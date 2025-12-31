@@ -1,0 +1,129 @@
+<template>
+    <div class="vehicle-details-wrapper">
+        <template if:true={boolvar.isLoaded}>
+            <!-- Page Header -->
+            <div class="step-header">
+                <h1>Finalize Your <span class="highlight">Vehicle Details</span></h1>
+                <p class="step-subtitle">Complete the registration information for your vehicle</p>
+            </div>
+
+            <!-- Vehicle Summary Card -->
+            <template if:true={vehicleDetails.Year__c}>
+                <div class="summary-card" style="margin-bottom: 32px;">
+                    <div class="vehicle-line">
+                        <span class="vehicle-year">{vehicleDetails.Year__c}</span>
+                        <span class="vehicle-make">{vehicleDetails.Make__c}</span>
+                        <span class="vehicle-model">{vehicleDetails.Model__c}</span>
+                        <span class="separator">|</span>
+                        <span class="vehicle-price">${vehicleDetails.Value__c}</span>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Vehicle Registration Form -->
+            <form class="wizard-form">
+                <div class="row g-4">
+                    <!-- VIN Number -->
+                    <div class="col-md-6">
+                        <c-buho_input
+                            label="VIN Number"
+                            label-class=""
+                            container-class="form-group"
+                            type="input"
+                            name="Vin__c"
+                            value={vehicleDetails.Vin__c}
+                            placeholder="Enter VIN number"
+                            input-type="text"
+                            maxlength="17"
+                            pattern="^[A-Z0-9\-]+$"
+                            message-when-pattern-mismatch="Only letters, numbers, and dashes are allowed"
+                            onchange={handleInputChange}
+                            oninput={handleVINInput}>
+                        </c-buho_input>
+                        <small class="form-text text-muted">Maximum 17 characters. Only letters, numbers, and dashes are allowed.</small>
+                    </div>
+
+                    <!-- License Plate -->
+                    <div class="col-md-6">
+                        <c-buho_input
+                            label="License Plate"
+                            label-class=""
+                            container-class="form-group"
+                            type="input"
+                            name="licensePlate"
+                            value={vehicleDetails.licensePlate}
+                            placeholder="Enter license plate"
+                            input-type="text"
+                            maxlength="17"
+                            pattern="^[A-Z0-9\-]+$"
+                            message-when-pattern-mismatch="Only letters, numbers, and dashes are allowed"
+                            onchange={handleInputChange}
+                            oninput={handleLicensePlateInput}>
+                        </c-buho_input>
+                        <small class="form-text text-muted">Only letters, numbers, and dashes are allowed.</small>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <!-- Registered Country -->
+                    <div class="col-md-6">
+                        <c-buho_input
+                            label="Registered Country"
+                            label-class=""
+                            container-class="form-group"
+                            type="combobox"
+                            name="Registered_Country__c"
+                            value={registeredCountry}
+                            options={countryOptions}
+                            dropdown-class="form-select"
+                            onchange={handleCountryChange}>
+                        </c-buho_input>
+                    </div>
+
+                    <!-- Registered State/Province -->
+                    <div class="col-md-6">
+                        <c-buho_input
+                            label="Registered State/Province"
+                            label-class=""
+                            container-class="form-group"
+                            type="combobox"
+                            name="Registered_State__c"
+                            value={registeredState}
+                            options={stateOptions}
+                            dropdown-class="form-select"
+                            disabled={flag.isStateDisabled}
+                            onchange={handleStateChange}>
+                        </c-buho_input>
+                    </div>
+                </div>
+
+                <!-- Checkboxes Section -->
+                <div class="coverage-terms-section">
+                    <div class="checkbox-options">
+                        <div class="custom-checkbox">
+                            <c-buho_input
+                                label="Is vehicle leased or financed"
+                                label-class="checkbox-title"
+                                container-class="custom-checkbox"
+                                type="checkbox"
+                                name="Is_Lienholder__c"
+                                checked={vehicleDetails.Is_Lienholder__c}
+                                onchange={handleCheckboxChange}>
+                            </c-buho_input>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Continue Button -->
+                <button type="button" class="btn btn-primary btn-continue" onclick={handleContinue}>
+                    Continue
+                </button>
+
+                <!-- Info Text -->
+                <p class="step-info-text">
+                    Accurate completion of your application is required under our Terms of Use. Providing false information may jeopardize your coverage in the event of a claim.
+                </p>
+            </form>
+        </template>
+    </div>
+</template>

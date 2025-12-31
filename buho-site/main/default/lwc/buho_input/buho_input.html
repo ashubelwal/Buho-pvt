@@ -10,17 +10,45 @@
             <template if:true={hasIcon}>
                 <div class="input-with-icon">
                     <i class={icon}></i>
-                    <input type={inputType} id={name} name={name} value={value} placeholder={placeholder}
-                        class={computedInputClass} disabled={disabled} onchange={handleInputChange}
-                        oninput={handleInput} onkeyup={handleKeyUp} />
+                    <input 
+                        type={inputType} 
+                        id={name} 
+                        name={name} 
+                        value={value} 
+                        placeholder={placeholder}
+                        class={computedInputClass} 
+                        disabled={disabled} 
+                        maxlength={maxLength}
+                        pattern={pattern}
+                        onchange={handleInputChange}
+                        oninput={handleInput} 
+                        onkeyup={handleKeyUp}
+                        oninvalid={handleInvalid} />
                 </div>
+                <template if:true={showPatternError}>
+                    <small class="form-text" style="color: #EF4444; margin-top: 6px; display: block; font-size: 12px;">{messageWhenPatternMismatch}</small>
+                </template>
             </template>
 
             <!-- Input without Icon -->
             <template if:false={hasIcon}>
-                <input type={inputType} id={name} name={name} value={value} placeholder={placeholder}
-                    class={computedInputClass} disabled={disabled} onchange={handleInputChange} oninput={handleInput}
-                    onkeyup={handleKeyUp} />
+                <input 
+                    type={inputType} 
+                    id={name} 
+                    name={name} 
+                    value={value} 
+                    placeholder={placeholder}
+                    class={computedInputClass} 
+                    disabled={disabled} 
+                    maxlength={maxLength}
+                    pattern={pattern}
+                    onchange={handleInputChange} 
+                    oninput={handleInput}
+                    onkeyup={handleKeyUp}
+                    oninvalid={handleInvalid} />
+                <template if:true={showPatternError}>
+                    <small class="form-text" style="color: #EF4444; margin-top: 6px; display: block; font-size: 12px;">{messageWhenPatternMismatch}</small>
+                </template>
             </template>
         </template>
 
