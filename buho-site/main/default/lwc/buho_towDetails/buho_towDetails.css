@@ -1,8 +1,19 @@
-.custom-container{
-	color : black;
-}
-
-.pageTitle h2 {
-	border-bottom: 1px solid #eee;
-    padding: 10px 0;
-}
+/* Styles are handled by buhoStyles.css in static resources */
+/* This component uses the following classes from buhoStyles.css:
+   - .towed-units-wrapper
+   - .towed-header
+   - .section-title
+   - .section-subtitle
+   - .towed-units-table
+   - .buho-table
+   - .action-buttons
+   - .btn-icon
+   - .btn-edit
+   - .towed-form-section
+   - .towed-form-grid
+   - .form-group
+   - .form-actions
+   - .btn-dark
+   - .btn-light
+   - .info-message
+*/

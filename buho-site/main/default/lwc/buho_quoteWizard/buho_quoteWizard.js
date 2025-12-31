@@ -29,6 +29,7 @@ export default class Buho_quoteWizard extends LightningElement {
         { component: "c/buho_territory", name: "territory" },
         { component: "c/buho_quotePage", name: "quotePage" },
         { component: "c/buho_towDetails", name: "towDetails" },
+        { component: "c/buho_finalizeVehicleDetails", name: "finalizeVehicleDetails" },
     ];
     // Total steps in the wizard
     get totalSteps() {
@@ -184,6 +185,11 @@ export default class Buho_quoteWizard extends LightningElement {
                 }
                 case 'c/buho_towDetails': {
                     const { default: ctor } = await import("c/buho_towDetails");
+                    this.componentConstructor = ctor;
+                    break;
+                }
+                case 'c/buho_finalizeVehicleDetails': {
+                    const { default: ctor } = await import("c/buho_finalizeVehicleDetails");
                     this.componentConstructor = ctor;
                     break;
                 }

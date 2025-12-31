@@ -373,6 +373,8 @@ export default class Buho_vehicleDetails extends LightningElement {
         this.inputValues.Model = this.model;
         this.inputValues.Value__c = this.vehicleValue;
         this.inputValues.Vehicle_sub_type__c = this.vehicleType;
+        this.inputValues.Make__c = this.make;
+        this.inputValues.Model__c = this.model;
     }
 
     connectedCallback() {

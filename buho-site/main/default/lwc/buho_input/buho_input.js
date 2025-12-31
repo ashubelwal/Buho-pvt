@@ -1,4 +1,4 @@
-import { LightningElement, api } from 'lwc';
+import { LightningElement, api, track } from 'lwc';
 
 export default class Buho_input extends LightningElement {
     @api label = '';
@@ -17,6 +17,9 @@ export default class Buho_input extends LightningElement {
     @api labelClass = ''; // custom class for label
     @api labelTitleClass = 'checkbox-title'; // custom class for label title
     @api hint;
+    @api maxLength; // maximum length for input
+    @api pattern; // regex pattern for validation
+    @api messageWhenPatternMismatch = ''; // error message when pattern doesn't match
 
 
     get computedContainerClass() {
@@ -84,8 +87,33 @@ export default class Buho_input extends LightningElement {
         });
     }
 
+    @track showPatternError = false;
+
+    handleInvalid(event) {
+        if (this.pattern && this.messageWhenPatternMismatch) {
+            const input = event.target;
+            if (!input.validity.valid && input.validity.patternMismatch) {
+                this.showPatternError = true;
+            } else {
+                this.showPatternError = false;
+            }
+        }
+    }
+
     handleInputChange(event) {
         const value = event.target.value;
+        /*
+        // Validate pattern if provided
+        if (this.pattern && this.messageWhenPatternMismatch) {
+            const regex = new RegExp(this.pattern);
+            // Only show error if there's a value and it doesn't match
+            if (value && value.trim() !== '' && !regex.test(value)) {
+                this.showPatternError = true;
+            } else {
+                this.showPatternError = false;
+            }
+        }*/
+        
         this.dispatchEvent(new CustomEvent('change', {
             detail: {
                 name: this.name,
@@ -128,10 +156,23 @@ export default class Buho_input extends LightningElement {
     }
 
     handleInput(event) {
+        const value = event.target.value;
+        
+        // Validate pattern on input if provided
+        if (this.pattern && this.messageWhenPatternMismatch) {
+            const regex = new RegExp(this.pattern);
+            // Only show error if there's a value and it doesn't match
+            if (value && value.trim() !== '' && !regex.test(value)) {
+                this.showPatternError = true;
+            } else {
+                this.showPatternError = false;
+            }
+        }
+        
         this.dispatchEvent(new CustomEvent('input', {
             detail: {
                 name: this.name,
-                value: event.target.value
+                value: value
             }
         }));
     }
