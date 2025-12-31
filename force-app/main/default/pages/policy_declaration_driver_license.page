@@ -1,0 +1,531 @@
+<apex:page applyBodyTag="false" controller="Declaration_Page_Insurance_Controller" renderAs="pdf">
+    
+    <head>
+        <style>
+            @page {
+            <!--size: A4;-->
+            margin-top: 0.7in;
+            margin-bottom: 0.5in;
+            @top-left {
+            content: element(header);
+            }
+            }
+            div.header {
+            display:block;
+            position: running(header);
+            width: auto;
+            }
+            hr.line{height:1.5px;
+            border-width:0;
+            color:#D3D3D3;
+            background-color:#D3D3D3;
+            }
+            table.t1
+            {
+            font-size:12px;
+            }
+            table.t2
+            {
+            font-size:10px;
+            }
+            .floatLeft { width: 50%; float: left; }
+            .floatRight {width: 50%; float: right; }
+            .container { overflow: hidden; }
+            ol li{
+            margin: 0;
+            padding: 0;
+            }
+            div.footer{
+            font-size: 12.5px;
+            position: running(footer);
+            display:block;}
+            
+            .maintable{border-collapse:collapse;
+            background-color:#E8E8E8;
+            font-size:13px}
+            .maintable td{background-color:white;border:1px solid silver; font-size:13px;width:20px}
+            
+        </style>
+    </head>
+    <div class="header">
+        <div style="margin-top:35px">
+            <img src="{!$Resource.chubb_logo_blue}" width="210" height="20"/>
+        </div>
+    </div>
+    <br/><br/>
+    <div style="display:inline; position:absolute; top:0px; left: 40%; font-size: 14px;">
+        Chubb Seguros México, S.A.<br/>
+        Paseo de la Reforma 250 Torre Niza<br/>
+        Piso 15 Col. Juárez, Del. Cuauhtémoc<br/>
+        Cd. de México, C.P. 06600<br/>
+        www.chubb.com/mx
+    </div>
+    <br/>
+    <br/>
+    <div>
+        <p style="font-weight:600; font-size: 13px; display:inline; position:absolute;">
+            CARÁTULA DE PÓLIZA / DECLARATION’S PAGE
+        </p>
+    </div>
+    <br/>
+    <div>
+        <p style="font-weight:600; font-size: 15px; display:inline; position:absolute;">
+            PÓLIZA DE SEGURO DE AUTOMÓVILES TURISTAS PARA MÉXICO - LICENCIAS / TOURIST AUTO
+            POLICY FOR MEXICO – DRIVER’S LICENSE
+        </p>
+    </div>
+    <br/>
+    <br/>
+    <div>
+        <p style="text-align: justify; font-size: 14.5px; position:absolute;">
+            Chubb Seguros México, S.A. (en lo sucesivo la “Compañía”), asegura a favor de la persona identificada como “Asegurado” los
+            bienes y riesgos más adelante detallados, de acuerdo a las Condiciones Generales y Particulares de esta póliza durante la
+            vigencia establecida. / Chubb Seguros México, S.A. (Herein after the “Company”), insures in favor of the person identified as
+            the “Insured” the goods and risks set forth detailed, according to the General Conditions of this Policy during the term established.
+        </p>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <hr class="line"/>
+    <table width="100%" class="t1" style="font-size:13px;" cellspacing="0" cellpadding="0" >
+        <tr>
+            <th>No. de Póliza / Policy No.</th>
+            <td>{!policy.Name}</td>
+            <th>Chubb Policy Number</th>
+            <td>{!policy.Chubb_Policy_Number__c}</td>
+        </tr>
+        <tr>
+            <th>I.V.A. / Mex. Tax:</th>
+            <td>{!policy.I_V_A_Mex_Tax__c}</td>
+            <th>Total Premium</th>
+            <td>{!ROUND(policy.Total_Premium_Amount__c, 2)}</td>
+        </tr>
+        <tr>
+            <th>Net Premium</th>
+            <td>{!ROUND(policy.Net_Premium__c, 2)}</td>
+            <th>Policy Fee</th>
+            <td>{!policy.Broker_Policy_Fee__c}</td>
+        </tr>
+        <tr>
+            <th>Issuance Date</th>
+            <td>
+                <apex:outputText value="{!formattedIssuanceDate}"></apex:outputText> &nbsp;
+                <apex:outputText value="{!formattedIssuanceTime}"></apex:outputText> &nbsp;
+                    <!-- <apex:outputText value="{0,time,HH:mm a}">
+                        <apex:param value="{!policy.Issued_At__c}"/>
+                    </apex:outputText> -->
+            </td>
+        </tr>
+    </table>
+    <hr class="line"/>
+    <table width="100%" class="t1" style="font-size:13px;" >
+        <tr>
+            <th>Vigencia de la Póliza / Policy Period:</th>
+            <td>
+                <apex:outputText value="{0,date,MMM dd, yyyy}">
+                    <apex:param value="{!policy.Start_Date__c}"/>
+                </apex:outputText>
+                &nbsp;{!FormattedStartTime} &nbsp; to &nbsp;
+                <apex:outputText value="{0,date,MMM dd, yyyy}">
+                    <apex:param value="{!policy.End_Date__c}"/>
+                </apex:outputText> &nbsp;
+                {!FormattedEndTime}
+            </td>
+            <th>Días / Days:</th>
+            <td> {!policy.Term_days__c} </td>
+        </tr>
+    </table> 
+    <hr class="line"/>
+    <div class="container">
+        <div style="background-color:#E8E8E8; font-weight:bold; font-size:14.5px; width:100%">Datos del asegurado / Insured’s Information</div>
+        <div class="floatLeft">
+            <table class="t1" cellspacing="0" cellpadding="2" style="font-size:14px;">
+                <tr>
+                    <th>Nombre / Name:</th>
+                    <td>{!policy.Contact__r.Name}</td></tr>
+                <tr><th>Domicilio / Address:</th>
+                    <td>{!driver.Address__c}</td></tr>
+                <tr><th>Ciudad / City:</th>
+                    <td>{!driver.City__c}</td></tr>
+                <tr><th>C.P. / Zip Code:</th>
+                    <td>{!driver.Postal_Code__c}</td></tr>
+               <tr><th>Driver License:</th>
+                    <td>{!driver.license_number__c}</td></tr>
+               
+            </table>
+        </div>
+        <div class="floatRight">
+            <table class="t1" cellspacing="0" cellpadding="2" style="font-size:14px;">
+                <tr>
+                    <th>Teléfono / Phone:</th>
+                    <td>{!driver.Phone__c}</td></tr>
+                <tr><th>Estado / State:</th>
+                    <td >{!driver.State_Province__c}</td></tr>
+                <tr>
+                    <th>Drivers License Country:</th>
+                    <td>{!driver.License_Country__c}</td></tr>
+                <tr>
+                    <th>Drivers License State:</th>
+                    <td>{!driver.License_state__c}</td></tr>
+                <tr>
+                    <th>Driver DOB:</th>
+                    <td> <apex:outputText value="{0,date,MMM dd, yyyy}">
+                    <apex:param value="{!driver.Dob__c}"/>
+                </apex:outputText>
+                   </td></tr>
+            </table>
+        </div>
+    </div>
+    <br/>
+    <div>
+        <div style="background-color:#E8E8E8; font-weight:bold; font-size:15px; width:100%">Datos generales de la póliza / General Policy Information</div>
+        <div class="floatLeft">
+            <table  class="t1" cellspacing="0" cellpadding="0" style="font-size:14px;">
+                <td>
+                    <table>
+                        <tr>
+                            <th>Moneda / Currency:</th>
+                            <td>USD</td>
+                        </tr>
+                        <tr>
+                            <th>Fecha de emisión / Issuance date:</th>
+                            <td><apex:outputText value="{0,date,MMM dd, yyyy}">
+                                <apex:param value="{!policy.CreatedDate}"/>
+                                </apex:outputText></td>
+                        </tr>
+                    </table>
+                </td>
+            </table>
+        </div>
+        <div class="floatRight">
+            <table  class="t1" cellspacing="0" cellpadding="0" style="font-size:14px;">
+                <td>
+                    <table>
+                        <tr>
+                            <th>Forma de pago / Method of Payment:</th>
+                            <td> Credit Card</td>
+                        </tr>
+                        <tr>
+                            <th>Clave del Agente / Agent’s Code:</th>
+                            <td>MEXINS</td>
+                        </tr>
+                    </table>
+                </td>
+            </table>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <div style="background-color:#E8E8E8; font-weight:bold; font-size:15px; width:100%">Conductor Nombrado y Conductores Adicionales / Named Driver and Additional Drivers</div>
+    <div style="font-size:15px;">
+        <table style= "font-size:14px; width:100%;" cellpadding="4">
+            <tr>
+                <th>Name</th>
+                <th>DOB</th>
+                <th>License</th>
+                <th>Drivers License Country</th>
+                <th>Drivers License State</th>
+            </tr>
+            <apex:repeat value="{!drivers}" var="driver" >
+                <tr>
+                    <td> {!driver.First_Name__c}&nbsp;{!driver.Last_Name__c} </td>
+                    <td>
+                        <apex:outputText value="{0,date,MMM dd, yyyy}">
+                            <apex:param value="{!driver.Dob__c}"/>
+                            </apex:outputText>
+                    </td>
+                    <td>
+                        {!driver.LN_With_Country__c}
+                    </td>
+                     <td>{!driver.License_Country__c}</td>
+                    <td>{!driver.License_state__c}</td>
+                </tr>
+            </apex:repeat>
+        </table>
+    </div>
+    <br/>
+    <br/>
+    <div>
+        <table class="maintable" style= "background-color:#E8E8E8; font-size:14px; width:100%;">
+            <tr>
+                <th>Coberturas / Coverages</th>
+                <th>Deducible / Deductible</th>
+                <th>Suma Asegurada / Insured Amount</th>
+            </tr>
+            <tr>
+                <td>
+                    Third Party Liability(Combined Single Limit)
+                </td>
+                <td style="text-align:center;" > NONE
+                </td>
+                <td style="text-align:center;" > 
+                    <apex:outputText value="$" rendered="{!NOT(ISNULL(policy.Liability_picklist__c))}" />
+                    {!policy.Liability_picklist__c}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Roadside Assistance
+                </td>
+                <td style="text-align:center;" > NONE
+                </td>
+                <td style="text-align:center;" > COVERED
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Medical Expenses for Occupants
+                </td>
+                <td style="text-align:center;" > NONE
+                </td>
+                <td style="text-align:center; font-size:12px;" > $ 2,000.00 per person / $ 10,000.00 per accident
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Legal Assistance
+                </td>
+                <td style="text-align:center;" > NONE
+                </td>
+                <td style="text-align:center;" > COVERED
+                </td>
+            </tr>
+            <tr>
+                <td style="background-color:white;padding:5px; text-align:center; font-size:12px; border:0px"></td>
+                <td style="background-color:white;padding:5px; text-align:center; font-size:12px; border:0px"></td>
+                <td style="background-color:white;padding:5px; text-align:center; font-size:12px; border:0px"></td>
+            </tr>
+            <tr colspan="2">
+                <td style="border:0px;">
+                </td>
+                <td style="text-align:center; border:0px;">Prima Neta / Net Premium:
+                </td>
+                <td style="text-align:right; border:0px;">
+                    <apex:outputText value="$" rendered="{!NOT(ISNULL(policy.Net_Premium__c))}" />
+                    {!Round(policy.Net_Premium__c, 2)}
+                </td>
+            </tr>
+            <tr>
+                <td style="border:0px;">
+                </td>
+                <td style="text-align:center; border:0px;">Gastos de expedición / Policy Fee:
+                </td>
+                <td style="text-align:right; border:0px;">
+                    <apex:outputText value="$" rendered="{!NOT(ISNULL(policy.Broker_Policy_Fee__c))}" />
+                    {!policy.Broker_Policy_Fee__c}
+                </td>
+            </tr>
+            <tr>
+                <td style="border:0px;">
+                </td>
+                <td style="text-align:center; border:0px;">Otros / Other Fees: 
+                </td>
+                <td style="text-align:right; border:0px;">$ 0.00
+                </td>
+            </tr>
+            <tr>
+                <td style="border:0px;">
+                </td>
+                <td style="text-align:center; border:0px;">I.V.A. / Mex. Tax:
+                </td>
+                <td style="text-align:right; border:0px;">$ 0.00
+                </td>
+            </tr>
+            <tr>
+                <td style="border:0px;">
+                </td>
+                <td style="text-align:center; border:0px;">Surcharge:
+                </td>
+                <td style="text-align:right; border:0px;">
+                    <apex:outputText value="$" rendered="{!NOT(ISNULL(policy.Surcharge__c))}" />
+                    {!ROUND(policy.Surcharge__c, 2)}
+                </td>
+            </tr>
+            <tr>
+                <td style="border:0px;">
+                </td>
+                <td style="text-align:center; border:0px;">Prima Total /Total Premium:
+                </td>
+                <td style="text-align:right; border:0px;">
+                    <apex:outputText value="$" rendered="{!NOT(ISNULL(policy.Total_Premium_Amount__c))}" />
+                    {!ROUND(policy.Total_Premium_Amount__c, 2)}
+                </td>
+            </tr>
+            
+        </table>
+    </div>
+    <br/>
+    <div>
+        <div style="background-color:#E8E8E8; font-weight:bold; font-size:14px; width:100%">Número de Contacto / Contact Information</div>
+        <div>
+            <span style="font-size:14px;">IMPORTANTE / IMPORTANT:</span><span style="font-size:13.8px;"> Todo accidente deberá ser reportado antes de salir de México, de lo contrario, su reclamo
+            podría ser rechazado. / All accidents must be reported before leaving Mexico, failure to do so may void your claim.</span>
+        </div>
+        <table class="maintable" width="100%">
+            <tr>
+                <td><span style="font-weight:bold; font-size:15px;">Reporte de Accidente / Accident
+                    Report:</span><br/>
+                    Desde México: / Calling from Mexico:
+                    800-801-01-17<br/>
+                    Desde una Línea Americana: / Calling
+                    from any US phone line:
+                    011-52-81-8864-9322<br/>
+                    Número gratuito:
+                    1-877-699-6679
+                </td>
+                <td><span style="font-weight:bold; font-size:15px;">Grúa o Asistencia Vial: / Roadside
+                    Assistance:</span><br/>
+                    Desde México: / Calling from Mexico:
+                    800-767-43-57<br/>
+                    Desde una Línea Americana: / Calling
+                    from any US phone line:
+                    011-52-55-4195-5348<br/>
+                    Número gratuito:
+                    1-877-211-6710
+                    
+                </td>
+                <td><span style="font-weight:bold; font-size:15px;">Para Seguimientos de Reclamos: /
+                    Claims Follow ups:</span><br/>
+                    Desde México: / Calling from Mexico:
+                    800-767-43-57<br/>
+                    Desde USA: / Calling from USA:
+                    011-52-55-4195-5348<br/>
+                    Número gratuito:
+                    1-877-211-6710
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br/>
+    <br/>
+    <div>
+        <p style="font-weight:600; font-size: 13px; display:inline; position:absolute;">
+            CARÁTULA DE PÓLIZA / DECLARATION’S PAGE
+        </p>
+    </div>
+    <br/>
+    <div>
+        <p style="font-weight:600; font-size: 14.5px; display:inline; position:absolute;">
+            PÓLIZA DE SEGURO DE AUTOMÓVILES TURISTAS PARA MÉXICO - LICENCIAS / TOURIST AUTO
+            POLICY FOR MEXICO – DRIVER’S LICENSE
+        </p>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <div style="background-color:#E8E8E8; font-weight:bold; font-size:14px; width:100%">Notas / Notes</div>
+    <div  style="font-size:13.5px;" >
+        
+        1. No mueva el vehículo hasta que reciba permiso por parte de las autoridades o representante de la compañía de
+        seguros. / Do not move the vehicles until you are given permission by the authorities or insurance company representative.<br/>
+        2. Llame a su compañía de seguros tan pronto como sea posible después de que tenga conocimiento de los daños y antes
+        de salir de México. / Call your insurance company as soon as possible after the accident occurs and before you leave
+        Mexico.<br/>
+        3. Un representante bilingüe será capaz de ayudarlea usted y le pedirá información sobre su póliza de seguros así como
+        detalles en la ocurrencia del accidente. / A bilingual representative will be able to assist you and they will ask you for
+        information regarding your Insurance Policy and details in the occurrence of the accident.
+    </div>
+    
+    <hr class="line"/>
+    <div style="background-color:#E8E8E8; font-weight:bold; font-size:14px; width:100%">Notas / Notes</div>
+    <div  style="font-size:13.5px;" >
+        Chubb Seguros México, S.A. está autorizado y reconocido en Estados Unidos de Norte América por la National
+        Association of Insurance Commissioners (NAIC:AA273007) /Chubb Seguros México, S.A. is authorized and recognized in
+        the United States of America by the National Association of Insurance Commissioners (NAIC:AA2730007).
+    </div>
+    <hr class="line"/>
+    <div  style="font-size:13.5px;" >
+        Artículo 25 de la Ley Sobre el Contrato de Seguro. Si el contenido de la póliza no concordaran con la oferta, el asegurado
+        podrá pedir la rectificación correspondiente dentro de los 30 días que sigan al día en que reciba la póliza. Transcurrido este
+        plazo se considerarán aceptadas las estipulaciones de la póliza. / Article 25 of the Insurance Contract Law.- If the content
+        of this policy are not in accordance with the offer, the insured may request rectification within 30 days following the day you
+        receive the policy. After this period, the Company shall understand you have accepted the information here provided
+    </div>
+    <hr class="line"/>
+    <div  style="font-size:13.5px;" >
+        <span style="font-weight:bold;">IMPORTANTE / IMPORTANT:</span> Es obligación del asegurado dar aviso a la compañía tan pronto tenga conocimiento de
+        haberse presentado alguna de las circunstancias o sucesos previstos en los términos de esta póliza, ya que el derecho a
+        tal protección depende del cumplimiento del asegurado de esta obligación de aviso. / It is the obligation of the insured to
+        give notice to the company as soon becomes aware of any of the circumstances or events provided in the terms of this
+        policy, as the right to such protection depends on the fulfilment of the insured of this obligation of notice.
+    </div>
+    <hr class="line"/>
+    <div  style="font-size:13.5px;" >
+        Al recibir esta carátula de póliza se entregan también las condiciones generales que integran su contrato de seguro, le
+        invitamos a consultarlas, en las mismas podrá conocer las coberturas y exclusiones de este seguro; de igual forma las
+        podrá consultar en la página web www.chubb.com/mx. / When you receive this Declaration Page, you are also receiving
+        the General Conditions applicable for your insurance contract, we invite you to read them carefully; there you will find the
+        details about your coverages and exclusions. You may also consult them in our web page: www.chubb.com/mx
+    </div>
+    <hr class="line"/>
+    <div  style="font-size:13.5px;" >
+        <span style="font-weight:bold;">Unidad Especializada de Atención de Consultas y Reclamaciones de CHUBB Seguros, México S.A. (UNE) /
+            Specialized Unit for Customer Care and Service:</span> Av. Paseo de la Reforma No. 250, Torre Niza, Piso 15, Col. Juárez,
+        Delg. Cuauhtemoc, C.P. 06600, Ciudad de México. <span style="font-weight:bold;">Llamada sin Costo desde México / Toll Free from Mexico / :</span> 800
+        223 2001 <span style="font-weight:bold;">E-mail:</span> uneseguros@chubb.com <span style="font-weight:bold;">Horarios de Atención</span> Lunes a Jueves de 08:30hrs a 17:00hrs y Viernes de
+        08:30hrs to 14:00hrs. / <span style="font-weight:bold;">Office Hours:</span> Monday to Thursday from 08:30hrs to 17:00hrs and Fridays from 08:30hrs to
+        14:00hrs
+    </div>
+    <hr class="line"/>
+    <div  style="font-size:13.5px;" >
+        <span style="font-weight:bold;">Comisión Nacional para la Protección y Defensa de los Usuarios de Servicios Financieros (CONDUSEF) / National
+            Commission for the Protection of Users of Financial Services (CONDUSEF):</span> Av. Insurgentes Sur #762, Col. Del Valle,
+        C.P. 03100,Ciudad de México. Usted puede conocer las oficinas de atención en el resto del país en la siguiente página de
+        internet: / You can get to know the offices in the rest of the country in the following internet page
+        www.condusef.gob.mx/index.php/oficinas-de-atención <span style="font-weight:bold;">E-mail:</span> asesoria@condusef.gob.mx <span style="font-weight:bold;">Llamada sin Costo desde
+        México / Toll Free from Mexico:</span> 800 999 8080 Desde cualquier teléfono americano / If you are calling from a U.S. Phone
+        Line: 011 52 (55) 5340 0999
+    </div>
+    <hr class="line"/>
+    <div  style="font-size:13.5px;" >
+        En cumplimiento a lo dispuesto en el artículo 202 de la Ley de Instituciones de Seguros y de Fianzas, la
+        documentación contractual y la nota técnica que integran este producto de seguro, quedaron registradas ante la
+        Comisión Nacional de Seguros y Fianzas, a partir del día 29 de Septiembre del 2016, con el número CNSFS0039-0764-2016 / CONDUSEF-000397-02.
+    </div>
+    <div  style="font-size:13.5px;" >
+        En testimonio de lo cual la Compañía firma la presente póliza en: / In witness whereof, the company signing this policy in:
+    </div>
+    <table  style= "font-size:13.5px; width:100%;">
+        <tr >
+            <td style="border-bottom: 1.5px solid #D3D3D3;">
+                <apex:outputText value="{0,date,MMM dd, yyyy}">
+                    <apex:param value="{!policy.createddate}"/>
+                </apex:outputText>
+            </td>
+            <td > &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+            
+            <td style="border-bottom: 1.5px solid #D3D3D3;">
+                <table >
+                    <tr>
+                        <td style="text-align:right;">
+                            <img  src="{!$Resource.chubb_logo_blue2}" />
+                        </td>
+                        <td style="font-size:8.5px;">
+                            Digitally signed by<br/>
+                            CHUBB<br/>
+                            Date:<apex:outputText value="{0,date,MMM dd, yyyy}">
+                            <apex:param value="{!policy.createddate}"/>
+                            </apex:outputText><br/>
+                            Reason: Private<br/>
+                            Location: Local<br/>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Lugar y Fecha / Place and Date
+            </td>
+            <td></td>
+            
+            <td >
+                Funcionario Autorizado / Authorized
+            </td>
+        </tr>
+    </table>
+</apex:page>

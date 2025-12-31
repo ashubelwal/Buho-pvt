@@ -1,0 +1,1148 @@
+<apex:page applyBodyTag="false" controller="Declaration_Page_Insurance_Controller" renderAs="pdf" standardStylesheets="false"  sidebar="false"  showHeader="false" applyHTMLTag="false">    
+    <head>
+        <style>
+            
+            #pageNum:before{
+            content: "Page " counter(page) " of " counter(pages);
+            }
+            
+            div.header {
+            position: running(header);
+            margin-top:40px;
+            }
+            
+            @page {
+            font-family:Helvetica;
+            margin-top: 0.9in;       
+            margin-bottom: 0.3in;
+            margin-left: 0.2in;
+            margin-right: 0.2in;
+            @bottom-right 
+            { 
+            content: element(footer);
+            }
+            @top-left {
+            content: element(header);
+            }
+            @top-center {
+            content: element(header1);
+            }
+            }
+            #pageNum:before{
+            content: "Page " counter(page) " of " counter(pages);
+            }
+            td.td1{
+            text-align:left;
+            }
+            div.footer{
+            font-size: 10pt;
+            position: running(footer);
+            display:block;
+            }
+            
+            .Devisions{
+            top :-10px !important;
+            border: 1px solid black;
+            }
+            div.header1 {
+            position: absolute;
+            left: 0;
+            top: 60px;
+            width: 95%;
+            }
+            div.header2 {
+            position: absolute;
+            font-size: normal;
+            left: 0;
+            width: 95%;
+            }
+            h4.h_1
+            {
+            color:black;
+            text-align:left;
+            display:inline;
+            }
+            div.d3 {
+            TEXT-ALIGN: CENTER;
+            border: 1px solid #0CBFD6;
+            }
+            div.d4 {
+            border: 1px solid #0CBFD6;
+            font-size:small;
+            }
+            
+            th.th1{
+            text-align:center;
+            font-weight:normal;
+            }
+            mark{
+            background-color:yellow;
+            }
+            td.td2{background-color:#A9A9A9;border: 1px solid;}
+            .row {
+            display: flex; /* equal height of the children */
+            position: relative;
+            margin:0;
+            }
+            
+            .col {
+            flex: 1; /* additionally, equal width */
+            
+            padding: 1em;
+            border: none;
+            }
+            
+            
+            hr
+            {
+            border: 0.5px solid #BDBDBD;
+            margin:0px;
+            }
+            }
+            
+        </style>
+    </head>
+    <!--body -->
+    <div class = "header">
+        <div class="row" >
+            <div class="col" >
+                <img src="{!$Resource.Chubb_logo_green}" width="25%"/>
+            </div>
+            <!--Issue date-->
+            <div class="col header1" style="left:50% !important; top: 0 !important; padding: 0 0 1.2em 0 !important; font-size: 10pt;">
+                Chubb Seguros México, S.A.<br/>
+                Paseo de la Reforma 250 Torre Niza Piso 15 Col. Juárez, Del.<br/>
+                Cuauhtémoc Cd. de México, C.P. 06600<br/>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="row" style="display: flex;">
+            <div class="col" style=" padding: 0 0 0 0">
+                <p style="font-weight:600; font-size: 12pt;">
+                    <span style="font-weight:bold; font-size: 10pt;">CARÁTULA DE PÓLIZA / DECLARATION’S PAGE </span><br/>
+                    PÓLIZA DE SEGURO DE AUTOMÓVILES TURISTAS PARA MÉXICO - AUTO SOUTHBOUND /<br/>
+                    TOURIST AUTO POLICY FOR MEXICO
+                </p>
+            </div>
+            
+        </div>
+        <div class="row" style="margin-top:-15px; margin-bottom:-10px;">
+            <p style="text-align: justify; font-size: 10pt">
+                Chubb Seguros México, S.A. (en lo sucesivo la “Compañía”), asegura a favor de la persona identificada como “Asegurado” los
+                bienes y riesgos más adelante detallados, de acuerdo a las Condiciones Generales de esta póliza durante la vigencia
+                establecida. / Chubb Seguros México, S.A. (Herein after the “Company”), insures in favor of the person identified as the
+                “Insured” the property and risks set forth detailed, according to the General Conditions of this Policy during the term
+                established herein.
+            </p>
+        </div>
+    </div>
+    <!-- Modified by ANUJ GOEL-->
+    <div style="font-size: 10pt;">
+        <table align="center" width="100%" cellspacing="0" cellpadding="0">
+            <hr/>
+            <tr style="margin-top:-10px;">
+                <th style = "font-weight: bold;">No. de Póliza / Policy No.</th>
+                <td >{!policy.Chubb_Policy_Number__c}</td>
+            </tr>
+            <hr/>
+            <tr>
+                <th style = "font-weight: bold;" width="33%">Vigencia de la Póliza / Policy Period : </th>
+                <td >
+                    <apex:outputText value="{0,date,MMM dd, yyyy}">
+                        <apex:param value="{!policy.Start_Date__c}" /> 
+                    </apex:outputText> {!FormattedStartTime}&nbsp;to  &nbsp;
+                    <apex:outputText value="{0,date,MMM dd, yyyy}">
+                        <apex:param value="{!policy.End_Date__c}" /> 
+                    </apex:outputText> {!FormattedEndTime} &nbsp;    
+                </td>
+                <th style = "font-weight: bold;" width="11%">Días / Days : </th>
+                <td >{!policy.Term_days__c}</td>
+            </tr>
+            <hr/>
+        </table>        
+    </div>
+    
+    <!-- GENERAL INFORMATION -->
+    
+    <br/>
+    <div class="footer">
+        <div >
+            <span id="pageNum"/>
+        </div>
+    </div>
+    <div class="container" style="margin-top: -20px;">
+        
+        <div style="background-color:#E8E8E8; font-weight:bold; font-size:10pt; width:100%">Datos del asegurado / Insured’s Information</div>
+        <span>
+            <table style="font-size:10pt;" align="center" width="100%" cellspacing="0" cellpadding="0">
+                <tr >
+                    <th width="16%">Nombre / Name:</th>
+                    <td width="41%">
+                        <apex:outputText rendered="{!policy.Vehicle_Policy__r.Is_vehicle_owned_by_a_company_or_rented__c}">
+                            {!policy.Vehicle_Policy__r.Company_Name__c}
+                        </apex:outputText>
+                        <apex:outputText rendered="{!!policy.Vehicle_Policy__r.Is_vehicle_owned_by_a_company_or_rented__c}">
+                            <apex:outputText rendered="{!!ISBLANK(policy.Vehicle_Policy__r.Vehicle_Owner_Name__c)}">
+                                {!policy.Vehicle_Policy__r.Vehicle_Owner_Name__c}
+                            </apex:outputText>
+                            <apex:outputText rendered="{!ISBLANK(policy.Vehicle_Policy__r.Vehicle_Owner_Name__c)}">
+                                <apex:outputText rendered="{!!ISBLANK(driver.First_Name__c)}">
+                                    {!driver.First_Name__c} &nbsp; {!driver.Last_Name__c}
+                                </apex:outputText>
+                                <apex:outputText rendered="{!ISBLANK(driver.First_Name__c)}">
+                                    {!policy.Contact__r.Name}
+                                </apex:outputText>
+                            </apex:outputText>
+                        </apex:outputText>
+                        
+                    </td>
+                    <th width="15%">Teléfono / Phone:</th>
+                    <td width="25%">
+                        <apex:outputText rendered="{!policy.Vehicle_Policy__r.Is_vehicle_owned_by_a_company_or_rented__c}">
+                            {!policy.Vehicle_Policy__r.Company_Phone__c}
+                        </apex:outputText>
+                        <apex:outputText rendered="{!!policy.Vehicle_Policy__r.Is_vehicle_owned_by_a_company_or_rented__c}">
+                            <apex:outputText rendered="{!!ISBLANK(policy.Vehicle_Policy__r.Vehicle_Owner_Phone__c)}">
+                                {!policy.Vehicle_Policy__r.Vehicle_Owner_Phone__c}
+                            </apex:outputText>
+                            <apex:outputText rendered="{!ISBLANK(policy.Vehicle_Policy__r.Vehicle_Owner_Phone__c)}">
+                                <apex:outputText rendered="{!!ISBLANK(driver.Phone__c)}">
+                                    {!driver.Phone__c}
+                                </apex:outputText>
+                                <apex:outputText rendered="{!ISBLANK(driver.Phone__c)}">
+                                    {!policy.Contact__r.Phone}
+                                </apex:outputText>
+                            </apex:outputText>
+                        </apex:outputText>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="16%">Domicilio / Address:</th>
+                    <td width="41%">
+                        <apex:outputText rendered="{!policy.Vehicle_Policy__r.Is_vehicle_owned_by_a_company_or_rented__c}">
+                            {!policy.Vehicle_Policy__r.Company_Address__c}
+                        </apex:outputText>
+                        <apex:outputText rendered="{!!policy.Vehicle_Policy__r.Is_vehicle_owned_by_a_company_or_rented__c}">
+                            <apex:outputText rendered="{!!ISBLANK(policy.Vehicle_Policy__r.Vehicle_Owner_Address__c)}">
+                                {!policy.Vehicle_Policy__r.Vehicle_Owner_Address__c}
+                            </apex:outputText>
+                            <apex:outputText rendered="{!ISBLANK(policy.Vehicle_Policy__r.Vehicle_Owner_Address__c)}">
+                                <apex:outputText rendered="{!!ISBLANK(driver.Address__c)}">
+                                    {!driver.Address__c} &nbsp; {!driver.Address_Line_2__c}
+                                </apex:outputText>
+                                <apex:outputText rendered="{!ISBLANK(driver.Address__c)}">
+                                    {!policy.Contact__r.Street__c}
+                                </apex:outputText>
+                            </apex:outputText>
+                        </apex:outputText>
+                    </td>
+                    <th width="15%">Ciudad / City:</th>
+                    <td width="25%" style="text-transform:uppercase;">
+                        <apex:outputText rendered="{!policy.Vehicle_Policy__r.Is_vehicle_owned_by_a_company_or_rented__c}">
+                            {!policy.Vehicle_Policy__r.Company_City__c}
+                        </apex:outputText>
+                        <apex:outputText rendered="{!!policy.Vehicle_Policy__r.Is_vehicle_owned_by_a_company_or_rented__c}">
+                            <apex:outputText rendered="{!!ISBLANK(policy.Vehicle_Policy__r.Vehicle_Owner_City__c)}">
+                                {!policy.Vehicle_Policy__r.Vehicle_Owner_City__c}
+                            </apex:outputText>
+                            <apex:outputText rendered="{!ISBLANK(policy.Vehicle_Policy__r.Vehicle_Owner_City__c)}">
+                                <apex:outputText rendered="{!!ISBLANK(driver.City__c)}">
+                                    {!driver.City__c} 
+                                </apex:outputText>
+                                <apex:outputText rendered="{!ISBLANK(driver.City__c)}">
+                                    {!policy.Contact__r.City__c}
+                                </apex:outputText>
+                            </apex:outputText>
+                        </apex:outputText>
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <th width="16%">Estado / State:</th>
+                    <td width="41%" style="text-transform: uppercase;">
+                        <apex:outputText rendered="{!policy.Vehicle_Policy__r.Is_vehicle_owned_by_a_company_or_rented__c}">
+                            {!policy.Vehicle_Policy__r.Company_State__c}
+                        </apex:outputText>
+                        <apex:outputText rendered="{!!policy.Vehicle_Policy__r.Is_vehicle_owned_by_a_company_or_rented__c}">
+                            <apex:outputText rendered="{!!ISBLANK(policy.Vehicle_Policy__r.Vehicle_Owner_State__c)}">
+                                {!policy.Vehicle_Policy__r.Vehicle_Owner_State__c}
+                            </apex:outputText>
+                            <apex:outputText rendered="{!ISBLANK(policy.Vehicle_Policy__r.Vehicle_Owner_State__c)}">
+                                <apex:outputText rendered="{!!ISBLANK(driver.State_Province__c)}">
+                                    {!driver.State_Province__c} 
+                                </apex:outputText>
+                                <apex:outputText rendered="{!ISBLANK(driver.State_Province__c)}">
+                                    {!policy.Contact__r.State__c}
+                                </apex:outputText>
+                            </apex:outputText>
+                        </apex:outputText>
+                    </td>
+                    <th width="15%">C.P. / Zip Code:</th>
+                    <td width="25%">
+                        <apex:outputText rendered="{!policy.Vehicle_Policy__r.Is_vehicle_owned_by_a_company_or_rented__c}">
+                            {!policy.Vehicle_Policy__r.Company_Zip__c}
+                        </apex:outputText>
+                        <apex:outputText rendered="{!!policy.Vehicle_Policy__r.Is_vehicle_owned_by_a_company_or_rented__c}">
+                            <apex:outputText rendered="{!!ISBLANK(policy.Vehicle_Policy__r.Vehicle_Owner_Postal_Code__c)}">
+                                {!policy.Vehicle_Policy__r.Vehicle_Owner_Postal_Code__c}
+                            </apex:outputText>
+                            <apex:outputText rendered="{!ISBLANK(policy.Vehicle_Policy__r.Vehicle_Owner_Postal_Code__c)}">
+                                <apex:outputText rendered="{!!ISBLANK(driver.Postal_Code__c)}">
+                                    {!driver.Postal_Code__c} 
+                                </apex:outputText>
+                                <apex:outputText rendered="{!ISBLANK(driver.Postal_Code__c)}">
+                                    {!policy.Contact__r.Postal_Code__c}
+                                </apex:outputText>
+                            </apex:outputText>
+                        </apex:outputText>
+                    </td>
+                    
+                </tr>
+            </table>
+        </span>
+        
+        <div style="background-color:#E8E8E8; font-weight:bold; font-size:10pt; width:100%">Datos generales de la póliza / General Policy Information</div>
+        <span>
+            <table style="font-size:10pt;" width="100%" cellspacing="0" cellpadding="0">
+                <tr>
+                    <th width="30%">Moneda / Currency:</th>
+                    <td width="20%" style="text-align:left;">USD</td>
+                    <th width="33%">Forma de pago / Method of Payment: </th>
+                    <td width="20%"> Credit Card</td>
+                </tr>
+                <tr>
+                    <th width="30%">Fecha de emisión / Issuance date:</th>
+                    <td width="20%" style="text-align: left;">
+                        <apex:outputText value="{!formattedIssuanceDate}"></apex:outputText> &nbsp;
+                        <apex:outputText value="{!formattedIssuanceTime}"></apex:outputText> &nbsp;
+                    <!-- <apex:outputText value="{0,time,HH:mm a}">
+                        <apex:param value="{!policy.Issued_At__c}"/>
+                    </apex:outputText> -->
+                    </td>
+                    <th width="30%">Clave del Agente / Agent’s Code: </th>
+                    <td width="20%">MEXINS</td>
+                </tr>
+            </table>
+        </span>
+        <div style="background-color:#E8E8E8; font-weight:bold; font-size:10pt; width:100%">Conductor Nombrado y Conductores Adicionales / Named Driver and Additional Drivers</div>
+        <div>
+            <table style="font-size:10pt;" width="100%" cellspacing="0" cellpadding="0">
+                <tr>
+                    <th>Name</th>
+                    <th>DOB</th>
+                    <th>License</th>
+                </tr>
+                <apex:repeat value="{!drivers}" var="driver" >
+                    <tr>
+                        <td> {!driver.First_Name__c}&nbsp;{!driver.Last_Name__c} </td>
+                        <td>
+                            <apex:outputText value="{0,date,MMM dd, yyyy}">
+                                <apex:param value="{!driver.Dob__c}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>
+                            {!driver.LN_With_Country__c}
+                        </td>
+                    </tr>
+                </apex:repeat>
+            </table>
+        </div>
+        
+        <div style="background-color:#E8E8E8; font-weight:bold; font-size:10pt; margin-top:0px; width:100%">Descripción del Vehículo / Vehicle Description (1)</div>
+        <span>
+            <table width="100%" cellspacing="0" cellpadding="0" style="font-size:10pt;">
+                <tr>
+                    <th width="17%">Año / Year:</th>
+                    <td>{!policy.Vehicle_Policy__r.year__c}</td>
+                    <th width="17%">Marca / Make:</th>
+                    <td style="text-transform: uppercase;">{!policy.Vehicle_Policy__r.Make__c}</td>
+                    <th width="17%">Modelo / Model:</th>
+                    <td style="text-transform: uppercase;">{!policy.Vehicle_Policy__r.Model__c}</td>
+                </tr>
+                <tr>
+                    <th width="17%">Serie / VIN:</th>
+                    <td style="text-transform: uppercase;">{!policy.Vehicle_Policy__r.Vin__c}</td>
+                    <th width="17%">Placas / Plates:</th>
+                    <td>{!policy.Vehicle_Policy__r.Registered_Plate__c}</td>
+                    <th width="17%">Uso / Use:</th>
+                    <td>{!policy.What_is_the_purpose_of_trip__c}</td>
+                </tr>
+                <tr>
+                    <th width="30%">Valor Declarado / Declared Value (2):</th>
+                    <td >
+                        <apex:outputText value="$" rendered="{!NOT(ISNULL(policy.Insured_value__c))}" />
+                        <apex:outputText value="{0,number,00.00}">
+                            <apex:param value="{!policy.Insured_value__c}" />
+                        </apex:outputText>
+                        
+                    </td>
+                    <th width="17%">Territorio / Territory:</th>
+                    <td >{!policy.Territory_picklist__c}</td>
+                </tr>
+            </table>
+        </span>
+        
+        <div style="background-color:#E8E8E8; font-weight:bold; font-size:10pt;width:100%">Remolques, Vehículos Remolcados y Equipo Especial / Additional Trailers, Towed Units and Special Equipment (3)</div>
+        <span>
+            <table width="100%" border="1px" cellspacing="0" cellpadding="0" style="font-size:10pt;width:100%;border-collapse: collapse;">
+                <tr>
+                    <th>Type</th>
+                    <th>Año / Year:</th>
+                    <th>Marca / Make:</th>
+                    <th>Modelo / Model:</th>
+                    <th>No. Serie / VIN</th>
+                    <th>Valor Declarado / Declared Value (2)</th>
+                </tr>
+                
+                <apex:outputText rendered="{!towedUnitsList.size = 0}">
+                    <tr style="font-size:10pt;">
+                        <td style="text-transform: uppercase;">NA</td>
+                        <td style="text-transform: uppercase;">NA</td>
+                        <td style="text-transform: uppercase;">NA</td>
+                        <td>NA</td>
+                        <td>
+                            NA
+                        </td>
+                        <td>NA</td>
+                    </tr>
+                </apex:outputText>
+                
+                <apex:repeat value="{!towedUnitsList}" var="towedUnit">
+                    <tr style="font-size:10pt;">
+                        <td>{!towedUnit.Towed_Unit_Type__c}</td>
+                        <td>  
+                            {!towedUnit.Year__c}
+                        </td> 
+                        <td style="text-transform: uppercase;">  
+                            {!towedUnit.Make__c}
+                        </td> 
+                        <td style="text-transform: uppercase;">  
+                            {!towedUnit.Model__c}
+                        </td> 
+                        <td style="text-transform: uppercase;">  
+                            {!towedUnit.VIN_Number__c}
+                        </td>
+                        
+                        <td style="text-align:center;">
+                            <apex:outputText value="$" rendered="{!NOT(ISNULL(towedUnit.Towed_Unit_Value__c))}" />
+                            <apex:outputText value="{0,number, 00.00}">
+                                <apex:param value="{!towedUnit.Towed_Unit_Value__c}" />
+                            </apex:outputText>
+                            
+                        </td>
+                        
+                    </tr> 
+                </apex:repeat>
+            </table>
+        </span>
+        <div style="background-color:#E8E8E8; font-weight:bold; font-size:10pt; margin-top:4px; width:100%">Coberturas / Coverages</div>
+        <span>
+            <table class="maintable"  style="width:100%; border-collapse: collapse;font-size:7pt;">
+                <tr style="font-size:10pt;">
+                    <th style="border-right: 1px solid #E8E8E8; border-bottom: 1px solid #E8E8E8;"></th>
+                    <th style="border-right: 1px solid #E8E8E8; border-bottom: 1px solid #E8E8E8;">Deducible / Deductible</th>
+                    <th style="border-bottom: 1px solid #E8E8E8;">Suma Asegurada / Insured Amount</th>
+                </tr>
+                <tr style="font-size:7pt;">
+                    <td style="border-right: 1px solid #E8E8E8;font-size:8pt;">Property Damage</td>
+                   
+                    <td style="text-align:center; border-right: 1px solid #E8E8E8;">
+                         <apex:outputText >
+                                <apex:outputText rendered="{!policy.Package__c == 'Liability'}">
+                                    n/a
+                                </apex:outputText>
+                                <apex:outputText rendered="{!policy.Package__c != 'Liability'}">
+                                    $ 500.00
+                                </apex:outputText>
+                            </apex:outputText>
+                    </td>
+                    <!--<td style="text-align:center; border-right: 1px solid #E8E8E8;"> $ 500.00 </td>-->
+                    <td style="text-align:center;">
+                         <apex:outputText >
+                                <apex:outputText rendered="{!policy.Package__c == 'Liability'}">
+                                    $ 0
+                             </apex:outputText>
+                             <apex:outputText rendered="{!policy.Package__c != 'Liability'}">
+                                 <apex:outputText value="$" rendered="{!NOT(ISNULL(policy.Insured_value__c))}" />
+                                 <apex:outputText value="{0,number, 00.00}">
+                                     <apex:param value="{!totalInsuredValue}" />
+                                 </apex:outputText>
+                             </apex:outputText>
+                        </apex:outputText>
+                    </td>
+                    
+                    
+                    <!--td style="text-align:center;">
+                        <apex:outputText value="$" rendered="{!NOT(ISNULL(policy.Insured_value__c))}" />
+                        <apex:outputText value="{0,number, 00.00}">
+                            <apex:param value="{!policy.Insured_value__c}" />
+                        </apex:outputtext>
+                    </td-->
+                    
+                </tr>
+                <tr>
+                    <td style="border-right: 1px solid #E8E8E8;font-size:8pt;">Total Theft</td>
+                    <td style="text-align:center; border-right: 1px solid #E8E8E8;">
+                         <apex:outputText >
+                                <apex:outputText rendered="{!policy.Package__c == 'Liability'}">
+                                    n/a
+                                </apex:outputText>
+                                <apex:outputText rendered="{!policy.Package__c != 'Liability'}">
+                                    $ 1,000.00
+                                </apex:outputText>
+                            </apex:outputText>
+                    </td>
+                    <td style="text-align:center;">
+                         <apex:outputText >
+                                <apex:outputText rendered="{!policy.Package__c == 'Liability'}">
+                                    $ 0
+                             </apex:outputText>
+                             <apex:outputText rendered="{!policy.Package__c != 'Liability'}">
+                                 <apex:outputText value="$" rendered="{!NOT(ISNULL(policy.Insured_value__c))}" />
+                                 <apex:outputText value="{0,number, 00.00}">
+                                     <apex:param value="{!totalInsuredValue}" />
+                                 </apex:outputText>
+                             </apex:outputText>
+                        </apex:outputText>
+                    </td>
+                    <!--td style="text-align:center; border-right: 1px solid #E8E8E8; " > $ 1,000.00 </td>
+                    <td style="text-align:center;">
+                        <apex:outputText value="$" rendered="{!NOT(ISNULL(policy.Insured_value__c))}" />
+                        <apex:outputText value="{0,number, 00.00}">
+                            <apex:param value="{!policy.Insured_value__c}" />
+                        </apex:outputtext>
+                        
+                    </td-->
+                    
+                </tr>
+                <tr>
+                    <td style="border-right: 1px solid #E8E8E8;font-size:8pt;">Third Party Liability(Combined Single Limit)</td>
+                    <td style="text-align:center; border-right: 1px solid #E8E8E8;" > NONE </td>
+                    
+                    <td style="text-align:center;">
+                        <apex:outputText value="$" rendered="{!NOT(ISNULL(policy.Liability_picklist__c))}" />
+                        {!policy.Liability_picklist__c}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-right: 1px solid #E8E8E8;font-size:8pt;">
+                        Medical Expenses for Occupants
+                    </td>
+                
+                    <td style="text-align:center; border-right: 1px solid #E8E8E8;">
+                        NONE
+                    </td>
+                
+                    <td style="text-align:center;">
+                        <apex:outputText value="NONE" rendered="{!ISBLANK(policy.Medical_picklist__c)}" />
+                        <apex:outputText rendered="{!NOT(ISBLANK(policy.Medical_picklist__c))}">
+                            $ {!policy.Medical_picklist__c}
+                        </apex:outputText>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="border-right: 1px solid #E8E8E8;font-size:8pt;">Legal Assistance</td>
+                    <td style="text-align:center; border-right: 1px solid #E8E8E8;" > NONE </td>
+                    <td style="text-align:center; " > COVERED</td>
+                </tr>
+                <tr>
+                    <td style="border-right: 1px solid #E8E8E8;font-size:8pt;">Roadside Assistance</td>
+                    <td style="text-align:center; border-right: 1px solid #E8E8E8;" > NONE </td>
+                    <td style="text-align:center;" > COVERED</td>
+                </tr>
+                <tr>
+                    <td style="border-right: 1px solid #E8E8E8; border-bottom: 1px solid #E8E8E8;font-size:8pt;">Platinum Endorsement</td>
+                    <td style="text-align:center; border-right: 1px solid #E8E8E8; border-bottom: 1px solid #E8E8E8;" > NONE </td>
+                    <td style="text-align:center; border-bottom: 1px solid #E8E8E8;" > INCLUDED</td>
+                </tr>
+                <tr>
+                    <td style="background-color:white;padding:5px; text-align:center; font-size:12px; border:0px"></td>
+                    <td style="background-color:white;padding:5px; text-align:center; font-size:12px; border:0px"></td>
+                    <td style="background-color:white;padding:5px; text-align:center; font-size:12px; border:0px"></td>
+                </tr>
+                <tr style="font-size:9pt;">
+                    <td style="border:0px;">
+                    </td>
+                    <td style="text-align:left; border:0px;">Prima Neta / Net Premium:
+                    </td>
+                    <td style="text-align:right; border:0px;">
+                        <apex:outputText value="$" rendered="{!NOT(ISNULL(netPremiumWithoutAgentAndBrokerFee))}" />
+                        <apex:outputText value="{0,number, 00.00}">
+                            <apex:param value="{!ROUND(netPremiumWithoutAgentAndBrokerFee, 2)}" />
+                        </apex:outputText>
+                        
+                    </td>
+                </tr>
+                <tr style="font-size:9pt;">
+                    <td style="border:0px;">
+                    </td>
+                    <td style="text-align:left; border:0px;">Gastos de expedición / Policy Fee:
+                    </td>
+                    <td style="text-align:right; border:0px;">
+                        <apex:outputText value="$" rendered="{!NOT(ISNULL(totalBrokerageFee))}" />
+                        <apex:outputText value="{0,number, 00.00}">
+                            <apex:param value="{!totalBrokerageFee}" />
+                        </apex:outputText>
+                        
+                    </td>
+                </tr>
+                
+                <tr style="font-size:9pt;">
+                    <td style="border:0px;">
+                    </td>
+                    <td style="text-align:left; border:0px;">I.V.A. / Mex. Tax:
+                    </td>
+                    <td style="text-align:right; border:0px;"> 
+                        <apex:outputText value="$" rendered="{!NOT(ISNULL(policy.I_V_A_Mex_Tax__c))}" />
+                        <apex:outputText value="{0,number, 00.00}">
+                            <apex:param value="{!policy.I_V_A_Mex_Tax__c}" />
+                        </apex:outputText>
+                        
+                    </td>
+                </tr>
+                <tr style="font-size:9pt;">
+                    <td style="border:0px;">
+                    </td>
+                    <td style="text-align:left; border:0px;">Surcharge:
+                    </td>
+                    <td style="text-align:right; border:0px;">
+                        <apex:outputText value="{0, number, $#,##0.00}" rendered="{!NOT(ISNULL(policy.Surcharge__c))}">
+                            <apex:param value="{!policy.Surcharge__c}" />
+                        </apex:outputText>
+                    </td>
+                </tr>
+                <tr style="font-size:9pt;">
+                    <td style="border:0px;">
+                    </td>
+                    <td style="text-align:left; border:0px;">Prima Total /Total Premium:
+                    </td>
+                    <td style="text-align:right; border:0px;">
+                        <apex:outputText value="$" rendered="{!NOT(ISNULL(policy.Total_Premium_Amount__c))}" />
+                        <apex:outputText value="{0,number, 00.00}">
+                            <apex:param value="{!ROUND(policy.Net_Premium__c + policy.Broker_Policy_Fee__c + policy.I_V_A_Mex_Tax__c + policy.Surcharge__c , 2)}" />
+                        </apex:outputText>
+                        
+                    </td>
+                </tr>
+            </table>
+        </span>
+        <apex:outputText rendered="{!(drivers.size = 0 && towedUnitsList.size = 0)}">
+            <br/><br/><br/><br/>
+        </apex:outputText>
+        <apex:outputText rendered="{!(drivers.size = 0 && towedUnitsList.size = 1)}">
+           <br/><br/><br/><br/>
+        </apex:outputText>
+         <apex:outputText rendered="{!(drivers.size = 0 && towedUnitsList.size = 2)}">
+           <br/><br/><br/>
+        </apex:outputText>
+        <apex:outputText rendered="{!(drivers.size = 0 && towedUnitsList.size = 3)}">
+           <br/><br/>
+        </apex:outputText>
+        <apex:outputText rendered="{!(drivers.size = 1 && towedUnitsList.size = 0)}">
+            <br/><br/><br/>
+        </apex:outputText>
+        <apex:outputText rendered="{!(drivers.size = 1 && towedUnitsList.size = 1)}">
+            <br/><br/><br/>
+        </apex:outputText>
+        <apex:outputText rendered="{!(drivers.size = 1 && towedUnitsList.size = 2)}">
+            <br/><br/>
+        </apex:outputText>
+        <apex:outputText rendered="{!(drivers.size = 1 && towedUnitsList.size = 3)}">
+            <br/>
+        </apex:outputText>
+         <apex:outputText rendered="{!(drivers.size = 2 && towedUnitsList.size = 0)}">
+            <br/><br/>
+        </apex:outputText>
+         <apex:outputText rendered="{!(drivers.size = 2 && towedUnitsList.size = 1)}">
+            <br/><br/>
+        </apex:outputText>
+         <apex:outputText rendered="{!(drivers.size = 2 && towedUnitsList.size = 2)}">
+            <br/>
+        </apex:outputText>
+         <apex:outputText rendered="{!(drivers.size = 3 && towedUnitsList.size = 0)}">
+            <br/>
+        </apex:outputText>
+         <apex:outputText rendered="{!(drivers.size = 3 && towedUnitsList.size = 1)}">
+            <br/>
+        </apex:outputText>
+        
+        <span style="border: 1px solid black;font-size:10pt;">
+            <div style="background-color:#E8E8E8; font-weight:bold; margin-top:0px; width:100%">Número de Contacto / Contact Information</div>
+            <span style="font-size:11pt;">IMPORTANTE / IMPORTANT:</span><span style="font-size:10pt;"> Todo accidente deberá ser reportado antes de salir de México, de lo contrario, su reclamo
+            podría ser rechazado. / All accidents must be reported before leaving Mexico, failure to do so may void your claim.
+            </span>
+            
+            <br/> 
+            <table cellspacing="0" cellpadding="0" class="maintable" border="1" width="100%" style="border-collapse: collapse;">
+                <tr>
+                    <td style="font-size:10pt;"><span style="font-weight:bold;">Reporte de Accidente / Accident
+                        Report:</span><br/>
+                        Desde México: / Calling from Mexico:
+                        800-801-01-17<br/>
+                        Desde una Línea Americana: / Calling
+                        from any US phone line:
+                        011-52-81-8864-9322<br/>
+                        Número gratuito:
+                        1-877-699-6679
+                    </td>
+                    <td style="font-size:10pt;"><span style="font-weight:bold;">Grúa o Asistencia Vial: / Roadside
+                        Assistance:</span><br/>
+                        Desde México: / Calling from Mexico:
+                        800-767-43-57<br/>
+                        Desde una Línea Americana: / Calling
+                        from any US phone line:
+                        011-52-55-4195-5348<br/>
+                        Número gratuito:
+                        1-877-211-6710
+                    </td>
+                    <td style="font-size:10pt;"><span style="font-weight:bold;">Para Seguimientos de Reclamos: / For 
+                        Claims Follow ups:</span><br/>
+                        Desde México: / Calling from Mexico:
+                        800-767-43-57<br/>
+                        Desde USA: / Calling from USA:
+                        011-52-55-4195-5348<br/>
+                        Número gratuito:
+                        1-877-211-6710
+                    </td>
+                </tr>
+            </table>
+        </span>
+        <div style="page-break-before:always;"/>    
+        <br/>
+        <p style="font-weight:600;font-size:12pt; display:inline;">
+            <span style="font-weight:bold; font-size: 10pt;">CARÁTULA DE PÓLIZA / DECLARATION’S PAGE</span> <br/>
+            PÓLIZA DE SEGURO DE AUTOMÓVILES TURISTAS PARA MÉXICO - AUTO SOUTHBOUND /<br/>
+            TOURIST AUTO POLICY FOR MEXICO<br/>
+        </p>
+        
+        <br/>
+        <div style="background-color:#E8E8E8; font-weight:bold; font-size:10pt; margin-top:-14px; width:100%">Información Adicional / Additional Information</div>
+        <span>
+            <table width="100%" cellspacing="0" cellpadding="0" style="font-size:10pt;">
+                <tr>
+                    <th width="33%">Conductores menores a 21 años de edad / Drivers under 21 years:</th>
+                    <td>
+                        <apex:outputText rendered="{!policy.Quote_c__r.Is_there_a_driver_under_21__c != null }">
+                            {!policy.Quote_c__r.Is_there_a_driver_under_21__c}
+                        </apex:outputText>
+                        <apex:outputText rendered="{!NOT(policy.Quote_c__r.Is_there_a_driver_under_21__c != null)}">
+                            No
+                        </apex:outputText>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Nombre de Financiera / Lienholder’s Name:</th>
+                    <td>{!policy.Vehicle_Policy__r.Lienholder_name__c}</td>
+                    <th width="18%">Teléfono / Phone No.:</th>
+                    <td>{!policy.Vehicle_Policy__r.Lienholder_Phone__c}</td>
+                </tr>
+                <tr>
+                    <th>Domicilio de Financiera / Lienholder’s Address:</th>
+                    <td>{!policy.Vehicle_Policy__r.Lienholder_Street__c} &nbsp; {!policy.Vehicle_Policy__r.Lienholder_Street_2__c} &nbsp;
+                        {!policy.Vehicle_Policy__r.Lienholder_State__c} &nbsp; {!policy.Vehicle_Policy__r.Lienholder_City__c} &nbsp;
+                        {!policy.Vehicle_Policy__r.Lienholder_Country__c}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Aseguradora de Origen / US Insurance Carrier:</th>
+                    <td></td>
+                    <th>No. Poliza / Policy No.:</th>
+                    <td>{!policy.Chubb_Policy_Number__c}</td>
+                </tr>
+            </table>
+        </span>
+        
+        <div style="background-color:#E8E8E8; font-weight:bold; font-size:10pt; margin-top:0px-; width:100%">Notas / Notes</div>
+        <div  style="font-size:10pt;" >
+            (1) Cada vehículo automotor deberá figurar en su propia póliza de seguro por separado. / Each self-propelled road vehicle
+            must be listed on its own separate insurance policy.<br/>
+            
+            (2) En el caso de pérdida total, la indemnización nunca superará el “valor actual de mercado” del vehículo, equipo especial,
+            remolque o bote, también conocido como “Valor Comercial”. / In the event of a total loss, the claim settlement will never
+            exceed the “current market value” of the vehicle, special equipment, trailer or boat, also known as “Actual Cash Value”.<br/>
+            
+            (3) Botes, remolques y equipos especiales sólo quedarán asegurados si están expresamente descritos en la presente
+            carátula incluyendo su valor correspondiente. / Boats, trailers and special equipment are only insured if they are expressly
+            listed here with its corresponding value.<br/>
+            
+            (4) La cobertura de Equipo Especial excluye expresamente equipo de reproducción de sonido, video y equipo de
+            grabación. / Special equipment coverage expressly excludes sound reproduction, video and recording equipment.
+            
+            <br/>
+            (5) Los botes asegurados en esta póliza estarán cubiertos exclusivamente mientras se encuentren sobre su respectivo
+            remolque. No habrá cobertura durante las maniobras de carga o descarga o estando a flote la embarcación. / Boats
+            insured under this policy are only covered while towed. No coverage while being launched or afloat.
+        </div>
+        <br/>
+        <div style="border:2px solid #b7b1b1;font-size:10pt; margin-top:-14px;">  
+            <table class="notasTable" style="font-size:10pt;">
+                <tr>
+                    <td colspan="3">
+                        <caption style="background-color:#E8E8E8;text-align:left;padding:2px;"><b>ESPECIFICACIONES QUE FORMAN PARTE DE LA PÓLIZA DE SEGURO / SPECIFICATIONS THAT FORMS PART
+                            OF THE INSURANCE POLICY</b>
+                        </caption>
+                        Sublímites de Cobertura (Dólares) / Insured Amount Sub-limits (USD) <br/>
+                        2.3 Gastos Médicos a Ocupantes / Medical Expenses for Occupants
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-right:1px solid #b7b1b1; border-top: 1px solid #b7b1b1;font-size:13.5px; ">
+                        E) Gastos Funerales / Funeral Expenses
+                    </td>
+                    <td colspan="2" style="border-top: 1px solid #b7b1b1;font-size:13.5px;">
+                        $1,000 por persona / per person // $5,000 por accidente / per accident
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="border-bottom:1px solid #b7b1b1; border-top: 1px solid #b7b1b1; ">
+                        <b>Costo Máximo de Mano de Obra / Maximum Labor Rates per Hour</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-bottom:1px solid #b7b1b1; border-right:1px solid #b7b1b1;">Reparaciones en México / Repairs in Mexico
+                        Reparaciones en EUA o Canadá / Repairs in
+                        US or Canada</td>
+                    <td style="border-bottom:1px solid #b7b1b1; border-right:1px solid #b7b1b1;">
+                        <b>Paquete Básico / Basic</b>
+                        Mexican current labor rates
+                        US$38.00 per hour
+                    </td>
+                    <td style="border-bottom:1px solid #b7b1b1;">
+                        <b>Endoso Platino / Platinum</b>
+                        Mexican current labor rates
+                        Full US Rates
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="border-bottom:1px solid #b7b1b1;">
+                        <b>Cláusula 3ra. Endoso Platino / 3rd Clause. Platinum Endorsement</b><br/>
+                        2.1 Daños Materiales / Physical Damage
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="border-bottom:1px solid #b7b1b1; border-right:1px solid #b7b1b1;" >Condonación de Deducible cuando el tercero con culpabilidad no cuente con
+                        Seguro de Autos / Deductible waiver in case of an Uninsured Liable Third</td>
+                    <td style="border-bottom:1px solid #b7b1b1; ">
+                        Sin Deducible / Deductible Waiver
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="border-bottom:1px solid #b7b1b1; ">2.3 Gastos Médicos a Ocupantes / Medical Expenses for Occupants</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style=" border-right:1px solid #b7b1b1;">B. Suma asegurada en exceso de Gastos Médicos a Ocupantes cuando el
+                        tercero con culpabilidad no cuente con Seguro de Autos / Increase in Medical
+                        Expenses in Excess in case of an Uninsured Liable Third Party</td>
+                    <td>
+                        $15,000 por persona / per person // <br/>
+                        $75,000 por accidente / per accident
+                    </td>
+                </tr>
+            </table>
+        </div>     
+        <div style="background-color:#E8E8E8; font-weight:bold; font-size:10pt; width:100%">En caso de Accidente en México / In case of an Accident in Mexico</div>
+        <div  style="font-size:10pt;" >
+            1. No mueva el vehículo hasta que reciba permiso por parte de las autoridades o representante de la compañía de
+            seguros. / Do not move the vehicles until you are given permission by the authorities or insurance company representative.
+            <br/>
+            2. Llame a su compañía de seguros tan pronto como sea posible después de que tenga conocimiento de los daños y antes
+            de salir de México. / Call your insurance company as soon as possible after the accident occurs and before you leave
+            Mexico.<br/>
+            3. Un representante bilingüe será capaz de ayudarlea usted y le pedirá información sobre su póliza de seguros así como
+            detalles en la ocurrencia del accidente. / A bilingual representative will be able to assist you and they will ask you for
+            information regarding your Insurance Policy and details in the occurrence of the accident.
+            <br/>
+            4. Posiblemente otras personas que estuvieron involucrados en el accidente puedan intentar ofrecerle el pago de daños y
+            perjuicios. No acepte ningún pago sin consultar a la compañía de seguros. / Others who were involved in the accident may
+            try to offer payment to you for damages. Do NOT accept any payment without consulting the insurance company.
+            <br/>
+            5. Incluso si se han producido lesiones leves durante el accidente, el caso puede pasar al Ministerio Público. Un abogado
+            será asignado a usted para asistencia legal. / Even if minor injuries have occurred during the accident, the case may go to
+            the State DA’s Office. An attorney will be assigned to you for legal assistance.
+        </div>
+        <hr class="line"/>
+        <div style="background-color:#E8E8E8; font-weight:bold; font-size:10pt; width:100%">Notas / Notes</div>
+        <div  style="font-size:10pt;" >
+            Chubb Seguros México, S.A. está autorizado y reconocido en Estados Unidos de Norte América por la National
+            Association of Insurance Commissioners (NAIC:AA273007) /Chubb Seguros México, S.A. is authorized and recognized in
+            the United States of America by the National Association of Insurance Commissioners (NAIC:AA2730007).
+            
+        </div>
+        <hr class="line"/>
+        <div  style="font-size:10pt;" >
+            Artículo 25 de la Ley Sobre el Contrato de Seguro. Si el contenido de la póliza no concordaran con la oferta, el asegurado
+            podrá pedir la rectificación correspondiente dentro de los 30 días que sigan al día en que reciba la póliza. Transcurrido este
+            plazo se considerarán aceptadas las estipulaciones de la póliza. / Article 25 of the Insurance Contract Law.- If the content
+            of this policy are not in accordance with the offer, the insured may request rectification within 30 days following the day you
+            receive the policy. After this period, the Company shall understand you have accepted the information here provided
+        </div>
+        <hr class="line"/>
+        <div  style="font-size:10pt;" >
+            <span style="font-weight:bold;">IMPORTANTE / IMPORTANT:</span> Es obligación del asegurado dar aviso a la compañía tan pronto tenga conocimiento de
+            haberse presentado alguna de las circunstancias o sucesos previstos en los términos de esta póliza, ya que el derecho a
+            tal protección depende del cumplimiento del asegurado de esta obligación de aviso. / It is the obligation of the insured to
+            give notice to the company as soon becomes aware of any of the circumstances or events provided in the terms of this
+            policy, as the right to such protection depends on the fulfilment of the insured of this obligation of notice.
+        </div>
+        <br/>
+        <hr class="line"/>
+        <div  style="font-size:10pt;" >
+            Al recibir esta carátula de póliza se entregan también las condiciones generales que integran su contrato de seguro, le
+            invitamos a consultarlas, en las mismas podrá conocer las coberturas y exclusiones de este seguro; de igual forma las
+            podrá consultar en la página web www.chubb.com/mx. / When you receive this Declaration Page, you are also receiving
+            the General Conditions applicable for your insurance contract, we invite you to read them carefully; there you will find the
+            details about your coverages and exclusions. You may also consult them in our web page: www.chubb.com/mx
+        </div>
+        <br/>
+        <hr class="line"/>
+        <div  style="font-size:10pt;" >
+            <span style="font-weight:bold;">Unidad Especializada de Atención de Consultas y Reclamaciones de CHUBB Seguros, México S.A. (UNE) /
+                Specialized Unit for Customer Care and Service:</span> Av. Paseo de la Reforma No. 250, Torre Niza, Piso 15, Col. Juárez,
+            Delg. Cuauhtemoc, C.P. 06600, Ciudad de México. <span style="font-weight:bold;">Llamada sin Costo desde México / Toll Free from Mexico / :</span> 800
+            223 2001 <span style="font-weight:bold;">E-mail:</span> uneseguros@chubb.com <span style="font-weight:bold;">Horarios de Atención</span> Lunes a Jueves de 08:30hrs a 17:00hrs y Viernes de
+            08:30hrs to 14:00hrs. / <span style="font-weight:bold;">Office Hours:</span> Monday to Thursday from 08:30hrs to 17:00hrs and Fridays from 08:30hrs to
+            14:00hrs
+        </div>
+        <br/>
+        <hr class="line"/>
+        <div  style="font-size:10pt;" >
+            <span style="font-weight:bold;">Comisión Nacional para la Protección y Defensa de los Usuarios de Servicios Financieros (CONDUSEF) / National
+                Commission for the Protection of Users of Financial Services (CONDUSEF):</span> Av. Insurgentes Sur #762, Col. Del Valle,
+            C.P. 03100,Ciudad de México. Usted puede conocer las oficinas de atención en el resto del país en la siguiente página de
+            internet: / You can get to know the offices in the rest of the country in the following internet page
+            www.condusef.gob.mx/index.php/oficinas-de-atención <span style="font-weight:bold;">E-mail:</span> asesoria@condusef.gob.mx <span style="font-weight:bold;">Llamada sin Costo desde
+            México / Toll Free from Mexico:</span> 800 999 8080 Desde cualquier teléfono americano / If you are calling from a U.S. Phone
+            Line: 011 52 (55) 5340 0999
+        </div>
+        <br/>
+        <hr class="line"/>
+        <div  style="font-size:10pt;" >
+            En cumplimiento a lo dispuesto en el artículo 202 de la Ley de Instituciones de Seguros y de Fianzas, la
+            documentación contractual y la nota técnica que integran este producto de seguro, quedaron registradas ante la
+            Comisión Nacional de Seguros y Fianzas, a partir del día 24 de Julio del 2024, con número CNSFS0039-0289-2024 / CONDUSEF-006522-01.
+        </div>
+        
+        <div  style="font-size:10pt;" >
+            En testimonio de lo cual la Compañía firma la presente póliza en: / In witness whereof, the company signing this policy in:
+        </div>
+        <br/>
+        <span>
+            <table  style= "font-size:10pt; width:100%;">
+                <tr >
+                    <td style="border-bottom: 1.5px solid #D3D3D3;">
+                        <apex:outputText value="{0,date,MMM dd, yyyy}">
+                            <apex:param value="{!policy.createdDate}"/>
+                        </apex:outputText>
+                    </td>
+                    <td > &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+                    
+                    <td style="border-bottom: 1.5px solid #D3D3D3;">
+                        <table >
+                            <tr>
+                                <td style="text-align:right;">
+                                    <img  src="{!$Resource.chubb_logo_blue2}" />
+                                </td>
+                                <td style="font-size:6pt;">
+                                    Digitally signed by<br/>
+                                    CHUBB<br/>
+                                    Date:<apex:outputText value="{0,date,MMM dd, yyyy}">
+                                    <apex:param value="{!policy.createdDate}"/>
+                                    </apex:outputText><br/>
+                                    Reason: Private<br/>
+                                    Location: Local<br/>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr style="font-size:10pt;">
+                    <td>
+                        Lugar y Fecha / Place and Date
+                    </td>
+                    <td></td>
+                    
+                    <td >
+                        Funcionario Autorizado / Authorized
+                    </td>
+                </tr>
+            </table>
+        </span>
+        <apex:outputText rendered="{!(len(policy.Vehicle_Policy__r.Lienholder_Country__c)==0)}">
+            <br/><br/>
+        </apex:outputText>
+        <span style="border: 1px solid black;">
+            <div style="background-color:#E8E8E8; font-weight:bold; font-size:10pt; margin-top:0px; width:100%">Número de Contacto / Contact Information</div>
+            <span style="font-size:10pt;">IMPORTANTE / IMPORTANT:</span><span style="font-size:10pt;"> Todo accidente deberá ser reportado antes de salir de México, de lo contrario, su reclamo
+            podría ser rechazado. / All accidents must be reported before leaving Mexico, failure to do so may void your claim.
+            </span>
+            
+            <br/> 
+            <table cellspacing="0" cellpadding="0" class="maintable" border="1" width="100%" style="border-collapse: collapse; font-size:10pt;">
+                <tr>
+                    <td><span style="font-weight:bold;">Reporte de Accidente / Accident
+                        Report:</span><br/>
+                        Desde México: / Calling from Mexico:
+                        800-801-01-17<br/>
+                        Desde una Línea Americana: / Calling
+                        from any US phone line:
+                        011-52-81-8864-9322<br/>
+                        Número gratuito:
+                        1-877-699-6679
+                    </td>
+                    <td><span style="font-weight:bold;">Grúa o Asistencia Vial: / Roadside
+                        Assistance:</span><br/>
+                        Desde México: / Calling from Mexico:
+                        800-767-43-57<br/>
+                        Desde una Línea Americana: / Calling
+                        from any US phone line:
+                        011-52-55-4195-5348<br/>
+                        Número gratuito:
+                        1-877-211-6710
+                        
+                    </td>
+                    <td><span style="font-weight:bold;">Para Seguimientos de Reclamos: / For 
+                        Claims Follow ups:</span><br/>
+                        Desde México: / Calling from Mexico:
+                        800-767-43-57<br/>
+                        Desde USA: / Calling from USA:
+                        011-52-55-4195-5348<br/>
+                        Número gratuito:
+                        1-877-211-6710
+                    </td>
+                </tr>
+            </table>
+        </span>
+        <div style="page-break-before:always;"/>
+        <br/><br/>
+        
+        <div class="lastPage">
+            <!-- 
+            <div align="right">
+                
+                <apex:outputPanel rendered="{!NOT(ISBLANK(logoUrl))}">
+                    <img src="{!logoUrl}" style="width:220px; margin-top:-200px !important;" />
+                </apex:outputPanel>
+                
+                <apex:outputPanel rendered="{!ISBLANK(logoUrl)}">
+                    <h2>{!agencyName}</h2> 
+                </apex:outputPanel>
+
+                
+            </div>-->
+            
+            <div align="center" style="font-size:11pt;">
+                <b><i>SUMMARY RECEIPT</i></b>    
+            </div>
+            <br/>
+            <br/>
+            <div style="border: 1px black solid; font-size:11pt;">
+                <table width="100%" style="border: 1px black solid;">
+                    <tr>
+                        <td>1. Mexico Tourist Automobile Policy No:</td>
+                        <td style="width:60%;text-align:right;font-size:10pt;">{!policy.Name}</td>
+                    </tr>
+                    <tr>
+                        <td>Premium</td>
+                        <td style="text-align:right; font-size:10pt;">
+                            <apex:outputText value="$" rendered="{!NOT(ISNULL(policy.Net_Premium__c))}" />
+                            <apex:outputText value="{0,number, 00.00}">
+                                <apex:param value="{!ROUND(policy.Net_Premium__c, 2)}" />
+                            </apex:outputText>
+                        </td>    
+                    </tr>
+                    <tr>
+                        <td>Policy Fee</td>
+                        <td style="text-align:right; font-size:10pt;">
+                            <apex:outputText value="$" rendered="{!NOT(ISNULL(policy.Broker_Policy_Fee__c))}" />
+                            <apex:outputText value="{0,number, 00.00}">
+                                <apex:param value="{!policy.Broker_Policy_Fee__c}" />
+                            </apex:outputText>
+                        </td>   
+                    </tr>
+                    <tr>
+                        <td>Tax</td>
+                        <td style="text-align:right; font-size:10pt;">
+                            <apex:outputText value="$" rendered="{!NOT(ISNULL(policy.I_V_A_Mex_Tax__c))}" />
+                            <apex:outputText value="{0,number, 00.00}">
+                                <apex:param value="{!policy.I_V_A_Mex_Tax__c}" />
+                            </apex:outputText>
+                        </td> 
+                    </tr>
+                    <tr>
+                        <td>Surcharge</td>
+                        <td style="text-align:right; font-size:10pt;">
+                            <apex:outputText value="$" rendered="{!NOT(ISNULL(policy.Surcharge__c))}" />
+                            <apex:outputText value="{0,number, 00.00}">
+                                <apex:param value="{!policy.Surcharge__c}" />
+                            </apex:outputText>
+                        </td> 
+                    </tr>
+                    <tr style="background-color:#A9A9A9;">
+                        <td style="text-align:center; border-top:1px solid black;">Sub-Total</td>
+                        <td style="text-align:right; border-top:1px solid black; font-size:10pt;">
+                            <apex:outputText value="$" rendered="{!NOT(ISNULL(policy.Total_Premium_Amount__c))}" />
+                            <apex:outputText value="{0,number, 00.00}">
+                                <apex:param value="{!ROUND(policy.Total_Premium_Amount__c, 2)}" />
+                            </apex:outputText>
+                        </td>   
+                    </tr>
+                    
+                </table>
+            </div>
+            <br/>
+            <br/>
+            <div style="border: 1px black solid; font-size:11pt;">
+                <table width="100%" style="border: 1px black solid; font-size:11pt;">
+                    <tr>
+                        <td>2. Agency Fee</td>
+                        <td style="text-align:right; font-size:10pt;">$ 0.00 USD</td>
+                    </tr>
+                    <tr style="background-color:#A9A9A9;">
+                        <td style="text-align:center; border-top:1px solid black;">Grand Total</td>
+                        <td style="text-align:right; border-top:1px solid black; font-size:10pt;">
+                            <apex:outputText value="$" rendered="{!NOT(ISNULL(policy.Total_Premium_Amount__c))}" />
+                            <apex:outputText value="{0,number, 00.00}">
+                                <apex:param value="{!ROUND(policy.Total_Premium_Amount__c, 2)}" />
+                            </apex:outputText>
+                        </td>    
+                    </tr>
+                </table>
+            </div>
+            <br/>
+        <br/>
+            <div class="d4">
+                
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <apex:outputPanel rendered="{!NOT(ISBLANK(agencyData.Partner_Name__c))}">
+                        <span>AGENCY:</span> {!agencyData.Partner_Name__c} |
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!NOT(ISBLANK(agencyData.Website__c))}">
+                        <span>Website: {!agencyData.Website__c}</span> |
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!NOT(ISBLANK(agencyData.Phone))}">
+                        <span>Phone: {!agencyData.Phone}</span> |
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!NOT(ISBLANK(agencyData.Agent_Id__c))}">
+                        <span>AGENT ID:</span> {!agencyData.Agent_Id__c} 
+                    </apex:outputPanel>
+                </div>
+                
+                <!-- Centered Logo and Name -->
+                <div style="text-align: center;">
+                    <apex:outputPanel rendered="{!NOT(ISBLANK(agencyData.Logo_URL__c))}">
+                        <img src="{!agencyData.Logo_URL__c}" width="30%" height="8%" />
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!ISBLANK(agencyData.Logo_URL__c)}">
+                        <h2>{!agencyData.Partner_Name__c}</h2> 
+                    </apex:outputPanel>
+                </div>
+                
+            </div>
+            
+        </div>        
+    </div>
+    
+    <!--/body-->
+</apex:page>

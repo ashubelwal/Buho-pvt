@@ -1,0 +1,54 @@
+<template>
+    <div class="territory-wrapper">
+        <!-- Page Title -->
+        <div class="step-header">
+            <h1>Select <span class="highlight">Territory</span></h1>
+            <p class="step-subtitle">Choose the territory you want ?</p>
+        </div>
+
+        <form class="wizard-form">
+            <!-- Territory Cards -->
+            <div class="territory-cards">
+                <template for:each={territories} for:item="territory">
+                    <div key={territory.value} 
+                         class={territory.className}
+                         data-territory={territory.value}
+                         onclick={handleTerritorySelect}>
+                        <h4 class="territory-title">{territory.label}</h4>
+                        <div class="territory-map">
+                            <img src={territory.imageUrl} alt={territory.label}>
+                        </div>
+                        
+                        <!-- Hidden radio input for form validation -->
+                        <input 
+                            type="radio" 
+                            name="region" 
+                            value={territory.value} 
+                            checked={territory.selected}
+                            onchange={handleInputChange}
+                            class="hidden-radio"
+                            required
+                            style="display: none;">
+                    </div>
+                </template>
+            </div>
+
+            <!-- Error Message -->
+            <template if:true={booleanvar.isError}>
+                <div class="error-message visible">
+                    Please select territory
+                </div>
+            </template>
+
+            <!-- Continue Button -->
+            <button type="button" class="btn btn-primary btn-continue" onclick={handleContinue}>
+                Continue
+            </button>
+
+            <!-- Info Text -->
+            <p class="step-info-text">
+                Coverage options and pricing vary by territory. Select all areas you plan to visit during your trip.
+            </p>
+        </form>
+    </div>
+</template>

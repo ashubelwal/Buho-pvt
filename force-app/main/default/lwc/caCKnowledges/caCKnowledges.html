@@ -1,0 +1,17 @@
+<template>
+    <lightning-card title="Trending Articles">
+        <div class="slds-p-around_medium">
+            <template if:true={visibleArticles}>
+                <ul class="slds-list_vertical slds-has-dividers_top-space">
+                    <template for:each={visibleArticles} for:item="article">
+                        <li key={article.Id} class="slds-item">
+                            <a href="#" data-id={article.Id} onclick={handleArticleClick} class="slds-text-link">
+                                {article.Title}
+                            </a>
+                        </li>
+                    </template>
+                </ul>
+            </template>
+        </div>
+    </lightning-card>
+</template>

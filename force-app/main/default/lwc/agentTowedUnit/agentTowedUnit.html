@@ -1,0 +1,209 @@
+<template>
+
+    <!-- Towed Unit start-->
+
+    <div class="card slds-p-around_small slds-m-bottom_large">
+
+        <h2 class="sectionTitle">Finalize Towed Detail</h2>
+
+        <template if:true={addedTowed}>
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered driverTable slds-m-top_small">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="">
+                            <div class="" title="Type">Type</div>
+                        </th>
+                        <th class="">
+                            <div class="" title="Value">Value</div>
+                        </th>
+                        <th class="">
+                            <div class="" title="Days">Days</div>
+                        </th>
+                        <th class="">
+                            <div class="" title="Action">Action</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={addedTowed} for:item="towed">
+                        <tr class="slds-line-height_reset" key={towed.towedCount} style={towed.selectedStyle}>
+                            <td>
+                                <div class="slds-truncate" title="">
+                                    {towed.Towed_Unit_Type__c}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate" title="">
+                                    {towed.Towed_Unit_Value__c}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate" title="">
+                                    {towed.Days_in_Tow__c}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">
+                                    <template if:true={towed.updateFields}>
+                                        <span title="Edit" style="cursor:pointer;">
+                                            <lightning-icon icon-name="utility:edit" variant="error" size="xx-small" data-id={towed.towedCount} onclick={handleEditTowed}
+                                                class="wobble animated infinite">
+                                            </lightning-icon>
+                                        </span>
+                                    </template>
+                                    <template if:false={towed.updateFields}>
+                                        <lightning-button-icon icon-name="utility:edit" variant="bare"
+                                            alternative-text="Edit" data-id={towed.towedCount} title="Edit"
+                                            onclick={handleEditTowed}>
+                                        </lightning-button-icon>
+                                    </template>
+
+                                    <lightning-button-icon icon-name="utility:delete" variant="bare"
+                                        alternative-text="Delete" lwc:if={towed.isDeleteTowedButton}
+                                        data-id={towed.towedCount} class="slds-m-left_x-small"
+                                        onclick={handleDeleteTowned} title="Delete">
+                                    </lightning-button-icon>
+                                </div>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </template>
+        
+        <template if:true={enableNewTowed}>
+            
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-combobox class=" cTowed"
+                            label="Type of Towed Unit" value={newTowed.Towed_Unit_Type__c}
+                            name="Towed_Unit_Type__c" options={TowedVehicleOptions}
+                            onchange={handleTowedInputChange}
+                            required></lightning-combobox>
+                    </div>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class=" cTowed" label="Towed Unit Value"
+                            inputmode="numeric" pattern="[0-9]*" maxlength="6" type="text"
+                            value={newTowed.Towed_Unit_Value__c} name="Towed_Unit_Value__c"
+                            required
+                            onchange={handleTowedInputChange}></lightning-input>
+                    </div>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class=" cTowed" label="Days in tow"
+                            type="text" value={newTowed.Days_in_Tow__c} name="Days_in_Tow__c"
+                            inputmode="numeric" pattern="[0-9]*" maxlength="3"
+                            onchange={handleTowedInputChange}
+                            required>
+                        </lightning-input>
+                        <div class="slds-form-element__help" data-error="true"
+                            if:true={isDaysInTowInvalid} style="color:#e74e33">
+                            Days value must be the same as the old Towed.
+                        </div>
+                    </div>
+                    
+                <div class="slds-col slds-p-around_small">
+                    <lightning-input class="quoteValidate cTowed" type="text" label="Year" name="Year__c"
+                        message-when-pattern-mismatch="Enter a valid Year" pattern="^(19|20)\d{2}$" max-length="4"
+                        placeholder="YYYY" max={currentYear} value={newTowed.Year__c} onchange={handleTowedInputChange}
+                        required></lightning-input>
+
+                </div>
+                <div class="slds-col slds-p-around_small">
+                    <lightning-input class="quoteValidate cTowed" label="Make" pattern="^[A-Za-z]+(\s[A-Za-z]+)*$"
+                        title="Only alphabetic characters are allowed" value={newTowed.Make__c} name="Make__c"
+                        maxlength="40" onchange={handleTowedInputChange} required>
+                    </lightning-input>
+                </div>
+                <div class="slds-col slds-p-around_small ">
+                    <lightning-input class="quoteValidate cTowed" label="Model" pattern="^([a-zA-Z0-9\-\_]+\s)*[a-zA-Z0-9]+$"
+                        title="Only alphabetic characters are allowed" value={newTowed.Model__c} name="Model__c"
+                        maxlength="40" onchange={handleTowedInputChange} required>
+                    </lightning-input>
+                </div>
+                <div class="slds-col slds-p-around_small ">
+                    <lightning-input class="quoteValidate cTowed" label="VIN Number"
+                        pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" maxlength="40"
+                        value={newTowed.VIN_Number__c} name="VIN_Number__c" onchange={handleTowedInputChange}
+                        required>
+                    </lightning-input>
+                </div>
+                <div class="slds-col slds-p-around_small ">
+                    <lightning-input class="quoteValidate cTowed" label="Place-License Plate" maxlength="10" minlength="4"
+                        value={newTowed.Plate__c} type="text" name="Plate__c"
+                        pattern="^([a-zA-Z0-9\-\_]+\s)*[a-zA-Z0-9]+$" onchange={handleTowedInputChange}
+                        required></lightning-input>
+                </div>
+
+
+                    <div class="slds-col slds-p-around_small">
+                            <lightning-button class="slds-float_right mexBtn" label="Add Towed unit"
+                                variant="brand" onclick={handleAddNewTowed}></lightning-button>
+                       
+                    </div>
+
+                </div>
+        </template>
+
+        <template if:true={openEditTowed}>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-p-around_small">
+                    <lightning-combobox class="quoteValidate cTowed" label="Type of Towed Unit"
+                        value={newTowed.Towed_Unit_Type__c} name="Towed_Unit_Type__c" options={TowedVehicleOptions}
+                        disabled="true"></lightning-combobox>
+                </div>
+                <div class="slds-col slds-p-around_small">
+                    <lightning-input class="quoteValidate cTowed" label="Towed Unit Value" inputmode="numeric"
+                        pattern="[0-9]*" maxlength="6" type="text" value={newTowed.Towed_Unit_Value__c}
+                        name="Towed_Unit_Value__c" disabled="true"></lightning-input>
+                </div>
+                <div class="slds-col slds-p-around_small">
+                    <lightning-input class="quoteValidate cTowed" label="Days in tow" type="text"
+                        value={newTowed.Days_in_Tow__c} name="Days_in_Tow__c" inputmode="numeric" pattern="[0-9]*"
+                        maxlength="3" disabled="true">
+                    </lightning-input>
+                </div>
+
+                <div class="slds-col slds-p-around_small">
+                    <lightning-input class="quoteValidate cTowed" type="text" label="Year" name="Year__c"
+                        message-when-pattern-mismatch="Enter a valid Year" pattern="^(19|20)\d{2}$" max-length="4"
+                        placeholder="YYYY" max={currentYear} value={newTowed.Year__c} onchange={handleTowedInputChange}
+                        required={isRequiredTowed}></lightning-input>
+
+                </div>
+                <div class="slds-col slds-p-around_small">
+                    <lightning-input class="quoteValidate cTowed" label="Make" pattern="^[A-Za-z]+(\s[A-Za-z]+)*$"
+                        title="Only alphabetic characters are allowed" value={newTowed.Make__c} name="Make__c"
+                        maxlength="40" onchange={handleTowedInputChange} required={isRequiredTowed}>
+                    </lightning-input>
+                </div>
+                <div class="slds-col slds-p-around_small cTowed">
+                    <lightning-input class="quoteValidate" label="Model" pattern="^([a-zA-Z0-9\-\_]+\s)*[a-zA-Z0-9]+$"
+                        title="Only alphabetic characters are allowed" value={newTowed.Model__c} name="Model__c"
+                        maxlength="40" onchange={handleTowedInputChange} required={isRequiredTowed}>
+                    </lightning-input>
+                </div>
+                <div class="slds-col slds-p-around_small cTowed">
+                    <lightning-input class="quoteValidate" label="VIN Number"
+                        pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" maxlength="40"
+                        value={newTowed.VIN_Number__c} name="VIN_Number__c" onchange={handleTowedInputChange}
+                        required={isRequiredTowed}>
+                    </lightning-input>
+                </div>
+                <div class="slds-col slds-p-around_small cTowed">
+                    <lightning-input class="quoteValidate" label="Place-License Plate" maxlength="10" minlength="4"
+                        value={newTowed.Plate__c} type="text" name="Plate__c"
+                        pattern="^([a-zA-Z0-9\-\_]+\s)*[a-zA-Z0-9]+$" onchange={handleTowedInputChange}
+                        required={isRequiredTowed}></lightning-input>
+                </div>
+
+                <div class="slds-col slds-p-around_small">
+                    <lightning-button class="slds-float_right mexBtn" label="Update Towed" variant="brand"
+                        onclick={handleUpdateTowed}></lightning-button>
+                </div>
+
+            </div>
+        </template>
+    </div>
+
+    <!-- Towed Unit end-->
+
+</template>

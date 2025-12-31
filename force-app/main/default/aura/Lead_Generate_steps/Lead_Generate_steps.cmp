@@ -1,0 +1,42 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="title" type="String" access="public"/>
+    <aura:attribute name="backButtonVisibility" type="Boolean" default="false" access="public" />
+    <aura:attribute name="policyType" type="String" access="public"/>
+    <aura:attribute name="step" type="String" access="public"/>
+    <aura:attribute name="completedStep" type="Integer" access="public"/>
+    <aura:attribute name="timeZones" type="list" access="private"/>
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    <aura:attribute name="onNextClick" type="Aura.Action"/>
+    <aura:attribute name="isOwner" type="boolean" default="true" access="public"/>
+
+    
+    <div class="slds-size_12-of-12 slds-m-top_xx-large">
+		<div class="flow-progress">
+            <div class="progress-inner clearfix">
+                <div class="{! 'step step1 '+ if(v.step == 'step1', 'active-step' , '' ) + if(v.completedStep > 1, 'completed-step' , '' )}">
+                    <div class="step-number">Step 1</div>
+                    <div class="step-label">User Detail</div>
+                </div>
+                <div class="{! 'step step2 '+ if(v.step == 'step2', 'active-step' , '' ) + if(v.completedStep > 2, 'completed-step' , '' )}">
+                    <div class="step-number">Step 2</div>
+                    <div class="step-label">Vehicle Details</div>
+                </div>
+                <div class="{! 'step step3 '+ if(v.step == 'step3', 'active-step' , '' ) + if(v.completedStep > 3, 'completed-step' , '' )}">
+                    <div class="step-number">Step 3</div>
+                    <div class="step-label">Term Option</div>
+                </div>
+                <div class="{! 'step step4 '+ if(v.step == 'step4', 'active-step' , '' ) + if(v.completedStep > 4, 'completed-step' , '' )}">
+                    <div class="step-number">Step 4</div>
+                    <div class="step-label">Towed Option</div>
+                </div>
+                <div class="{! 'step step5 '+ if(v.step == 'step5', 'active-step' , '' ) + if(v.completedStep > 5, 'completed-step' , '' )}">
+                    <div class="step-number">Step 5</div>
+                    <div class="step-label">Territory Coverage</div>
+                </div>
+               
+                <div class="progress-bar"></div>
+                <div class="progress-bar-current"></div>
+            </div>
+        </div>
+    </div>
+</aura:component>

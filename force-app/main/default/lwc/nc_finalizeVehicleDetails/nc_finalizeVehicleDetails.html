@@ -1,0 +1,207 @@
+<!-- <template>
+    <div class="test">              
+        <template if:true={boolvar.isLoaded}>
+            <div class="pageTitle slds-m-bottom_medium">
+                <h2 class="slds-text-heading_medium"> Vehicle Details </h2>
+            </div>
+
+            <div class="slds-grid slds-wrap slds-gutters">
+                <div class="slds-size_1-of-1 slds-medium-size_12-of-12 slds-large-size_12-of-12 slds-p-around_small">
+                <template if:true={vehicleDetails.Year__c}>
+                    <div class="vehicle-line">
+                        <span class="vehicle-year">{vehicleDetails.Year__c}</span>                    
+                        <span class="vehicle-make">{vehicleDetails.Make__c}</span>                    
+                        <span class="vehicle-model">{vehicleDetails.Model__c}</span>
+                        <span class="separator">|</span>
+                        <span class="vehicle-price">${vehicleDetails.Value__c}</span>
+                    </div>
+                </template>
+                    </div> -->
+
+
+                <!-- Year -->
+                <!-- <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                    <lightning-input id="Year__c" type="text" label="Year" value={vehicleDetails.Year__c} disabled
+                        name="year">
+                    </lightning-input>
+                </div> -->
+
+                <!-- Make -->
+                <!-- <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                    <lightning-input id="Make__c" type="text" label="Make" value={vehicleDetails.Make__c} disabled
+                        name="make">
+                    </lightning-input>
+                </div> -->
+
+                <!-- Model -->
+                <!-- <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                    <lightning-input id="Model__c" type="text" label="Model" value={vehicleDetails.Model__c} disabled
+                        name="model">
+                    </lightning-input>
+                </div> -->
+
+                <!-- Vehicle Value -->
+                <!-- <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                    <lightning-input id="Value__c" type="number" label="Vehicle Value" value={vehicleDetails.Value__c}
+                        disabled name="value">
+                    </lightning-input>
+                </div> -->
+
+                <!-- VIN Number -->
+                <!-- <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                    <lightning-input id="Vin__c" type="text" label="VIN Number" required value={vehicleDetails.Vin__c}
+                        onchange={handleChange} name="Vin__c">
+                    </lightning-input>
+                </div> -->
+                <!-- <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                    <lightning-input type="text" name="Vin__c" label="VIN Number" pattern="^\d+$"
+                        message-when-pattern-mismatch="Only numbers are allowed" onchange={handleChange} required>
+                    </lightning-input>
+
+                </div> -->
+                <!-- <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-p-around_small">
+                    <lightning-input id="Vin__c" type="text" label="VIN Number" value={vehicleDetails.vin} onchange={handleChange}
+                        name="vin" required pattern="^[A-Z0-9\-]+$" maxlength="17"
+                        message-when-pattern-mismatch="Only letters, numbers, and dashes are allowed">
+                    </lightning-input>
+                </div> -->
+
+                <!-- Registered Country -->
+                <!-- <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                    <c-nc_combobox input-label="Registered Country" options={countryOptions} onselect={handleOptionClick} name="Registered_Country__c"
+                    onreset={handleChildComboboxReset} onaddnew={handleAddValue} search-value ={registeredCountry}  inputrequired="true"></c-nc_combobox> -->
+                    <!-- <lightning-combobox id="Registered_Country__c" label="Registered Country"
+                        placeholder="Select Country" options={countryOptions} required value={vehicleDetails.registeredCountry}
+                        onchange={handleChange} name="registeredCountry"> 
+
+                    </lightning-combobox>-->
+                <!-- </div> -->
+
+                <!-- <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-p-around_small">
+                    <c-nc_combobox input-label="Registered Country" options={countryOptions} onselect={handleOptionClick}
+                        name="Registered_Country__c" onreset={handleChildComboboxReset} onaddnew={handleAddValue}
+                        search-value="United States" inputrequired="true">
+                    </c-nc_combobox>
+                </div> -->
+                <!-- Registered State/Province -->
+                <!-- <div class="slds-size_1-of-1 slds-medium-size_2-of-12 slds-p-around_small">
+                    <c-nc_combobox input-label="Registered State/Province" options={stateOptions} onselect={handleOptionClick}
+                        name="Registered_State__c" onaddnew={handleAddValue} inputdisabled={flag.isStateDisabled}
+                        search-value={registeredState} inputrequired="true">
+                    </c-nc_combobox> -->
+                
+
+                     <!-- JOSE CHANGES -->
+                    <!-- <c-nc_combobox input-label="Registered State/Province" options={stateOptions} onselect={handleOptionClick}
+                        name="Registered_State__c" onaddnew={handleAddValue} inputdisabled={flag.isStateDisabled}
+                        search-value="United States" inputrequired="true">
+                    </c-nc_combobox> -->
+
+                    <!-- JOSE CHANGES -->
+
+                    <!-- <lightning-combobox id="Registered_State__c" label="Registered State/Province"
+                        placeholder="Select State/Province" options={stateOptions} disabled={flag.isStateDisabled} required
+                        value={vehicleDetails.registeredState} onchange={handleChange} name="registeredState">
+                    </lightning-combobox> -->
+                <!-- </div> -->
+
+                <!-- Placas-License Plate -->
+                <!-- <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                    <lightning-input id="Registered_Plate__c" type="text" label="Placas-License Plate" 
+                        value={vehicleDetails.licensePlate} onchange={handleChange} name="licensePlate" required>
+                    </lightning-input>
+                </div> -->
+                <!-- <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-p-around_small">
+                    <lightning-input id="Registered_Plate__c" type="text" label="Placas-License Plate"
+                        value={vehicleDetails.licensePlate} onchange={handleChange} name="licensePlate" required pattern="^[A-Z0-9\-]+$"
+                        maxlength="17" message-when-pattern-mismatch="Only letters, numbers, and dashes are allowed">
+                    </lightning-input>
+                </div>
+
+            <div class="slds-grid slds-wrap slds-gutters slds-p-around_small"> -->
+                <!-- Is the vehicle registered to a business? -->
+                <!-- <div class="slds-col slds-p-around_small">
+                    <lightning-input id="Is_the_vehicle_registered_to_a_business__c" type="checkbox"
+                        label="Is the vehicle registered to a business?" checked={vehicleDetails.isRegisteredToBusiness}
+                        onchange={handleChange} name="isRegisteredToBusiness">
+                    </lightning-input>
+                </div> -->
+                <!-- Is vehicle leased or financed -->
+                <!-- <div class="slds-col slds-p-around_small">
+                    <lightning-input id="Is_Lienholder__c" type="checkbox" label="Is vehicle leased or financed"
+                        checked={vehicleDetails.Is_Lienholder__c} onchange={handleChange} name="Is_Lienholder__c">
+                    </lightning-input>
+                </div>
+            </div>
+        </template>
+    </div>
+</template> -->
+
+<template>
+    <div class="test">
+        <template if:true={boolvar.isLoaded}>
+            <div class="pageTitle slds-m-bottom_medium">
+                <h2 class="slds-text-heading_medium"> Vehicle Details </h2>
+            </div>
+
+            <div class="slds-grid slds-wrap slds-gutters">
+                <div class="slds-size_1-of-1 slds-medium-size_12-of-12 slds-large-size_12-of-12 slds-p-around_small">
+                    <template if:true={vehicleDetails.Year__c}>
+                        <div class="vehicle-line">
+                            <span class="vehicle-year">{vehicleDetails.Year__c}</span>
+                            <span class="vehicle-make">{vehicleDetails.Make__c}</span>
+                            <span class="vehicle-model">{vehicleDetails.Model__c}</span>
+                            <span class="separator">|</span>
+                            <span class="vehicle-price">${vehicleDetails.Value__c}</span>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- VIN Number -->
+                <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-p-around_small">
+                    <lightning-input id="Vin__c" type="text" label="VIN Number" value={vehicleDetails.Vin__c}
+                        onchange={handleChange} name="Vin__c" maxlength="17"
+                        message-when-pattern-mismatch="Only letters, numbers, and dashes are allowed">
+                    </lightning-input>
+                </div>
+
+                <!-- Registered Country -->
+                <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-p-around_small">
+                    <c-nc_combobox input-label="Registered Country" options={countryOptions}
+                        onselect={handleOptionClick} name="Registered_Country__c" onreset={handleChildComboboxReset}
+                        onaddnew={handleAddValue} search-value={registeredCountry} inputrequired="true">
+                    </c-nc_combobox>
+                </div>
+
+                <!-- Registered State/Province -->
+                <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-p-around_small">
+                    <c-nc_combobox input-label="Registered State/Province" options={stateOptions}
+                        onselect={handleOptionClick} name="Registered_State__c" onaddnew={handleAddValue}
+                        search-value={registeredState} inputrequired="true">
+                    </c-nc_combobox>
+                    <!-- {registeredState} -->
+                </div>
+                <!-- inputdisabled={flag.isStateDisabled} -->
+
+                <!-- Placas-License Plate -->
+                <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-p-around_small">
+                    <lightning-input id="Registered_Plate__c" type="text" label="Placas-License Plate"
+                        value={vehicleDetails.licensePlate} onchange={handleChange} name="licensePlate" required
+                        pattern="^[A-Z0-9\-]+$" maxlength="17"
+                        message-when-pattern-mismatch="Only letters, numbers, and dashes are allowed">
+                    </lightning-input>
+                </div>
+
+                <!-- Checkboxes section -->
+                <div class="slds-grid slds-wrap slds-gutters slds-p-around_small">
+                    <!-- Is vehicle leased or financed -->
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input id="Is_Lienholder__c" type="checkbox" label="Is vehicle leased or financed"
+                            checked={vehicleDetails.Is_Lienholder__c} onchange={handleChange} name="Is_Lienholder__c">
+                        </lightning-input>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

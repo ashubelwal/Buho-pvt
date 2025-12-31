@@ -1,0 +1,275 @@
+<aura:component controller="WatercraftFlowController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <aura:attribute name="leadRecord" type="Lead" default="{ 'sobjectType': 'Lead'}"  />
+    <aura:attribute name="quoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" />
+    <aura:attribute name="watercraftRecord" type="Watercraft__c" default="{ 'sobjectType': 'Watercraft__c'}" />
+    <aura:attribute name="tempQuoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" />
+    <aura:attribute name="tempWatercraftRecord" type="Watercraft__c" default="{ 'sobjectType': 'Watercraft__c'}" />
+    <aura:attribute name="driverObject" type="Driver__c" default="{ 'sobjectType': 'Driver__c'}"/>
+    
+    <aura:attribute name="rateRecordList" type="list" />
+    <aura:attribute name="drivers" type="List" access="public" />
+    <aura:attribute name="vesselTypes" type="list" access="private"/>
+    <aura:attribute name="vesselLengths" type="list" access="private"/>
+    
+    <aura:attribute name="Final_total_Premium" type="Decimal" />
+    
+    <aura:attribute name="Total_Premium" type="decimal" />
+    <aura:attribute name="minDate" type="String" />
+
+    <aura:attribute name="isOwner" type="boolean" />
+    <aura:attribute name="isEditDriver" type="boolean" />
+    <aura:attribute name="isEditWatercraft" type="boolean" />
+    <aura:attribute name="isEditRate" type="boolean" />
+    
+    <aura:attribute name="rateValue" type="decimal" />
+    <aura:attribute name="rateRecord" type="object" />
+    <aura:attribute name="rateQuoteRecord" type="Quote__c" />
+    <aura:attribute name="highLiability" type="String" default="750,000" />
+    <aura:attribute name="lowLiability" type="String" default="200,000" />
+    <aura:attribute name="difference_In_Days" type="Integer" />
+    <aura:attribute name="annualTerm" type="Boolean" access="public" />
+    
+    <aura:attribute name="communityUser" type="Boolean" access="public"/>
+    
+    <aura:attribute name="onbackClick" type="Aura.Action" />
+    <aura:attribute name="onEditDriver" type="Aura.Action" />
+    <aura:attribute name="onEditRateData" type="Aura.Action" />
+    <aura:attribute name="onEditWatercraft" type="Aura.Action" />
+
+    <aura:attribute name="policyType" type="String" access="public"/>    
+    
+    <ltng:require styles="{!$Resource.mexinsurance_assets + '/style.css'}" afterScriptsLoaded="{!c.doInit}"/>
+    
+    
+    <lightning:layout multipleRows="true">
+        
+        <lightning:layoutItem size="12" class="slds-align-center slds-m-top_large">
+            <div class="page-title">
+                <button class="button -plain -back-button" name="step_11" onclick="{! v.onbackClick }">
+                    <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/> Back
+                </button>
+                <h1>Verify and edit Quote 1 details</h1>
+            </div>
+            
+        </lightning:layoutItem>
+        
+        <div class="slds-size_12-of-12">
+            <aura:iteration items="{!v.rateRecordList}" var="item" indexVar="index">
+                <div class="grid">
+                    <div class="grid_1-2 grid_1-sm">
+                        <h3 class="red slds-m-top_small slds-m-bottom_small">Quote Summary</h3>
+                        <ul class="quote-details">
+                            <li>Insurance Company: <strong>{!item.Underwriter__c}</strong></li>
+                            <li>Premium: <strong><lightning:formattedNumber value="{!item.Net_Premium__c}" style="currency" currencyCode="USD"/></strong></li>
+                            <li>Surcharge: <strong><lightning:formattedNumber value="{!item.surcharge}" style="currency" currencyCode="USD"/></strong></li>
+                            <li>Broker Charge: <strong><lightning:formattedNumber value="{!item.Broker_Policy_Fee__c}" style="currency" currencyCode="USD"/></strong></li>
+                            <li>Mexican IVA TAX: <strong><lightning:formattedNumber value="{!item.IVA_Mex_Tax__c}" style="currency" currencyCode="USD"/></strong></li>
+                        </ul>
+                    </div>
+                    <div class="grid_1-2 grid_1-sm">
+                        <h3 class="red slds-m-top_small slds-m-bottom_small">Coverage 
+                            <!--aura:if isTrue="{!and(v.policyType != 'Automobile')}">
+                                <span class="separator">/</span> 
+                                <a class="simple-link" href="javascript:void(0)" name="{!index}" onclick="{!c.editRateData}">Edit</a>
+                            </aura:if -->
+                        </h3>
+                        <ul class="quote-details">
+                            <li>Coverage: <strong>{!item.quoteRecord.Coverage__c}</strong></li>
+                            <li>Policy Type: <strong>{!item.quoteRecord.Policy_Type_picklist__c}</strong></li>
+                            <li>Term: 
+                                <strong>
+                                    <lightning:formattedDateTime value="{!item.quoteRecord.Start_Date_for_Coverage__c}"/>
+                                    &nbsp; 
+                                    <lightning:formattedTime value="{!item.quoteRecord.Start_Time__c}" />
+                                    -
+                                    <lightning:formattedDateTime value="{!item.quoteRecord.End_Date_for_Coverage__c}"/>
+                                    &nbsp; 
+                                    <lightning:formattedTime value="{!item.quoteRecord.End_Time__c}" /> ( {!item.quoteRecord.Term__c} @ {!v.difference_In_Days} day ) {!item.quoteRecord.Time_Zone__c}
+                                </strong>
+                            </li>
+                            <!--li>Territory: <strong>[Full Territory]</strong></li -->
+                            <li>Liability: <strong>${!item.Liability__c}</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </aura:iteration>
+            
+            <div class="quote-total-bar">
+                TOTAL: <lightning:formattedNumber value="{!v.Total_Premium}" style="currency" currencyCode="USD"/>
+            </div>
+            
+            <div class="grid">
+                <!--***** Watercraft *****-->
+                <div class="grid_1-2 grid_1-sm">
+                    <h3 class="red slds-m-top_small slds-m-bottom_small">Watercraft <span class="separator">/</span> <a class="simple-link" href="javascript:void(0)" onclick="{!c.editWatercraft}">Edit</a></h3>
+                    <ul class="quote-details">
+                        <li>Year: <strong>{!v.watercraftRecord.Year__c}</strong></li>
+                        <!--li>Owner: <strong>[Owner Name]</strong></li-->
+                        <li>Make: <strong>{!v.watercraftRecord.Make__c}</strong></li>
+                        <li>Model: <strong>{!v.watercraftRecord.Model__c}</strong></li>
+                        <li>Value: <strong>{!v.watercraftRecord.Value__c}</strong></li>
+                        <li>Watercraft Type: <strong>{!v.watercraftRecord.Type_of_Vessel__c}</strong></li>
+                        <aura:if isTrue="{!v.watercraftRecord.Type_of_Vessel__c != 'Personal Watercraft (Jet Ski)'}">
+                            <li>Footage: <strong>{!v.watercraftRecord.Vessel_Length__c}</strong></li>
+                        </aura:if>
+                        <li>VIN Number: <strong>{!v.watercraftRecord.VIN_Number__c}</strong></li>
+                        <li>Beam: <strong>{!v.watercraftRecord.Beam__c}</strong></li>
+                        <li>Flag: <strong>{!v.watercraftRecord.Flag__c}</strong></li>
+                        <li>Engine Type: <strong>{!v.watercraftRecord.Engine_Type__c}</strong></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="grid">
+                <!--***** Drivers *****-->
+                <aura:iteration items="{!v.drivers}" var="item" indexVar="index">
+                    <div class="grid_1-2 grid_1-sm">
+                        <h3 class="red slds-m-top_small slds-m-bottom_small">Driver {!index + 1} / <a class="simple-link" href="javascript:void(0)" name="{!index}" onclick="{!c.editDriver}">Edit</a></h3>
+                        <ul class="quote-details">
+                            <li>Name: <strong>{!item.First_Name__c} {!item.First_Name__c != null ? ' ' : ''} {!item.Last_Name__c}</strong></li>
+                            <li>Email: <strong>{!item.Email__c}</strong></li>
+                            <li>Phone: <strong>{!item.Phone__c}</strong></li>
+                            <!-- <li>Date of Birth: <strong>{!item.Dob__c}</strong></li> -->
+                            <li>Captain's Date of Birth: <strong>{!item.formattedDob}</strong></li>
+                            <li>Address: <strong>{!item.Address__c} {!item.Address__c != null ? ',' : ''} {!item.Address_Line_2__c}</strong></li>
+                            <li>Country: <strong>{!item.Country__c}</strong></li>
+                            <li>State: <strong>{!item.State_Province__c}</strong></li>
+                            <li>License Country: <strong>{!item.License_Country__c}</strong></li>
+                            <li>License State: <strong>{!item.License_state__c}</strong></li>
+                            <li>License Number: <strong>{!item.LN_With_Country__c}</strong></li>
+                        </ul>
+                    </div>
+                </aura:iteration>
+            </div>
+            
+        </div>
+        
+    </lightning:layout>
+    
+    <aura:if isTrue="{!v.isEditDriver}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Edit Driver</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <c:DriverRegistration driverObject="{!v.driverObject}" isOwner="{!v.isOwner}" policyType="{!v.policyType}"/>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.cancelEdit}">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick="{!c.updateDriver}">Save</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.isEditWatercraft}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Edit Watercraft</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <div class="slds-size_12-of-12">
+                        <div class="form-container">
+                            <lightning:input aura:id="validateField" type="text" name="Year__c" pattern="^(19|20)\d{2}$" maxlength="4" messageWhenPatternMismatch ="Enter a valid year" placeholder="Year" value="{!v.tempWatercraftRecord.Year__c}" onchange="{!c.updateWatercraftField}" required="true" variant="label-hidden" />
+                            <lightning:input aura:id="validateField" type="text" name="Make__c" placeholder="Make" value="{!v.tempWatercraftRecord.Make__c}" onchange="{!c.updateWatercraftField}" required="true" variant="label-hidden" />
+                            <lightning:input aura:id="validateField" type="text" name="Model__c" placeholder="Model" value="{!v.tempWatercraftRecord.Model__c}" onchange="{!c.updateWatercraftField}" required="true" variant="label-hidden" />
+                            <lightning:input aura:id="validateField" type="number" name="Value__c" formatter="currency" step="0.01" placeholder="Value" value="{!v.tempWatercraftRecord.Value__c}" onchange="{!c.updateWatercraftField}" required="true" variant="label-hidden" />
+                            <lightning:combobox aura:id="validateField" name="Type_of_Vessel__c" placeholder="Watercraft Type" value="{!v.tempWatercraftRecord.Type_of_Vessel__c}" options="{! v.vesselTypes }" onchange="{!c.updateWatercraftField}" required="true" variant="label-hidden" disabled="true" />
+                            <aura:if isTrue="{!v.tempWatercraftRecord.Type_of_Vessel__c != 'Personal Watercraft (Jet Ski)'}">
+                                <lightning:combobox aura:id="validateField" name="Vessel_Length__c" placeholder="Vessel Length" value="{!v.tempWatercraftRecord.Vessel_Length__c}" options="{! v.vesselLengths }" onchange="{!c.updateValue}" required="true" variant="label-hidden" disabled="true" />
+                            </aura:if>
+                            <lightning:input aura:id="validateField" type="text" name="VIN_Number__c" pattern="[A-Z0-9]+" messageWhenPatternMismatch ="Whitespace are not allowed" placeholder="VIN Number" value="{!v.tempWatercraftRecord.VIN_Number__c}" onchange="{!c.updateWatercraftField}" required="true" variant="label-hidden" />
+                            <lightning:input aura:id="validateField" type="text" name="Beam__c" placeholder="Beam (Width)" value="{!v.tempWatercraftRecord.Beam__c}" onchange="{!c.updateWatercraftField}" variant="label-hidden" />
+                            <lightning:input aura:id="validateField" type="text" name="Flag__c" placeholder="Flag" value="{!v.tempWatercraftRecord.Flag__c}" onchange="{!c.updateWatercraftField}" variant="label-hidden" />
+                            <lightning:input aura:id="validateField" type="text" name="Engine_Type__c" placeholder="Engine Type (Inboard, Outboard)" value="{!v.tempWatercraftRecord.Engine_Type__c}" onchange="{!c.updateWatercraftField}" required="true" variant="label-hidden" />
+                        </div>
+                    </div>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.cancelEdit}">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick="{!c.updateWatercraft}">Save</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.isEditRate}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Edit Rate</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <section class="quick-quote">
+                        <div class="quotes-normal-view">
+                            <div class="quote-box -recommended">
+                                <div class="quote-provider">
+                                    <img src="{!$Resource.mexJs  + '/mexJs/images/chubb.png'}" alt="Chubb" />
+                                    <div class="recommended-label">Recommended</div>
+                                </div>
+                                <div class="quote-pricing"><lightning:formattedNumber value="{!v.rateValue}" style="currency" currencyCode="USD"/></div>
+                                <div class="quote-body">
+                                    <div class="unit">
+                                        <div class="grid -spacing-sm">
+                                            <div class="grid_1-2">
+                                                <div class="datepicker">
+                                                    <lightning:input aura:Id="validateField" type="date" name="Start_Date_for_Coverage__c" variant="label-hidden" value="{!v.rateQuoteRecord.Start_Date_for_Coverage__c}" onchange="{!c.fetchRateDate}" min="{!v.minStartDate}" required="true" />
+                                                </div>
+                                            </div>
+                                            <div class="grid_1-2">
+                                                <div class="datepicker">
+                                                    <lightning:input aura:Id="validateField" type="date" name="End_Date_for_Coverage__c" variant="label-hidden" value="{!v.rateQuoteRecord.End_Date_for_Coverage__c}" onchange="{!c.fetchRateDate}" min="{!v.quoteRecord.Start_Date_for_Coverage__c}" required="true" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="adjustable-fields">
+                                            <div class="adjustable-field">
+                                                <span class="field-label">
+                                                    <i class="icon-info"></i> Total Third Party Liability
+                                                </span>
+                                                <span class="field-item">
+                                                    <button class="field-plus" name="{!v.highLiability}" onclick="{!c.highLiability}"></button>
+                                                    <input type="text" value="{!'$'+v.rateQuoteRecord.Liability__c}"/>
+                                                    <button class="field-minus" name="{!v.lowLiability}" onclick="{!c.lowLiability}" ></button>
+                                                </span>
+                                            </div>
+                                            <div class="adjustable-field">
+                                                <span class="field-label">
+                                                    <i class="icon-info"></i> Third Party Bodily Injury
+                                                </span>
+                                                <span class="field-item">
+                                                    <lightning:input variant="label-hidden" type="text" class="full-width-field" name="Third_Party_Bodily_Injury__c" value="{!v.rateQuoteRecord.Third_Party_Bodily_Injury__c}" varient="label-hidden" disabled="true"/>
+                                                </span>
+                                            </div>
+                                            <div class="adjustable-field">
+                                                <span class="field-label">
+                                                    <i class="icon-info"></i> Third Party Property Damage
+                                                </span>
+                                                <span class="field-item">
+                                                    <lightning:input variant="label-hidden" type="text" class="full-width-field" name="Property_Damage_Liability__c" value="{!v.rateQuoteRecord.Property_Damage_Liability__c}" varient="label-hidden" disabled="true"/>
+                                                </span>
+                                            </div>
+                                        </div><!-- end adjustable-fields -->
+                                        <div class="checkbox-field">
+                                            <lightning:input type="checkbox" name="Coverage__c" label="Liability Only" checked="true" disabled="true"/>
+                                        </div>
+                                    </div><!-- end unit -->
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.cancelEdit}">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick="{!c.updateRateTable}">Save</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+</aura:component>

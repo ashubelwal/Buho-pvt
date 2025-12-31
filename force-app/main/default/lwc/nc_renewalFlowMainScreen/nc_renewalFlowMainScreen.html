@@ -1,0 +1,133 @@
+<template>
+    <div class="notranslate wrapper">
+        <template if:false={spinner}>
+            <lightning-spinner alternative-text="Loading" variant="brand"></lightning-spinner>
+        </template>
+        <header class="page-header slds-text-align--center">
+            <div class="wrap">
+                <span class="product-name">{label.RenewPolicy} - {renewalPolicyName}</span>
+            </div>
+        </header>
+        <div class="wrap-size-md">
+            <lightning-layout multiple-rows="true" class="pagelayout">
+                <template if:true={isTermOptions}>
+                    <lightning-layout-item size="12">
+                        <c-nc_policy-edit-term-option disable-date={disableDate} is-renewal-policy={isRenewalPolicy}
+                            connectedcallback={connectedcallback} onrenewconnectedcallback={renewconnectedcallback}
+                            oneditpolicyvaluechange={handleEditPolicyChange} policy-type={policyType}
+                            onerrorgenerated={showLogaCase} editpolicydata={renewalPolicy}
+                            changesnextscreen={changeNextScreen} oldpolicydata={oldPolicy} policy-exist={policyExist}
+                            changeprevscreen={changePrevScreen} onloadingstatuschange={handleLoadingStatus}></c-nc_policy-edit-term-option>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
+            <lightning-layout multiple-rows="true" class="pagelayout">
+                <template if:true={isReviewVehicle}>
+                    <lightning-layout-item size="12">
+                        <c-review-vehicle policy-type={policyType} changesnextscreen={changeNextScreen}
+                            onerrorgenerated={showLogaCase} is-renewal-policy={isRenewalPolicy}
+                            oneditpolicyvaluechange={handleEditPolicyChange} editpolicydata={renewalPolicy}
+                            oldpolicydata={oldPolicy} changeprevscreen={changePrevScreen} onloadingstatuschange={handleLoadingStatus} ></c-review-vehicle>
+                    </lightning-layout-item>
+                </template>
+
+                <template if:true={isReviewWatercraft}>
+                    <lightning-layout-item size="12">
+                        <c-watercraft-review policy-type={policyType} changesnextscreen={changeNextScreen}
+                            onerrorgenerated={showLogaCase} is-renewal-policy={isRenewalPolicy}
+                            oneditpolicyvaluechange={handleEditPolicyChange} editpolicydata={renewalPolicy}
+                            changeprevscreen={changePrevScreen}></c-watercraft-review>
+                    </lightning-layout-item>
+                </template>
+
+                <template if:true={isCompanyInfo}>
+                    <lightning-layout-item size="12">
+                        <c-company-information policy-type={policyType} changesnextscreen={changeNextScreen}
+                            onerrorgenerated={showLogaCase} oneditpolicyvaluechange={handleEditPolicyChange}
+                            editpolicydata={renewalPolicy} changeprevscreen={changePrevScreen} onloadingstatuschange={handleLoadingStatus}></c-company-information>
+                    </lightning-layout-item>
+                </template>
+
+                <template if:true={isLienholderDetails}>
+                    <lightning-layout-item size="12">
+                        <c-lienholder-information policy-type={policyType} changesnextscreen={changeNextScreen}
+                            onerrorgenerated={showLogaCase} oneditpolicyvaluechange={handleEditPolicyChange}
+                            editpolicydata={renewalPolicy} changeprevscreen={changePrevScreen} onloadingstatuschange={handleLoadingStatus}>
+                        </c-lienholder-information>
+                    </lightning-layout-item>
+                </template>
+                <template if:true={isDriverDetail}>
+                    
+                    <lightning-layout-item size="12">
+                        <c-nc_renewaldriver-details payload={payload} editpolicydata={renewalPolicy} oneditpolicyvaluechange={handleEditPolicyChange}
+                                                       changesnextscreen={changeNextScreen} changeprevscreen={changePrevScreen} onloadingstatuschange={handleLoadingStatus}></c-nc_renewaldriver-details>
+                    </lightning-layout-item>
+                </template>
+                <template if:true={isTowingAnything}>
+                    
+                    <lightning-layout-item size="12">
+                        <c-towed-option policy-type={policyType} changesnextscreen={changeNextScreen}
+                            onerrorgenerated={showLogaCase} oneditpolicyvaluechange={handleEditPolicyChange}
+                            editpolicydata={renewalPolicy} is-renewal-policy={isRenewalPolicy}
+                            changeprevscreen={changePrevScreen} onloadingstatuschange={handleLoadingStatus}></c-towed-option>
+                    </lightning-layout-item>
+                </template>
+                <template if:true={isTowedDetails}>
+                    
+                    <lightning-layout-item size="12">
+                        <c-towed-details policy-type={policyType} community-user={isCommunityUser}
+                            changesnextscreen={changeNextScreen} oneditpolicyvaluechange={handleEditPolicyChange}
+                            editpolicydata={renewalPolicy} onerrorgenerated={showLogaCase}
+                            is-renewal-policy={isRenewalPolicy} changeprevscreen={changePrevScreen} step="1"
+                            towed-unit-data={towedUnitData} onloadingstatuschange={handleLoadingStatus}></c-towed-details>
+                    </lightning-layout-item>
+                </template>
+
+                <template if:true={isConfirmScreen}>
+                    <c-nc_quote-page payload={payload} onquoteevent={handleQuoteEvent} onerror={handleChildError} onchangescreen = {buyQuote} onloadingstatuschange={handleLoadingStatus} onpayloadupdate={handlePayloadUpdate}>> 
+                    </c-nc_quote-page>
+
+                </template>
+
+                <template if:true={isTowedDetailsFinal}>
+                    <!-- <lightning-layout-item size="3">
+                        <c-policy-edit-flow-steps steps='steps6' policy-type={policyType} completed-steps='6'>
+                        </c-policy-edit-flow-steps>
+                    </lightning-layout-item> -->
+                    <lightning-layout-item size="12">
+                        <c-towed-details policy-type={policyType} changesnextscreen={changeNextScreen}
+                            onerrorgenerated={showLogaCase} oneditpolicyvaluechange={handleEditPolicyChange}
+                            editpolicydata={renewalPolicy} is-renewal-policy={isRenewalPolicy}
+                            changeprevscreen={changePrevScreen} onloadingstatuschange={handleLoadingStatus} step="2">
+                        </c-towed-details>
+                    </lightning-layout-item>
+                </template>
+
+                <template if:true={isPaymentDetail}>
+                    <!-- <lightning-layout-item size="3">
+                        <c-policy-edit-flow-steps steps='steps7' policy-type={policyType} completed-steps='7'>
+                        </c-policy-edit-flow-steps>
+                    </lightning-layout-item> -->
+                    <lightning-layout-item size="12">
+                        <lightning-layout padding="around-small" size="12"
+                            class="slds-align-center slds-m-top_xx-large">
+                            <div class="page-title">
+                                <h1
+                                    class="slds-text slds-text-heading_medium slds-p-around_small slds-align_absolute-center">
+                                    {label.LetstacklethePaymentnow}</h1>
+                            </div>
+                        </lightning-layout>
+                        <c-nc_renewalpayment policy-type={policyType} refund-amount={refundAmount} editpolicydata={renewalPolicy}
+                            is-renewal-policy={isRenewalPolicy} changesnextscreen={changeNextScreen}
+                            old-policy-data={oldPolicy} changeprevscreen={changePrevScreen}
+                            onerrorgenerated={showLogaCase} renew-quote-id={renewQuoteId} onloadingstatuschange={handleLoadingStatus} ></c-nc_renewalpayment>
+                    </lightning-layout-item>
+                </template>
+
+
+
+            </lightning-layout>
+        </div>
+    </div>
+    <c-log-acase lwc:if={isShowCaseLog} onopenlogcasemodalsection={openModalLogCase}></c-log-acase>
+</template>

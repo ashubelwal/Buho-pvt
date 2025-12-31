@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>BÚHO Login</masterLabel>
+    <description>Custom login component for BÚHO Insurance Experience Site</description>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="showCarousel" type="Boolean" default="true" label="Show Carousel" description="Display the carousel section"/>
+            <property name="showSocialLogin" type="Boolean" default="true" label="Show Social Login" description="Display social login buttons"/>
+            <property name="forgotPasswordUrl" type="String" default="/ForgotPassword" label="Forgot Password URL"/>
+            <property name="signUpUrl" type="String" default="/SelfRegister" label="Sign Up URL"/>
+            <property name="startUrl" type="String" default="/" label="Start URL after login"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

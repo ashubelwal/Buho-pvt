@@ -1,0 +1,89 @@
+public without sharing class CompanyInformationDetailFlow {
+    @AuraEnabled
+    public static Map<String, Object> saveCompanyInformationDetails(String strLeadDetails) {
+        Map<String, Object> response = new Map<String, Object>();
+        
+        try {
+            System.debug('String lead details in the company information save method: ' + strLeadDetails);
+            if (String.isNotBlank(strLeadDetails)) {
+                List<Object> leadDetails = (List<Object>) JSON.deserializeUntyped(strLeadDetails);
+                Map<String, Object> userDetails = new Map<String, Object>();
+                Map<String, Object> companyInformation = new Map<String, Object>();
+                for (Object detail : leadDetails) {
+                    try {
+                        Map<String, Object> dataMap = (Map<String, Object>) detail;
+                        
+                        if (dataMap.containsKey('userDetails')) {
+                            userDetails = (Map<String, Object>) dataMap.get('userDetails');
+                        }
+                        
+                        // Look for driverDetails structure
+                        if (dataMap.containsKey('driverDetails')) {
+                            Map<String, Object> driverDetails = (Map<String, Object>) dataMap.get('driverDetails');
+                            if (driverDetails.containsKey('companyInformation')) {
+                                companyInformation = (Map<String, Object>) driverDetails.get('companyInformation');
+                            }
+                        }
+                    } catch (Exception e) { System.debug('Skipping non-map entry: ' + e.getMessage());}
+                }
+                
+                // Check if Lead ID is provided in userDetails
+                String leadId = (String) userDetails.get('Id');
+                Lead existingLead;
+                
+                if (String.isNotBlank(leadId)) {
+                    existingLead = [SELECT Id, Company_details__c FROM Lead WHERE Id = :leadId LIMIT 1];
+                } else {
+                    // If LeadId is not provided, find Lead by email
+                    String email = (String) userDetails.get('Email');
+                    if (String.isNotBlank(email)) {
+                        List<Lead> leadsByEmail = [SELECT Id, Company_details__c FROM Lead WHERE Email = :email LIMIT 1];
+                        if (!leadsByEmail.isEmpty()) {
+                            existingLead = leadsByEmail[0];
+                        } else {
+                            response.put('Message', 'No lead found.');
+                            response.put('Status', 'Error');
+                            return response;
+                        }
+                    } else {
+                        response.put('Message', 'Lead record not found. Email is required.');
+                        response.put('Status', 'Error');
+                        return response;
+                    }
+                }
+                
+                if (existingLead != null) {
+                    return updateCompanyInformationDetails(existingLead, companyInformation);
+                } else {
+                    response.put('Message', 'Lead record not found using provided details.');  response.put('Status', 'Error');  return response;
+                }
+            } else {response.put('Message', 'No data found.');  response.put('Status', 'Error'); return response; }
+        } catch (CustomErrorExceptionHandlerException ex) { CustomErrorExceptionHandlerException.LogException(ex); throw new CustomErrorExceptionHandlerException(ex.getMessage());
+        } catch (Exception e) {  CustomErrorExceptionHandlerException.LogException(e); throw new CustomErrorExceptionHandlerException(e.getMessage()); }
+    }
+    
+    private static Map<String, Object> updateCompanyInformationDetails(Lead lead, Map<String, Object> companyInformation) {
+        Map<String, Object> response = new Map<String, Object>();
+        
+        try {
+            // Serialize the company information as a single object
+            lead.Company_details__c = JSON.serialize(companyInformation);
+            Database.SaveResult sr = Database.update(lead, false); 
+            if (sr.isSuccess()) {
+                System.debug('Lead updated successfully. ID: ' + sr.getId());
+                response.put('LeadId', sr.getId());
+                response.put('Data', companyInformation);
+                response.put('Status', 'Success');
+            } else {
+                for (Database.Error error : sr.getErrors()) {
+                    System.debug('Error message: ' + error.getMessage());
+                    response.put('Message', error.getMessage());
+                    response.put('Status', 'Error');
+                }
+            }
+        } catch (Exception e) {System.debug('Exception occurred during update: ' + e.getMessage()); response.put('Message', 'Error during update: ' + e.getMessage()); response.put('Status', 'Error');
+        }
+        
+        return response;
+    }
+}

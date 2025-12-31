@@ -1,0 +1,39 @@
+<template>
+    <div>
+        <lightning-card title="Policy Analytics" icon-name="custom:custom63">
+            <div class="slds-p-around_medium">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                        <lightning-combobox name="policyType" label="Select Policy Type" value={selectedPolicyType}
+                            placeholder="Choose a policy type" options={policyOptions} onchange={handlePolicyChange}>
+                        </lightning-combobox>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-grid slds-wrap slds-col slds-size_6-of-12">
+                    <template if:true={isPolicyForNew}>
+                        <div class="slds-col slds-size_1-of-2" style="width: 400px;height: 400px">
+                            <canvas lwc:dom="manual" class="chart" data-id="pie-chart" width="400"
+                                height="600"></canvas>
+                            <!-- <p class="chart-label">Pie Chart: New Policies</p> -->
+                        </div>
+                    </template>
+                    <template if:true={isPolicyForRenew}>
+                        <div class="slds-col slds-size_1-of-2" style="width: 400px;height: 400px">
+                            <canvas lwc:dom="manual" class="chart" data-id="pie-chartrenew" width="400"
+                                height="600"></canvas>
+                            <!-- <p class="chart-label">Pie Chart: Newnew Policies</p> -->
+                        </div>
+                    </template>
+                </div>
+                <template if:true={isAgency}>
+                    <div class="slds-col slds-size_6-of-12" style="height: 400px">
+                        <canvas lwc:dom="manual" class="chart" data-id="bar-chart" width="400" height="600"></canvas>
+                        <!-- <p class="chart-label">Bar Chart: Agency Commission</p> -->
+                    </div>
+                </template>
+            </div>
+        </lightning-card>
+    </div>
+</template>

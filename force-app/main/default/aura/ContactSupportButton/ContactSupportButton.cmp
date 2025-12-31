@@ -1,0 +1,11 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <div class="c-container">
+        <lightning:layout multipleRows="true">
+            <lightning:layoutItem padding="slds-p-around_xxx-small" size="12">
+                <lightning:button class="contactSupportBtn" variant="brand-outline" label="Contact Support" title="Contact Support" onclick="{! c.handleClick }" />
+            </lightning:layoutItem>
+        </lightning:layout>
+        
+    </div>
+    
+</aura:component>

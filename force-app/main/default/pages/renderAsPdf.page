@@ -1,0 +1,200 @@
+<apex:page applyBodyTag="false" renderAs="pdf"  controller="Mex_NorthboundYellowPdf" >
+    <head>
+        <style> 
+            @page{
+            size: 16in 6.35in;
+            margin: 0px;
+           
+            }
+            body { font-family: 'sans-serif';  }
+            
+            
+            .header{
+            border: 2px solid #000;
+            }
+            .row {
+            display: flex; /* equal height of the children */
+            position: relative;
+            margin:auto;
+            }
+            
+            .col {
+            flex: 1; /* additionally, equal width */
+            
+            padding: 1em;
+            border: none;
+            }
+            div.header1 {
+            position: absolute;
+            font-size: normal;
+            left: 0;
+            top: 60px;
+            width: 95%;
+            }
+            div.header2 {
+            position: absolute;
+            font-size: 14px;
+            left: 0;
+            width: 95%;
+            }
+            .blueBorder{
+            border: 2px solid #8AB4F8;
+            }
+            
+            .divider{
+            position:absolute;
+            left: 40%;
+            transform: rotate(90deg);
+            background-color: yellow;
+            }
+            .maintable{
+            border-collapse:collapse;
+            background-color:#E8E8E8;
+            font-size:13px
+            }
+            .maintable td{
+            background-color:white;border:1px solid silver; font-size:13px;width:20px
+            }
+            .boderClass{
+            border: 2px solid #000;
+            }
+            .bottomBorder{
+            	border-bottom: 2px solid #7e7777;
+            }
+            .rotateText{
+            -webkit-transform: rotate(-90deg);
+            transform: rotate(-90deg);
+            }
+        </style>
+    </head>
+    <body>
+        
+        
+        <table width="100%" style="width:100%;" class="boderClass">
+            <tr>
+                <td width="49.5%" style="width: 49.5%;" >
+                    <table width="100%" style="width: 100%; text-align: center;">
+                        
+                        <tr>
+                            <th colspan="4" style="border-bottom: 3px solid #7e7777; font-size: 23px; font-weight : 700;">
+                                CANADA <span style="font-size:26px">NON-RESIDENT</span> INTER-PROVINCE<br />
+                                MOTOR VEHICLE LIABLITY INSUREANCE CARD <br/>
+                                CERTIFICAT D'ASSURANCE-AUTOMOBILE RESPONSIBILITE</th>
+                            
+                            
+                            
+                        </tr>
+                        <tr >
+                            <td  width="150" colspan="2" style="width: 150px; ">
+                                NAME AND ADDRESS<br /> OF INSURED
+                            </td>
+                            <td colspan="2" width="150" style="width: 150px;">
+                                NOM ET ADDRESSE DE L'ASSURE
+                            </td>
+                            
+                        </tr>
+                        <tr>
+                            <td class="blueBorder" colspan="2" width="150" style="width: 150px;">
+                                <apex:outputPanel rendered="{!NOT(ISNULL(policy.Vehicle_Policy__r.Vehicle_Owner_Name__c))}" >
+                                	{!policy.Vehicle_Policy__r.Vehicle_Owner_Name__c}
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!ISNULL(policy.Vehicle_Policy__r.Vehicle_Owner_Name__c)}" >
+                                	{!policy.Account_Policy__r.Name}
+                                </apex:outputPanel>
+                            </td>
+                            <td class="blueBorder" colspan="2" width="150" style="width: 150px;">
+                                {!policy.Vehicle_Policy__r.Vehicle_Owner_Address__c},&nbsp;{!policy.Vehicle_Policy__r.Vehicle_Owner_City__c},&nbsp;{!policy.Vehicle_Policy__r.Vehicle_Owner_State__c}
+                            </td>
+                           
+                        </tr>
+                        <tr>
+                                <th class="bottomBorder" colspan="4"></th>
+                        </tr>
+                        <tr>
+                            <td width="150" colspan="2" style="width: 150px;">INSURED VEHICLE - YEAR, MAKE, SERIAL NO.</td>
+                            <td width="150" colspan="2" style="width: 150px;">VEHICULE ASSURE - ANNEE, MARQUE, SERIE</td>
+                        </tr>
+                        <tr>
+                            <td  class="blueBorder" colspan="1" width="100" style="width: 100px;">{!policy.Vehicle_Year__c}</td>
+                            <td class="blueBorder" colspan="1" width="100" style="width: 100px;">{!policy.Vehicle_Make__c}</td>
+                            <td  class="blueBorder" colspan="2" width="100" style="width: 100px;">{!policy.Vehicle_Policy__r.Vin__c}</td>
+                        </tr>
+                        <tr>
+                                <th class="bottomBorder" colspan="4"></th>
+                        </tr>
+                        <tr>
+                            <td width="100" colspan="2" style="width: 100px;">EFFECTIVE DATE DATE D'ENTREE EN VIGUEUR</td>
+                            <td width="100" colspan="1" style="width: 100px;">DATE OF EXPIRY</td>
+                            <td width="100" colspan="1" style="width: 100px;">DATE D'EXPIRATION</td>
+                        </tr>
+                        <tr>
+                            <td class="blueBorder" colspan="2" width="150" style="width: 150px; border-right">  
+                                <apex:outputText value="{0,date,dd-MMM, yyyy}">
+                                    <apex:param value="{!policy.Start_Date__c}" /> 
+                                </apex:outputText>
+                                
+                            </td>
+                            <td class="blueBorder" colspan="2" width="150" style="width: 150px;"> 
+                                 <apex:outputText value="{0,date,dd-MMM, yyyy}">
+                                    <apex:param value="{!policy.End_Date__c}" /> 
+                                </apex:outputText>
+                             </td>
+                        </tr>
+                        <tr>
+                                <th class="bottomBorder" colspan="4"></th>
+                        </tr>
+                        <tr>
+                            <td width="150" colspan="2" style="width: 150px;">POLICY NUMBER - POLICE NUMERO</td>
+                            <td width="150" colspan="2" style="width: 150px;">AGENT</td>
+                        </tr>
+                        <tr>
+                            <td class="blueBorder" colspan="1" width="150" style="width: 150px;">{!policy.Name}</td>
+                            <td class="blueBorder" colspan="3" width="150" style="width: 150px;">Mexico Insurance Service, Inc.</td>
+                        </tr>
+                        <tr>
+                                <th class="bottomBorder" colspan="4"></th>
+                        </tr>
+                        <tr>
+                            <td width="150" colspan="2" style="width: 150px;">NAME AND ADDRESS OF INSURANCE COMPANY</td>
+                            <td width="150" colspan="2" style="width: 150px;">NOM ET ADRESSEE DE LA COMPAGNIE D'ARRURANCE</td>
+                        </tr>
+                        <tr>
+                            <td class="blueBorder" colspan="4" width="300" style="width: 300px;">www.mexinsurance.com</td>
+                        </tr>
+                        
+                    </table>
+                </td>
+                <td width="1%" style="width: 1%;" class="foldPart">
+                    <p style="writing-mode: vertical-rl" class="rotateText">
+                     
+                        <img src="{!$Resource.Rotate_fold_here}" height="480"/>
+                    </p>
+                </td>
+                <td width="49.5%" style="width: 49.5%;">
+                    <p style="color: #ABADB0; font-size: 20px">This certifies that the party named herein is insured against liablity for bodily injury and property damage by reason of the Operation 
+                        of the motor vehicle described herein , in an amount not less than the statutory minimum requirements of every province of Canada.
+                        <br />
+                        <br />
+                        <span style="font-weight: bold;  font-size: 22px;">Warning</span>- Any person who issuess or produces a card to show that there is in force a policy of insurance
+                        as indicated herein that is in fact not in force is liable to a heavy fine and/or imprisonment and his licence may be suspended.<br />
+                        <span style="margin-left:8px;">This</span> card should be carried in the insured vehicle for production as proof of insurance when demanded by police.
+                        
+                    </p>
+                    <hr />
+                    <p style="color: #ABADB0; font-size: 20px">
+                        Ce certificat atteste que la persohne susnommeé est assurée contre la responsibilité pour blessures et dommages aux biens découlant de l'usage du 
+                        véhicule ci-décrit, conformément aux exigences minima des lois d'assurance en viguer dans chacune des provinces candiennes.<br /><br />
+                        
+                        <span style="font-weight: bold;  font-size: 22px;">AVERTISSEMENT</span> - Quiconque émet ou présente un tel certificat comme preuve d'une police d'assurance-responsibilité 
+                        qui effectivement n'est pas en viguer, est coupable d'une infraction passible d'une forte amende et/ ou d'emprisonnement et suspension de son permis.<br />
+                        <span style="margin-left:8px;"> Ce</span> certificat doit être laissé dans le véhicule assuré afin d'être présenté comme preuve d'assurance lorsque la police l'exige.
+                    </p>
+                </td>
+            </tr>
+        </table> 
+        
+        
+        
+        
+    </body>
+</apex:page>

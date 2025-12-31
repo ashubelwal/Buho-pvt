@@ -1,0 +1,496 @@
+<template>
+    <div>
+        <c-custom-toast auto-close-time="8000"></c-custom-toast>
+    </div>
+    <div class="page-content">
+        <template if:true={spinner}>
+            <lightning-spinner alternative-text="Loading" variant="brand"></lightning-spinner>
+        </template>
+        <template if:false={spinner}>
+            <template if:true={isRefundDetail}>
+
+
+
+                <div class="mainDIv slds-p-around--small notranslate">
+                    <div class="policyBanner slds-p-around--xx-large slds-m-bottom--large">
+                        <div class="sectionFirst slds-m-bottom--medium">
+                            <h2 class="policyName slds-align_absolute-center slds-m-bottom--x-large"
+                                onclick={handleBack}>{terminatePolicyName}</h2>
+                        </div>
+                        <div class="sectionSecond ">
+                            <template if:true={policyDetail}>
+
+                                <div class="slds-grid slds-grid_align-spread">
+                                    <div class="slds-col">
+
+                                        <h4 class="slds-m-bottom--small">{label.PolicyType} :
+                                            {policyDetail.quoteData.Policy_Type_picklist__c}</h4>
+                                        <!-- <h4>{policyDetail.quoteData.Territory__c}</h4> -->
+                                        <h4>{label.MedicalType} : {policyDetail.quoteData.Medical__c}</h4>
+                                        <!-- <h4>Third Party Bodily Injury : {policyDetail.Third_Party_Bodily_Injury__c}</h4> -->
+                                    </div>
+
+                                    <div class="slds-col alginRight">
+                                        <h4 class="slds-m-bottom--x-small">{label.Pacakge} :
+                                            {policyDetail.quoteData.Coverage__c}</h4>
+                                        <h4 class="">{label.LiabilityType} : {policyDetail.quoteData.Liability__c}</h4>
+                                    </div>
+                                </div>
+
+                            </template>
+
+                        </div>
+                    </div>
+                    <div class="divSection slds-m-bottom--large">
+                        <div class="termSection">
+                            <h3 class="summary-title green slds-m-bottom--small">{label.PolicyInformation}</h3>
+                            <div class="slds-grid slds-grid_align-spread slds-m-bottom--small">
+                                <div class="slds-col slds-size--1-of-3">
+                                    <h6 class="">{label.StartDate}</h6>
+                                    <h2>{policyDetail.policyData.Start_Date__c}</h2>
+
+                                </div>
+                                <div class="slds-col slds-size--1-of-3 alginCenter">
+                                    <h6 class="">{label.TermType}</h6>
+                                    <h2>{policyDetail.policyData.Term__c}</h2>
+                                </div>
+                                <div class="slds-col slds-size--1-of-3 alginRight">
+                                    <h6 class="">{label.EndDate}</h6>
+                                    <h2>{policyDetail.policyData.End_Date__c}</h2>
+                                </div>
+                            </div>
+                            <div class="slds-grid slds-grid_align-spread">
+                                <div class="slds-col slds-size--1-of-3">
+                                    <h6 class="">{label.PolicyPremiumAmount} </h6>
+                                    <h2><lightning-formatted-number
+                                            value={policyDetail.policyData.Total_Premium_Amount__c}
+                                            format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                    </h2>
+
+                                </div>
+                                <div class="slds-col slds-size--1-of-3 alginCenter">
+                                    <h6 class="">{label.PolicyDays}</h6>
+                                    <h2>{policyDetail.quoteData.Term_Days__c}</h2>
+                                </div>
+                                <div class="slds-col slds-size--1-of-3 alginRight">
+                                    <h6 class="">{label.PolicyUsedDays} </h6>
+                                    <h2>{refundObj.daysUsed}</h2>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="rateDescriptionSection divSection">
+
+                        <div class="summary-box-content refundSection slds-m-bottom--small">
+                            <h3 class="summary-title green slds-m-bottom--small">{label.RefundCalculation}</h3>
+
+                            <div class="slds-grid slds-grid_align-spread">
+                                <div class="slds-col">
+                                    <h6>{label.PolicyPremiumAmount} </h6>
+                                </div>
+
+                                <div class="slds-col balckColor">
+                                    <h6><lightning-formatted-number
+                                            value={policyDetail.policyData.Total_Premium_Amount__c}
+                                            format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                    </h6>
+                                </div>
+                            </div>
+                            <div class="slds-grid slds-grid_align-spread">
+                                <div class="slds-col">
+                                    <h6>{label.PolicyUsedPremium} </h6>
+                                </div>
+
+                                <div class="slds-col balckColor">
+                                    <h6>-<lightning-formatted-number value={usedPolicyPrimium} format-style="currency"
+                                            currency-code="USD"></lightning-formatted-number></h6>
+                                </div>
+
+                            </div>
+                            <template if:true={refundObj.ivaTax}>
+                                <div class="slds-grid slds-grid_align-spread">
+                                    <div class="slds-col">
+                                        <h6>{label.IVATax}</h6>
+                                    </div>
+
+                                    <div class="slds-col balckColor">
+                                        <h6>-<lightning-formatted-number value={refundObj.ivaTax}
+                                                format-style="currency"
+                                                currency-code="USD"></lightning-formatted-number></h6>
+                                    </div>
+
+                                </div>
+                            </template>
+                            <template if:true={refundObj.surcharge}>
+                                <div class="slds-grid slds-grid_align-spread">
+                                    <div class="slds-col">
+                                        <h6>{label.Surcharge} </h6>
+                                    </div>
+
+                                    <div class="slds-col balckColor">
+                                        <h6>-<lightning-formatted-number value={refundObj.surcharge}
+                                                format-style="currency"
+                                                currency-code="USD"></lightning-formatted-number></h6>
+                                    </div>
+
+                                </div>
+                            </template>
+                            <div class="slds-grid slds-grid_align-spread slds-m-bottom--x-small">
+                                <div class="slds-col">
+                                    <h6>{label.Brokerfee} (Non refundable)</h6>
+                                </div>
+
+                                <div class="slds-col balckColor">
+                                    <h6>-<lightning-formatted-number
+                                            value={policyDetail.policyData.Broker_Policy_Fee__c} format-style="currency"
+                                            currency-code="USD"></lightning-formatted-number></h6>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="refundCalculation slds-text-align--right">
+
+                            <span class="summary-refund">{label.TOTALREFUND} : </span>
+                            <span class="refundamout green"><template if:false={nonWatercraftPolicy}>
+                                    <lightning-formatted-number value={refundWatercraft} format-style="currency"
+                                        currency-code="USD"></lightning-formatted-number>
+                                </template>
+
+                                <template if:true={nonWatercraftPolicy}>
+                                    <lightning-formatted-number value={refundDisplayAmount} format-style="currency"
+                                        currency-code="USD"></lightning-formatted-number>
+
+
+                                </template>
+                            </span>
+
+                        </div>
+
+                        <div class="resonForTerminate slds-m-top_small">
+                            <lightning-combobox class="" name="combobox_Reason__c" label={label.Reasonforterminating}
+                                placeholder={label.Reasonforterminating} options={resonForTerminateOptions}
+                                onchange={handlechangeTerminate}></lightning-combobox>
+                            <template if:true={showOtherOption}>
+                                <lightning-textarea class="" name="Why_Terminate_Policy__c"
+                                    placeholder={label.Reasonforterminating} onchange={handlechangeTerminate}
+                                    max-length="350"></lightning-textarea>
+                            </template>
+
+
+                        </div>
+
+                    </div>
+                    <div class="">
+                        <div class="slds-m-top_x-large noteQuote">
+                            <h6>{label.Note}:&nbsp;</h6>
+                            <p>{label.Onceconfirmed}</p>
+                        </div>
+
+
+                        <div class="slds-m-bottom_x-large align-center buttons-group slds-align_absolute-center">
+                            <template if:true={isCommunity}>
+                                <button class="buttonNext button -secondary -min-width-small"
+                                    onclick={handleBack}>{label.Cancel}</button>
+                                <button class="buttonterminate button -primary -min-width-small slds-m-left_small"
+                                    style="" onclick={terminateConfirm}>{label.Terminate}</button>
+                            </template>
+
+                            <template if:false={isCommunity}>
+                                <button class="buttonterminate button -primary -min-width-small slds-m-left_small"
+                                    onclick={terminateConfirm}>{label.Terminate}</button>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+                <!-- 	
+				<div class="slds-container_large slds-container_center ">
+					<div class="summary-box" style="background: #f9fafb !important;">
+						<div class="summary-box-content">
+							<h3 class="summary-title green">Refund Calculation</h3>
+							<ul class="summary-details-list">
+								<li>Premium Paid: <span class="black">
+										<template if:false={nonWatercraftPolicy}>
+											<lightning-formatted-number value={refundWatercraft} style="currency"
+												currency-code="USD"></lightning-formatted-number>
+										</template>
+	
+										<template if:true={nonWatercraftPolicy}>
+											<lightning-formatted-number value={refundAmount} style="currency"
+												currency-code="USD"></lightning-formatted-number>
+										</template>
+									</span></li>
+							</ul>
+	
+						</div>
+						<div class="summary-box-footer green-bg">
+							<div class="summary-total">TOTAL REFUND <span class="summary-amount white">
+	
+									<template if:false={nonWatercraftPolicy}>
+										<lightning-formatted-number value={refundWatercraft} style="currency"
+											currency-code="USD"></lightning-formatted-number>
+									</template>
+	
+									<template if:true={nonWatercraftPolicy}>
+										<lightning-formatted-number value={refundAmount} style="currency"
+											currency-code="USD"></lightning-formatted-number>
+									</template>
+								</span></div>
+						</div>
+						<div class="align-center slds-m-top_x-large">
+							<p>Once confirmed, your policy will be terminated and your refund will be applied to your
+								original
+								payment method.</p>
+						</div>
+	
+						<div class="slds-m-bottom_x-large align-center buttons-group">
+							<button class="buttonNext button -secondary -min-width-small" onclick={handleBack}>Cancel</button>
+							<button class="buttonterminate button -primary -min-width-small slds-m-left_small" onclick={terminate}>Terminate</button>
+						</div>
+	
+						<h2>Policy Summary</h2>
+						<template if:true={policyDetail}>
+	
+							<ul class="summary-details-list -size-small">
+								<li>Status: <span class="black">This policy is up to date</span></li>
+								<li>Coverage: <span class="black">{policyDetail.quoteData.Coverage__c}</span></li>
+								<li>Policy Type: <span class="black">{policyDetail.quoteData.Policy_Type_picklist__c}</span>
+								</li>
+								<li>Term: <span class="black">
+										<lightning-formatted-date-time
+											value={policyDetail.quoteData.Start_Date_for_Coverage__c}></lightning-formatted-date-time>
+										&nbsp;
+										<lightning-formatted-time
+											value={policyDetail.quoteData.Start_Time__c}></lightning-formatted-time>
+										-
+										<lightning-formatted-date-time
+											value={policyDetail.quoteData.End_Date_for_Coverage__c}></lightning-formatted-date-time>
+										&nbsp;
+										<lightning-formatted-time
+											value={policyDetail.quoteData.End_Time__c}></lightning-formatted-time> (
+										{policyDetail.quoteData.Term__c} @ {policyDetail.quoteData.Term_Days__c} day )
+										{policyDetail.quoteData.Time_Zone__c}
+									</span></li>
+								<li>Territory: <span class="black">{policyDetail.quoteData.Territory__c}</span></li>
+								<li>Liability: <span class="black">{policyDetail.quoteData.Liability__c}</span></li>
+								<li>Medical: <span class="black">{policyDetail.quoteData.Medical__c}</span></li>
+								<li>Business Use: <span class="black">
+	
+										<template if:true={policyDetail.quoteData.Vehicle_used_for_Business_Purposes__c}>
+											Yes
+										</template>
+										<template if:false={policyDetail.quoteData.Vehicle_used_for_Business_Purposes__c}>
+											No
+										</template>
+									</span></li>
+								<li>Rental Vehicle: <span class="black">
+										<template if:true={policyDetail.quoteData.Is_this_a_Rental_Vehicle__c}>
+											Yes
+										</template>
+										<template if:false={policyDetail.quoteData.Is_this_a_Rental_Vehicle__c}>
+											No
+										</template>
+	
+									</span></li>
+								<li>Under 21 Driver: <span class="black">
+										{policyDetail.quoteData.Is_there_a_driver_under_21__c}
+									</span></li>
+								<li>Collision Deductible: <span class="black">$500</span></li>
+								<li>Comprehensive Deductible: <span class="black">$1,000</span></li>
+							</ul>
+	
+							<div class="horizontal-divider"></div>
+	
+							<div class="slds-grid slds-wrap slds-gutters_medium">
+								<div class="slds-col slds-size_6-of-12 slds-max-small-size_12-of-12">
+									<h3 class="red slds-m-top_small slds-m-bottom_small">Vehicle 1</h3>
+									<ul class="summary-details-list -size-small">
+										<li>Name: <template if:false={isWatercraft}><span class="black">
+													{policyDetail.vehicleData.Year__c}&nbsp;
+													{policyDetail.vehicleData.Make__c} &nbsp;
+													{policyDetail.vehicleData.Model__c}
+												</span></template>
+											<template if:true={isWatercraft}><span class="black">
+													{policyDetail.watercraftData.Year__c}&nbsp;
+													{policyDetail.watercraftData.Make__c} &nbsp;
+													{policyDetail.watercraftData.Model__c}
+												</span></template>
+										</li>
+									
+										<template if:false={isWatercraft}>
+											<li>Owner:
+											<span class="black">{policyDetail.vehicleData.Vehicle_Owner_Name__c}</span>
+										</li>
+										</template> 
+										
+										<template if:false={isWatercraft}>
+											<li>Registered Country:
+												<span
+													class="black">{policyDetail.vehicleData.Registered_Country__c}</span>
+											</li>
+											<li>Registered State: <span
+													class="black">{policyDetail.vehicleData.Registered_State__c}</span>
+											</li>
+											<li>Registration ID: <span
+													class="black">{policyDetail.vehicleData.Registered_Plate__c}</span>
+											</li>
+											<li>Business Vehicle: <span class="black">
+	
+													<template
+														if:true={policyDetail.vehicleData.Is_the_vehicle_registered_to_a_business__c}>
+														Yes
+													</template>
+													<template
+														if:false={policyDetail.vehicleData.Is_the_vehicle_registered_to_a_business__c}>
+														NO
+													</template>
+	
+												</span></li>
+											<li>Business Use: <span class="black">
+													<template
+														if:true={policyDetail.vehicleData.Is_the_vehicle_used_for_business_purpose__c}>
+														Yes
+													</template>
+													<template
+														if:false={policyDetail.vehicleData.Is_the_vehicle_used_for_business_purpose__c}>
+														NO
+													</template>
+												</span></li>
+											<li>Rental Vehicle: <span
+													class="black">{policyDetail.vehicleData.Rental__c}</span>
+											</li>
+										</template>
+										<template if:true={isWatercraft}>
+											<li>Under 21 Boat Operator:
+												<span
+													class="black">{policyDetail.quoteData.Any_Boat_Operator_Under_22__c}</span>
+											</li>
+										</template> 
+										<template if:false={isWatercraft}>
+										<li>Under 21 Driver:
+											<span
+												class="black">{policyDetail.quoteData.Is_there_a_driver_under_21__c}</span>
+										</li>
+									</template>
+									</ul>
+								</div>
+	
+								<div class="slds-col slds-size_6-of-12 slds-max-small-size_12-of-12 slds-m-top_large">
+								</div>
+							</div>
+	
+	
+							<div class="slds-grid slds-wrap slds-gutters_medium">
+	
+								<template for:each={policyDetail.DriverData} for:item="driver" for:index="index">
+									<div class="slds-col slds-size_6-of-12 slds-max-small-size_12-of-12 slds-m-top_large"
+										key={driver.license_number__c}>
+										<h3 class="red slds-m-top_small slds-m-bottom_small">Driver {index}</h3>
+										<ul class="summary-details-list -size-small">
+											<li>Name: <span class="black">{driver.Name}</span></li>
+											<li>Email: <span class="black">{driver.Email__c}</span></li>
+											<li>Phone: <span class="black">{driver.Phone__c}</span></li>
+											<li>Date of Birth: <span class="black">{driver.Dob__c}</span></li>
+											<li>Address:
+												<span class="black">{driver.Address__c} , {driver.Address_Line_2__c}</span>
+											</li>
+											<li>Country: <span class="black">{driver.Country__c}</span></li>
+											<li>State: <span class="black">{driver.State_Province__c}</span></li>
+											<li>Licence Country: <span class="black">{driver.License_Country__c}</span></li>
+											<li>Licence State: <span class="black">{driver.License_state__c}</span></li>
+											<li>Licence Number: <span class="black">{driver.license_number__c}</span></li>
+										</ul>
+									</div>
+	
+								</template>
+	
+	
+	
+							</div>
+	
+						</template>
+	
+	
+					</div>
+				</div> -->
+                <template if:true={isTerminate}>
+                    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                        aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header">
+                                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">
+                                    {label.Whyareyouterminating}
+
+                                </h2>
+                            </header>
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                <div class="summary-total">{label.TOTALREFUND} <span class="summary-amount white">
+
+                                        <template if:false={nonWatercraftPolicy}>
+                                            <lightning-formatted-number value={refundWatercraft} format-style="currency"
+                                                currency-code="USD"></lightning-formatted-number>
+                                        </template>
+
+                                        <template if:true={nonWatercraftPolicy}>
+                                            <lightning-formatted-number value={refundDisplayAmount}
+                                                format-style="currency"
+                                                currency-code="USD"></lightning-formatted-number>
+                                        </template>
+                                    </span></div>
+
+                            </div>
+                            <footer class="slds-modal__footer">
+                                <button class="slds-button slds-button_neutral"
+                                    onclick={cancleTerminate}>{label.Cancel}</button>
+                                <button class="slds-button slds-button_destructive"
+                                    onclick={terminatePolicy}>{label.ConfirmTerminate}
+                                </button>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+
+
+                </template>
+            </template>
+        </template>
+        <template if:true={isPaymentDetail}>
+
+            <lightning-layout-item padding="around-small" size="12" class="slds-align-center slds-m-top_xx-large">
+                <div class="page-title">
+
+                    <h1>{label.LetstacklethePaymentnow}</h1>
+                </div>
+
+            </lightning-layout-item>
+
+            <template if:false={nonWatercraftPolicy}>
+
+                <c-payment policy-type={policyType} editpolicydata={policyDetail} refund-amount={refundWatercraft}
+                    is-refund={isRefund} policy-id={recordId} changesnextscreen={changeNextScreen}
+                    refund-obj={refundObj} changeprevscreen={changePrevScreen} transaction-details={transactionRecord}
+                    companyaddress={isshowaddress}></c-payment>
+            </template>
+            <template if:true={nonWatercraftPolicy}>
+                <!-- refund-amount={refundObj.total - policyDetail.PolicyData.Total_Transaction_Amount__c}  -->
+                <c-payment policy-type={policyType} is-refund={isRefund} policy-id={recordId}
+                    editpolicydata={policyDetail} refund-amount={refundAmount} changesnextscreen={changeNextScreen}
+                    refund-obj={refundObj} changeprevscreen={changePrevScreen} transaction-details={transactionRecord} cmp-source={cmpSource}
+                    companyaddress={isshowaddress}></c-payment>
+
+            </template>
+
+        </template>
+
+    </div>
+</template>

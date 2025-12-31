@@ -1,0 +1,108 @@
+.THIS .flow-progress .step {
+        z-index: 2 !important;
+}
+.THIS .flow-progress .progress-bar{
+    z-index: 1 !important;
+}
+
+.THIS .flow-progress .progress-bar-current{
+    z-index: 1 !important;
+}
+
+
+
+/* flow progress */
+
+.THIS .flow-progress{
+	padding: 50px 25px;
+	background: #397f80;
+    border-radius: 4px;
+}
+
+.THIS .flow-progress .progress-inner{
+	position: relative;
+}
+
+.THIS .flow-progress .step{
+	width: 32.8%;	
+	float: left;
+	padding: 20px 5px 0;
+	position: relative;
+	z-index: 100;
+	text-align: center;
+}
+
+.THIS .flow-progress .step:before{
+	position: absolute;
+	content: "";
+	left: 50%;
+	top:-10px;
+	margin-left: -10px;
+	width: 20px;
+	height: 20px;
+	border-radius: 100%;
+	background: #6da9aa;
+	border: 6px solid #397f80;
+}
+
+.THIS .flow-progress .step-number{
+	color: #fff;
+	font-weight: bold;
+	font-size: 16px;
+
+}
+
+.THIS .flow-progress .step-label{
+	font-size: 14px;
+	font-weight: normal;
+	color: #9ED4D5;
+}
+
+.THIS .flow-progress .progress-bar, 
+.THIS .flow-progress .progress-bar-current{
+	background: #6da9aa;
+	height: 2px;
+	top:-1px;
+	position: absolute;
+	z-index: 10;
+	left: 15.33%;
+	width: 0;
+}
+
+.THIS .flow-progress .progress-bar{
+	width: 67.34%;
+}
+
+.THIS .flow-progress .progress-bar-current{
+	background: #e2f2f2;
+	z-index: 20;
+}
+
+.THIS .flow-progress .step.completed-step:before{
+	background: #fff;
+}
+
+.THIS .flow-progress .step.active-step:before{
+	background: #f4bd55;
+	border-color: #8c9b6e;
+}
+
+.THIS .flow-progress .step.active-step .step-number{
+	color: #fff;
+}
+
+.THIS .flow-progress .step.active-step .step-label{
+	color: #f4bd55;
+}
+
+.THIS .flow-progress .step2.active-step ~ .progress-bar-current{
+	width: 32.8%;
+}
+
+.THIS .flow-progress .step3.active-step ~ .progress-bar-current{
+	width: 65.59%;
+}
+
+.THIS .flow-progress .step4.active-step ~ .progress-bar-current{
+	width: 100%;
+}

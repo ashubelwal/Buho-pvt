@@ -1,0 +1,23 @@
+<template>
+
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                <lightning-combobox name="What_is_your_trip_destination_in_US__c" label="" value={tripDestination}
+                placeholder={label.WhatisyourTripDestination} options={usDestinations} onchange={handleChange} onblur={handleDataUpdate} >
+            </lightning-combobox>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                <lightning-combobox name="What_is_the_purpose_of_trip__c" label="" value={tripPurpose}
+                placeholder={label.Whatisthetrippurposetrip} options={tripPurposes} onchange={handleChange} onblur={handleDataUpdate} >
+            </lightning-combobox>
+            </div>
+        </div>
+    
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_1-of-1 slds-p-around_small">
+                <lightning-input type="checkbox" label={label.Newsletter} name="Newsletter__c" checked={Newsletter}
+                onchange={handleChange} onblur={handleDataUpdate}>
+            </lightning-input>
+            </div>
+        </div>
+</template>

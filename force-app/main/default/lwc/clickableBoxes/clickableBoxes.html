@@ -1,0 +1,11 @@
+<template>
+    <div class="slds-grid slds-gutters">
+        <template for:each={items} for:item="item">
+            <div key={item.id} class="slds-col slds-size_1-of-3">
+                <a href={item.url} class="grid-item slds-box slds-theme_shade slds-text-align_center" target="_self">
+                    <p>{item.name}</p>
+                </a>
+            </div>
+        </template>
+    </div>
+</template>

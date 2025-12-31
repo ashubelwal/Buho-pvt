@@ -1,0 +1,280 @@
+<template>
+	<div class="newCardForm">
+		<div class="formCard">
+			
+			<div class="slds-grid slds-wrap slds-card slds-var-p-around_small slds-m-bottom_small">
+				<div class="slds-col slds-size_2-of-3">
+					<h2 class="slds-text-heading_medium"> {pageTitle} </h2>
+				</div>
+				<div class="slds-col slds-size_1-of-3 slds-text-align_right">
+					<div class="closeBtn">
+						<lightning-button-icon icon-name="utility:close" alternative-text="Close" title="Close"
+							onclick={handleCloseNewCardScreen}></lightning-button-icon>
+					</div>
+				</div>
+			</div>
+
+			<div class="slds-grid slds-wrap">
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12">
+					<div>
+
+					</div>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12">
+					<template if:true={addActionType}>						
+						<form onsubmit={handleCardOprations}>
+							<!-- First Row -->
+							<div class="slds-grid slds-wrap slds-gutters">
+								<div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+									<div class="slds-p-bottom_small lgc-bg">
+										<lightning-input class="validate" type="text" placeholder="Address"
+											label="Address" name="address" onchange={handleInput} required></lightning-input>
+									</div>
+								</div>
+								<div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+									<div class="slds-p-bottom_small lgc-bg">
+										<lightning-input class="" type="text" placeholder="Address Line 2"
+											label="Address Line 2" name="secondAddress" onchange={handleInput}>
+										</lightning-input>
+									</div>
+								</div>
+							</div>
+
+							<!-- Second Row -->
+							<div class="slds-grid slds-wrap slds-gutters">
+								<div class="slds-col  slds-size_6-of-12">
+									<div class="slds-p-bottom_small lgc-bg">
+										<lightning-combobox class="validate" name="country" label="Country"
+											placeholder="Country" options={countryoptions} onchange={handleInput}
+											required>
+										</lightning-combobox>
+									</div>
+								</div>
+								<div class="slds-col  slds-size_6-of-12">
+									<div class="slds-p-bottom_small lgc-bg">
+										
+										<template if:false={showStateInput}>
+											<lightning-combobox class="validate" name="state" label="State"
+												placeholder="State" options={stateOption} onchange={handleInput}
+												required>
+											</lightning-combobox>
+										</template>
+
+										<template if:true={showStateInput}>
+											<lightning-input type='text' class="validate" name="state" label="State" pattern="^[A-Za-z]+(\s[A-Za-z]+)*$"
+												placeholder="State" onchange={handleInput} required></lightning-input>
+										</template>
+
+									</div>
+								</div>
+							</div>
+
+							<!-- Third Row -->
+							<div class="slds-grid slds-wrap slds-gutters">
+								<div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+									<div class="slds-p-bottom_small lgc-bg">
+										<lightning-input class="validate" type="text" placeholder="City" label="City" pattern="^[A-Za-z]+(\s[A-Za-z]+)*$"
+											name="city" onchange={handleInput} required></lightning-input>
+									</div>
+								</div>
+								<div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+									<div class="slds-p-bottom_small lgc-bg">
+										<lightning-input class="validate" type="text" placeholder="Postal Code"
+											pattern="^(0|[1-9][0-9]*)$"
+											message-when-pattern-mismatch="Only numbers can be entered"
+											label="Postal Code" name="postalCode" onchange={handleInput} required>
+										</lightning-input>
+									</div>
+								</div>
+							</div>
+
+							<div class="slds-p-bottom_small lgc-bg">
+								<lightning-input class="validate" type="text" pattern="^[A-Za-z]+(\s[A-Za-z]+)*$"
+								 	message-when-pattern-mismatch="Please enter a correct name"
+								 	label="Full Name" placeholder="Enter Full Name"
+									name="holderName" onchange={handleInput} required></lightning-input>
+							</div>
+							<div class="slds-p-bottom_small lgc-bg">
+								<lightning-input class="validate slds-size_full" type="text" placeholder="Card number"
+								    pattern="[0-9\s]*" 
+									inputmode="numeric"
+									message-when-pattern-mismatch="Only numbers can be entered" minlength="12"
+									maxlength="19" label="Card Number" data-id="cardNumber"
+									name="formattedCreditCardNumberOrg" value={formattedCreditCardNumber}
+									onchange={handleChange} required>
+								</lightning-input>
+							</div>
+
+							<div class="slds-grid slds-wrap slds-gutters">
+								<div class="slds-col slds-size_6-of-12">
+									<div class="slds-p-bottom_small lgc-bg">
+										<lightning-combobox class="validate" name="experationMonth" 
+											label="Expiration Month" placeholder="MM" options={months} onchange={handleInput}
+											required>
+										</lightning-combobox>
+									</div>
+								</div>
+								<div class="slds-col slds-size_6-of-12">
+									<div class="slds-p-bottom_small lgc-bg">
+										<lightning-combobox class="validate" name="experationYear"
+											label="Expiration Year" placeholder="YYYY" options={YYYY}
+											onchange={handleInput} required>
+										</lightning-combobox>
+									</div>
+								</div>
+							</div>
+
+							<div class="slds-p-bottom_small lgc-bg slds-m-bottom_small">
+								<lightning-input class="validate" type="text" minlength="3" maxlength="4"
+									pattern="^(?=.*[1-9])\d+$"
+									message-when-pattern-mismatch="Only numbers can be entered"
+									placeholder="Security Code" label="Security Code" name="securityCode"
+									onchange={handleInput} required></lightning-input>
+							</div>
+
+							<div class="slds-p-bottom_small lgc-bg slds-m-bottom_small">								
+								<lightning-input id="termAndConditions" type="checkbox" label="By clicking here, I state that I have read and understood the terms and conditions." class="validate" name="termAndConditions" required></lightning-input>
+								<!-- <input type="checkbox" id="termAndConditions" name="termAndConditions" class="validate" required="required"></input>
+    							<label for="termAndConditions" style="display: inline;" class="slds-form-element__label"> Yes, by creating an account I agree to the <a href="#">Terms and Service.</a></label> -->
+							</div>							
+
+							<template if:false={newCardLoader}>
+								<div class="slds-p-bottom_small lgc-bg">
+									<input type="submit" name="submit" class="btn">
+									
+									<lightning-button label="Cancel" title="Cancel" class="slds-m-left_x-small"
+									onclick={handleCloseNewCardScreen}></lightning-button>
+								</div>
+							</template>
+							<template if:true={newCardLoader}>
+								<lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+							</template>
+						</form>
+					</template>
+
+					<template if:false={addActionType}>						
+						<form onsubmit={handleCardOprations}>
+
+							<!-- First Row -->
+
+							<div class="slds-p-bottom_small lgc-bg">
+								<lightning-input class="" type="text" placeholder={carddata.billTo.address}
+									label="Address" name="address" onchange={handleInput}></lightning-input>
+							</div>
+							<!-- <div class="slds-grid slds-wrap slds-gutters">
+								<div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+									<div class="slds-p-bottom_small lgc-bg">
+										<lightning-input class="" type="text" placeholder={carddata.billTo.address}
+											label="Address" name="address" onchange={handleInput}></lightning-input>
+									</div>
+								</div>
+								<div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+									<div class="slds-p-bottom_small lgc-bg">
+										<lightning-input class="" type="text" placeholder={carddata.billTo.secondAddress}
+											label="Address Line 2" name="secondAddress" onchange={handleInput}>
+										</lightning-input>
+									</div>
+								</div>
+							</div> -->
+
+							<!-- Second Row -->
+							<div class="slds-grid slds-wrap slds-gutters">
+								<div class="slds-col slds-size_6-of-12">
+									<div class="slds-p-bottom_small lgc-bg">
+										<lightning-combobox class="" name="country" label="Country" value={}
+											placeholder={carddata.billTo.country} options={countryoptions} onchange={handleInput}>
+										</lightning-combobox>
+									</div>
+								</div>
+								<div class="slds-col slds-size_6-of-12">
+									<div class="slds-p-bottom_small lgc-bg">
+
+										<template if:false={showStateInput}>
+											<lightning-combobox class="validate" name="state" label="State"
+												placeholder={carddata.billTo.state} options={stateOption} onchange={handleInput}
+												>
+											</lightning-combobox>
+										</template>
+
+										<template if:true={showStateInput}>
+											<lightning-input type="text" class="validate" name="state" label="State" pattern="^[A-Za-z]+(\s[A-Za-z]+)*$"
+												placeholder={carddata.billTo.state} onchange={handleInput} ></lightning-input>
+										</template>
+
+										<!-- <lightning-combobox class="" name="state" label="State" placeholder={carddata.billTo.state}
+											options={stateOption} onchange={handleInput}>
+										</lightning-combobox> -->
+									</div>
+								</div>
+							</div>
+
+							<!-- Third Row -->
+							<div class="slds-grid slds-wrap slds-gutters">
+								<div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+									<div class="slds-p-bottom_small lgc-bg">
+										<lightning-input class="" type="text" placeholder={carddata.billTo.city} pattern="^[A-Za-z]+(\s[A-Za-z]+)*$"
+											label="City" name="city" onchange={handleInput}></lightning-input>
+									</div>
+								</div>
+								<div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+									<div class="slds-p-bottom_small lgc-bg">
+										<lightning-input class="" type="text" placeholder={carddata.billTo.zip}
+											label="Postal Code" name="postalCode" onchange={handleInput}></lightning-input>
+									</div>
+								</div>
+							</div>
+
+
+							<div class="slds-p-bottom_small lgc-bg">
+								<lightning-input class="" type="text" placeholder={fullName} pattern="^[A-Za-z]+(\s[A-Za-z]+)*$"
+									label="Full Name" name="holderName" onchange={handleInput}></lightning-input>
+							</div>
+
+							<div class="slds-p-bottom_small lgc-bg">
+								<lightning-input class="slds-size_full" type="text" label="Card Number"
+									data-id="cardNumber" pattern="[0-9\s]*" inputmode="numeric"
+									message-when-pattern-mismatch="Only numbers can be entered" minlength="12"
+									maxlength="19" value={formattedCreditCardNumber} name="formattedCreditCardNumberOrg"
+									onchange={handleChange} 
+									placeholder={carddata.payment.creditCard.cardNumber}></lightning-input>
+							</div>
+
+							<div class="slds-grid slds-wrap slds-gutters slds-m-bottom_small">
+								<div class="slds-col slds-size_6-of-12">
+									<div class="slds-p-bottom_small lgc-bg">
+										<lightning-combobox class="" name="experationMonth" label="Expiration Month"
+											placeholder="XX" options={months} onchange={handleInput} data-id="experationMonth">
+										</lightning-combobox>
+									</div>
+								</div>
+								<div class="slds-col slds-size_6-of-12">
+									<div class="slds-p-bottom_small lgc-bg">
+										<lightning-combobox class="" name="experationYear" label="Expiration Year"
+											placeholder="XXXX" options={YYYY} onchange={handleInput} data-id="experationYear">
+										</lightning-combobox>
+									</div>
+								</div>
+							</div>
+
+							<!-- <div class="slds-p-bottom_small lgc-bg">
+								<lightning-input class="validate" type="number" minlength="3" maxlength="4"  label="Security Code" name="securityCode" onchange={handleInput} required></lightning-input>
+							</div>						 -->
+
+							<template if:false={newCardLoader}>
+								<div class="slds-p-bottom_small lgc-bg">
+									<input type="submit" name="submit" value="Update Card" class="btn">
+
+									<lightning-button label="Cancel" title="Cancel" class="slds-m-left_x-small"
+									onclick={handleCloseNewCardScreen}></lightning-button>
+								</div>
+							</template>
+							<template if:true={newCardLoader}>
+								<lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+							</template>
+						</form>
+					</template>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>

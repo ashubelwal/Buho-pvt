@@ -1,0 +1,76 @@
+<aura:component controller="QuickQuotationCtrl" implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="title" type="String" access="public"/>
+    <aura:attribute name="backButtonVisibility" type="Boolean" default="true" access="public" />
+    <aura:attribute name="policyType" type="String" access="public"/>
+    <aura:attribute name="timeZones" type="list" access="private"/>
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    <aura:attribute name="onNextClick" type="Aura.Action"/>
+    <aura:attribute name="quoteRecord" type="Object"/>
+    <aura:attribute name="leadRecord" type="Object"/>
+    <aura:attribute name="minDate" type="String" />
+    <aura:attribute name="minTime" type="String" />
+    <aura:attribute name="endMinDate" type="String" />
+    <aura:attribute name="pstTime" type="String" />
+    <aura:attribute name="serverDateTime" type="String" />
+    <ltng:require scripts="{!join(',', $Resource.momentJS, $Resource.momentJSTimezone)}" afterScriptsLoaded="{!c.afterScriptsLoaded}" />
+
+    <aura:attribute name="annaul" type="Boolean" />
+    <aura:attribute name="semiAnnual" type="Boolean" />
+
+    <aura:attribute name="editPolicy" type="Boolean" default="false" />
+
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="renderInit" type="Boolean" default="false"/>
+    <!--aura:handler name="render" value="{!this}" action="{!c.onRender}"/-->
+
+    
+    <aura:if isTrue="{!v.editPolicy}">
+        <c:Policy_Edit_Steps step="step1" />
+    </aura:if>
+    <lightning:layoutItem padding="around-small" size="12" class="align-center slds-m-top_xx-large">
+        <div class="page-title">
+            <aura:if isTrue="{!v.backButtonVisibility}">
+                <button class="button -plain -back-button" name="step_3" onclick="{!v.onBackClick }">
+                    <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/> Back
+                </button>
+            </aura:if>
+            <h1>{!v.title}</h1>
+            <img class="slds-m-bottom_large" src="{!$Resource.mexinsurance_assets + '/images/icon-calendar.svg'}" alt="Terms"/>
+        </div>                    
+    </lightning:layoutItem>
+    
+    <div class="slds-size_12-of-12">
+        <div class="form-container">
+            <lightning:input aura:Id="validateField" name="Start_Date_for_Coverage__c" type="date" label="Start Date for Coverage" placeholder="" value="{!v.quoteRecord.Start_Date_for_Coverage__c}"  onchange="{!c.updateValue}" min="{!v.minDate}" required="true"/>
+
+            <lightning:helptext iconName="utility:info" content="All policies are issued in Pacific Time, so please be sure to make the adjustment, if you are crossing in Texas (Central Time) or Mountain Time (Arizona/New Mexico)."/> System Time Now: {!v.pstTime}<!--<lightning:formattedDateTime value="{!v.pstTime}" hour="2-digit" minute="2-digit" timeZone="America/Los_Angeles" timeZoneName="short" />-->
+            <lightning:input aura:Id="validateField" type="time" name="Start_Time__c" label="START TIME" placeholder="" value="{!v.quoteRecord.Start_Time__c}" onchange="{!c.updateValue}" required="true" min="{!v.minTime}" timeZone="PST"/>
+            <lightning:layoutItem size="12">
+                <lightning:layout multipleRows="true">
+                    <lightning:layoutItem size="6" class="align-center">
+                        <label class="label-large slds-m-top_small slds-m-bottom_small">Annual</label>
+                        <label class="radiocontainer">
+                            <lightning:input type="checkbox" name="Annual" variant="label-hidden" checked="{!v.annaul}" onchange="{!c.onGroup}" />
+                        </label>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="6" class="align-center">
+                        <label class="label-large slds-m-top_small slds-m-bottom_small">Semi Annual</label>
+                        <label class="radiocontainer">
+                            <lightning:input type="checkbox" name="Semi Annual" variant="label-hidden" checked="{!v.semiAnnual}" onchange="{!c.onGroup}" />
+                        </label>
+                    </lightning:layoutItem> 
+                </lightning:layout>
+            </lightning:layoutItem>
+            <lightning:input aura:Id="validateField" name="End_Date_for_Coverage__c" type="date" label="End Date for Coverage" placeholder="" value="{!v.quoteRecord.End_Date_for_Coverage__c}" onchange="{!c.updateValue}"  min="{!v.endMinDate}" required="true" />
+            <lightning:helptext iconName="utility:info" content="This will match the start time unless the policy is to start immediately.  Daily policies are purchased in 24 hour increments."/>
+            <lightning:input type="time" name="End_Time__c" label="End Time" placeholder="" value="{!v.quoteRecord.End_Time__c}" disabled="true" timeZone="PST"/>
+
+            <!--lightning:combobox aura:Id="validateField" name="Time_Zone__c" label="Time Zone" placeholder="" value="{!v.quoteRecord.Time_Zone__c}"  options="{! v.timeZones }" onchange="{!c.updateValue}" required="true" /-->
+        </div>
+    </div>               
+    
+    <lightning:layoutItem size="12" class="slds-m-top_large align-center">                    
+        <button class="button -secondary -wider" onclick="{!c.onNextClick }">Next</button>
+    </lightning:layoutItem>
+</aura:component>

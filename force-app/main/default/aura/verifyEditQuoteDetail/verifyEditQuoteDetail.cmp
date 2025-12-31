@@ -1,0 +1,295 @@
+<aura:component controller="QuickQuotationCtrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="drivers" type="List" />
+    <aura:attribute name="towed_Units" type="List" />
+    <aura:attribute name="vehicleTypeOptions" type="List" access="public" />
+    <aura:attribute name="vehicles" type="List" />
+    <aura:attribute name="quote" type="object" />
+    <aura:attribute name="isEditDriver" type="boolean" />
+    <aura:attribute name="isEditVehicle" type="boolean" />
+    <aura:attribute name="isEditRate" type="boolean" />
+    <aura:attribute name="quoteIds" type="list" />
+    <aura:attribute name="isOwner" type="boolean" default="true"/>
+    <aura:attribute name="rateObectList" type="list" access="public" />
+    <aura:attribute name="vehicleObject" type="Vehicle__c" default="{ 'sobjectType': 'Vehicle__c'}"/>
+    <aura:attribute name="driverObject" type="Driver__c" default="{ 'sobjectType': 'Driver__c'}"/>
+    <aura:attribute name="quoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" />
+    <aura:attribute name="Total_Premium" type="decimal" />
+    <aura:attribute name="driverAgeUnder21" type="map" />
+    <aura:attribute name="minDate" type="String" />
+    <aura:attribute name="liability" type="String" default="100,000" />
+    <aura:attribute name="highLiability" type="String"  />
+    <aura:attribute name="lowLiability" type="String"  />
+    <aura:attribute name="Final_total_Premium" type="Decimal" access="public" />
+    <aura:attribute name="IVA_Mex_Tax__cValue" type="decimal" />
+    
+    <aura:attribute name="rateValue" type="decimal" />
+    <aura:attribute name="rateObect" type="object" />
+    <aura:attribute name="onbackClick" type="Aura.Action" />
+    <aura:attribute name="vehicleTempId" type="String" />
+    
+    <aura:attribute name="isCommunityUser" type="Boolean" access="public"/>
+    
+    <aura:attribute name="quoteObject" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" access="public" />
+    <aura:attribute name="policyType" type="String" access="public"/>
+    <!-- CA attribute -->
+    <aura:attribute name="driverOptions" type="list" />
+
+    <ltng:require styles="{!$Resource.mexinsurance_assets + '/style.css'}" afterScriptsLoaded="{!c.doInit}"/>
+    
+    
+    <lightning:layout multipleRows="true">
+        
+        <lightning:layoutItem size="12" class="slds-align-center slds-m-top_large">
+            <div class="page-title">
+                <button class="button -plain -back-button" name="step_11" onclick="{! v.onbackClick }">
+                    <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/> Back
+                </button>
+                <h1>Verify and edit Policy details</h1>
+            </div>
+            
+        </lightning:layoutItem>
+        
+        <div class="slds-size_12-of-12">
+            <aura:iteration items="{!v.rateObectList}" var="item" indexVar="index">
+                
+                <div class="grid">
+                    <div class="grid_1-2 grid_1-sm">
+                        <h3 class="red slds-m-top_small slds-m-bottom_small">Policy Summary</h3>
+                        <ul class="quote-details">
+                            <li>Vehicle Details: <strong>{!item.year} &nbsp; {!item.make} &nbsp; {!item.model}</strong></li>
+                            <li>Insurance Company: <strong>{!item.Underwriter__c}</strong></li>
+                            <li>Premium: <strong><lightning:formattedNumber value="{!item.Net_Premium__c}" style="currency" currencyCode="USD"/></strong></li>
+                            <li>Surcharge: <strong><lightning:formattedNumber value="{!item.surcharge}" style="currency" currencyCode="USD"/></strong></li>
+                            <li>Broker Charge: <strong><lightning:formattedNumber value="{!item.Broker_Policy_Fee__c}" style="currency" currencyCode="USD"/></strong></li>
+                            <li>Mexican IVA TAX: <strong><lightning:formattedNumber value="{!item.IVA_Mex_Tax__c != null ? item.IVA_Mex_Tax__c : 0}" style="currency" currencyCode="USD"/></strong></li>
+                        </ul>
+                    </div>
+                    <div class="grid_1-2 grid_1-sm">
+                        <h3 class="red slds-m-top_small slds-m-bottom_small">Coverage 
+                            <!--aura:if isTrue="{!and(v.policyType != 'Automobile')}">
+                                <span class="separator">/</span> 
+                                <a class="simple-link" href="javascript:void(0)" name="{!index}" onclick="{!c.editRateData}">Edit</a>
+                            </aura:if-->
+                        </h3>
+                        <ul class="quote-details">
+                            <li>Coverage: <strong>{!item.Package__c}</strong></li>
+                            <li>Policy Type: <strong>{!item.Type__c}</strong></li>
+                            <li>Term: 
+                                <strong>
+                                    <lightning:formattedDateTime value="{!item.quoteRecord.Start_Date_for_Coverage__c}"/>
+                                    &nbsp; 
+                                    <lightning:formattedTime value="{!item.quoteRecord.Start_Time__c}" />
+                                    -
+                                    <lightning:formattedDateTime value="{!item.quoteRecord.End_Date_for_Coverage__c}"/>
+                                    &nbsp; 
+                                    <lightning:formattedTime value="{!item.quoteRecord.End_Time__c}" /><br/>
+                                    ( {!item.quoteRecord.Term__c} @ {!item.quoteRecord.Term_Days__c} day ) {!item.quoteRecord.Time_Zone__c}
+                                </strong>
+                            </li>
+                            <!--li>Territory: <strong>[Full Territory]</strong></li -->
+                            <li>Liability: <strong>${!item.Liability__c}</strong></li>
+                            <aura:if isTrue="{!and(v.policyType != 'Motorcycle/Street Legal ATV', item.Type__c != 'Motorcycle/Street Legal ATV')}">
+                                <li>Medical: <strong>${!item.Medical__c}</strong></li> 
+                            </aura:if>
+                        </ul>
+                    </div>
+                </div>
+            </aura:iteration>
+            
+            <div class="quote-total-bar">
+                TOTAL: <lightning:formattedNumber value="{!v.Total_Premium}" style="currency" currencyCode="USD"/>
+            </div>
+            
+            <div class="grid">
+                <!--***** Vehicles *****-->
+                <aura:iteration items="{!v.vehicles}" var="item" indexVar="index">
+                    <div class="grid_1-2 grid_1-sm" style="width: 100% !important;">
+                        <h3 class="red slds-m-top_small slds-m-bottom_small">Vehicle {!index + 1} 
+                            <span class="separator">/</span> <a class="simple-link" href="javascript:void(0)" name="{!index}" onclick="{!c.editVehicle}">Edit</a></h3>
+                        <ul class="quote-details">
+                            <!--li>Name: <strong>{!item.Model__c}</strong></li>
+                            <li>Registered Country: <strong>{!item.Registered_Country__c}</strong></li>
+                            <li>Registered State: <strong>{!item.Registered_State__c}</strong></li>
+                            <li>Registered Id: <strong>{!item.Vin__c}</strong></li>
+                            <li>Business Vehicle: <strong>{!item.Is_the_vehicle_registered_to_a_business__c ? 'Yes' : 'No'}</strong></li>
+                            <li>Business Use: <strong>{!item.Is_the_vehicle_used_for_business_purpose__c ? 'Yes' : 'No'}</strong></li>
+                            <li>Rental Vehicle: <strong>{!item.Rental__c != null ? item.Rental__c : 'No' }</strong></li>
+                            <li>Under 21 Driver: 
+                                <strong>
+                                    <aura:renderIf isTrue="{!!empty(v.driverAgeUnder21)}" >
+                                        <c:showMapValue driverAgeUnder21="{!v.driverAgeUnder21}" key="{!item.Id}" />
+                                    </aura:renderIf>
+                                </strong></li-->
+                            <li>{!item.Year__c} &nbsp; {!item.Make__c} &nbsp; {!item.Model__c} &nbsp; {!item.Registered_State__c} &nbsp; {!item.Registered_Country__c}</li>
+                            <li>Vin: <strong>{!item.Vin__c}</strong></li>
+                        </ul>
+                        <div style="padding-left: 30px;">
+                            <aura:if isTrue="{!item.Is_Lienholder__c}">
+                                <h3 class="red slds-m-top_small slds-m-bottom_small">Lienholder</h3>
+                                <ul class="quote-details">
+                                    <li>{!item.Lienholder_name__c} &nbsp; {!item.Lienholder_Phone__c} &nbsp; {!item.Lienholder_Fax__c} &nbsp; {!item.Lienholder_Street__c} &nbsp; {!item.Lienholder_City__c} &nbsp; {!item.Lienholder_State__c} &nbsp; {!item.Lienholder_Country__c} &nbsp; {!item.Lienholder_Postal_Code__c}</li>
+                                </ul>
+                            </aura:if>
+                            <aura:if isTrue="{!item.Is_the_vehicle_registered_to_a_business__c}">
+                                <h3 class="red slds-m-top_small slds-m-bottom_small">Owner</h3>
+                                <ul class="quote-details">
+                                    <li>{!item.Company_Name__c} &nbsp; {!item.Company_Phone__c} &nbsp; {!item.Tax_ID__c} &nbsp; {!item.Company_Address__c} </li>
+                                </ul>
+                            </aura:if>
+
+                            <aura:if isTrue="{!and(v.towed_Units, v.vehicleTempId == item.Id)}">
+                                <h3 class="red slds-m-top_small slds-m-bottom_small">Towed Units</h3>
+                                <table class="listing-table" width="100%">
+                                    <tr>
+                                        <th Style="width: 25%;">Unit Name</th>
+                                        <th>Registration #/License Plate</th>
+                                        <th>Days in Tow</th>
+                                        <th>Value</th>
+                                        <th>VIN</th>
+                                    </tr>
+                                    <aura:iteration items="{!v.towed_Units}" var="towedUnit" indexVar="index">
+                                        <tr>
+                                            <td>{!towedUnit.Year__c} &nbsp; {!towedUnit.Make__c} &nbsp; {!towedUnit.Model__c}</td>
+                                            <td>{!towedUnit.Plate__c}</td>
+                                            <td>{!towedUnit.Days_in_Tow__c}</td>
+                                            <td>{!towedUnit.Towed_Unit_Value__c}</td>
+                                            <td>{!towedUnit.VIN_Number__c}</td>
+                                        </tr>
+                                    </aura:iteration>
+                                </table>
+                                <br/>
+                            </aura:if>
+                        </div>
+                    </div>
+                </aura:iteration>
+            </div>
+            
+            <div class="grid">
+                <!--***** Drivers *****-->
+                <aura:iteration items="{!v.drivers}" var="item" indexVar="index">
+                    <div class="grid_1-2 grid_1-sm">
+                        <h3 class="red slds-m-top_small slds-m-bottom_small">Driver {!index + 1} <span class="separator">/</span> <a class="simple-link" href="javascript:void(0)" name="{!index}" onclick="{!c.editDriver}">Edit</a></h3>
+                        <ul class="quote-details">
+                            <li>Name: <strong>{!item.First_Name__c} &nbsp; {!item.Last_Name__c}</strong></li>
+                            <li>Phone: <strong>{!item.Phone__c}</strong></li>
+                            <li>Date of Birth: <strong>{!item.Dob__c}</strong></li>
+                            <li>License Country: <strong>{!item.License_Country__c}</strong></li>
+                            <li>License State: <strong>{!item.License_state__c}</strong></li>
+                            <li>License Number: <strong>{!item.LN_With_Country__c}</strong></li>
+                        </ul>
+                    </div>
+                </aura:iteration>
+            </div>
+            
+        </div>
+        
+    </lightning:layout>
+    
+    <aura:if isTrue="{!v.isEditDriver}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Edit Driver</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <c:DriverRegistration driverObject="{!v.driverObject}" isOwner="{!v.isOwner}" policyType="{!v.policyType}"/>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.cancleEdit}">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick="{!c.updateDriver}">Save</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.isEditVehicle}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Edit Vehicle</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <div class="slds-size_12-of-12">
+                        <div class="form-container">
+                            <lightning:input type="text" name="Year__c" placeholder="Year" value="{!v.vehicleObject.Year__c}" onchange="{!c.updateVehicleField}" disabled="true"/>
+                            <lightning:input type="text" name="Make__c" placeholder="Make" value="{!v.vehicleObject.Make__c}" onchange="{!c.updateVehicleField}" disabled="true" />
+                            <lightning:input type="text" name="Model__c"  placeholder="Model" value="{!v.vehicleObject.Model__c}" onchange="{!c.updateVehicleField}" disabled="true" />
+                            <lightning:input type="number" name="Value__c" formatter="currency" step="0.01" placeholder="Vehicle Value" value="{!v.vehicleObject.Value__c}"  onchange="{!c.updateVehicleField}" disabled="true"/>
+                            <lightning:input type="text" name="Vin__c" placeholder="VIN Number" value="{!v.vehicleObject.Vin__c}" onchange="{!c.updateVehicleField}" pattern="[A-Z0-9]+" messageWhenPatternMismatch ="Whitespace &#38; Special Characters (@, $, %, etc...) arn't allowed" />
+                            <lightning:input type="text" name="Registered_Country__c" placeholder="Registered Country" value="{!v.vehicleObject.Registered_Country__c}" maxlength="2"  onchange="{!c.updateVehicleField}"/>
+                            <lightning:input type="text" name="Registered_State__c" placeholder="Registered State/Province" value="{!v.vehicleObject.Registered_State__c}" maxlength="3" onchange="{!c.updateVehicleField}"/>
+                            <lightning:input type="text" name="Registered_Plate__c" placeholder="Registration #" value="{!v.vehicleObject.Registered_Plate__c}" onchange="{!c.updateVehicleField}" />
+                        </div>
+                    </div>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.cancleEdit}">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick="{!c.updateVehicle}">Save</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.isEditRate}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Edit Rate</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <section class="quick-quote">
+                        <div class="quotes-normal-view">
+                            <div class="quote-box -recommended">
+                                <div class="quote-provider">
+                                    <img src="{!$Resource.mexJs  + '/mexJs/images/chubb.png'}" alt="Chubb" />
+                                    <div class="recommended-label">Recommended</div>
+                                </div>
+                                <div class="quote-pricing"><lightning:formattedNumber value="{!v.rateValue}" style="currency" currencyCode="USD"/></div>
+                                
+                                <div class="quote-body">
+                                    
+                                    <div class="unit">
+                                        <div class="grid -spacing-sm">
+                                            <div class="grid_1-2">
+                                                <div class="datepicker">
+                                                    <lightning:input aura:Id="validateField" name="Start_Date_for_Coverage__c" type="date" label="START DATE FOR COVERAGE" placeholder="" value="{!v.quoteObject.Start_Date_for_Coverage__c}"  onchange="{!c.updateQuoteField}" min="{!v.minDate}" />
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="grid_1-2">
+                                                <div class="datepicker">
+                                                    <lightning:input aura:Id="validateField" name="End_Date_for_Coverage__c" type="date" label="END DATE FOR COVERAGE" placeholder="" value="{!v.quoteObject.End_Date_for_Coverage__c}" onchange="{!c.updateQuoteField}"  min="{!v.minDate}" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="adjustable-fields">
+                                            
+                                            <div class="adjustable-field">
+                                                <span class="field-label">
+                                                    <i class="icon-info"></i> Combined Liability
+                                                </span>
+                                                <span class="field-item">
+                                                    <button class="field-plus" name="{!v.highLiability}" onclick="{!c.updateLiability}"></button>
+                                                    <input type="text" value="{!'$'+v.liability}"/>
+                                                    <button class="field-minus" name="{!v.lowLiability}" onclick="{!c.updateLiability}" ></button>
+                                                </span>
+                                            </div>
+                                        </div><!-- end adjustable-fields -->
+                                        
+                                    </div><!-- end unit -->
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.cancleEdit}">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick="{!c.updateRateTable}">Save</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+</aura:component>

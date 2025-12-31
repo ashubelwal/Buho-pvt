@@ -1,0 +1,129 @@
+<aura:component controller="PoilcyEditController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="title" type="String" access="public"/>
+    <aura:attribute name="refundAmount" type="decimal" access="public" />
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    <aura:attribute name="onNextClick" type="Aura.Action"/>
+    
+    <aura:attribute name="policyRecord" type="Policy__c" default="{ 'sobjectType': 'Policy__c'}" />
+    <aura:attribute name="quoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" />
+    <aura:attribute name="towedunitRecord" type="Towed_Unit__c" default="{ 'sobjectType': 'Towed_Unit__c'}" />
+    <aura:attribute name="vehicleRecord" type="Vehicle__c" default="{ 'sobjectType': 'Vehicle__c'}" />
+    <aura:attribute name="watercraftRecord" type="Watercraft__c" default="{ 'sobjectType': 'Watercraft__c'}" access="public" />
+    <aura:attribute name="drivers" type="List" access="public" />
+    <aura:attribute name="transporates" type="List" access="public" />
+    <aura:attribute name="policyType" type="String" />
+    <aura:attribute name="rateData" type="object" />
+    <aura:attribute name="iscloneConditionPass" type="Boolean" />
+    <aura:attribute name="rateValue" type="decimal" />
+    <aura:attribute name="ivrValue" type="decimal" />
+    <aura:attribute name="brokerValue" type="decimal" />
+    <aura:attribute name="surcharge" type="decimal" />
+    <aura:attribute name="newTotal" type="decimal" />
+    <aura:attribute name="newPolicyId" type="String" />
+    <aura:attribute name="oldQuoteId" type="String" />
+    <aura:attribute name="isRefund" type="Boolean" />
+	<aura:attribute name="oldNewPermimum" type="decimal" />
+    <aura:attribute name="newToatalAmount" type="decimal" />
+    
+    <aura:attribute name="IsMapfrePolicy" type="Boolean" />
+
+    <aura:attribute name="days" type="Integer" />
+    
+    
+    <ltng:require styles="{!$Resource.editConfirmScreen + '/css/style.css'}" afterScriptsLoaded="{!c.doInit}"/>
+    
+    <div class="slds-wrap">
+        <c:Policy_Edit_Steps step="step5" completedStep="5" />
+        <div class="slds-m-top_xx-large slds-p-around_small slds-size_12-of-12 modify-policy">
+            <div class="page-title">
+                <button class="button -plain -back-button" name="step_5" onclick="{!v.onBackClick }">
+                    <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/> Back
+                </button>
+                <!--h1>Modify Policy {!v.policyRecord.Name}</h1-->
+            </div>
+            <div class="align-center slds-m-top_xx-large slds-p-around_small slds-size_12-of-12">
+                <h2 class="_mg-b-xs">Summary</h2>	
+                <p>{!v.title}</p>
+            </div>
+            
+            <div class="slds-grid slds-wrap slds-gutters_medium">
+                <div class="slds-col slds-size_6-of-12 slds-max-small-size_12-of-12 slds-m-top_large">
+                    <div class="summary-box" style="background: #f9fafb !important;">
+                        <div class="summary-box-content">
+                            <h3 class="summary-title red">Original Policy</h3>
+                            <ul class="summary-details-list">
+                                <li>Premium: <span class="black"><lightning:formattedNumber value="{!v.oldNewPermimum}" style="currency" currencyCode="USD"/></span></li>
+                                <li>Surcharge: <span class="black"><lightning:formattedNumber value="{!v.policyRecord.Surcharge__c}" style="currency" currencyCode="USD"/></span></li>
+                                <aura:if isTrue="{!and(v.policyType != 'Motorcycle/Street Legal ATV', v.policyType != 'Watercraft') }">
+                                    <li>Medical: <span class="black">{!v.policyRecord.Medical_picklist__c}</span></li>
+                                </aura:if>
+                                <aura:if isTrue="{!v.policyType == 'Watercraft'}">
+                                    <li>Medical: <span class="black">{!v.policyRecord.Third_Party_Bodily_Injury__c}</span></li>
+                                </aura:if>
+                                <li>Liability: <span class="black">{!v.policyRecord.Liability_picklist__c}</span></li>
+                                <li>Broker Charge: <span class="black"><lightning:formattedNumber value="{!v.policyRecord.Broker_Policy_Fee__c}" style="currency" currencyCode="USD"/></span></li>
+                                <li>Mexican IVA Tax: <span class="black"><lightning:formattedNumber value="{!v.policyRecord.I_V_A_Mex_Tax__c}" style="currency" currencyCode="USD"/></span></li>
+                            </ul>
+                        </div>
+                        <div class="summary-box-footer red-bg">
+                            <aura:if isTrue="{! v.policyType == 'Watercraft' }">
+                                <div class="summary-total">TOTAL <span class="summary-amount white"><lightning:formattedNumber value="{!v.policyRecord.Total_Transaction_Amount__c}" style="currency" currencyCode="USD"/></span></div>
+                                <aura:set attribute="else">
+                                    <div class="summary-total">TOTAL <span class="summary-amount white"><lightning:formattedNumber value="{!v.policyRecord.Total_Transaction_Amount__c}" style="currency" currencyCode="USD"/></span></div>
+                                </aura:set>
+                            </aura:if>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_6-of-12 slds-max-small-size_12-of-12 slds-m-top_large">
+                    <div class="summary-box" style="background: #f9fafb !important;">
+                        <div class="summary-box-content">
+                            <h3 class="summary-title green">Modified Policy</h3>
+                            <ul class="summary-details-list">
+                                <aura:if isTrue="{! v.policyType == 'Watercraft' }">
+                                    <li>Premium: <span class="black"><lightning:formattedNumber value="{!v.rateData.RateResult.LiabilityLimitSelection}" style="currency" currencyCode="USD"/></span></li>
+                                    <li>Surcharge: <span class="black"><lightning:formattedNumber value="{!v.rateData.RateResult.Surcharge}" style="currency" currencyCode="USD"/></span></li>
+                                    
+                                        <li>Medical: <span class="black">{!v.quoteRecord.Medical__c}</span></li>
+                                    
+                                    <li>Liability: <span class="black">{!v.quoteRecord.Liability__c}</span></li>
+                                    <li>Broker Charge: <span class="black"><lightning:formattedNumber value="{!v.rateData.RateResult.BrokerPolicyFee}" style="currency" currencyCode="USD"/></span></li>
+                                    <li>Mexican IVA Tax: <span class="black"><lightning:formattedNumber value="{!v.rateData.RateResult.IVAMexTax}" style="currency" currencyCode="USD"/></span></li>
+                                    <aura:set attribute="else">
+                                        <li>Premium: <span class="black"><lightning:formattedNumber value="{!v.rateValue}" style="currency" currencyCode="USD"/></span></li>
+                                        <li>Surcharge: <span class="black"><lightning:formattedNumber value="{!v.surcharge}" style="currency" currencyCode="USD"/></span></li>
+                                        <aura:if isTrue="{!v.policyType != 'Motorcycle/Street Legal ATV'}">
+                                            <li>Medical: <span class="black">{!v.quoteRecord.Medical__c}</span></li>
+                                        </aura:if>
+                                        <li>Liability: <span class="black">{!v.quoteRecord.Liability__c}</span></li>
+                                        <li>Broker Charge: <span class="black"><lightning:formattedNumber value="{!v.brokerValue}" style="currency" currencyCode="USD"/></span></li>
+                                        <li>Mexican IVA Tax: <span class="black"><lightning:formattedNumber value="{!v.ivrValue}" style="currency" currencyCode="USD"/></span></li>
+                                    </aura:set>
+                                </aura:if>
+                            </ul>
+                        </div>
+                        <div class="summary-box-footer green-bg">
+                            <aura:if isTrue="{!v.IsMapfrePolicy}">
+                            	<div class="summary-total">TOTAL <span class="summary-amount white"><lightning:formattedNumber value="{!v.rateValue + v.surcharge + v.brokerValue }" style="currency" currencyCode="USD"/></span></div>
+                                <aura:set attribute="else">
+                                	<div class="summary-total">TOTAL <span class="summary-amount white"><lightning:formattedNumber value="{!v.rateValue + v.surcharge + v.brokerValue + v.ivrValue }" style="currency" currencyCode="USD"/></span></div>
+                                </aura:set>
+                            </aura:if>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="align-center">
+                <aura:if isTrue="{!v.isRefund}">
+                    <h2 class="slds-m-bottom_xx-large slds-m-top_xx-large">Refund amount: <span class="green-txt"><lightning:formattedNumber value="{!v.refundAmount}" style="currency" currencyCode="USD"/></span> </h2>
+                    <aura:set attribute="else">
+                        <h2 class="slds-m-bottom_xx-large slds-m-top_xx-large">Amount owed: <span class="red-txt"><lightning:formattedNumber value="{!v.refundAmount}" style="currency" currencyCode="USD"/></span> </h2>
+                    </aura:set>
+                </aura:if>
+                
+                <button class="button -secondary -min-width" id="show-quote-highlights" onclick="{! c.onNextClick }">Confirm</button>
+            </div>
+        </div>
+    </div>
+</aura:component>

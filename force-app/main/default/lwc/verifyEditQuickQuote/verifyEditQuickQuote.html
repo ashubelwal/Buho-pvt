@@ -1,0 +1,247 @@
+<template>
+	<div class="mainDiv slds-m-top_xx-large notranslate">
+		<div class="blue slds-m-bottom_x-large slds-text-heading_large">{label.verifyandedit}
+		</div>
+		<template if:true={QuoteDetails}>
+			<lightning-layout multiple-rows="true">
+				<lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12" class="slds-m-bottom_medium">
+					<p class="slds-text-heading_medium blue"><strong>{label.policysummary}</strong></p>
+					<!-- <p>Vehicle Details: </p> -->
+					<div class="datatable">
+						<table class="listing-table">
+							<tr>
+								<th><strong>{label.insurancecompany}</strong></th>
+								<th><strong>{label.premium}</strong></th>
+								<th><strong>{label.surcharge}</strong></th>
+								<th><strong>{label.brokercharge}</strong></th>
+								<th><strong>{label.MexicanIVATAX}</strong></th>
+							</tr>
+
+							<tr>
+								<td>{QuoteDetails.Underwriter__c}</td>
+								<td>
+									<lightning-formatted-number value={QuoteDetails.Net_Premium__c}
+									format-style="currency" currency-code="USD"></lightning-formatted-number>
+								</td>
+								<td>
+									<lightning-formatted-number value={QuoteDetails.Surcharge__c} 
+									format-style="currency" currency-code="USD"></lightning-formatted-number>
+								</td>
+								<td>
+									<lightning-formatted-number value={QuoteDetails.Broker_Policy_Fee__c}
+									format-style="currency" currency-code="USD"></lightning-formatted-number>
+								</td>
+								<td>
+									<lightning-formatted-number value={QuoteDetails.I_V_A_Mex_Tax__c}
+									format-style="currency" currency-code="USD"></lightning-formatted-number>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<!-- <p>Insurance Company: <strong>{QuoteDetails.Underwriter__c}</strong></p>
+					<p>Premium: <strong> <lightning-formatted-number value={QuoteDetails.Net_Premium__c}
+								format-style="currency" currency-code="USD"></lightning-formatted-number>
+
+						</strong></p>
+					</p>
+					<p>Surcharge: <strong>
+							<lightning-formatted-number value={QuoteDetails.Surcharge__c} format-style="currency"
+								currency-code="USD"></lightning-formatted-number>
+
+						</strong></p>
+					<p>Broker Charge: <strong>
+							<lightning-formatted-number value={QuoteDetails.Broker_Policy_Fee__c}
+								format-style="currency" currency-code="USD"></lightning-formatted-number>
+
+						</strong></p>
+					<p>Mexican IVA TAX: <strong><lightning-formatted-number value={QuoteDetails.I_V_A_Mex_Tax__c}
+								format-style="currency" currency-code="USD"></lightning-formatted-number></strong></p> -->
+				</lightning-layout-item>
+				<lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+					<p class="slds-text-heading_medium blue"><strong>{label.coveragedetails}</strong></p>
+					<div class="datatable">
+						<table class="listing-table">
+							<tr>
+								<th><strong>{label.coverage}</strong></th>
+								<th><strong>{label.policytype}</strong></th>
+								<th><strong>{label.term}</strong></th>
+								<th><strong>{label.liability}</strong></th>
+								<template if:false={isMotorcyclePolicy}><th><strong>{label.Medical}</strong></th></template>
+							</tr>
+
+							<tr>
+								<td>{QuoteDetails.Coverage__c}</td>
+								<td>{QuoteDetails.Policy_Type_picklist__c}</td>
+								<td>
+									<lightning-formatted-date-time value={QuoteDetails.Start_Date_for_Coverage__c}></lightning-formatted-date-time>
+									-
+									<lightning-formatted-date-time value={QuoteDetails.End_Date_for_Coverage__c}></lightning-formatted-date-time><br />
+									( {QuoteDetails.Term__c} @ {QuoteDetails.Term_Days__c} day )
+								</td>
+								<td>{QuoteDetails.Liability__c}</td>
+								<template if:false={isMotorcyclePolicy}><td>{QuoteDetails.Medical__c}</td></template>
+							</tr>
+						</table>
+					</div>
+					<!-- <p>Coverage: <strong>{QuoteDetails.Coverage__c}</strong>
+					</p>
+					<p>Policy Type: <strong>{QuoteDetails.Policy_Type_picklist__c}</strong></p>
+					<p>Term: <strong>
+							<lightning-formatted-date-time value={QuoteDetails.Start_Date_for_Coverage__c}>
+							</lightning-formatted-date-time>
+							&nbsp;
+							<lightning-formatted-time value={QuoteDetails.Start_Time__c}></lightning-formatted-time>
+							-
+							<lightning-formatted-date-time value={QuoteDetails.End_Date_for_Coverage__c}>
+							</lightning-formatted-date-time>
+							&nbsp;
+							<lightning-formatted-time value={QuoteDetails.End_Time__c}></lightning-formatted-time><br />
+							( {QuoteDetails.Term__c} @ {QuoteDetails.Term_Days__c} day )
+						</strong></p>
+					<p>Liablity: <strong>{QuoteDetails.Liability__c}</strong></p>
+					<p>Medical: <strong>{QuoteDetails.Medical__c}</strong></p> -->
+				</lightning-layout-item>
+			</lightning-layout>
+
+			<div class="totalSection">
+				<div class={label.TOTAL}>
+					<p>{label.TOTAL}: <strong><lightning-formatted-number value={QuoteDetails.Quote_Value__c}
+								format-style="currency" currency-code="USD"></lightning-formatted-number></strong></p>
+				</div>
+			</div>
+		</template>
+
+
+		<div class="">
+			<p class="slds-text-heading_medium blue"><strong>{label.vehicledetails}</strong></p>
+
+			<template if:true={vehicleList}>
+				<div class="datatable">
+					<table class="listing-table">
+						<tr>
+							<th><strong>{label.name}</strong></th>
+							<th><strong>{label.value}</strong></th>
+							<th><strong>{label.vehicletype}</strong></th>
+							<th><strong>{label.registeredplate}</strong></th>
+							<th><strong>{label.Vin}</strong></th>
+						</tr>
+						<tr>
+							<td>{vehicleList.Year__c}&nbsp;{vehicleList.Make__c}&nbsp;{vehicleList.Model__c}</td>
+							<td><lightning-formatted-number value={vehicleList.Value__c} format-style="currency"
+									currency-code="USD"></lightning-formatted-number></td>
+							<td>{vehicleList.Vehicle_Type__c}</td>
+							<td>{vehicleList.Registered_Plate__c}</td>
+							<td>{vehicleList.Vin__c}</td>
+						</tr>
+					</table>
+				</div>
+				<!-- <ul>
+					<li>
+						<p>Name : <strong>{vehicleList.Year__c} &nbsp; {vehicleList.Make__c} &nbsp;
+								{vehicleList.Model__c}</strong></p>
+					</li>
+					<li>
+						<p>Value : <strong><lightning-formatted-number value={vehicleList.Value__c} format-style="currency"
+							currency-code="USD"></lightning-formatted-number></strong></p>
+					</li>
+					<li>
+						<p>Vehicle Type : <strong>{vehicleList.Vehicle_Type__c}</strong></p>
+					</li>
+					<li>
+						<p>Registered Plate : <strong>{vehicleList.Registered_Plate__c}</strong></p>
+					</li>
+					<li>
+						<p>Vin : <strong>{vehicleList.Vin__c}</strong></p>
+					</li>
+
+				</ul> -->
+			</template>
+
+
+			<!-- <tr key='1' >
+                    <td>{vehicleList.Year__c} &nbsp; {vehicleList.Make__c} &nbsp; {vehicleList.Model__c}</td>
+                    <td>{vehicleList.Value__c}</td>
+                    <td>{vehicleList.Vehicle_Type__c}</td>
+                    <td>{vehicleList.Registered_Plate__c}</td>
+                    <td>{vehicleList.Vin__c}</td>
+                    <td>
+                    </td>
+                  
+                </tr> -->
+		</div>
+		<br />
+		<div class="">
+			<p class="slds-text-heading_medium blue"><strong>{label.DriverDetails}</strong></p>
+			<div class="datatable">
+				<table class="listing-table">
+					<tr>
+						<th><strong>{label.name}</strong></th>
+						<th><strong>{label.DateOfBirth}</strong></th>
+						<th><strong>{label.State}</strong></th>
+						<th><strong>{label.Country}</strong></th>
+						<th><strong>{label.LicenseNumber}</strong></th>
+						<th><strong>{label.Edit}</strong></th>
+					</tr>
+
+					<template for:each={driverList} for:item="driverItem" for:index="index">
+
+						<tr key={driverItem.Index}>
+							<td>{driverItem.First_Name__c} &nbsp; {driverItem.Last_Name__c}</td>
+							<td>{driverItem.Dob__c}</td>
+							<td>{driverItem.License_state__c}</td>
+							<td>{driverItem.License_Country__c}</td>
+							<td>{driverItem.license_number__c}</td>
+							<td>
+								<lightning-button-icon data-id={driverItem.License_Number__c} data-index={index}
+									name={driverItem.License_Number__c} icon-name="utility:edit" variant="bare"
+									onclick={editDriverDetail} alternative-text={label.Edit} title={label.EditUnit}>
+								</lightning-button-icon>
+							</td>
+							<!-- <td style="width: 0px;">
+							<lightning-button-icon name={driverItem.index} icon-name="utility:close" variant="bare"
+								onclick={deleteDriver} alternative-text="close" title="Delete Unit"></lightning-button-icon>
+						</td> -->
+						</tr>
+
+					</template>
+				</table>
+			</div>
+		</div>
+		
+			<div class="horizontalAlign slds-m-top--xx-large">
+                <div class="">
+                    <button class="buttonPrev btnHover" onclick={handlePrevClick}><span class="icon-prev"><i
+                                class="icon-prevs"></i></span>{label.Prev}</button>
+                </div>
+                <div class="">
+                    <button class="buttonNext btnHover" onclick={handleNextClick}><span class="icon-next"><i
+                                class="icon-nexts"></i></span>{label.Next}</button>
+                </div>
+            </div>
+			
+		
+	</div>
+	<template if:true={isDriverEdit}>
+		<section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+			aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+			<div class="slds-modal__container">
+				<header class="slds-modal__header">
+					<h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{label.EditDriver}</h2>
+				</header>
+				<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+					<c-add-driver-register is-owner={isOwner} onnewdriveradd={handleAddNewDriver}
+						driver-list={driverList} review-vehicle-data={reviewVehicleData} is-edit={isEdit}
+						edit-driver-data={editDriverData} leaddata={leaddata}
+						policy-type={policyType}></c-add-driver-register>
+				</div>
+				<!-- <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.cancleEdit}">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick="{!c.updateDriver}">Save</button>
+                </footer> -->
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open"></div>
+
+
+	</template>
+</template>

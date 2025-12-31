@@ -1,0 +1,50 @@
+<template>
+    <lightning-card title="Knowledge Articles">
+        <div class="slds-grid slds-wrap slds-p-around_medium">
+            <template if:true={visibleArticles}>
+                <template for:each={visibleArticles} for:item="article">
+                    <div key={article.Id} class="slds-col slds-size_1-of-3 slds-p-around_small">
+                        <div class="article-card slds-box slds-theme_default" data-id={article.Id}
+                            onclick={handleArticleClick}>
+                            <div class="card-front">
+                                <h2 class="slds-text-heading_medium">{article.Title}</h2>
+                            </div>
+                            <div class="card-back">
+                                <div class="scrollable-content">
+                                    <p>{article.Summary}</p>
+                                    <p class="slds-text-link">Click to read more</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </template>
+        </div>
+
+        <!-- Botones centrados y ocultos cuando no sean necesarios -->
+        <template if:true={showMoreButton}>
+            <div class="button-container">
+                <lightning-button label="Show More" onclick={handleShowMore}></lightning-button>
+            </div>
+        </template>
+
+        <template if:true={showLessButton}>
+            <div class="button-container">
+                <lightning-button label="Show Less" onclick={handleShowLess}></lightning-button>
+            </div>
+        </template>
+    </lightning-card>
+
+    <!-- Artículo seleccionado (Modal) -->
+    <template if:true={selectedArticle}>
+        <div class="modal-overlay">
+            <div class="modal-content slds-box slds-theme_shade">
+                <button class="slds-button slds-button_icon slds-modal__close" onclick={handleCloseArticle}>
+                    ✖
+                </button>
+                <h1 class="slds-text-heading_large slds-m-bottom_medium">{selectedArticle.Title}</h1>
+                <div class="article-body slds-text-longform" lwc:dom="manual"></div>
+            </div>
+        </div>
+    </template>
+</template>

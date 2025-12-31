@@ -1,0 +1,204 @@
+<aura:component controller="QuickQuotationCtrl" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader,lightning:actionOverride" access="global" >
+    <aura:attribute name="driverObject" type="Driver__c" default="{ 'sobjectType': 'Driver__c'}" access="public"/>
+
+    <aura:attribute name="driverTypeOptions" type="list"/>
+    <aura:attribute name="stateOptions" type="list"/>
+    <aura:attribute name="stateOptionsLicense" type="list"/>
+    <aura:attribute name="countryOption" type="List"/>
+    <aura:attribute name="Primary_insured" type="boolean" default="false"/>
+
+    <aura:attribute name="showStatePick" type="boolean" default="false"/>
+    <aura:attribute name="showStatePickLicense" type="boolean" default="false"/>
+    <aura:attribute name="showCountryInput" type="Boolean" default="false"/>
+    <aura:attribute name="showCountryLicenseInput" type="Boolean" default="false"/>
+    <aura:attribute name="disableCountryInput" type="Boolean" default="false"/>
+    <aura:attribute name="disableCountryLicenseInput" type="Boolean" default="false"/>
+    <aura:attribute name="policyCountry" type="String" access="public"/>
+    <aura:attribute name="policyCountryInput" type="String" access="public"/>
+    <aura:attribute name="policyCountryLicense" type="String" access="public"/>
+    <aura:attribute name="policyCountryLicenseInput" type="String" access="public"/>
+
+    <ltng:require styles="{!$Resource.mexinsurance_assets + '/style.css'}" afterScriptsLoaded="{!c.doInit}"/>
+    <aura:if isTrue="{!v.spinner}">
+        <lightning:spinner alternativeText="Loading" variant="brand" />
+    </aura:if> 
+
+    <!--Custom Styles for Modal Header and Footer--> 
+    <aura:html tag="style">
+        .cuf-content {
+            padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+            padding: 0rem !important;
+        }       
+        .slds-modal__content{
+            max-height:560 !important;
+        }
+    </aura:html>
+    
+
+    <!--Modal Header-->  
+    <div class="modal-header slds-modal__header slds-size_1-of-1">
+        <h4 class="title slds-text-heading--medium">Create New Driver</h4>
+    </div>
+    <!--End Modal Header-->  
+     
+    <!--Modal Body-->   
+    <div class="slds-modal__content slds-p-around--x-small slds-align_absolute-center slds-size_1-of-1 slds-is-relative">
+        <form class="slds-form--stacked">
+            <div class="wrap -size-md">
+                <lightning:layout multipleRows="true">
+                    <lightning:layoutItem size="12">
+                        <h3 class="slds-m-bottom_small red">Driver</h3>
+                    </lightning:layoutItem>
+                    <div class="slds-size_12-of-12">
+                        <div class="grid -spacing-md">
+                            <div class="grid_1-2 grid_1-sm">
+                                <lightning:input required="true" aura:id="validateField" name="First_Name__c" type="text" label="" value="{!v.driverObject.First_Name__c}"
+                                                 placeholder="First Name" variant="label-hidden" onchange="{!c.updateDriverField}"/>
+                            </div>
+                            <div class="grid_1-2 grid_1-sm">
+                                <lightning:input required="true" aura:id="validateField" name="Last_Name__c" type="text" label="" value="{!v.driverObject.Last_Name__c}"
+                                                 placeholder="Last Name" variant="label-hidden" onchange="{!c.updateDriverField}"/>
+                            </div>
+
+                            <div class="grid_1-2 grid_1-sm">
+                                <lightning:input aura:id="validateField" name="Email__c"
+                                                type="email" label="" value="{!v.driverObject.Email__c}"
+                                                placeholder="Email Address (Optional)" variant="label-hidden"
+                                                onchange="{!c.updateDriverField}"/>
+                            </div>
+                            <div class="grid_1-2 grid_1-sm">
+                                <lightning:input aura:id="validateField" name="Phone__c" type="tel"
+                                                label="" value="{!v.driverObject.Phone__c}"
+                                                pattern="^\(\d{3}\)\s\d{3}-\d{4}$"
+                                                messageWhenPatternMismatch="Not a valid phone number"
+                                                placeholder="Phone (Optional)" variant="label-hidden" onchange="{!c.updateDriverField}"/>
+                            </div>
+                            
+                            <div class="grid_1-2 grid_1-sm">
+                                <lightning:input required="true" aura:id="validateField" name="Dob__c" type="date" label="" value="{!v.driverObject.Dob__c}"
+                                                 placeholder="Date of Birth" variant="label-hidden"
+                                onchange="{!c.updateDriverField}" />
+                            </div>
+                            <div class="grid_1-2 grid_1-sm">
+                                <lightning:combobox required="true" aura:id="validateField" name="Driver_Type__c" placeholder="Driver Type" variant="label-hidden"
+                                                    value="{!v.driverObject.Driver_Type__c}" options="{! v.driverTypeOptions }"
+                                                    onchange="{!c.updateDriverField}"/>
+                            </div>
+                            <!--div class="grid_1-2 grid_1-sm">
+                                <lightning:input type="checkbox" name="Primary_insured__c" label="Primary insured" checked="{!v.Primary_insured}"  />
+                            </div-->
+                        </div>
+                    </div>
+
+                    <lightning:layoutItem size="12" class="slds-m-top_large">
+                        <h3 class="slds-m-bottom_small red">Address Information</h3>
+                    </lightning:layoutItem>
+
+                    <div class="slds-size_12-of-12">
+
+                        <div class="grid -spacing-md">
+                            <div class="grid_1-2 grid_1-sm">
+                                <lightning:input required="true" aura:id="validateField" name="Address__c" type="text" label="" value="{!v.driverObject.Address__c}"
+                                                placeholder="Address" variant="label-hidden"
+                                                onchange="{!c.updateDriverField}"/>
+                            </div>
+                            <div class="grid_1-2 grid_1-sm">
+                                <lightning:input name="Address_Line_2__c" type="text" label=""
+                                                value="{!v.driverObject.Address_Line_2__c}" placeholder="Address (Line2)"
+                                                variant="label-hidden" onchange="{!c.updateDriverField}"/>
+                            </div>
+
+                            <div class="grid_1-2 grid_1-sm">
+                                <lightning:input required="true" aura:id="validateField" name="City__c" type="text" label="" value="{!v.driverObject.City__c}"
+                                                placeholder="City" variant="label-hidden" onchange="{!c.updateDriverField}"/>
+                            </div>
+                            <div class="grid_1-2 grid_1-sm">
+                                <lightning:combobox required="true" aura:id="validateField" name="Country__c" label="Country" variant="label-hidden"
+                                                    placeholder="Country" value="{!v.policyCountry}"
+                                                    options="{! v.countryOption }" onchange="{!c.updateDriverField}"/>
+                                <aura:if isTrue="{!v.showCountryInput}">
+                                    <lightning:input required="true" aura:id="validateField" name="Country__c" type="text" label="" placeholder="Country"
+                                                    variant="label-hidden" onchange="{!c.updateDriverField}"
+                                                    value="{!v.policyCountryInput}"/>
+                                </aura:if>
+                            </div>
+
+                            <div class="grid_1-2 grid_1-sm">
+                                <lightning:input required="true" aura:id="validateField" name="Postal_Code__c" type="text" label=""
+                                                value="{!v.driverObject.Postal_Code__c}" placeholder="Postal Code" pattern="^[A-Z0-9_-]{3,12}$"
+                                                variant="label-hidden" onchange="{!c.updateDriverField}"/>
+                            </div>
+                            <div class="grid_1-2 grid_1-sm">
+                                <aura:if isTrue="{!v.showStatePick}">
+                                    <lightning:combobox required="true" aura:id="validateField" name="State_Province__c" label="State/Province" variant="label-hidden"
+                                                        placeholder="State/Province" value="{!v.driverObject.State_Province__c}"
+                                                        options="{! v.stateOptions }" onchange="{!c.updateDriverField}"/>
+                                    <aura:set attribute="else">
+                                        <lightning:input required="true" aura:id="validateField" name="State_Province__c" type="text" label=""
+                                                        value="{!v.driverObject.State_Province__c}"
+                                                        placeholder="State/Province" variant="label-hidden"
+                                                        onchange="{!c.updateDriverField}"/>
+                                    </aura:set>
+                                </aura:if>
+                            </div>
+                        </div>
+                    </div>
+
+                    <lightning:layoutItem size="12" class="slds-m-top_large">
+                        <h3 class="slds-m-bottom_small red">Driver's License Information</h3>
+                    </lightning:layoutItem>
+
+                    <div class="slds-size_12-of-12">
+                        <div class="grid -spacing-md">
+                            <div class="grid_1-2 grid_1-sm">
+                                <lightning:combobox required="true" aura:id="validateField" name="License_Country__c" variant="label-hidden" label="License Country"
+                                                    placeholder="License Country" value="{!v.policyCountryLicense}"
+                                                    options="{! v.countryOption }" onchange="{!c.updateDriverField}"/>
+                                <aura:if isTrue="{!v.showCountryLicenseInput}">
+                                    <lightning:input required="true" aura:id="validateField" name="License_Country__c" type="text" label=""
+                                                    placeholder="License Country" variant="label-hidden"
+                                                    onchange="{!c.updateDriverField}" maxlength="20"
+                                                    value="{!v.policyCountryLicenseInput}"/>
+                                </aura:if>
+                            </div>
+
+                            <div class="grid_1-2 grid_1-sm">
+                                <aura:if isTrue="{!v.showStatePickLicense}">
+                                    <lightning:combobox required="true" aura:id="validateField" name="License_state__c" variant="label-hidden"
+                                                        label="License State / Province" placeholder="License State / Province"
+                                                        value="{!v.driverObject.License_state__c}"
+                                                        options="{! v.stateOptionsLicense }" onchange="{!c.updateDriverField}"/>
+                                    <aura:set attribute="else">
+                                        <lightning:input required="true" aura:id="validateField" name="License_state__c" type="text" label=""
+                                                        value="{!v.driverObject.License_state__c}"
+                                                        placeholder="License State / Province" variant="label-hidden"
+                                                        onchange="{!c.updateDriverField}" maxlength="20"/>
+                                    </aura:set>
+                                </aura:if>
+                            </div>
+                            <div class="grid_1-2 grid_1-sm">
+                                <lightning:input required="true" aura:id="validateField" name="license_number__c" type="text" label=""
+                                                value="{!v.driverObject.license_number__c}" placeholder="License Number"
+                                                pattern="[A-Z0-9]+" messageWhenPatternMismatch ="Whitespace &#38; Special Characters (@, $, %, etc...) aren't allowed"
+                                                variant="label-hidden" onchange="{!c.updateDriverField}"/>
+                            </div> 
+                        </div>
+                    </div>
+                </lightning:layout>
+            </div>
+        </form> 
+    </div>
+    <!--End of Modal Body--> 
+     
+    <!--Modal Footer-->
+    <div class="modal-footer slds-modal__footer slds-size_1-of-1">
+        <lightning:button variant="Brand" class="slds-button" label="Submit" onclick="{!c.handleSubmit}"/>
+        <lightning:button variant="Neutral" class="slds-button" label="Cancel" onclick="{!c.handleClose}"/>
+    </div>
+    <!--End of Modal Footer-->
+
+
+    
+</aura:component>

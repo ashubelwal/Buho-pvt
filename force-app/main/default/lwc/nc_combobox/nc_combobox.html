@@ -1,0 +1,46 @@
+<template>
+    <div class="combobox-container">
+        <!-- Input and Reset Button -->
+        <div class="input-container">
+            <div class="slds-form-element">
+                <label class="slds-form-element__label" for="text-input-id-46"><template if:true={inputrequired}><span class="slds-required">*</span></template>{inputLabel}</label>
+                <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_left-right">
+                    <input type="text" id="text-input-id-46" class={inputClass} placeholder="Search or add..." name={name}
+                        value={searchValue} onclick={handleInputClick} oninput={handleInputChange} required={inputrequired} disabled={inputdisabled} />
+
+                    <!-- <lightning-input type="text" variant="label-hidden" class={inputClass} placeholder="Search or add..." name={name}
+                        value={searchValue} onclick={handleInputClick} oninput={handleInputChange} required={inputrequired}>
+                    </lightning-input> -->                    
+                    <button class="slds-button slds-button_icon slds-input__icon slds-input__icon_right clrBtn"
+                        title="Clear" onclick={handleReset}>
+                        <lightning-icon icon-name="utility:clear" alternative-text="Clear" size="xx-small"
+                            class="slds-icon-text-light "></lightning-icon>
+                        <span class="slds-assistive-text">Clear</span>
+                    </button>
+                </div>
+                <template if:false={isValid}>
+                    <div class="slds-text-color_error">This field is required.</div>
+                </template>
+            </div>
+        </div>
+
+        <!-- Dropdown Options -->
+        <template if:true={showDropdown}>
+            <ul class="dropdown">
+                <!-- Existing Options -->
+                <template for:each={filteredOptions} for:item="option">
+                    <li key={option.value} data-value={option.value} onclick={handleOptionClick}>
+                        {option.label}
+                    </li>
+                </template>
+
+                <!-- Add New Value -->
+                <template if:true={showAddNewOption}>
+                    <li class="add-new" onclick={handleAddNewValue}>
+                        Add "{searchValue}"
+                    </li>
+                </template>
+            </ul>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,50 @@
+.affiliateHeader {
+	background-color : #ffffff;
+	padding: 10px;
+	border-radius: 4px;
+}
+
+.affiliateLogo img {
+	width: 250px;
+	height: fit-content;
+    cursor: pointer;
+}
+
+
+.affiliateUserDetails {
+	display: inline-flex;
+}
+.affusrDlt {
+	text-align: right;
+}
+.affiliateUserDetails img{
+	width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    object-position: top;
+}
+
+.affiliateUserDetails h2{	
+    padding-left: 19px;
+	font-weight: 600;	
+    text-align: center;
+    align-content: center;
+	padding-right: 20px;
+	font-size: larger;
+}
+
+.container {
+    display: flex;
+    flex-direction: column; /* Aligns the divs vertically */
+    align-items: center; /* Centers them horizontally within the container */
+    gap: 15px; /* Adds spacing between the divs (optional) */
+    justify-content: center; /* Centers vertically in the container */
+}
+
+.box {
+    display: flex;
+    align-items: center; /* Centers content vertically within the div */
+    justify-content: center; /* Centers content horizontally within the div */
+    border-radius: 5px;
+}

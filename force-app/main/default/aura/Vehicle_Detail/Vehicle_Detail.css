@@ -1,0 +1,15 @@
+.THIS .slds-required{
+    /* display:none; */
+}
+.THIS .form-container {
+    margin: 0 auto;
+    max-width: 620px;
+}
+.THIS label.slds-form-element__label {
+    display: inline;
+    margin-right: 3px;
+}
+.THIS lightning-helptext {
+    position: absolute;
+    top: -5%;
+}

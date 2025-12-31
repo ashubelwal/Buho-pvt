@@ -1,0 +1,517 @@
+<apex:page applyBodyTag="false" controller="Declaration_Page_Insurance_Controller" renderAs="pdf">
+    <head>
+        <style>
+            @page {
+            <!--size: A4;-->
+            margin-top: 0.3in;
+            margin-bottom: 0.5in;
+            @top-left {
+            content: element(header);
+            }
+            }
+            div.header {
+            display:block;
+            position: running(header);
+            width: auto;
+            }
+            hr.line{height:1.5px;
+            border-width:0;
+            color:#D3D3D3;
+            background-color:#D3D3D3;
+            }
+            table.t1
+            {
+            font-size:12px;
+            }
+            table.t2
+            {
+            font-size:10px;
+            }
+            .floatLeft { width: 50%; float: left; }
+            .floatRight {width: 50%; float: right; }
+            .container { overflow: hidden; }
+            ol li{
+            margin: 0;
+            padding: 0;
+            }
+            <!--td.td1{
+border: 1px solid silver;
+}-->
+            .maintable{border-collapse:collapse;
+            background-color:#E8E8E8;
+            font-size:13px}
+            .maintable td{background-color:white;border:1px solid silver; font-size:13px;width:20px}
+            
+        </style>
+    </head>
+    <div class="header">
+        <div style="margin-top:35px">
+            <img src="{!$Resource.Chubb_logo}" width="210" height="20"/>
+        </div>
+    </div>
+    <br/><br/>
+    <div style="display:inline; position:absolute; top:0px; left: 40%; font-size: 13px;">
+        Chubb Seguros México, S.A.<br/>
+        Paseo de la Reforma 250 Torre Niza<br/>
+        Piso 15 Col. Juárez, Del. Cuauhtémoc<br/>
+        Cd. de México, C.P. 06600<br/>
+        www.chubb.com/mx
+    </div>
+    <br/>
+    <div>
+        <p style="font-weight:600; font-size: 13px; text-align: justify;">
+            PÓLIZA DE SEGURO DE RESPONSABILIDAD CIVIL PARA AUTOS TURISTAS CON PLACAS MEXICANAS EN E.U.A. Y CANADÁ -
+            AUTO TURISTA NORTHBOUND / USA AND CANADA THIRD PARTY LIABILITY TOURIST AUTO INSURANCE POLICY FOR
+            MEXICAN PLATED VEHICLES - TOURIST AUTO NORTHBOUND
+        </p>
+    </div>
+    <p style="text-align: justify; font-size: 12px">
+        Chubb Seguros México, S.A. (en lo sucesivo la “Compañía”), asegura a favor de la persona identificada como “Asegurado” los
+        bienes y riesgos más adelante detallados, de acuerdo a las Condiciones Generales y Particulares de esta póliza durante la vigencia
+        establecida. / Chubb Seguros México, S.A. (Herein after the “Company”), insures in favor of the person identified as the “Insured”
+        the goods and risks set forth detailed, accordingly to the General and Particular Conditions of this Policy during the term established.
+    </p>
+    <hr class="line"/>
+    <table width="100%" class="t1">
+        <tr>
+            <th>No. de Póliza / Policy No.</th>
+            <td>{!policy.Name}</td>
+            <th>Fecha de emisión / Issuance date:</th>
+            <td>{!policy.CreatedDate}</td>
+        </tr>
+    </table>
+    <hr class="line"/>
+    <table width="100%" class="t1">
+        <tr>
+            <th>Vigencia de la Póliza / Policy Period:</th>
+            <td> {!policy.Start_Date__c} &nbsp;{!policy.End_Date__c}</td>
+        </tr>
+    </table>
+    <div class="container">
+        <div style="background-color:#E8E8E8; font-weight:bold; font-size:14px; width:100%">Datos del Asegurado y datos generales de la póliza / Insured Information &amp; policy general data</div>
+        <div class="floatLeft">
+            <table class="t1" cellspacing="0" cellpadding="0">
+                <tr>
+                    <th>Nombre / Name:</th>
+                    <td>{!policy.Contact__r.Name}</td></tr>
+                <tr><th style="width:40%">Fecha de Nac / DOB:</th>
+                    <td>{!policy.Contact__r.Date_of_Birth__c}</td></tr>
+                <tr><th>Domicilio / Address:</th>
+                    <td>{!policy.Contact__r.Street__c} &nbsp; {!policy.Contact__r.Street_2__c}</td></tr>
+                <tr><th>Ciudad / City:</th>
+                    <td>{!policy.Contact__r.State__c}</td></tr>
+                <tr><th>C.P. / Zip Code:</th>
+                    <td>{!policy.Contact__r.Postal_Code__c}</td></tr>
+                <tr><th>E-mail:</th>
+                    <td>{!policy.Contact__r.Email}</td></tr>
+                <tr><th>Moneda / Currency:</th>
+                    <td>Dólares</td>
+                </tr>
+            </table>
+        </div>
+        <div class="floatRight">
+            <table class="t1" cellspacing="0" cellpadding="0">
+                <tr>
+                    <th>Teléfono / Phone:</th>
+                    <td>{!policy.Contact__r.Phone}</td></tr>
+                <tr><th>Estado / State:</th>
+                    <td style="text-transform: uppercase;">{!policy.Contact__r.State__c}</td></tr>
+                <tr><th>R.F.C. / Tax Payer ID:</th>
+                    <td></td></tr>
+                <tr><th>Forma de pago / Payment installments:</th>
+                    <td></td></tr>
+                <tr><th>Clave del Agente / Agent code:</th>
+                    <td></td></tr>
+            </table>
+        </div>
+    </div>
+    <div>
+        <div style="background-color:#E8E8E8; font-weight:bold; font-size:15px; width:100%">Descripción del Vehículo / Vehicle Description</div>
+        <div>
+            <table  class="t1" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td>
+                        <table>
+                            <tr>
+                                <th>Año / Year:</th>
+                                <td>{!policy.Vehicle_Policy__r.Year__c}</td>
+                            </tr>
+                            <tr>
+                                <th>Serie / VIN:</th>
+                                <td>{!policy.Vehicle_Policy__r.Vin__c}</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table>
+                            <tr>
+                                <th>Marca / Make:</th>
+                                <td style="text-transform: uppercase;">{!policy.Vehicle_Policy__r.Make__c}</td>
+                            </tr>
+                            <tr>
+                                <th>Placas / Plates:</th>
+                                <td>{!policy.Vehicle_Policy__r.Registered_Plate__c}</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table>
+                            <tr>
+                                <th>Modelo / Model:</th>
+                                <td style="text-transform: uppercase;">{!policy.Vehicle_Policy__r.Model__c}</td>
+                            </tr>
+                            <tr>
+                                <th>Uso / Use:</th>
+                                <td>{!policy.What_is_the_purpose_of_trip__c}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <!--<div>
+        <div style="background-color:#E8E8E8; font-weight:bold; font-size:14px; width:100%">Descripción de Remolques / Description of Towing units</div>
+        <div>
+            <table  class="t2" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td>
+                        <table style="padding:10px">
+                            <tr>
+                                <th>Año / Year:</th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>Año / Year:</th>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table style="padding:10px">
+                            <tr>
+                                <th>Marca / Make:</th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>Marca / Make:</th>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table style="padding:10px">
+                            <tr>
+                                <th>Modelo / Model:</th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>Modelo / Model:</th>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table style="padding:10px">
+                            <tr>
+                                <th>Serie / VIN:</th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>Serie / VIN:</th>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table style="padding:10px">
+                            <tr>
+                                <th>Placas / Plates:</th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>Placas / Plates:</th>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>-->
+    <div>
+        <table class="maintable">
+            <tr>
+                <th>Coberturas sin deducible / Coverages without deductible</th>
+                <th>Suma Asegurada /Insured Amount</th>
+                <th>Prima / Premium</th>
+            </tr>
+            <tr>
+                <td >RC Daños a Terceros por persona/ por evento<br/>
+                    T.P.L. Bodily Injury per person/ per event
+                </td>
+                <td style="text-align:center;" > 
+                </td>
+                <td style="text-align:right;" > {!policy.Liability_picklist__c}
+                </td>
+            </tr>
+            <!--<tr>
+                <td >RC Daños a Terceros / T.P.L. Property Damage 
+                </td>
+                <td >
+                </td>
+                <td style="text-align:right;"> $ 41.40
+                </td>
+            </tr>-->
+            <tr>
+                <td >Gastos Médicos Ocupantes por persona / por evento<br/>Medical Expenses Occupants per person / per event
+                </td>
+                <td style="text-align:center;"> 
+                </td>
+                <td style="text-align:right;"> {!policy.Medical_picklist__c}
+                </td>
+            </tr>
+            <tr>
+                <td >G.M.O. 3º sin seguro / Medical Expenses Uninsured Motorist
+                </td>
+                <td style="text-align:center;"> Amparado/Covered
+                </td>
+                <td >
+                </td>
+            </tr>
+            <tr>
+                <td >Indemnización por Muerte al Titular / Death Compensation
+                </td>
+                <td style="text-align:center;"> Amparado/Covered
+                </td>
+                <td >
+                </td>
+            </tr>
+            <tr>
+                <td >Servicios de Asistencia / Roadside Assistance 
+                </td>
+                <td style="text-align:center;"> Amparado/Covered
+                </td>
+                <td >
+                </td>
+            </tr>
+            <tr>
+                <td >Asistencia Legal / Legal Assistance
+                </td>
+                <td style="text-align:center;"> Amparado/Covered
+                </td>
+                <td style="text-align:right;">
+                </td>
+            </tr>
+            <tr>
+                <th>Conductores Adicionales / Aditional Drivers</th>
+                <td style="background-color:white;padding:5px; text-align:center; font-size:12px; border:0px"></td>
+                <td style="background-color:white;padding:5px; text-align:center; font-size:12px; border:0px"></td>
+            </tr>
+            <tr>
+                <td rowspan="4">Cualquier conductor desde 21 y hasta 74 años, con licencia y autorizado por elasegurado, está amparado en esta
+                    póliza / Any driver since 21 and until 74 years old, with driver license and authorized by the insured, is covered by this 
+                    Policy
+                </td>
+                <td>Prima Neta / Net Premium:
+                </td>
+                <td style="text-align:right;">{!policy.Net_Premium__c}
+                </td>
+            </tr>
+            <tr>
+                <td>Gastos de expedición / Policy Fee: </td>
+                <td style="text-align:right;">{!policy.Broker_Policy_Fee__c}</td>
+            </tr>
+            <tr>
+                <td>I.V.A. / Mex. Tax:</td>
+                <td style="text-align:right;">$ 0.00</td>
+            </tr>
+            <tr>
+                <td>Prima Total /Total Premium:</td>
+                <td style="text-align:right;">
+                    {!ROUND(policy.Total_Premium_Amount__c, 2)}
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br/>
+    <div>
+        <p style="font-weight:bold; font-size:13px">
+            Chubb Seguros México, S.A. está autorizado y reconocido en Estados Unidos de Norteamérica por la National
+            Association of Insurance Commissioners (NAIC:AA273007) y en Canadá por el Canadian Council of Insurance
+            Regulators (CCIR)/Chubb Seguros México, S.A. is authorized and recognized in the United States of America by the
+            National Association of Insurance Commissioners (NAIC:AA2730007) and in Canada by the Canadian Council of
+            Insurance Regulators (CCIR).
+        </p>
+    </div>
+    <br/>
+    <div>
+        <table class="maintable" width="100%">
+            <tr>
+                <th>Reporte de siniestro:</th>
+                <th>Solicitar una grúa o asistencia:</th>
+                <th>Solicitar ID Card para Canadá:</th>
+            </tr>
+            <tr>
+                <td>Llamando desde USA: 1-866-223-5677<br/>
+                    Llamando desde México:
+                    001-883-223-5677
+                </td>
+                <td>Llamando desde USA: 1-877-730-8622<br/>
+                    Llamando desde México:
+                    001-882-730-8622
+                    
+                </td>
+                <td>Llamando desde USA: 1-877-730-8622<br/>
+                    Llamando desde México:
+                    001-800-467-3031
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <div style="font-size:13px">
+        <p style="font-weight:bold">En caso de Accidente en USA o Canadá</p>
+        <ol>
+            <li> Presente su póliza de Seguro CHUBB para Auto Mexicano en USA y Canadá.</li>
+            <li> Obtenga Nombre, Dirección y Teléfono de los Terceros involucrados y testigos del accidente si los hay.</li>
+            <li> Obtenga Nombre de la Aseguradora y número de póliza de cada vehículo involucrado.</li>
+            <li> Obtenga No. de reporte de policía y Nombre y No. de placas del policía que investigó el accidente.</li>
+            <li> Nunca admita la culpa o asuma la responsabilidad del accidente.</li>
+            <li> No hable de los detalles del accidente, únicamente con el oficial de policía que investigue.</li>
+        </ol>
+        <p style="font-weight:bold">Cómo se atienden los siniestros en USA y Canadá</p>
+        <ol>
+            <li> A diferencia de la atención de siniestros en México, en estos países la presencia de un ajustador NO es necesaria, la
+                policía es quien funge como ajustador deslindando responsabilidades.</li>
+            <li> Una vez reportado el siniestro, el tercero o su Aseguradora llamarán a CHUBB para hacer la reclamación de pago si
+                usted es declarado responsable por la autoridad.</li>
+            <li> CHUBB asignará personal de siniestros para realizar las investigaciones y negociaciones pertinentes con el tercero
+                afectado y en su caso, pagar la indemnización correspondiente.</li>
+            <li> En caso de recibir una llamada por parte del afectado o sus representantes, NO haga ninguna negociación y diríjalo a los
+                números de atención de siniestros de CHUBB.  </li>
+        </ol>
+    </div>
+    
+    <hr class="line"/>
+    
+    <div style="display:inline; font-size:13px">
+        Artículo 25 de la Ley Sobre el Contrato de Seguro.- Si el contenido de la póliza o sus modificaciones no concordaren con la
+        oferta, el asegurado podrá pedir la rectificación correspondiente dentro de los treinta días que sigan al día en que reciba la
+        póliza. Transcurrido este plazo se considerarán aceptadas las estipulaciones de la póliza o de sus modificaciones.
+    </div>
+    <hr class="line"/>
+    <div style="display:inline; font-size:13px">
+        <b>IMPORTANTE / IMPORTANT: </b>Todo accidente deberá ser reportado antes de salir de USA ó CANADÁ, de lo contrario, su
+        reclamo podría ser rechazado. / All accident must be reported before leaving USA or CANADA, failure to do so may void
+        your claim.
+    </div>
+    <hr class="line"/>
+    <div style="display:inline; font-size:13px">
+        Es obligación del asegurado dar aviso a la compañía tan pronto tenga conocimiento de haberse presentado alguna de las
+        circunstancias o sucesos previstos en los términos de esta póliza, ya que el derecho a tal protección depende del
+        cumplimiento del asegurado de esta obligación de aviso. / It is mandatory for the insured to give notice to the company as
+        soon as the insured becomes aware of any of the circumstances or events provided in the conditions of this policy, as the
+        right to such protection depends on the fulfilment of the insured of this obligation of notice.
+    </div>
+    <hr class="line"/>
+    <div style="display:inline; font-size:13px">
+        Al recibir esta carátula de póliza se entregan también las condiciones generales y particulares que integran su contrato de
+        seguro, le invitamos a consultarlas, en las mismas podrá conocer las coberturas, exclusiones y restricciones de este seguro;
+        de igual forma las podrá consultar en la página web www.chubb.com/mx / When you receive this Declaration Page, you are
+        also receiving the General and Particular Conditions applicable for your insurance contract, we invite you to read them
+        carefully; there you will find details about your coverages, exclusions and restrictions of this Insurance policy. You may also
+        consult them in our web page: www.chubb.com/mx
+    </div>
+    <hr class="line"/>
+    <div style="display:inline; font-size:13px">
+        <b>Unidad Especializada de Atención de Consultas y Reclamaciones de CHUBB Seguros México, S.A. (UNE) /
+            Specialized Unit for Customer Care and Service:</b> Av. Paseo de la Reforma No. 250, Torre Niza, Piso 15, Col. Juárez,
+        Delg. Cuauhtemoc, C.P. 06600, Ciudad de México. <b>Llamada sin Costo desde México / Toll Free from Mexico:</b> 800 223
+        2001 <b>E-mail:</b> uneseguros@chubb.com <b>Horarios de Atención / Office Hours: </b>Lunes a Jueves de 08:30hrs a 17:00hrs y
+        Viernes de 08:30hrs a 14:00hrs. / Monday to Thursday from 08:30hrs to 17:00hrs and Fridays from 08:30hrs to 14:00hrs.
+    </div>
+    <hr class="line"/>
+    <div style="display:inline; font-size:13px">
+        <b>Comisión Nacional para la Protección y Defensa de los Usuarios de Servicios Financieros (CONDUSEF) / National
+            Commission for the Protection of Users of Financial Services (CONDUSEF): </b>Av. Insurgentes Sur #762, Col. Del Valle,
+        C.P. 03100, Ciudad de México.<b>E-mail:</b> asesoria@condusef.gob.mx <b>Llamada sin Costo desde México / Toll Free from
+        Mexico:</b> 800 999 8080 Desde cualquier teléfono americano / If you are calling from a U.S. Phone Line: 011 52 (55) 5340
+        0999
+        
+    </div>
+    <hr class="line"/>
+    <div style="display:inline; font-size:13px">
+        En cumplimiento a lo dispuesto en el artículo 202 de la Ley de Instituciones de Seguros y de Fianzas, la
+        documentación contractual y la nota técnica que integran este producto de seguro, quedaron registradas
+        ante la Comisión Nacional de Seguros y Fianzas, a partir del día 19 de Enero de 2018, con el número
+        <b>CNSF-0039-0091-2018 CONDUSEF-003120-01.</b>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <div align="right">
+        <img src="{!$Resource.MexInsurance}" width="30%" height="8%"/>
+    </div>
+    <br/>
+    
+    <div align="center">
+        <b><i>SUMMARY RECEIPT</i></b>    
+    </div>
+    <br/>
+    <br/>
+    <table width="100%" style="border: 1px black solid;">
+        <tr>
+            <td>1. Mexico Tourist Automobile Policy No:</td>
+            <td style="width:60%">{!policy.Name}</td>
+        </tr>
+        <tr>
+            <td>Premium</td>
+            <td style="text-align:right;">{!policy.Net_Premium__c}</td>
+        </tr>
+        <tr>
+            <td>Policy Fee</td>
+            <td style="text-align:right;">{!policy.Broker_Policy_Fee__c}</td>
+        </tr>
+        <tr>
+            <td>Tax</td>
+            <td style="text-align:right;">$ 0.00 USD</td>
+        </tr>
+        <tr style="background-color:#A9A9A9;">
+            <td style="text-align:center; border-top:1px solid black;">Sub-Total</td>
+            <td style="text-align:right; border-top:1px solid black;"></td>
+        </tr>
+        
+    </table>
+    <br/>
+    <br/>
+    <table width="100%" style="border: 1px black solid;">
+        <tr>
+            <td>2. Agency Fee</td>
+            <td style="text-align:right;">$ 0.00 USD</td>
+        </tr>
+        <tr style="background-color:#A9A9A9;">
+            <td style="text-align:center; border-top:1px solid black;">Grand Total</td>
+            <td style="text-align:right; border-top:1px solid black;">{!policy.Total_Premium_Amount__c}</td>
+        </tr>
+    </table>
+    <br/>
+    <br/>
+     <table width="100%" style="border: 1px black solid;">
+        <tr>
+            <td>Credit Card Number</td>
+            <td style="text-align:right;"></td>
+        </tr>
+        <tr>
+            <td>Transaction Number</td>
+            <td style="text-align:right;">{!trans.Name}</td>
+        </tr>
+        <tr>
+            <td>Authorization Number</td>
+            <td style="text-align:right;"></td>
+        </tr>
+    </table>
+</apex:page>

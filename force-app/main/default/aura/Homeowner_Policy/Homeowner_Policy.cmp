@@ -1,0 +1,46 @@
+<aura:component controller="QuickQuotationCtrl" implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="title" type="String" access="public" default="{!$Label.c.TR_Please_fill_in_your_details_below}"/>
+    <aura:attribute name="backButtonVisibility" type="Boolean" default="true" access="public" />
+    <aura:attribute name="policyType" type="String" access="public"/>
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    <aura:attribute name="onNextClick" type="Aura.Action"/>
+    <aura:attribute name="quoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" access="public"/>
+    <aura:attribute name="leadRecord" type="Lead" default="{ 'sobjectType': 'Lead'}" access="public"/>
+    <aura:attribute name="vehicleRecord" type="Vehicle__c" default="{ 'sobjectType': 'Vehicle__c'}" access="public"/>
+    
+    <ltng:require styles="{!$Resource.mexinsurance_assets + '/style.css'}" afterScriptsLoaded="{!c.doInit}" />
+    
+    <aura:if isTrue="{!v.spinner}">
+        <lightning:spinner alternativeText="Loading" variant="brand" />
+    </aura:if>
+    
+    <header class="page-header">
+        <div class="wrap">
+            <img src="{!$Resource.mexinsurance_assets + '/images/logo-mexinsurance.png'}"/>
+        </div>
+    </header>
+    
+    <div class="wrap -size-md">
+        <lightning:layout multipleRows="true">  
+            <lightning:layoutItem padding="around-small" size="12" class="align-center slds-m-top_xx-large">
+                <div class="page-title">
+                    <h1>{!v.title}</h1>
+                    <img class="slds-m-bottom_large" src="{!$Resource.mexinsurance_assets + '/images/icon-company.svg'}" alt="Company"/>
+                </div>                    
+            </lightning:layoutItem>
+            
+            <div class="slds-size_12-of-12">
+                <div class="form-container">  
+                    <lightning:input type="text" name="FirstName" placeholder="{!$Label.c.TR_First_Name}" value="{!v.leadRecord.FirstName}" onchange="{!c.updateValue}" aura:id="validateField" required="true" variant="label-hidden"/>
+                    <lightning:input type="text" name="LastName" placeholder="{!$Label.c.TR_Last_Name}" value="{!v.leadRecord.LastName}" onchange="{!c.updateValue}" aura:id="validateField" required="true" variant="label-hidden"/>
+                    <lightning:input type="text" name="Email" placeholder="{!$Label.c.TR_Email}" value="{!v.leadRecord.Email}" onchange="{!c.updateValue}" aura:id="validateField" required="true" variant="label-hidden"/>
+                    <lightning:input type="text" name="Phone" placeholder="{!$Label.c.TR_Phone}" value="{!v.leadRecord.Phone}" onchange="{!c.updateValue}" aura:id="validateField" required="true" variant="label-hidden" />
+                </div>
+            </div>
+            
+            <lightning:layoutItem padding="around-small" size="12" class="slds-align_absolute-center slds-m-top_large">
+                <button class="button -secondary -wider" name="step_9" onclick="{! c.onNextClick }">{!$Label.c.TR_Next}</button>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+</aura:component>

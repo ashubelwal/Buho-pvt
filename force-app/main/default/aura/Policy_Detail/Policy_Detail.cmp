@@ -1,0 +1,71 @@
+<aura:component controller="QuickQuotationCtrl" implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="policyMapList" type="list"  />
+    <aura:attribute name="iscommunityUser" type="boolean" default="false" access="public" />
+    <aura:attribute name="userExist" type="boolean" default="false"  />
+    <aura:attribute name="quoteIds" type="List" access="public" />
+    <aura:attribute name="quoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" access="public" />
+    <lightning:workspaceAPI aura:id="workspace"/>       
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    
+    <div class="slds-size_12-of-12 slds-m-top_xx-large">
+        <div class="completed-box align-center">
+            <div class="completed-box-inside">
+                <h1 class="green">
+                    <img src="{!$Resource.mexinsurance_assets + '/images/check-circle.svg'}" alt="Icon Completed"/> Complete
+                </h1>
+                <aura:iteration items="{!v.policyMapList}" var="item">
+                    <h3>Policy {!item.name}</h3>
+                    <p>The insurance packet is on its way to {!item.email}</p>          
+                </aura:iteration>
+                
+                <aura:if isTrue="{!and(!v.iscommunityUser, !v.userExist)}">
+                    <h3><b>Important</b></h3>
+                    <p>Your Account is ready to go! <mark>Check your email for the link button.</mark></p>
+                </aura:if>
+                <aura:if isTrue="{!and(v.iscommunityUser, v.userExist)}">
+                    <button class="button -primary -min-width slds-m-bottom_large" onclick="{!c.gotohome}">MY MEXINSURANCE &trade;</button> 
+                </aura:if>
+                <aura:if isTrue="{!and(!v.iscommunityUser, !v.userExist)}">
+                     <!--button class="button -primary -min-width slds-m-bottom_large" onclick="{!c.closeTabAction}">Close window &trade;</button--> 
+				</aura:if>
+            </div>
+        </div>
+        
+        <div class="grid -spacing-md">
+            <div class="grid_1-3 grid_1-sm">
+                <a href="#" class="cta-box">
+                    <h4 class="green _transition">
+                        <a href="https://www.mexinsurance.com/auto-insurance/" target="_blank">
+                            <img src="{!$Resource.mexinsurance_assets + '/images/icon-round-car.svg'}" alt="Auto Insurance"/>
+                            Auto Insurance
+                        </a>
+                    </h4>
+                    <p class="_transition">Grab your vehicle’s VIN number &amp; your registration, and then enter a few details here on our website</p>
+                </a>
+            </div>
+            <div class="grid_1-3 grid_1-sm">
+                <a href="#" class="cta-box">
+                    <h4 class="green  _transition">
+                        <a href="https://www.mexinsurance.com/homeowners-insurance/" target="_blank">
+                            <img src="{!$Resource.mexinsurance_assets + '/images/icon-round-house.svg'}" alt="Home Insurance for Mexico"/>
+                            Home Insurance for Mexico
+                        </a>
+                    </h4>
+                    <p class="_transition">Confirm the dates and type of coverage and pay online via credit card</p>
+                </a>
+            </div>
+            <div class="grid_1-3 grid_1-sm">
+                <a href="#" class="cta-box">
+                    <h4 class="green  _transition">
+                        <a href="https://www.mexinsurance.com/medical-health-care-in-mexico/" target="_blank">
+                            <img src="{!$Resource.mexinsurance_assets + '/images/icon-round-steering.svg'}" alt="Medical Insurance"/>
+                            Medical Insurance
+                        </a>
+                    </h4>
+                    <p class="_transition">Download your insurance policy immediately and print it out</p>
+                </a>
+            </div>
+        </div>
+    </div>
+</aura:component>

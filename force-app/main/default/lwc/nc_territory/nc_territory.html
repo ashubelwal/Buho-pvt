@@ -1,0 +1,54 @@
+<!-- <template>
+    <div class="test slds-has-error">
+        <div class="pageTitle slds-m-bottom_medium">
+            <h2 class="slds-text-heading_medium"> Select territory </h2>
+        </div>
+         <h4><abbr class="slds-required" title="required">*</abbr>Select territory</h4>
+        <div class="grid-container">
+            <template for:each={options} for:item="option">
+                <label key={option.value} class="radio-option">
+                    <img src={option.imageUrl} alt={option.label} class="radio-image" />
+                    <input type="radio" name="region" value={option.value} onchange={handleInputChange} checked={option.selected} required />
+                    {option.label}
+                </label>
+            </template>
+        </div>
+        <template if:true={booleanvar.isError}>
+            <div id="error_01" class="slds-form-element__help inputError">Please select territory</div>
+        </template>
+    </div>
+</template> -->
+
+<template>
+    <div class="test slds-form-element slds-has-error">
+        <div class="pageTitle slds-m-bottom_medium">
+            <h2 class="slds-text-heading_medium">Select territory</h2>
+        </div>
+
+        <div class="slds-grid slds-wrap slds-gutters">
+            <template for:each={options} for:item="option">
+                <div key={option.value}
+                     class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3"
+                     style="height: 100%;">
+                    <label class="custom-radio-option">
+                        <input 
+                            type="radio" 
+                            name="region" 
+                            value={option.value} 
+                            checked={option.selected} 
+                            onchange={handleInputChange} 
+                        />
+                        <div class="radio-visual">
+                            <img src={option.imageUrl} alt={option.label} class="radio-image" />
+                            <div class="slds-m-top_small slds-text-heading_small">{option.label}</div>
+                        </div>
+                    </label>
+                </div>
+            </template>
+        </div>
+
+        <template if:true={booleanvar.isError}>
+            <div id="error_01" class="slds-form-element__help inputError">Please select territory</div>
+        </template>
+    </div>
+</template>

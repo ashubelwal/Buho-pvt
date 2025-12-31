@@ -1,0 +1,24 @@
+<apex:page showHeader="false" sidebar="false">
+    
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    
+    <apex:includeLightning />    
+        <div id="LightningComponentid" />    
+            <script>
+    var status = '{!$CurrentPage.parameters.status}';
+     var recId = '{!$CurrentPage.parameters.Id}';
+            $Lightning.use("c:LWCContainer" ,function() {
+                $Lightning.createComponent("c:mexAcknowledged",
+                                           { 
+                                               statusValue:status,
+                                               recordId:recId
+                                           },
+                                           "LightningComponentid",
+                                           function(cmp) {
+                                               console.log('LWC Componenet added in VF page');
+                                           });
+            });
+    </script>
+</apex:page>

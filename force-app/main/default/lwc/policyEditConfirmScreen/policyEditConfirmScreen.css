@@ -1,0 +1,25 @@
+.mainDiv{
+	margin-left: 2%;
+	/* max-width: 720px; */
+	/* transform: translateY(35%); */
+	padding: 12px;
+	background-color: #fff;
+}
+.horizontalAlign {
+    display: flex;
+ 
+    justify-content: space-between;
+}
+.buttonNext,.buttonPrev{
+    position: relative;
+    cursor: pointer;
+    background: #003a70;
+    border: 2px solid #003a70;
+    color: #fff;
+    font-weight: 600;
+    height: 33px;
+    width: 120px;
+    border-radius: 2px;
+    user-select: none;
+    outline: none;
+}

@@ -1,0 +1,232 @@
+/* Container for custom styles */
+.custom-container {
+    color: black;
+}
+
+.error {
+    color: #ea001e;
+}
+
+.pageTitle h2 {
+	border-bottom: 1px solid #eee;
+    padding: 10px 0;
+}
+
+/* Style for each time slot */
+.time-slot {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    align-content: space-around;
+    justify-content: space-around;
+    align-items: center;
+    width: 90px;
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
+}
+
+/* Styling for radio button inside time slot */
+.time-slot input {
+    margin-top: 3px;
+}
+
+/* Hover effect on time slot */
+.time-slot:hover {
+    background-color: #e6f7ff;
+    border-color: #91d5ff;
+}
+
+/* Style for selected radio button with a checked state */
+input[type="radio"]:checked + .time-slot {
+    background-color: #0070d2 !important;
+    color: white !important;
+    border-color: #0056a3 !important;
+    font-weight: bold !important;
+}
+
+
+/* ---------- TermType Radio Button Group ---------- */
+.termType-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.termType {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 8px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Individual buttons */
+.termType .slds-radio_button {
+    flex: 1 1 auto;
+    min-width: 0;
+    /* Resize */
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* Text inside button */
+.termType .slds-radio_button label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    text-align: center;
+    white-space: nowrap;
+    /* Do not breking */
+    word-break: normal;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    min-height: 40px;
+}
+
+/* Botón radio faux */
+.termType .slds-radio_faux {
+    padding: 0.5rem 0.75rem;
+    text-align: center;
+    vertical-align: middle;
+    width: 100%;
+    display: inline-block;
+    font-size: 0.9rem;
+    line-height: 1.2;
+}
+
+/* ---------- Media Queries ---------- */
+
+/* Tablets (768px - 481px) */
+@media screen and (max-width: 768px) and (min-width: 481px) {
+    .termType {
+        gap: 6px;
+    }
+
+    .termType .slds-radio_button label {
+        padding: 0.5rem 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .termType .slds-radio_faux {
+        padding: 0.5rem 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .time-slot {
+        width: 80px;
+    }
+}
+
+/* Mobile Large (480px - 361px) */
+@media screen and (max-width: 480px) and (min-width: 361px) {
+    .termType {
+        gap: 6px;
+        flex-wrap: nowrap;
+        /* One file */
+    }
+
+    .termType .slds-radio_button {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .termType .slds-radio_button label {
+        padding: 0.4rem 0.3rem;
+        font-size: 0.7rem;
+        white-space: nowrap;
+        line-height: 1.1;
+    }
+
+    .termType .slds-radio_faux {
+        padding: 0.4rem 0.3rem;
+        font-size: 0.7rem;
+        line-height: 1.1;
+    }
+
+    .pageTitle h2 {
+        font-size: 1.1rem;
+        text-align: center;
+    }
+
+    .time-slot {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Mobile Small (360px) */
+@media screen and (max-width: 360px) {
+    .termType-wrapper {
+        width: 100%;
+        padding: 0 5px;
+        box-sizing: border-box;
+    }
+
+    .termType {
+        gap: 4px;
+        flex-wrap: nowrap;
+        /* One file */
+        width: 100%;
+    }
+
+    .termType .slds-radio_button {
+        flex: 1 1 auto;
+        min-width: 0;
+        margin: 0;
+    }
+
+    .termType .slds-radio_button label {
+        padding: 0.35rem 0.2rem;
+        font-size: 0.6rem;
+        white-space: nowrap;
+        line-height: 1.1;
+        min-height: 36px;
+    }
+
+    .termType .slds-radio_faux {
+        padding: 0.35rem 0.2rem;
+        font-size: 0.6rem;
+        line-height: 1.1;
+    }
+
+    .slds-form-element__label {
+        font-size: 0.85rem;
+        text-align: center;
+    }
+
+    .pageTitle h2 {
+        font-size: 1rem;
+        text-align: center;
+    }
+}
+
+/* Extra Small (320px and less) */
+@media screen and (max-width: 320px) {
+    .termType-wrapper {
+        padding: 0 3px;
+    }
+
+    .termType {
+        gap: 2px;
+    }
+
+    .termType .slds-radio_button label {
+        padding: 0.3rem 0.1rem;
+        font-size: 0.55rem;
+        min-height: 34px;
+        line-height: 1.1;
+    }
+
+    .termType .slds-radio_faux {
+        padding: 0.3rem 0.1rem;
+        font-size: 0.55rem;
+        line-height: 1.1;
+    }
+}

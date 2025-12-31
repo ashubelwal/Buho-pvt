@@ -1,0 +1,39 @@
+.chat-history {
+    max-height: 250px;
+    /* 🔹 Altura máxima */
+    min-height: 250px;
+    /* 🔹 Evita que se haga más pequeño */
+    overflow-y: auto;
+    /* 🔹 Activa el scroll */
+    display: flex;
+    flex-direction: column;
+    /* 🔹 Mantiene el orden natural */
+    border: 1px solid #d1d1d1;
+    padding: 10px;
+    border-radius: 5px;
+    background: #f9f9f9;
+    margin-top: 15px;
+}
+
+/* 🔹 Estilos para mensajes */
+.message {
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 5px;
+    max-width: 80%;
+    /* 🔹 Para que no se expandan demasiado */
+}
+
+.user {
+    background: #d4eaf7;
+    text-align: right;
+    align-self: flex-end;
+    /* 🔹 Alinea mensajes de usuario a la derecha */
+}
+
+.ai {
+    background: #e8e8e8;
+    text-align: left;
+    align-self: flex-start;
+    /* 🔹 Alinea mensajes de IA a la izquierda */
+}

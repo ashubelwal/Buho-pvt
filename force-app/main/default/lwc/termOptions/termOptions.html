@@ -1,0 +1,142 @@
+<template>
+    <div class="maindiv slds-m-top_xx-large notranslate">
+        <template if:true={spinner}>
+            <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+        </template>
+        <template if:false={spinner}>
+            <!-- <div class="icon">
+                <lightning-icon class="slds-col slds-p-around_small slds-align_absolute-center slds-size_1-of-12"
+                    icon-name="standard:event">
+                </lightning-icon>
+            </div> -->
+            <div class=" slds-p-around--x-small">
+                <div class="blue slds-text-heading_large screenHeading">{label.termOptions}</div>
+                <div class="slds-text dimBlue">{label.selectyourterm}<abbr title="required" class="slds-required">*</abbr></div>
+            </div>
+
+            <div class="systemTime slds-m-top_x-small slds-p-around--x-small slds-m-bottom_x-small">
+                <template if:true={isShowingEndTerm}>
+                    <lightning-helptext icon-name="utility:info"
+                        content={label.allpoliciesare}>
+                    </lightning-helptext>
+                    {label.SystemTimeNow} <lightning-formatted-time value={getdisplayPstTime} hour="2-digit" minute="2-digit"
+                        time-zone-name="short"></lightning-formatted-time>
+                </template>
+            </div>
+
+
+            <div class="slds-p-bottom_medium">
+               
+                <div class="slds-grid slds-p-around--x-small">
+                    <div class="TermOptions slds-m-right--large">
+                      <span><input class="radiotype slds-align--absolute-center" type="radio" checked={isAnnual}
+                        id="Annual" name="Term" value="Annual(One Year)" onchange={onGroup} />
+                    <label for="Annual"
+                        class="radiolable slds-text-heading--small slds-p-left_small slds-align--absolute-center slds-m-bottom--x-small"><strong>
+                            {label.annual}</strong>
+                    </label></span>
+                    </div>
+                    <div class="TermOptions slds-m-right--large">
+                      <span> <input class="radiotype slds-align--absolute-center" type="radio"
+                        checked={isSemiAnnual} id="SemiAnnual" name="Term"
+                        value="Semi-Annual(Half a Year)" onchange={onGroup} />
+                    <label for="SemiAnnual"
+                        class="radiolable slds-text-heading--small slds-p-left_small slds-align--absolute-center slds-m-bottom--x-small"><strong>
+                            {label.semiannual}</strong>
+                    </label></span>
+                    </div>
+                    <div class="TermOptions slds-m-right--large">
+                      <span>  <input class="radiotype slds-align--absolute-center" type="radio" checked={isDaily}
+                        id="daily" name="Term" value="Daily" onchange={onGroup} />
+                    <label for="daily"
+                        class="radiolable slds-text-heading--small slds-p-left_small slds-align--absolute-center slds-m-bottom--x-small"><strong>
+                            {label.daily}</strong>
+                    </label></span>
+                    </div>
+                    <!-- <div>
+                      <span>4</span>
+                    </div> -->
+                    <!-- <div class="slds-col_bump-left">
+                      <span>5</span>
+                    </div>
+                    <div>
+                      <span>6</span>
+                    </div> -->
+                  </div>    
+
+                        <!-- <lightning-layout multiple-rows="true">
+                            <lightning-layout-item size={isGridSize} class="slds-p-around_x-small">
+                                
+                                
+
+                            </lightning-layout-item>
+                            <template if:true={isSouthboudOrNorthboundVehicle}>
+                                <lightning-layout-item size="2" class="slds-p-around_x-small">
+                                   
+                                    
+
+                                </lightning-layout-item>
+                            </template> 
+                            <lightning-layout-item size={isGridSize} class="slds-p-around_x-small">
+                              
+                                
+
+                            </lightning-layout-item>
+
+                        </lightning-layout> -->
+                        <lightning-layout multiple-rows="true">
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="3"
+                                large-device-size="4" class="slds-p-around_x-small">
+                                <lightning-input class="inputfield Validation" type="date"
+                                    name="Start_Date_for_Coverage__c" label={label.startdate} min={mindate}
+                                    onchange={handleChange} value={StartDate} pattern="^(?![\s-])[\w\s-]+$" required>
+                                </lightning-input>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="3"
+                                large-device-size="4" class="slds-p-around_x-small">
+                                <lightning-input class="inputfield Validation" type="date"
+                                    name="End_Date_for_Coverage__c" min={endMinDate} pattern="^(?![\s-])[\w\s-]+$"
+                                    onchange={handleChange} label={label.enddate} disabled={isEndDateDisabled}
+                                    value={EndDate} required>
+                                </lightning-input>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout multiple-rows="true">
+                            <template if:true={isShowingEndTerm}>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="3"
+                                    large-device-size="4" class="slds-p-around_x-small">
+
+                                    <lightning-input class="inputfield Validation" type="time" name="Start_Time__c"
+                                        label={label.starttime} onchange={handleChange}
+                                        value={StartTime} min={displayPstTime} required>
+                                    </lightning-input>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="3"
+                                    large-device-size="4" class="slds-p-around_x-small">
+                                    <lightning-input class="inputfield" type="time" name="End_Time__c"
+                                        onchange={handleChange} disabled="true"
+                                        value={EndTime} label={label.endtime}>
+                                    </lightning-input>
+                                </lightning-layout-item>
+                            </template>
+
+                        </lightning-layout>
+                    
+            </div>
+
+            <div class="horizontalAlign slds-p-around--x-small">
+                <div class="">
+                    <button class="buttonPrev btnHover" onclick={handlePrevClick}><span class="icon-prev"><i
+                                class="icon-prevs"></i></span>{label.prev}</button>
+                </div>
+                <div class="">
+                    <button class="buttonNext btnHover" onclick={handleNextClick}><span class="icon-next"><i
+                                class="icon-nexts"></i></span>{label.next}</button>
+                </div>
+            </div>
+        </template>
+
+    </div>
+</template>

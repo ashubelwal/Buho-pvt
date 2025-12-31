@@ -1,0 +1,34 @@
+<template>
+    <lightning-card title="Rate Our Service">
+        <div class="slds-m-around_medium">
+            <p>Please rate your experience:</p>
+            <div class="stars slds-m-bottom_small">
+                <template for:each={stars} for:item="star">
+                    <lightning-icon 
+                        key={star.value} 
+                        icon-name={star.icon} 
+                        size="medium" 
+                        onclick={handleStarClick}
+                        data-value={star.value}
+                        class={star.class}
+                    ></lightning-icon>
+                </template>
+            </div>
+
+            <lightning-textarea
+                label="Additional Feedback (Optional)"
+                value={feedbackText}
+                onchange={handleFeedbackChange}
+                class="slds-m-bottom_small feedbackText"
+                max-length="500"
+            ></lightning-textarea>
+
+            <lightning-button
+                label="Submit Feedback"
+                variant="brand" 
+                class="slds-m-top_medium" 
+                onclick={handleSubmit}
+            ></lightning-button>
+        </div>
+    </lightning-card>
+</template>

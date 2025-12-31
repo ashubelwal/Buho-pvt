@@ -1,0 +1,71 @@
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.pageTitle h2 {
+	border-bottom: 1px solid #eee;
+    padding: 10px 0;
+}
+
+.custom-table th,
+.custom-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.custom-table th {
+    background-color: #f4f4f4;
+}
+
+.delete-btn {
+    margin-left: 10px;
+    color: red;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.nav-button {
+    background-color: #0070d2;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 112, 210, 0.2);
+}
+
+.nav-button:hover {
+    background-color: #005bb5;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 112, 210, 0.3);
+}
+
+.nav-button .icon-prev,
+.nav-button .icon-next {
+    display: inline-flex;
+    margin: 0 0.5rem;
+}
+
+.prev {
+    justify-content: flex-start;
+}
+
+.next {
+    justify-content: flex-end;
+}

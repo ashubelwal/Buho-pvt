@@ -1,0 +1,182 @@
+<template>
+    <div class="wrapper">
+        <div class="slds-grid slds-wrap slds-gutters_xx-small">
+            <div class="slds-col slds-size_1-of-1 slds-large-size_12-of-12 slds-order_2 slds-large-order_1">
+                <div class="" style="position: relative">
+
+                    <!-- showing custom notification for all cmp, use this cmp to show toast from any child cmp -->
+                    <div>
+                        <c-custom-toast auto-close-time="8000"></c-custom-toast>
+                    </div>
+
+                    <!-- <c-p-s-t-time-picker></c-p-s-t-time-picker> -->
+
+
+                    <!-- Dynamic Child Component -->
+                    <div class="childCmp">
+                        <template if:true={componentConstructor}>
+                            <lwc:component payload={payload} lwc:is={componentConstructor} onflagupdate={handleFlagUpdate}
+                                onpayloadupdate={handlePayloadUpdate} onfullpayloadupdate={handlePayloadUpdateComplete}
+                                onchangescreen={handleNavigation} onloadingstatuschange={handleLoadingStatus}
+                                ontoastevent={handleToastEvent}></lwc:component>
+                        </template>
+                    </div>
+
+                    <!-- Navigation Buttons -->
+
+                    <div class="step-navigation slds-p-top_small navigationBtn">
+                        <button class="slds-button slds-button_outline-brand slds-m-right_x-small"
+                                    onclick={handleNavigation} data-direction="previous" disabled={isFirstStep}>Back</button>
+                        <template if:false={flag.isQuotePage}>
+                            <button class="slds-button slds-button_brand slds-m-right_x-small" onclick={handleNavigation} data-direction="next"
+                                disabled={isLastStep}>
+
+                                <template if:false={childLoaded}>
+                                    <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                                </template>
+                            Continue</button>
+                        </template>
+
+                        <!-- <c-nc_modal modal-title="Information"
+                            modal-content="Here is the information you wanted to see!">
+                        </c-nc_modal> -->
+                    </div>
+
+                    <!-- use this spinner to show loading screen from all child cmp -->
+                    <div class="loading" if:false={childLoaded}>
+                        <!-- <h2> Loading... </h2> -->
+                        <lightning-spinner alternative-text="Loading" size="medium">
+                            Loading
+                        </lightning-spinner>
+                    </div>
+                    <!-- 
+                    <template if:true={componentVisibility.showUserDetails}>
+                        <div class="childCmp">
+                            <c-nc_user-details></c-nc_user-details>
+                        </div>
+                    </template>
+
+                    <template if:true={componentVisibility.showVehicleDetails}>
+                        <div class="childCmp">
+                            <c-nc_vehicle-details></c-nc_vehicle-details>
+                        </div>
+                    </template> -->
+
+
+                    <!-- <div class="childCmp" style="display: none;">
+                        <c-nc_user-details></c-nc_user-details>
+                        <c-nc_vehicle-details></c-nc_vehicle-details>
+                        <c-nc_term-option></c-nc_term-option>
+                    </div> -->
+
+                    <!-- 
+                    <template if:true={componentVisibility.showTowed}>
+                        <div class="childCmp">
+                            <c-nc_towed></c-nc_towed>
+                        </div>
+                    </template>
+
+                    <template if:true={componentVisibility.showTerritory}>
+                        <div class="childCmp">
+                            <c-nc_territory></c-nc_territory>
+                        </div>
+                    </template>
+
+                    <template if:true={componentVisibility.showQuotePage}>
+                        <div class="childCmp">
+                            <c-nc_quote-page></c-nc_quote-page>
+                        </div>
+                    </template>
+
+                    <template if:true={componentVisibility.showTowDetails}>
+                        <div class="childCmp">
+                            <c-nc_tow-details></c-nc_tow-details>
+                        </div>
+                    </template>
+
+                    <template if:true={componentVisibility.showFinalizeVehicleDetails}>
+                        <div class="childCmp">
+                            <c-nc_finalize-vehicle-details></c-nc_finalize-vehicle-details>
+                        </div>
+                    </template>
+
+                    <template if:true={componentVisibility.showCompanyInformation}>
+                        <div class="childCmp">
+                            <c-nc_company-information></c-nc_company-information>
+                        </div>
+                    </template>
+
+                    <template if:true={componentVisibility.showLienholderInformation}>
+                        <div class="childCmp">
+                            <c-nc_lienholder-information></c-nc_lienholder-information>
+                        </div>
+                    </template>
+
+                    <template if:true={componentVisibility.showDriverDetails}>
+                        <div class="childCmp">
+                            <c-nc_driver-details></c-nc_driver-details>
+                        </div>
+                    </template>
+
+                    <template if:true={componentVisibility.showFinalDetails}>
+                        <div class="childCmp">
+                            <c-nc_final-details></c-nc_final-details>
+                        </div>
+                    </template>
+
+                    <template if:true={componentVisibility.showPayment}>
+                        <div class="childCmp">
+                            <c-nc_payment></c-nc_payment>
+                        </div>
+                    </template>
+
+                    <template if:true={componentVisibility.showConfirmation}>
+                        <div class="childCmp">
+                            <c-nc_confirmation></c-nc_confirmation>
+                        </div>
+                    </template>
+
+                    <template if:true={componentVisibility.showFeedback}>
+                        <div class="childCmp">
+                            <c-nc_feedback></c-nc_feedback>
+                        < /div>
+                    </template> -->
+                </div>
+            </div>
+            <!-- <div class="slds-col slds-size_1-of-1 slds-large-size_4-of-12 slds-order_1 slds-large-order_2">
+                <div class="" style="max-height: 88vh;overflow-y: scroll;">
+                    
+                        <template if:true={processedData}>
+                            <template for:each={processedData} for:item="section" for:index="index">
+                                <div key={section.sectionName} class="section-container overview">
+                                    <div class="overview-title">
+                                        <h2>
+                                            {section.sectionName}
+                                            <lightning-button-icon class="edit-btn" icon-name="utility:edit"
+                                                variant="bare" data-id={index} onclick={handleEditScreen}
+                                                alternative-text="Edit" title="Edit"></lightning-button-icon>
+                                        </h2>
+                                    </div>
+                                    <div class="data-grid">
+                                        <template for:each={section.fields} for:item="field">
+                                            <div key={field.key} class="data-item">
+                                                <div class="field-name">{field.label}:</div>
+                                                <div class="field-value">{field.displayValue}</div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                            </template>
+                        </template>
+                    
+                    <div style="position: relative;">
+                        <div if:false={childLoaded} class="overview-loading">
+                             <h2> Loading... </h2>
+                            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+</template>

@@ -1,0 +1,194 @@
+<aura:component controller="QuickQuotationCtrl" implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="title" type="String" access="public"/>
+    <aura:attribute name="backButtonVisibility" type="Boolean" default="false" access="public" />
+    <aura:attribute name="policyType" type="String" access="public"/>
+    <aura:attribute name="vehicleTypeQuoteOptions" type="list" access="private"/>
+    <aura:attribute name="under21Options" type="list" access="private"/>
+    <aura:attribute name="iscommunityUser" type="Boolean" default="false"/>
+    <aura:attribute name="newSectionOpen" type="Boolean" default="false" />
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    <aura:attribute name="onNextClick" type="Aura.Action"/>
+    <aura:attribute name="quoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" access="public"/>
+    <aura:attribute name="leadRecord" type="Lead" default="{ 'sobjectType': 'Lead'}" access="public"/>
+    <aura:attribute name="vehicleRecord" type="Vehicle__c" default="{ 'sobjectType': 'Vehicle__c'}"  />
+    
+    <aura:attribute name="vehicleYears" type="list" />
+    <aura:attribute name="vehicleMakes" type="list" />
+    <aura:attribute name="vehicleModels" type="list" />
+    <aura:attribute name="disableMake" type="Boolean" default="true" />
+    <aura:attribute name="disableModel" type="Boolean" default="true" />
+    <aura:attribute name="liabiltyOnly" type="Boolean" default="false" />
+    <aura:attribute name="RestrictliabiltyOnly" type="Boolean" default="false" />
+    <aura:attribute name="showYearPicklist" type="Boolean" default="true" />
+    <aura:attribute name="showManualMake" type="Boolean" default="false" />
+    <aura:attribute name="showManualModel" type="Boolean" default="false" />
+    <aura:attribute name="vehicleMake" type="String" />
+    <aura:attribute name="vehicleModel" type="String" />
+    
+    
+    
+    <aura:attribute name="loginUserVehicleOption" type="list" />
+    <aura:attribute name="loginUserVehicles" type="list" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    
+    <lightning:layoutItem padding="around-small" size="12" class="align-center slds-m-top_xx-large">
+        <div class="page-title">
+            <aura:if isTrue="{!v.backButtonVisibility}">
+                <button class="button -plain -back-button" name="step_3" onclick="{!v.onBackClick }">
+                    <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/> Back
+                </button>
+            </aura:if>
+            <h1>{!v.title}</h1>
+            <aura:if isTrue="{!v.policyType == 'Automobile'}">
+                <img class="slds-m-bottom_large" src="{!$Resource.mexinsurance_assets + '/images/icon-car.svg'}" alt="Vehicle"/>
+            </aura:if>
+            <aura:if isTrue="{!v.policyType == 'RV'}">
+                <img class="slds-m-bottom_large" src="{!$Resource.mexinsurance_assets + '/images/icon-rv.svg'}" alt="Vehicle"/>
+            </aura:if>
+            <aura:if isTrue="{!v.policyType == 'Motorcycle/Street Legal ATV'}">
+                <img class="slds-m-bottom_large" src="{!$Resource.mexinsurance_assets + '/images/icon-motorcycle.svg'}" alt="Vehicle"/>
+            </aura:if>
+        </div>                    
+    </lightning:layoutItem>
+    
+    <div class="slds-size_12-of-12">
+        
+        
+        <div class="form-container">
+            <div class="c-container">
+                <lightning:layout multipleRows="true">
+                    <aura:if isTrue="{!v.iscommunityUser}">
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" class="slds-p-around_x-small">
+                            <lightning:combobox name="progress" placeholder="Select a Vehicle from your account" value="{!v.vehicleRecord.Id}" options="{!v.loginUserVehicleOption}" onchange="{!c.handleChange}"/>
+                            
+                            <lightning:accordion allowMultipleSectionsOpen="true" onsectiontoggle="{! c.handleSectionToggle }" >
+                                <lightning:accordionSection name="A" class="slds-align_absolute-center" label="ADD A DIFFERENT VEHICLE"></lightning:accordionSection>
+                            </lightning:accordion>
+                        </lightning:layoutItem>
+                    </aura:if> 
+                    <aura:if isTrue="{!v.newSectionOpen}">
+                        <aura:if isTrue="{!v.policyType == 'Northbound'}">
+                            <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                                <lightning:combobox name="Vehicle_Type__c" aura:id="validateField" required="true" label="Vehicle Type" placeholder="" value="{!v.quoteRecord.Vehicle_Type__c}" options="{! v.vehicleTypeQuoteOptions }"  onchange="{!c.updateValue}"/>
+                            </lightning:layoutItem>
+                            <aura:set attribute="else">
+                                <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                                    <lightning:combobox aura:id="validateField" required="true" name="Vehicle_Sub_type__c" label="Vehicle Type" placeholder="" value="{!v.quoteRecord.Vehicle_Sub_type__c}" options="{! v.vehicleTypeQuoteOptions }"  onchange="{!c.updateValue}"/>
+                                </lightning:layoutItem>
+                            </aura:set>
+                        </aura:if> 
+                        
+                        <aura:if isTrue="{!!v.showYearPicklist}">
+                            <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                                <lightning:combobox name="Vehicle_Year__c" aura:id="validateField" required="true" label="Year" placeholder="Year" value="{!v.quoteRecord.Vehicle_Year__c}" options="{! v.vehicleYears }"  onchange="{!c.updateValue}"/>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                                <lightning:input type="text" aura:id="validateField" required="true" name="Vehicle_Make__c" label="Make" placeholder="Make" value="{!v.quoteRecord.Vehicle_Make__c}" onchange="{!c.updateValue}" />
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                                <lightning:input type="text" aura:id="validateField" required="true" label="Model" name="Vehicle_Model__c" placeholder="Model" value="{!v.quoteRecord.Vehicle_Model__c}" onchange="{!c.updateValue}" />
+                            </lightning:layoutItem>
+                        </aura:if>
+
+                        <aura:if isTrue="{!v.showYearPicklist}">
+                            <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                                <lightning:combobox name="Vehicle_Year__c" aura:id="validateField" required="true" label="Year" placeholder="Year" value="{!v.quoteRecord.Vehicle_Year__c}" options="{! v.vehicleYears }"  onchange="{!c.updateValue}"/>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                                <lightning:combobox name="Vehicle_Make__combobox"  aura:id="validateField" required="true" label="Make" placeholder="Make" value="{!v.vehicleMake}" options="{! v.vehicleMakes }"  onchange="{!c.updateValue}" disabled="{!v.disableMake}"/>
+                            </lightning:layoutItem>
+                            <aura:if isTrue="{!v.showManualMake}">
+                                <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                                    <lightning:input type="text" aura:id="validateField" required="true" name="Vehicle_Make__c" label="Make" placeholder="Make" value="{!v.quoteRecord.Vehicle_Make__c}" onchange="{!c.updateValue}" />
+                                </lightning:layoutItem>
+                            </aura:if>
+                            <aura:if isTrue="{!!and(v.showManualModel, v.showManualMake)}">
+                                <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                                    <lightning:combobox name="Vehicle_Model__combobox" aura:id="validateField" required="true" label="Model" placeholder="Model" value="{!v.vehicleModel}" options="{! v.vehicleModels }"  onchange="{!c.updateValue}" disabled="{!v.disableModel}"/>
+                                </lightning:layoutItem>
+                            </aura:if>
+                            <aura:if isTrue="{!v.showManualModel}">
+                                <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                                    <lightning:input type="text" aura:id="validateField" label="Model" required="true" name="Vehicle_Model__c" placeholder="Model" value="{!v.quoteRecord.Vehicle_Model__c}" onchange="{!c.updateValue}" />   
+                                </lightning:layoutItem>
+                            </aura:if>
+                        </aura:if>
+                        
+                        <!--<aura:if isTrue="{!or(v.policyType == 'RV', v.policyType == 'Automobile')}">
+                            <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                                <lightning:input type="hidden" name="Group_Manual__c" placeholder="Group #" />
+                            </lightning:layoutItem>
+                        </aura:if> -->
+                        
+                        <aura:if isTrue="{!v.policyType == 'Northbound'}">
+                            <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                                <lightning:input aura:id="validateField" fieldLevelHelp="Your estimate of vehicle value will not be used as a rating factor on this policy because it is a Liability Only policy.  Please estimate." required="true" type="number" label="Vehicle Value" name="Vehicle_Value__c" formatter="currency" step="0.01" placeholder="Vehicle Value" value="{!v.quoteRecord.Vehicle_Value__c}" onchange="{!c.updateValue}" />
+                            </lightning:layoutItem>
+                            <aura:set attribute="else">
+                                <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                                    <lightning:input aura:id="validateField" fieldLevelHelp="Your estimate of vehicle value in case of a total loss.  This amount will be your limit for damages to, or total theft of your vehicle.  If you owe money on the vehicle you must list at least as much as you owe.  There is no gap coverage, but the lienholder will need to see their risk covered.  For guidance on value check Kelly Blue Book or NADA guides for Actual Cash Value or Private Party Value." required="true" type="number" label="Vehicle Value" name="Vehicle_Value__c" formatter="currency" step="0.01" placeholder="Vehicle Value" value="{!v.quoteRecord.Vehicle_Value__c}" onchange="{!c.updateValue}" />
+                                </lightning:layoutItem>
+                            </aura:set>
+                        </aura:if>
+                        <aura:if isTrue="{!v.policyType != 'Northbound'}">
+                            <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                                <lightning:input type="checkbox" class="slds-p-vertical_medium" label="Liability Only" checked="{!v.liabiltyOnly}" onchange="{!c.updateLiabilityValue}" />
+                            </lightning:layoutItem>
+                        </aura:if>
+                        
+                        <aura:if isTrue="{!v.policyType == 'Northbound'}">
+                            <!--lightning:input fieldLevelHelp="Enter the date of birth of the registered owner, or primary driver." aura:id="validateField" type="date" name="Date_of_Birth__c" label="Date of Birth" value="{!v.quoteRecord.Date_of_Birth__c}" onchange="{!c.updateValue}" required="true" /-->
+                            <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                                <c:customDate fieldLevelHelp="Enter the date of birth of the registered owner, or primary driver." label="Date of Birth" custDate="{!v.quoteRecord.Date_of_Birth__c}" required="true" aura:id="customValidateField" onDateChange="{!c.handleDateOfBirth}" /> 
+                            </lightning:layoutItem>
+                            <aura:set attribute="else">
+                                <!--lightning:input type="checkbox" name="Is_there_a_driver_under_21__c" label="Will anyone under the age of 21 drive the vehicle?" checked="{!v.quoteRecord.Is_there_a_driver_under_21__c == 'Yes' }" onchange="{!c.updateValue}" /-->
+                                <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                                    <lightning:combobox name="Is_there_a_driver_under_21__c" aura:id="validateField" required="true" label="Will anyone under the age of 21 drive the vehicle?" placeholder="Will anyone under the age of 21 drive the vehicle?" value="{!v.quoteRecord.Is_there_a_driver_under_21__c}" options="{!v.under21Options }"  onchange="{!c.updateValue}"/>
+                                </lightning:layoutItem>
+                            </aura:set>
+                        </aura:if>
+                        
+                        <!--lightning:input type="number" name="Driver_Age__c" placeholder="Driver Age" value="{!v.quoteRecord.Driver_Age__c}" onchange="{!c.updateValue}" />
+                <lightning:input aura:id="validateField" type="number" name="Vehicle_Age__c" placeholder="Vehicle Age" value="{!v.quoteRecord.Vehicle_Age__c}" onchange="{!c.updateValue}" /-->
+                        <aura:if isTrue="{!v.policyType == 'Northbound'}">
+                            <!--lightning:input type="checkbox" name="Salvage_Vehicle__c" label="This is a salvage vehicle" checked="{!v.quoteRecord.Salvage_Vehicle__c == 'Yes' }" onchange="{!c.updateValue}" />
+                    <lightning:input type="checkbox" name="Vehicle_used_for_Business_Purposes__c" label="Is the vehicle used for business purposes?" checked="{!v.quoteRecord.Vehicle_used_for_Business_Purposes__c}" onchange="{!c.updateValue}" />
+                    <lightning:input type="checkbox" name="Is_this_a_Rental_Vehicle__c" label="Is this a rental vehicle?" checked="{!v.quoteRecord.Is_this_a_Rental_Vehicle__c}" onchange="{!c.updateValue}"   /-->
+                            <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                                <lightning:combobox name="Salvage_Vehicle__c" aura:id="validateField" required="true" label="Is this is a salvage vehicle?" value="{!v.quoteRecord.Salvage_Vehicle__c}" options="{!v.under21Options }"  onchange="{!c.updateValue}"/>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                                <lightning:combobox name="Vehicle_used_for_Business_Purposes__c" aura:id="validateField" required="true" label="Is the vehicle used for business purposes?" value="{!if(v.quoteRecord.Vehicle_used_for_Business_Purposes__c, 'Yes', 'No')}" options="{!v.under21Options }"  onchange="{!c.updateValue}"/>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                                <lightning:combobox name="Is_this_a_Rental_Vehicle__c" aura:id="validateField" required="true" label="Is this a rental vehicle?" value="{!if(v.quoteRecord.Is_this_a_Rental_Vehicle__c, 'Yes', 'No')}" options="{!v.under21Options }"  onchange="{!c.updateValue}"/>
+                            </lightning:layoutItem>
+                            <aura:set attribute="else">
+                                <!--lightning:input fieldLevelHelp="A vehicle with a Salvage Title indicates that the vehicle was re-built.  The value of a Salvage vehicle is about 50% of the vehicle value.  Getting value out of a complete coverage policy can be challenging so usually Liability Only is the best choice.  If you do choose Complete Coverage, don’t over-insure.  You will not recover full retail value of a Salvage vehicle." type="checkbox" name="Salvage_Vehicle__c" label="This is a salvage vehicle" checked="{!v.quoteRecord.Salvage_Vehicle__c == 'Yes' }" onchange="{!c.updateValue}" />
+
+                        <lightning:input fieldLevelHelp="If your vehicle is registered to a business, or used for business please check this box.  It will cover additional things like automobile wrap, excess miles, etc.  Failure to check this box can limit your claims ability for full recovery on a business vehicle." type="checkbox" name="Vehicle_used_for_Business_Purposes__c" label="Is the vehicle used for business purposes?" checked="{!v.quoteRecord.Vehicle_used_for_Business_Purposes__c}" onchange="{!c.updateValue}" />
+
+                        <lightning:input fieldLevelHelp="Rental vehicles are owned by a rental agency, and often self-insure and handle their own vehicle repairs.  Check this box if the vehicle is “rented” so that the appropriate surcharge can be applied.  Failure to check this box for a rental car policy can result in denial of a claim." type="checkbox" name="Is_this_a_Rental_Vehicle__c" label="Is this a rental vehicle?" checked="{!v.quoteRecord.Is_this_a_Rental_Vehicle__c}" onchange="{!c.updateValue}"   /-->
+                                <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                                    <lightning:combobox fieldLevelHelp="A vehicle with a Salvage Title indicates that the vehicle was re-built.  The value of a Salvage vehicle is about 50% of the vehicle value.  Getting value out of a complete coverage policy can be challenging so usually Liability Only is the best choice.  If you do choose Complete Coverage, don’t over-insure.  You will not recover full retail value of a Salvage vehicle." name="Salvage_Vehicle__c" aura:id="validateField" required="true" label="Is this is a salvage vehicle?" value="{!v.quoteRecord.Salvage_Vehicle__c}" options="{!v.under21Options }"  onchange="{!c.updateValue}"/>
+                                </lightning:layoutItem>
+                                <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                                    <lightning:combobox fieldLevelHelp="If your vehicle is registered to a business, or used for business please check this box.  It will cover additional things like automobile wrap, excess miles, etc.  Failure to check this box can limit your claims ability for full recovery on a business vehicle." name="Vehicle_used_for_Business_Purposes__c" aura:id="validateField" required="true" label="Is the vehicle used for business purposes?" value="{!if(v.quoteRecord.Vehicle_used_for_Business_Purposes__c, 'Yes', 'No')}" options="{!v.under21Options }"  onchange="{!c.updateValue}"/>
+                                </lightning:layoutItem>
+                                <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                                    <lightning:combobox fieldLevelHelp="Rental vehicles are owned by a rental agency, and often self-insure and handle their own vehicle repairs.  Check this box if the vehicle is “rented” so that the appropriate surcharge can be applied.  Failure to check this box for a rental car policy can result in denial of a claim." name="Is_this_a_Rental_Vehicle__c" aura:id="validateField" required="true" label="Is this a rental vehicle?" value="{!if(v.quoteRecord.Is_this_a_Rental_Vehicle__c, 'Yes', 'No')}" options="{!v.under21Options }"  onchange="{!c.updateValue}"/>
+                                </lightning:layoutItem>
+                            </aura:set>
+                        </aura:if>
+                    </aura:if>
+                </lightning:layout>
+            </div>
+        </div>
+    </div>               
+    
+    <lightning:layoutItem size="12" class="slds-m-top_large align-center">                    
+        <button class="button -secondary -wider" onclick="{! c.onNextClick }">Next</button>
+    </lightning:layoutItem>
+</aura:component>

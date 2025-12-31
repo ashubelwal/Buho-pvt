@@ -1,0 +1,51 @@
+<template>
+    <lightning-card title="Contact Policies" icon-name="standard:contract">
+        <lightning-spinner size="medium" alternative-text="Processing" lwc:if={isLoading}></lightning-spinner>
+        <template if:true={policies}>
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th scope="col">
+                            <div class="slds-truncate">Name</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate">Start Date</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate">End Date</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate">Status</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate">Actions</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={policies} for:item="policy">
+                        <tr key={policy.Id}>
+                            <td>{policy.Name}</td>
+                            <td>{policy.Start_Date__c}</td>
+                            <td>{policy.End_Date__c}</td>
+                            <td>{policy.Status_picklist__c}</td>
+                            <td>
+                                <lightning-button-group>
+                                    <lightning-button label="Edit" onclick={handleEdit}
+                                        data-id={policy.Name}></lightning-button>
+                                    <lightning-button label="Renew" onclick={handleRenew}
+                                        data-id={policy.Name}></lightning-button>
+                                    <lightning-button label="Terminate" onclick={handleTerminate} data-id={policy.Name}
+                                        variant="destructive"></lightning-button>
+                                </lightning-button-group>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </template>
+        <template if:true={error}>
+            <p class="slds-text-color_error">{error}</p>
+        </template>
+    </lightning-card>
+</template>

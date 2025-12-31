@@ -1,0 +1,177 @@
+<template>
+    <div class="maindiv slds-m-top_xx-large notranslate">
+        <div class="">
+            <div class="blue slds-text-heading_large screenHeading">{label.Onlineinsurancefinaldetails}</div>
+        </div>
+        <!-- <div class="icon slds-p-around_small">
+            <lightning-icon class="slds-col slds-p-around_small slds-align_absolute-center slds-size_1-of-12"
+                icon-name="standard:tour">
+            </lightning-icon>
+        </div> -->
+        <div class="details slds-p-around-large">
+            <lightning-layout multiple-rows="true">
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4" class="slds-p-around--small">
+
+                    <lightning-combobox name="What_is_your_trip_destination_in_US__c" label="" value={tripDestination}
+                        placeholder={label.WhatisyourTripDestination} options={usDestinations} onchange={handleChange}>
+                    </lightning-combobox>
+
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4" class="slds-p-around--small">
+                    <lightning-combobox name="What_is_the_purpose_of_trip__c" label="" value={tripPurpose}
+                        placeholder={label.Whatisthetrippurposetrip} options={tripPurposes} onchange={handleChange}>
+                    </lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4" class="slds-p-around--small">
+                    <lightning-combobox name="How_did_you_hear_about_us__c" label="" value={hearAboutUs}
+                        placeholder={label.Howdidyouhearaboutus} options={aboutusOption} onchange={handleChange}>
+                    </lightning-combobox>
+                </lightning-layout-item>
+
+            </lightning-layout>
+        </div>
+        <template if:true={showOtherOptioForHearus}>
+            <div class="details slds-p-vertical--large">
+                <lightning-textarea name="How_did_you_hear_about_us_Other__c" placeholder={label.Howdidyouhearaboutus}
+                    variant="label-hidden" value={hearAboutUsOther} style="height: 180px;" onchange={handleChange}
+                    max-length="350"></lightning-textarea>
+
+            </div>
+
+        </template>
+
+        <div class="slds-text-heading_medium slds-m-vertical_large blue">{label.YesIwanttoreceivethefollowing}:</div>
+        <div>
+            <lightning-layout multiple-rows="true">
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4">
+                    <lightning-input type="checkbox" label={label.Newsletter} name="Newsletter__c" checked={Newsletter}
+                        onchange={handleChange}>
+                    </lightning-input>
+                </lightning-layout-item>
+                <!-- <lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4">
+                    <lightning-input type="checkbox" label={label.Announcements} name="Announcements__c"
+                        checked={Announcements} onchange={handleChange}>
+                    </lightning-input>
+                </lightning-layout-item> -->
+                <!-- <lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4">
+                    <lightning-input type="checkbox" label={label.TravelAlerts} name="Travel_Alerts__c"
+                        checked={TravelAlerts} onchange={handleChange}>
+                    </lightning-input>
+                </lightning-layout-item> -->
+                <template if:true={isNorthboundVehicle}>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="4"
+                        large-device-size="4">
+                        <lightning-input type="checkbox" label={label.YellowCard} name="Yellow_Card__c" checked={yellowCard}
+                            onchange={handleChange}>
+                        </lightning-input>
+                    </lightning-layout-item>
+                </template>
+
+            </lightning-layout>
+        </div>
+        <div class="slds-text-heading_medium slds-m-top_large blue">{label.Ireadandagreewiththefollowing}:</div>
+        <div class="terms">
+            <lightning-layout multiple-rows="true">
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                    class="slds-p-left_small">
+
+                    <lightning-input type="checkbox" label={label.Termsofpurchase} name="Terms_of_Purchase_Confirmed__c"
+                        checked={TermsOfPurchaseConfirmed} required class="slds-p-vertical_small Validation"
+                        onchange={handleChange}>
+                    </lightning-input>
+                    <template if:true={legalTermRecord}>
+                        <div class="box slds-box slds-p-around_small slds-textarea slds-scrollable">
+                            <template if:true={isShowingOrgDataPurchaseAndUse}>
+                                <p>{legalTermRecord.Terms_of_Purchase_and_Use__c}</p>
+                            </template>
+                            <template if:false={isShowingOrgDataPurchaseAndUse}>
+
+
+                                <p>{label.Iagreetothefollowingwhen}
+                                </p>
+                                <p>{label.IhavereadunderstandandagreetotheTermsofAccessandUse} <a
+                                        href="https://www.mexinsurance.com/legal/terms/" target="_blank">{label.clickinghere}
+                                        </a>
+                                </p>
+                                <p>{label.Iunderstandandagreetotheinsurancepolicycontractofthe} <a
+                                        href="https://www.mexinsurance.com/legal/terms/" target="_blank">{label.clickinghere}
+                                        </a>
+                                </p>
+                                <p>{label.Iunderstandandagreethatcoverageappliesonlytothe} </p>
+                                <p>{label.IunderstandandagreethatIwillonlybeinsuredbetweenthe}
+                                </p>
+                                <p>{label.Iunderstand} </p>
+                                <p>{label.IunderstandandagreethatthelawsofMexicodonot}</p>
+                                <p>{label.IunderstandandagreethatthistouristNorthboundInsurance}
+                                </p>
+                                <p>{label.IunderstandandagreethatImustprintthe}</p>
+                                <p>{label.Iunderstandandagreethatthepolicydeclarationspage}</p>
+                                <p>{label.IunderstandandagreethatthepolicyNorthboundTermsandConditions}</p>
+                                <p>{label.IunderstandandagreethatImustreport}
+                                    </p>
+                                <p>{label.Iunderstandandagreethatfailuretoreport}
+                                    </p>
+                                <p>{label.Iunderstandandagreethatthistourist}
+                                </p>
+                            </template>
+                        </div>
+                    </template>
+
+
+
+
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                    class="slds-p-left_small">
+
+                    <lightning-input type="checkbox" label={label.Termsofcancellation} checked={TermsOfPurchaseCancellation}
+                        name="Terms_of_Cancellation_Confirmed__c" required class="slds-p-vertical_small Validation"
+                        onchange={handleChange}>
+                    </lightning-input>
+                    <template if:true={legalTermRecord}>
+                        <div class="box slds-box slds-p-around_small slds-textarea slds-scrollable">
+                            <template if:true={isShowingOrgDataPurchaseAndUse}>
+                                <p>{legalTermRecord.Terms_of_Cancellation__c}</p>
+                                <p>{legalTermRecord.Daily_Policy_Cancellation__c}</p>
+                                <p>{legalTermRecord.Semi_Annual_and_Annual_Policy_Cancellati__c}</p>
+
+                            </template>
+                            <template if:false={isShowingOrgDataPurchaseAndUse}>
+                                <p>{label.ThefollowingareTermsofCancellation}</p>
+                                <p>{label.WhentheContractingPartyrequests}</p>
+                                <p><b>{label.DailyPolicyCancellation}</b>{label.Dailytermpoliciesarefully}
+                                </p>
+                                <p><b>{label.SemiAnnualandAnnualPolicyCancellation}</b>{label.SemiannualandAnnualpoliciesar}
+                                </p>
+                                <p>{label.Allcancellationswillbeassesseda}</p>
+                            </template>
+
+                        </div>
+                    </template>
+
+
+
+
+
+
+
+
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+        <div class="horizontalAlign slds-m-top--x-large">
+            <div class="">
+                <button class="buttonPrev btnHover" onclick={handlePrevClick}><span class="icon-prev"><i
+                            class="icon-prevs"></i></span>{label.Prev}</button>
+            </div>
+            <div class="">
+                <button class="buttonNext btnHover" onclick={handleNextClick}><span class="icon-next"><i
+                            class="icon-nexts"></i></span>{label.Next}</button>
+            </div>
+        </div>
+        <!-- <div class="horizontalAlign">
+            <button class="buttonPrev btnHover" onclick={handlePrevClick}>Prev</button>
+            <button class="buttonNext btnHover" onclick={handleNextClick}>Next</button>
+        </div> -->
+    </div>
+</template>

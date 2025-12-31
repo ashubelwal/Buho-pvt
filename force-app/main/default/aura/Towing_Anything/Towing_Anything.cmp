@@ -1,0 +1,52 @@
+<aura:component controller="QuickQuotationCtrl" implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="title" type="String" access="public"/>
+    <aura:attribute name="backButtonVisibility" type="Boolean" default="true" access="public" />
+    <aura:attribute name="policyType" type="String" access="public"/>
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    <aura:attribute name="onNextClick" type="Aura.Action"/>
+    <aura:attribute name="quoteRecord" type="Object" access="public"/>
+    <aura:attribute name="leadRecord" type="Object" access="public"/>
+    <aura:attribute name="iscommunityUser" type="Boolean" default="false"  />
+    <aura:attribute name="renewPolicy" type="Boolean" default="false" />
+    <aura:attribute name="iscloneConditionPass" type="boolean" default="false" />
+    <aura:attribute name="transporates" type="List" access="public" />
+    <aura:attribute name="towedunitRecord" type="Towed_Unit__c" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    
+    <lightning:layoutItem padding="around-small" size="12" class="align-center slds-m-top_xx-large">
+        <div class="page-title">
+            <aura:if isTrue="{!v.backButtonVisibility}">
+                <button class="button -plain -back-button" name="step_3" onclick="{!v.onBackClick }">
+                    <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/> Back
+                </button>
+            </aura:if>
+            <h1>{!v.title}</h1>
+            <img class="slds-m-bottom_large" src="{!$Resource.mexinsurance_assets + '/images/icon-towing-unit.svg'}" alt="Towing Unit"/>
+        </div>                    
+    </lightning:layoutItem>
+    
+    <lightning:layoutItem padding="around-small" size="12">
+        <lightning:layout multipleRows="true">
+            <lightning:layoutItem size="6" class="align-center slds-p-around_xx-small">
+                <label class="label-large slds-m-top_small slds-m-bottom_small">Yes</label>
+                <label class="radiocontainer">
+                    <ui:inputRadio aura:id="r2" name="towing" class="radio_box slds-m-top_x-small" text="Yes" change="{!c.onGroup}" value="{!v.quoteRecord.Towed_Unit__c == 'Yes'}" />
+                    <span class="radiobtn"></span>
+                </label>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="6" class="align-center slds-p-around_xx-small">
+                <label class="label-large slds-m-top_small slds-m-bottom_small">No</label>
+                <label class="radiocontainer">
+                    <ui:inputRadio aura:id="r3" name="towing" class="radio_box slds-m-top_x-small" text="No" change="{!c.onGroup}" value="{!v.quoteRecord.Towed_Unit__c == 'No'}" />
+                    <span class="radiobtn"></span>
+                </label>
+			</lightning:layoutItem>
+        </lightning:layout>
+    </lightning:layoutItem>
+    
+    <lightning:layoutItem size="12" class="slds-m-top_large align-center">                    
+        <button class="button -secondary -wider" onclick="{! c.onNextClick }">Next</button>
+    </lightning:layoutItem>
+</aura:component>

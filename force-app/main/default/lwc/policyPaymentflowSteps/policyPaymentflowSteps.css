@@ -1,0 +1,78 @@
+.filling {	
+    position: relative;
+   
+    /* border: 1px solid #ddd; */
+    background-color: #003a70;
+    /* border: 1px solid #003a70 !important; */
+    /* border-radius: 4px; */
+    
+}
+.flowStep{
+    padding: 10px !important;
+    border-left: 5px solid #fff;
+}
+.flowStep:hover {
+    background-color: #f2f2f2;
+    cursor: pointer;
+    border-left: 5px solid #f2f2f2;
+}
+.flows-progress{
+    width: 100% !important;
+    background-color: #fff;
+}
+.completdSection{
+    background: #003a70; 
+}
+.filling span{
+border: 1px solid #003a70 !important;
+}
+.flowStep span{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid #5D7A8E;
+    display: block;
+    text-align: center;
+    color: #003a70;
+    /* background: #003a70; */
+    line-height: 28px;
+    font-weight: 700;
+}
+
+.flowStep.filling{
+    background: linear-gradient(90deg, rgba(0, 132, 255,0.15), rgba(0, 128, 246,0));
+    border-left: 5px solid #003A70;
+}
+.filling span, .fill span{
+    background-color: #003A70 !important;
+    color: #fff !important;
+}
+
+
+.flowStep.filling h4,
+.flowStep.filling p {
+    color: #003A70;
+}
+.flowStep p {
+    margin-bottom: 5px;
+    color: #5D7A8E;
+}
+.flowStep h4{
+    margin-bottom: 5px;
+    color: #003A70;
+}
+
+.completdSection{
+    background: #fff;
+    padding: 5px 7px 1px 5px;
+    /* border-radius: 50%; */
+  
+}
+
+.screenName{
+	font-size: 16px;
+    text-transform: uppercase;
+}
+.screenDesc{
+	font-size: 14px;
+}

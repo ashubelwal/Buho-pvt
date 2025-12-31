@@ -1,0 +1,23 @@
+<template>
+    <div style="background: #fff; border-radius: 4px" class="slds-p-around_medium">      
+
+        <!-- If action type is equal to policy -->
+        <!-- <template if:true={actionTypePolicy}>
+            <c-agent-policy-details ></c-agent-policy-details>            
+        </template> -->
+
+        <!-- If action type is equal to Quote -->
+        
+        <template if:true={actionTypeQuote}> 
+            <c-agent-quick-quote paramdata={stateContact}></c-agent-quick-quote>
+        </template> 
+
+
+        
+            <div style="width:60%; margin:auto;" class="managePayment" lwc:if={actionTypePolicyTerminate}>
+                <c-terminate-policy-main-screen isshowaddress=true></c-terminate-policy-main-screen>
+            </div> 
+            
+        
+    </div>
+</template>

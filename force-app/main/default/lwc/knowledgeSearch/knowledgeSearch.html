@@ -1,0 +1,22 @@
+<template>
+    <lightning-card title="">
+        <div class="slds-m-around_medium search-container">
+            <lightning-input type="text" label="Help Articles" placeholder="Search Any Article..." value={searchTerm}
+                onchange={handleSearch}></lightning-input>
+
+            <!-- 🔹 Botón de búsqueda -->
+            <lightning-button label="Search" variant="brand" onclick={handleSearchButtonClick}
+                class="search-button"></lightning-button>
+        </div>
+
+        <template if:true={articles.length}>
+            <ul class="autocomplete-list">
+                <template for:each={articles} for:item="article">
+                    <li key={article.Id} data-id={article.Id} onclick={handleSelect} class="autocomplete-item">
+                        {article.Title}
+                    </li>
+                </template>
+            </ul>
+        </template>
+    </lightning-card>
+</template>

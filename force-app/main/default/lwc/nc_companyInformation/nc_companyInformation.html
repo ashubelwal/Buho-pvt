@@ -1,0 +1,68 @@
+<template>
+    <div class="test">
+        <template if:true={flag.isLoaded}>
+            <div class="slds-grid slds-wrap slds-gutters">
+                <!-- Company Name -->
+                <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                    <lightning-input type="text" label="Company Name" value={companyInfo.Company_Name__c}
+                        onchange={handleInputChange} data-field="Company_Name__c" required></lightning-input>
+                </div>
+
+                <!-- Company Phone -->
+                <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                    <lightning-input type="text" name="Company Phone" label="Company Phone" value={formattedPhone}
+                        onchange={handleInputChange} data-field="Company_Phone__c" required placeholder="(123) 456-7890"
+                        max-length="14">
+                    </lightning-input>
+                </div>
+
+                <!-- Tax ID -->
+                <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                    <lightning-input name="Tax ID" type="text" label="Tax ID" value={companyInfo.Tax_ID__c}
+                        onchange={handleInputChange} data-field="Tax_ID__c"></lightning-input>
+                </div>
+
+                <!-- Address Recommendations -->
+                <div class="slds-size_1-of-1 slds-p-around_small">
+                    <c-address-recommendations onsendaddress={handleCompanyAddress}
+                        placeholder="Start typing company address to autofill fields below">
+                    </c-address-recommendations>
+                </div>
+
+                <!-- Company Country -->
+                <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                    <lightning-combobox label="Company Country" value={companyInfo.Company_Country__c}
+                        options={countryOptions} onchange={handleInputChange} data-field="Company_Country__c" required>
+                    </lightning-combobox>
+                </div>
+
+                <!-- Company Address -->
+                <div class="slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12 slds-p-around_small">
+                    <lightning-input type="text" label="Company Address" value={companyInfo.Company_Address__c}
+                        onchange={handleInputChange} data-field="Company_Address__c" required></lightning-input>
+                </div>
+
+                <!-- Company Zip -->
+                <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                    <lightning-input type="text" label="Company Zip" value={companyInfo.Company_Zip__c}
+                        onchange={handleInputChange} data-field="Company_Zip__c" required></lightning-input>
+                </div>
+
+                <!-- Company State -->
+                <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                    <lightning-input type="text" label="Company State" value={companyInfo.Company_State__c}
+                        onchange={handleInputChange} data-field="Company_State__c" required></lightning-input>
+                </div>
+
+                <!-- Company City -->
+                <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                    <lightning-input type="text" label="Company City" value={companyInfo.Company_City__c}
+                        onchange={handleInputChange} data-field="Company_City__c" required></lightning-input>
+                </div>
+            </div>
+        </template>
+        <template if:false={flag.isLoaded}> Loading...
+        </template>
+
+    </div>
+</template>

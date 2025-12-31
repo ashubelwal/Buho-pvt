@@ -1,0 +1,93 @@
+<template>
+	<div class="notranslate">
+	<lightning-layout multiple-rows="true">
+		<lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4"
+			class="slds-p-around_x-small">
+			<lightning-combobox class="validateField" label={label.typeoftowed} name="Towed_Unit_Type__c"
+				value={TowedUnitType} placeholder={label.typeoftowed} options={TowedVehicleOptions}
+				onchange={handleChange} disabled={isDisabled} required>
+			</lightning-combobox>
+		</lightning-layout-item>
+
+		<lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4"
+			class="slds-p-around_x-small">
+			<lightning-input class="inputfield validateField" type="text" label={label.towedunitvalue} pattern="^[0-9]*$"
+				name="Towed_Unit_Value__c" placeholder={label.towedunitvalue} value={TowedUnitValue} onchange={handleChange}
+				disabled={isDisabled} required>
+			</lightning-input>
+		</lightning-layout-item>
+
+		<lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4"
+			class="slds-p-around_x-small">
+			<lightning-input class="inputfield validateField" type="text" label={label.daysintow} name="Days_in_Tow__c"
+				pattern="^[0-9]*$" placeholder={label.daysintow} value={DaysTowed} disabled={isDisabled} required
+				onchange={handleChange}>
+			</lightning-input>
+		</lightning-layout-item>
+	</lightning-layout>
+
+
+	<template if:false={step}>
+		<lightning-layout multiple-rows="true">
+			<lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+				class="slds-p-around_x-small">
+				<lightning-input class="inputfield validateField" type="text" label={label.year} name="Year__c"
+					message-when-pattern-mismatch={label.enteravalidyear} pattern="^(19|20)\d{2}$" max-length="4"
+					placeholder={label.year} max={currentYear} value={towedYear} onchange={handleChange}
+					required></lightning-input>
+			</lightning-layout-item>
+			<lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+				class="slds-p-around_x-small">
+				<lightning-input class="inputfield validateField" type="text" label={label.make} name="Make__c"
+					placeholder={label.make} value={towedMake}
+					onchange={handleChange} required></lightning-input>
+			</lightning-layout-item>
+			<lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+				class="slds-p-around_x-small">
+				<lightning-input class="inputfield validateField" type="text" label={label.model} name="Model__c"
+					 placeholder={label.model} value={towedModel}
+					onchange={handleChange} required></lightning-input>
+			</lightning-layout-item>
+			<lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+				class="slds-p-around_x-small">
+				<lightning-input class="inputfield validateField" type="text" label={label.vinnumber} name="VIN_Number__c"
+					 placeholder={label.vinnumber} value={towedVinNumber}
+					onchange={handleChange} required></lightning-input>
+			</lightning-layout-item>
+			<lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+				class="slds-p-around_x-small">
+				<lightning-input class="inputfield validateField" type="text" label={label.licenseplate} name="Plate__c"
+					 placeholder={label.licenseplate} value={towedLicensePlate}
+					onchange={handleChange} required>
+				</lightning-input>
+			</lightning-layout-item>
+		</lightning-layout>
+	</template>
+
+
+	<!-- <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+			class="slds-p-around_x-small">
+
+			<lightning-combobox class="validateField"
+				label="Does this towed unit have a motor, is it drive-able, and does it also have a Foreign ( non-Mexican )registration?"
+				name="Street_Legal__c" value={StreetLegal} placeholder="" options={YesNoOptions} onchange={handleChange}
+				required>
+			</lightning-combobox>
+		</lightning-layout-item>
+
+	</lightning-layout> -->
+	<div class="slds-align_absolute-center slds-p-around_small slds-m-top_small">
+		<template if:true={isEdit}>
+			<button class="button slds-m-right_medium" onclick={cancelEditSection}>{label.cancel}</button>
+			<button class="button" onclick={updateTowed}>{label.updatedetail}</button>
+		</template>
+		<template if:false={isEdit}>
+			<button class="button slds-m-right_medium" onclick={cancelEditSection}>{label.cancel}</button>
+			<button class="button" onclick={addTowedUnit}>{label.add}</button>
+		</template>
+
+	</div>
+	<!-- <lightning-button class="button slds-m-left_small" label="Add new towed" title="Add new towed" onclick={addTowedUnit}>
+    </lightning-button> -->
+	</div>
+</template>

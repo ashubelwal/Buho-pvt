@@ -1,0 +1,28 @@
+.drawer {
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.45);
+    border-radius: 4px;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;    
+    width: 100%;
+    height: 100vh;
+}
+
+.driverDetails {
+	position: absolute;
+    z-index: 1000;
+	width: 720px;
+	background: #fff;
+    max-width: 100vw;
+    transition: all 0.3s;
+	top: 0;
+    right: 0px;
+    bottom: 0;
+    box-shadow: -6px 0 16px 0 rgba(0, 0, 0, 0.08), -3px 0 6px -4px rgba(0, 0, 0, 0.12), -9px 0 28px 8px rgba(0, 0, 0, 0.05);	
+	overflow: auto;
+	padding: 24px;
+}

@@ -1,0 +1,31 @@
+<template>
+    <template if:true={showLoginForm}>
+        <div class="login-container">
+            <lightning-spinner size="medium" alternative-text="Processing" lwc:if={isLoading}></lightning-spinner>
+            <h1>Login</h1>
+            <lightning-input label="Username" value={username} onchange={handleUsernameChange}></lightning-input>
+            <lightning-input label="Password" type="password" value={password}
+                onchange={handlePasswordChange}></lightning-input>
+            <lightning-button label="Login" onclick={handleLogin}></lightning-button>
+            <template if:true={errorMessage}>
+                <p class="error">{errorMessage}</p>
+            </template>
+        </div>
+    </template>
+
+    <template if:true={contact}>
+        <div class="contact-details">
+            <lightning-spinner size="medium" alternative-text="Processing" lwc:if={isLoading}></lightning-spinner>
+            <template if:true={contact.Name}>
+                <h1>Welcome, {contact.Name}</h1>
+            </template>
+            <template if:true={contact.Email}>
+                <p>Email: {contact.Email}</p>
+            </template>
+            <template if:true={contact.Phone}>
+                <p>Phone: {contact.Phone}</p>
+            </template>
+            <c-affiliate-dashboard record-id={contact.Id}></c-affiliate-dashboard>
+        </div>
+    </template>
+</template>

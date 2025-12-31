@@ -1,0 +1,291 @@
+<template>
+    <div class="notranslate">
+        <template if:true={spinner}>
+            <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+        </template>
+        <template if:false={spinner}>
+            <div class="pageTitle slds-m-bottom_medium">
+                <h2 class="slds-text-heading_medium">
+                    {label.Finalizevehicledetails}
+                </h2>
+            </div>
+            <!-- <div class="icon slds-p-around_small">
+                <lightning-icon class="slds-col slds-p-around_small slds-align_absolute-center slds-size_1-of-12"
+                    icon-name="custom:custom31">
+                </lightning-icon>
+            </div> -->
+
+            <lightning-layout multiple-rows="true">
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                    class="slds-p-around_x-small">
+                    <lightning-input class="inputfield Validation" type="text" name="Year__c" disabled="true"
+                        pattern="^([a-zA-Z0-9]+\s)*[a-zA-Z0-9]+$" label={label.Year} placeholder={label.Year}
+                        value={Year} required onchange={handleChange}></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                    class="slds-p-around_x-small">
+                    <lightning-input class="inputfield Validation" type="text" name="Make__c" disabled="true"
+                        pattern="^([a-zA-Z0-9]+\s)*[a-zA-Z0-9]+$" label={label.Make} placeholder={label.Make}
+                        value={Make} required onchange={handleChange}></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                    class="slds-p-around_x-small">
+                    <lightning-input class="inputfield Validation" type="text" name="Model__c" disabled="true"
+                        pattern="^([a-zA-Z0-9]+\s)*[a-zA-Z0-9]+$" label={label.Model} placeholder={label.Model}
+                        value={Model} required onchange={handleChange}>
+                    </lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                    class="slds-p-around_x-small">
+                    <lightning-input class="inputfield Validation" type="text" disabled={valueDisable} name="Value__c"
+                        pattern="^([0-9])*[0-9]+$" label={label.Vehiclevalue} placeholder={label.Vehiclevalue}
+                        value={VehicleValue} required onchange={handleChange}></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                    class="slds-p-around_x-small">
+                    <lightning-input class="inputfield Validation" type="text" name="Vin__c" label={label.VINNumber}
+                        pattern="^([a-zA-Z0-9])*[a-zA-Z0-9]+$" placeholder={label.VINNumber} value={VINNumber}
+                        onchange={handleChange} required>
+                    </lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                    class="slds-p-around_x-small">
+
+                    <lightning-combobox class="Validation" name="Registered_Country__cmbx"
+                        label={label.RegisteredCountry} value={comboBoxReisterCountry}
+                        placeholder={label.RegisteredCountry} options={countryoptions} onchange={handleChange} required>
+                    </lightning-combobox>
+                </lightning-layout-item>
+                <template if:true={otherstate}>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                        class="slds-p-around_x-small">
+
+                        <lightning-input class="inputfield Validation" type="text" name="Registered_Country__c"
+                            pattern="^([a-zA-Z]+\s)*[a-zA-Z]+$" label={label.RegisteredCountry}
+                            placeholder={label.RegisteredCountry} value={RegisteredCountry} required
+                            onchange={handleChange}></lightning-input>
+
+                    </lightning-layout-item>
+                </template>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                    class="slds-p-around_x-small">
+                    <template if:false={otherstate}>
+                        <lightning-combobox class="inputfield Validation" type="text" name="Registered_State__c"
+                            label={label.RegisteredStateProvince} placeholder={label.RegisteredStateProvince}
+                            value={RegisteredState} options={stateOption} required onchange={handleChange}>
+                        </lightning-combobox>
+                    </template>
+                    <template if:true={otherstate}>
+                        <lightning-input class="inputfield Validation" type="text" name="Registered_State__c"
+                            label={label.RegisteredStateProvince} placeholder={label.RegisteredStateProvince}
+                            pattern="^([a-zA-Z]+\s)*[a-zA-Z]+$" value={RegisteredState} required
+                            onchange={handleChange}></lightning-input>
+                    </template>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                    class="slds-p-around_x-small">
+
+                    <lightning-input class="inputfield Validation" type="text" name="Registered_Plate__c"
+                        pattern="^([a-zA-Z0-9\-\_]+\s)*[a-zA-Z0-9]+$" label={label.PlacasLicensePlate}
+                        placeholder={label.PlacasLicensePlate} value={LicensePlate} required onchange={handleChange}>
+                    </lightning-input>
+                </lightning-layout-item>
+            </lightning-layout>
+            <lightning-layout multiple-rows="true">
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                    class="slds-p-around_x-small">
+                    <lightning-combobox class="Validation" name="Is_the_vehicle_registered_to_a_business__c"
+                        label={label.Isthevehicleregisteredtoabusiness} value={vehicleRegistered} placeholder=""
+                        options={YesNooptions} onchange={handleChange} required> </lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                    class="slds-p-around_x-small">
+                    <lightning-combobox class="Validation" name="Is_Lienholder__c"
+                        label={label.Isvehicleleasedorfinanced} value={vehicleInfo} placeholder=""
+                        options={YesNooptions} onchange={handleChange} required>
+                    </lightning-combobox>
+                </lightning-layout-item>
+
+                <template if:true={reviewVehicle.Is_the_vehicle_registered_to_a_business__c}>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        class="slds-p-around_x-small">
+                        <lightning-combobox class="Validation" name="Is_Account_Company_Named__c"
+                            label={label.Isthisaccountcompanynamed} value={IsUserAddress} placeholder=""
+                            options={YesNooptions} onchange={handleChange} required>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+                </template>
+
+                <template if:true={showAdditionalAddressForm}>
+                    <div class="Addressdetail">
+                        <div
+                            class="slds-text-heading_small slds-p-left_small slds-p-top_x-large slds-m-bottom_small blue">
+                            {label.BusinessAddressInformation}</div>
+                        <lightning-layout multiple-rows="true">
+                            <!-- Country -->
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="4"
+                                large-device-size="4" class="slds-p-horizontal_x-small">
+                                <lightning-combobox class="Validation" label={label.Country} name="Country__combox"
+                                    value={comboBoxUserCountry} placeholder={label.Country} options={countryoptions}
+                                    onchange={handleChange} required></lightning-combobox>
+                            </lightning-layout-item>
+                            <template if:true={otherCoutryAdd}>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="4"
+                                    large-device-size="4" class="slds-p-horizontal_x-small">
+                                    <lightning-input class="Validation" label={label.Country} name="Country__c"
+                                        value={userCountry} placeholder={label.Country} onchange={handleChange}
+                                        required>
+                                    </lightning-input>
+                                </lightning-layout-item>
+                            </template>
+                            <!-- Postal Code -->
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="4"
+                                large-device-size="4" class="slds-p-horizontal_x-small">
+                                <template if:false={otherCoutryAdd}>
+                                    <c-custom-lookup isrequired=true objecttype="Address__c"
+                                        searchagainst="Postal_Code__c" placeholder={label.EnterPostalCode}
+                                        filter-value={comboBoxUserCountry} filter-api="Name" label={label.PostalCode}
+                                        value={postalCode} selectedname={postalCode} selectedid={postalCodeId}
+                                        onselection={handleSearch} postal-code-id={postalCodeId} state-id={stateId}
+                                        city-id={cityId} required></c-custom-lookup>
+                                </template>
+                                <template if:true={otherCoutryAdd}>
+                                    <lightning-input class="inputfield Validation" type="text" label={label.PostalCode}
+                                        value={userPostalCode} name="Postal_Code__c" placeholder={label.PostalCode}
+                                        pattern="^*([AaBbCcEeGgHhJjKkLlMmNnPpRrSsTtVvXxYy]\d[a-zA-Z])*-**(\d[a-zA-Z]\d)*$|^*(\d{5})*$|^*(\d{5})*-**(\d{4})*$"
+                                        onchange={handleChange} max-length="9" required>
+                                    </lightning-input>
+                                </template>
+                            </lightning-layout-item>
+                            <!-- State -->
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="4"
+                                large-device-size="4" class="slds-p-horizontal_x-small">
+                                <template if:false={otherCoutryAdd}>
+                                    <c-custom-lookup isrequired=true objecttype="Address__c" searchagainst="State__c"
+                                        placeholder={label.EnterState} filter-value={comboBoxUserCountry}
+                                        filter-api="Name" label={label.States} secondaryfield="Postal_Code__c"
+                                        selectedname={state} selectedid={stateId} value={state}
+                                        onselection={handleSearch} postal-code-id={postalCodeId} state-id={stateId}
+                                        city-id={cityId} required></c-custom-lookup>
+                                </template>
+
+                                <template if:true={otherCoutryAdd}>
+                                    <lightning-input class="inputfield Validation" type="text" label={label.State}
+                                        value={userStateProvince} name="State_Province__c" placeholder={label.State}
+                                        onchange={handleChange} required>
+                                    </lightning-input>
+                                </template>
+                            </lightning-layout-item>
+                            <!-- City -->
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="4"
+                                large-device-size="4" class="slds-p-horizontal_x-small">
+                                <template if:false={otherCoutryAdd}>
+                                    <c-custom-lookup isrequired=true objecttype="Address__c" searchagainst="City__c"
+                                        placeholder={label.EnterCity} filter-value={comboBoxUserCountry}
+                                        filter-api="Name" label={label.City} secondaryfield="Postal_Code__c"
+                                        selectedname={city} selectedid={cityId} value={city} onselection={handleSearch}
+                                        postal-code-id={postalCodeId} state-id={stateId} city-id={cityId} required>
+                                    </c-custom-lookup>
+                                </template>
+                                <template if:true={otherCoutryAdd}>
+                                    <lightning-input class="inputfield Validation" type="text" label={label.City}
+                                        value={userCity} name="City__c" placeholder={label.City} onchange={handleChange}
+                                        required>
+                                    </lightning-input>
+                                </template>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="4"
+                                large-device-size="4" class="slds-p-horizontal_x-small">
+                                <lightning-input class="inputfield Validation" type="text" name="Address__c"
+                                    label={label.Address} value={userAddress} placeholder={label.Address}
+                                    onchange={handleChange} pattern="^\S+(?: \S+)*$" required>
+                                </lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="4"
+                                large-device-size="4" class="slds-p-horizontal_x-small">
+                                <lightning-input class="inputfield Validation" type="text" label={label.AddressLine2}
+                                    value={userAddressLine2} name="Address_Line_2__c" placeholder={label.AddressLine2}
+                                    pattern="^\S+(?: \S+)*$" onchange={handleChange}>
+                                </lightning-input>
+                            </lightning-layout-item>
+
+                            <!--
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="4"
+                                large-device-size="4" class="slds-p-horizontal_x-small">
+                                <lightning-input class="inputfield Validation" type="text" name="Address__c"
+                                    label="Address" value={userAddress} placeholder="Address" onchange={handleChange}
+                                    pattern="^\S+(?: \S+)*$" required>
+                                </lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="4"
+                                large-device-size="4" class="slds-p-horizontal_x-small">
+                                <lightning-input class="inputfield Validation" type="text" label="Address(Line2)"
+                                    value={userAddressLine2} name="Address_Line_2__c" placeholder="Address(Line2)"
+                                    pattern="^\S+(?: \S+)*$" onchange={handleChange}>
+                                </lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="4"
+                                large-device-size="4" class="slds-p-horizontal_x-small">
+                                <lightning-input class="inputfield Validation" type="text" label="City" value={userCity}
+                                    name="City__c" placeholder="City" onchange={handleChange} required>
+                                </lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="4"
+                                large-device-size="4" class="slds-p-horizontal_x-small">
+                                <lightning-combobox class="Validation" label="Country" name="Country__combox"
+                                    value={comboBoxUserCountry} placeholder="Country" options={countryoptions}
+                                    onchange={handleChange} required></lightning-combobox>
+                            </lightning-layout-item>
+                            <template if:true={otherCoutryAdd}>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="4"
+                                    large-device-size="4" class="slds-p-horizontal_x-small">
+                                    <lightning-input class="Validation" label="Country" name="Country__c"
+                                        value={userCountry} placeholder="Country" onchange={handleChange} required>
+                                    </lightning-input>
+                                </lightning-layout-item>
+                            </template>
+
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="4"
+                                large-device-size="4" class="slds-p-horizontal_x-small">
+                                <lightning-input class="inputfield Validation" type="text" label="Postal Code"
+                                    value={userPostalCode} name="Postal_Code__c" placeholder="Postal Code"
+                                    pattern="^*([AaBbCcEeGgHhJjKkLlMmNnPpRrSsTtVvXxYy]\d[a-zA-Z])*-**(\d[a-zA-Z]\d)*$|^*(\d{5})*$|^*(\d{5})*-**(\d{4})*$"
+                                    onchange={handleChange} max-length="9" required>
+                                </lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="4"
+                                large-device-size="4" class="slds-p-horizontal_x-small">
+                                <template if:false={otherCoutryAdd}>
+                                    <lightning-combobox class="inputfield Validation" type="text" label="State"
+                                        value={userStateProvince} name="State_Province__c" placeholder="State/province"
+                                        options={userStateOption} onchange={handleChange} required>
+                                    </lightning-combobox>
+                                </template>
+
+                                <template if:true={otherCoutryAdd}>
+                                    <lightning-input class="inputfield Validation" type="text" label="State"
+                                        value={userStateProvince} name="State_Province__c" placeholder="State/province"
+                                        onchange={handleChange} required>
+                                    </lightning-input>
+                                </template>
+                            </lightning-layout-item>
+                            -->
+                        </lightning-layout>
+                    </div>
+                </template>
+            </lightning-layout>
+
+            <div class="slds-p-around--x-small">
+                <div class="">
+                    <button class="buttonPrev btnHover" onclick={handlePrevClick}><span class="icon-prev"><i
+                                class="icon-prevs"></i></span>{label.Prev}</button>
+                </div>
+                <div class="">
+                    <button class="buttonNext btnHover" onclick={handleNextClick}><span class="icon-next"><i
+                                class="icon-nexts"></i></span>{label.Next}</button>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

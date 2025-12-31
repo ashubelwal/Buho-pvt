@@ -1,0 +1,101 @@
+<aura:component controller="QuickQuotationCtrl" implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="title" type="String" access="public"/>
+    <aura:attribute name="backButtonVisibility" type="Boolean" default="false" access="public" />
+    <aura:attribute name="policyType" type="String" access="public"/>
+    <aura:attribute name="vehicleTypeOptions" type="List" />
+    <aura:attribute name="stateOptions" type="List" />
+    <aura:attribute name="countryOption" type="List" />
+    <aura:attribute name="showStatePick" type="Boolean" default="false" access="public" />
+    <aura:attribute name="disableCountry" type="Boolean" default="false" />
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    <aura:attribute name="onNextClick" type="Aura.Action"/>
+    <aura:attribute name="quoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" access="public" />
+    <aura:attribute name="leadRecord" type="Lead" default="{ 'sobjectType': 'Lead'}" access="public" />
+    <aura:attribute name="vehicleRecord" type="Vehicle__c" default="{ 'sobjectType': 'Vehicle__c'}" access="public" />
+    
+    <aura:attribute name="communityUser" type="Boolean" access="public" default="false" />
+
+    <aura:attribute name="policyCountry" type="String" access="public"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="editPolicy" type="Boolean" default="false" />
+    <aura:attribute name="renewPolicy" type="Boolean" default="false" />
+    <aura:attribute name="iscloneConditionPass" type="Boolean" />
+    <aura:attribute name="clonedvehicleRecord" type="Vehicle__c" />
+    <aura:attribute name="vehicleValueChange" type="Boolean" />
+    <aura:attribute name="yesNoOptions" type="list" access="private"/>
+
+
+    <aura:if isTrue="{!v.editPolicy}">
+        <c:Policy_Edit_Steps step="step2" completedStep="2"/>
+        <aura:set attribute="else">
+            <c:Insurance_Flow_Steps step="step2" completedStep="2"/>
+        </aura:set>
+    </aura:if> 
+    <lightning:layoutItem padding="around-small" size="12" class="align-center slds-m-top_xx-large">                    
+        <div class="page-title">
+            <button class="button -plain -back-button" name="step_6" onclick="{!v.onBackClick }">
+                <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/> Back
+            </button>
+            <h1>{!v.title}</h1>
+            <aura:if isTrue="{!v.policyType == 'Automobile'}">
+                <img class="slds-m-bottom_large" src="{!$Resource.mexinsurance_assets + '/images/icon-car.svg'}" alt="Vehicle"/>
+            </aura:if>
+            <aura:if isTrue="{!v.policyType == 'RV'}">
+                <img class="slds-m-bottom_large" src="{!$Resource.mexinsurance_assets + '/images/icon-rv.svg'}" alt="Vehicle"/>
+            </aura:if>
+            <aura:if isTrue="{!v.policyType == 'Motorcycle/Street Legal ATV'}">
+                <img class="slds-m-bottom_large" src="{!$Resource.mexinsurance_assets + '/images/icon-motorcycle.svg'}" alt="Vehicle"/>
+            </aura:if>
+        </div>
+    </lightning:layoutItem>
+    
+    <div class="slds-size_12-of-12">
+        <div class="form-container"> 
+            <lightning:input type="text" aura:id="validateField" required="true" variant = "label-hidden" name="Year__c" placeholder="Year" value="{!v.vehicleRecord.Year__c}" onchange="{!c.updateValue}" disabled="{!v.editPolicy}"  
+                             pattern="^(19|20)\d{2}$" maxlength="4"  messageWhenPatternMismatch ="Enter a valid year"
+                             />
+            <lightning:input type="text" aura:id="validateField" required="true" variant = "label-hidden" name="Make__c" placeholder="Make" value="{!v.vehicleRecord.Make__c}" onchange="{!c.updateValue}" disabled="{!v.editPolicy}"/>
+            <lightning:input type="text" aura:id="validateField" required="true" variant = "label-hidden" name="Model__c" placeholder="Model" value="{!v.vehicleRecord.Model__c}" onchange="{!c.updateValue}" disabled="{!v.editPolicy}"/>
+            <lightning:input type="number" aura:id="validateField" required="true" variant = "label-hidden" name="Value__c" formatter="currency" step="0.01" placeholder="Vehicle Value" value="{!v.vehicleRecord.Value__c}" onchange="{!c.updateValue}" disabled="{!v.editPolicy}" />
+            <lightning:input type="text" aura:id="validateField" required="true" variant = "label-hidden" name="Vin__c" placeholder="VIN Number" value="{!v.vehicleRecord.Vin__c}" onchange="{!c.updateValue}" pattern="[A-Z0-9]+" messageWhenPatternMismatch="Whitespace &#38; Special Characters (@, $, %, etc...) aren't allowed" />
+
+            <!--aura:if isTrue="{!v.policyType != 'RV'}">
+                <lightning:combobox name="Vehicle_Type__c" placeholder="Vehicle type" value="{!v.vehicleRecord.Vehicle_Type__c}" options="{! v.vehicleTypeOptions }" onchange="{!c.updateValue}"/>
+            </aura:if-->
+            
+            <!--aura:if isTrue="{!v.policyType == 'Northbound'}">
+                <lightning:input type="text" aura:Id="validateField" name="Registered_Country__c" placeholder="Registered Country" value="{!v.vehicleRecord.Registered_Country__c}" maxlength="20" onchange="{!c.updateValue}" disabled="{!v.disableCountry}"/>
+                <aura:set attribute="else" -->
+                    <lightning:combobox name="Registered_Country__c" aura:Id="validateField" required="true" label="Registered Country" placeholder="Registered Country" value="{!v.policyCountry}" options="{! v.countryOption }" onchange="{!c.onCountryChange}" />
+                <!--/aura:set>
+            </aura:if -->
+
+            <!-- {! and(v.policyType != 'Northbound', v.policyCountry == 'Other' )} -->
+            <aura:if isTrue="{! and(v.policyCountry == 'Other' )}">
+                <lightning:input type="text" aura:Id="validateField" required="true"  label="Registered Country" name="Registered_Country__c" placeholder="Registered Country" value="{!v.vehicleRecord.Registered_Country__c}" maxlength="20" onchange="{!c.updateValue}" />
+            </aura:if>
+            <aura:if isTrue="{!v.showStatePick}">
+                <lightning:combobox name="Registered_State__c" aura:Id="validateField" required="true" label="Registered State/Province" placeholder="Registered State/Province" value="{!v.vehicleRecord.Registered_State__c}" options="{! v.stateOptions }" onchange="{!c.updateValue}" />
+                <aura:set attribute="else">
+                    <lightning:input type="text" required="true" aura:Id="validateField" label="Registered State/Province" name="Registered_State__c" placeholder="Registered State/Province" value="{!v.vehicleRecord.Registered_State__c}" maxlength="20" onchange="{!c.updateValue}"/>
+                </aura:set>
+            </aura:if>
+            <lightning:input type="text" required="true" aura:Id="validateField" name="Registered_Plate__c"  label ='Placas - License Plate' placeholder="Placas - License Plate" value="{!v.vehicleRecord.Registered_Plate__c}" maxlength="20" onchange="{!c.updateValue}" />
+            
+            <div class="check-group">
+                <!--lightning:input type="checkbox" name="Is_the_vehicle_registered_to_a_business__c" label="Is the vehicle registered to a business?" checked="{!v.vehicleRecord.Is_the_vehicle_registered_to_a_business__c}" onchange="{!c.updateValue}" /-->
+
+                <lightning:combobox name="Is_the_vehicle_registered_to_a_business__c" aura:id="validateField" required="true" label="Is the vehicle registered to a business?" value="{!if(v.vehicleRecord.Is_the_vehicle_registered_to_a_business__c, 'Yes', 'No')}" options="{!v.yesNoOptions }"  onchange="{!c.updateValue}"/>
+            </div>
+
+            <div class="radio-group">
+                <!--lightning:input type="checkbox" name="Is_Lienholder__c" label="Is vehicle leased or financed?" checked="{!v.vehicleRecord.Is_Lienholder__c}" onchange="{!c.updateValue}"  /-->
+                <lightning:combobox name="Is_Lienholder__c" aura:id="validateField" required="true" label="Is vehicle leased or financed?" value="{!if(v.vehicleRecord.Is_Lienholder__c, 'Yes', 'No')}" options="{!v.yesNoOptions }"  onchange="{!c.updateValue}"/>
+            </div>
+        </div>
+    </div>
+    
+    <lightning:layoutItem size="12" class="slds-align_absolute-center slds-m-top_xx-large">
+        <button class="button -secondary -wider" name="step_6" onclick="{! c.onNextClick }">Next</button>
+    </lightning:layoutItem>
+</aura:component>

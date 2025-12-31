@@ -1,0 +1,458 @@
+<aura:component controller="WatercraftFlowController" implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="title" type="String" access="public"/>
+    <aura:attribute name="communityUser" type="Boolean" access="public" default="false"/>
+    <aura:attribute name="backButtonVisibility" type="Boolean" default="false" access="public" />
+    <aura:attribute name="saveQuotePop" type="Boolean" default="false" />
+    <aura:attribute name="purchaseQuotePop" type="Boolean" default="false" />
+
+    <aura:attribute name="policyType" type="String" access="public"/>
+    <aura:attribute name="rateValue" type="decimal" />
+    <aura:attribute name="rateRecord" type="Rate_Table__c" default="{ 'sobjectType': 'Rate_Table__c'}" access="public" />
+    <aura:attribute name="lowLiability" type="String" default="200,000" />
+    <aura:attribute name="highLiability" type="String" default="750,000" />
+    <aura:attribute name="minStartDate" type="Date" />
+    <aura:attribute name="firstName" type="String"  />
+    <aura:attribute name="lastName" type="String"  />
+    <aura:attribute name="emailAdder" type="String"/>
+    <aura:attribute name="phoneNumber" type="String"/>
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    <aura:attribute name="onNextClick" type="Aura.Action"/>
+    <aura:attribute name="normalView" type="boolean" default="true" />
+    <aura:attribute name="highlightView" type="boolean" default="false" />
+    <aura:attribute name="coverageDetail" type="object"/>
+    <aura:attribute name="quoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" access="public"/>
+    <aura:attribute name="leadRecord" type="Lead" default="{ 'sobjectType': 'Lead'}" access="public"/>
+    <aura:attribute name="difference_In_Days" type="Integer" />
+    <aura:attribute name="difference_In_Daysin30" type="Boolean" default="true"  />
+    <aura:attribute name="annualTerm" type="Boolean" access="public" />
+    <aura:attribute name="termType" type="String" access="public" />
+    <aura:attribute name="renewPolicy" type="Boolean" default="false" />
+    <aura:attribute name="days" type="Integer" />
+    
+    <aura:attribute name="additional_quoteRecord" type="object" />
+    <aura:attribute name="primaryquoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" access="public"/>
+    <aura:attribute name="towedpolicyType" type="String" access="public"/>
+    <aura:attribute name="additional_towunit" type="object" />
+    <aura:attribute name="QuoteSave" type="Boolean" default="false" />
+    
+    <aura:attribute name="Final_total_Premium" type="Decimal" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <c:Insurance_Flow_Steps step="step1"/>
+    <lightning:layoutItem padding="around-small" size="12" class="align-center slds-m-top_xx-large">
+        <div class="page-title">
+            <button class="button -plain -back-button" name="step_5" onclick="{! v.onBackClick }">
+                <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/> Back
+            </button>
+            <h1>{!v.title}</h1>
+            <aura:if isTrue="{!!empty(v.termType)}">
+                <b>Your quote for {!v.days} days was more expensive at the daily rate than this full-term annual policy quote below.  Your term has been adjusted automatically to save you money.</b>
+            </aura:if>
+        </div>
+    </lightning:layoutItem>
+
+    <lightning:layoutItem size="12">
+
+        <section class="quick-quote">
+            <div class="quotes-normal-view">
+                <aura:if isTrue="{!v.normalView}" >
+                    <div class="align-center _mg-b-sm">
+                        <button class="button -secondary" id="show-quote-highlights" onclick="{!c.highlightView}">Compare</button>
+                    </div>
+
+                    <div class="quote-box -recommended">
+                        <div class="quote-provider">
+                            <img src="{!$Resource.mexJs  + '/mexJs/images/chubb.png'}" alt="Chubb" />
+                            <div class="recommended-label">Recommended</div>
+                        </div>
+                        <div class="quote-pricing"><lightning:formattedNumber value="{!v.rateValue}" style="currency" currencyCode="USD"/></div>
+
+                        <div class="quote-body">
+
+                            <div class="unit">
+                                <h6 class="red">Watercraft</h6>
+                                <div class="grid -spacing-sm">
+                                    <div class="grid_1-2">
+                                        <div class="datepicker">
+                                            <lightning:input aura:Id="validateField" type="date" name="Start_Date_for_Coverage__c" variant="label-hidden" value="{!v.quoteRecord.Start_Date_for_Coverage__c}" onchange="{!c.fetchRateDate}" min="{!v.minStartDate}"/>
+                                        </div>
+                                    </div>
+                                    <div class="grid_1-2">
+                                        <div class="datepicker">
+                                            <lightning:input aura:Id="validateField" type="date" name="End_Date_for_Coverage__c" variant="label-hidden" value="{!v.quoteRecord.End_Date_for_Coverage__c}" onchange="{!c.fetchRateDate}" min="{!v.quoteRecord.Start_Date_for_Coverage__c}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="adjustable-fields">
+                                    <div class="adjustable-field">
+                                        <span class="field-label">
+                                            <i class="icon-info"></i> 
+                                            Days
+                                        </span>
+                                        <span class="field-item">
+                                            <lightning:input variant="label-hidden" type="number" class="full-width-field" disabled="true" value="{!v.difference_In_Days}" varient="label-hidden" />
+                                        </span>
+                                    </div>
+                                    <div class="adjustable-field">
+                                        <span class="field-label">
+                                            <i class="icon-info" title="The combination of max limits below. Liability is required by the dockmasters in Mexico."></i> Total Third Party Liability
+                                        </span>
+                                        <span class="field-item">
+                                            <button class="field-plus" name="{!v.highLiability}" onclick="{!c.highLiability}"></button>
+                                            <input type="text" value="{!'$'+v.quoteRecord.Liability__c}"/>
+                                            <button class="field-minus" name="{!v.lowLiability}" onclick="{!c.lowLiability}" ></button>
+                                        </span>
+                                    </div>
+                                    <div class="adjustable-field">
+                                        <span class="field-label">
+                                            <i class="icon-info" title="The amount of liability coverage to third party person. Think medical damages."></i> Third Party Bodily Injury
+                                        </span>
+                                        <span class="field-item">
+                                            <lightning:input variant="label-hidden" type="text" class="full-width-field" name="Third_Party_Bodily_Injury__c" value="{!v.quoteRecord.Third_Party_Bodily_Injury__c}" varient="label-hidden" disabled="true"/>
+                                        </span>
+                                    </div>
+                                    <div class="adjustable-field">
+                                        <span class="field-label">
+                                            <i class="icon-info" title="The amount of damage to third party property, ie: a dock, another boat, etc."></i> Third Party Property Damage
+                                        </span>
+                                        <span class="field-item">
+                                            <lightning:input variant="label-hidden" type="text" class="full-width-field" name="Property_Damage_Liability__c" value="{!v.quoteRecord.Property_Damage_Liability__c}" varient="label-hidden" disabled="true"/>
+                                        </span>
+                                    </div>
+                                </div><!-- end adjustable-fields -->
+                                <div class="checkbox-field">
+                                    <lightning:input type="checkbox" name="Coverage__c" label="Liability Only" checked="true" onchange="{!c.updateQuoteField}" disabled="true"/>
+                                </div>
+                            </div><!-- end unit -->
+                            
+                            
+                            <div class="quote-button">
+                                <button class="button -ternary -wider" name="step_5" onclick="{!c.onNextClick}">Purchase</button>
+                            </div>
+                            
+                            <div class="quote-terms">
+                                <a href="{!$Label.c.Terms_and_Conditions_Watercraft}" class="simple-link" target="_blank">Full terms <i class="icon-new-tab"></i></a>
+                            </div>
+                        </div>
+                    </div><!-- end quote-box -->
+                </aura:if>
+
+            </div><!-- end #quotes-normal-view -->
+
+            <div class="quotes-highlights-view">
+                <aura:if isTrue="{!v.highlightView}">
+                    <div class="align-center _mg-b-sm">
+                        <button class="button -secondary" id="show-normal-view" onclick="{!c.normalView}">Quote Detail</button>
+                    </div>
+                    <div class="quote-box -recommended">
+                        <div class="quote-provider">
+                            <img src="{!$Resource.mexJs  + '/mexJs/images/chubb.png'}" alt="Chubb" />
+                            <div class="recommended-label">Recommended</div>
+                        </div>
+                        <div class="quote-pricing"><lightning:formattedNumber value="{!v.rateValue}" style="currency" currencyCode="USD"/></div>
+
+                        <div class="quote-body">
+                            <div class="quote-highlight">
+                                <aura:if isTrue="{!v.coverageDetail.Deductibles__c == 'Yes'}">
+                                    <div class="highlight-title">
+                                        Deductibles
+                                        <aura:if isTrue="{!v.coverageDetail.Deductibles__c == 'Yes'}">
+                                            <i class="icon-"></i>
+                                            <aura:set attribute="else">
+                                                <i class="icon-cross"></i>
+                                            </aura:set>
+                                        </aura:if>
+                                    </div>
+                                </aura:if>
+                                <aura:if isTrue="{!v.policyType == 'Northbound'}">
+                                    <div class="highlight-details-list">
+                                        <div class="clearfix">
+                                            <div class="highlight-list-item">
+                                                Third Party Liability Damage
+                                            </div>
+                                            <div class="highlight-list-desc">
+                                                <aura:if isTrue="{!not(empty(v.coverageDetail.Deductible_Damage__c))}">
+                                                    ${!v.coverageDetail.Deductible_Damage__c}
+                                                    <aura:set attribute="else">
+                                                        $0
+                                                    </aura:set>
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </aura:if>
+
+
+                                <div class="highlight-list-desc">
+                                    <aura:if isTrue="{!!empty(v.coverageDetail.Collision_Deductible__c)}">
+                                        <div class="highlight-title" style="padding-left: 15px">
+                                            Collision Deductible
+                                            <aura:if isTrue="{!empty(v.coverageDetail.Collision_Deductible__c)}">
+                                                <span style="position: absolute;right: 0;">N/A</span>
+                                                <aura:set attribute="else">
+                                                    <div class="slds-text-align_right">
+                                                        {!v.coverageDetail.Collision_Deductible__c}
+                                                    </div>
+                                                </aura:set>
+                                            </aura:if>
+                                        </div>
+                                    </aura:if>
+
+                                    <aura:if isTrue="{!!empty(v.coverageDetail.Deductible_Total_Theft__c)}">
+                                        <div class="highlight-title" style="padding-left: 15px">
+                                            Total Theft Deductible
+                                            <aura:if isTrue="{!empty(v.coverageDetail.Deductible_Total_Theft__c)}">
+                                                <span style="position: absolute;right: 0;">N/A</span>
+                                                <aura:set attribute="else">
+                                                    <div class="slds-text-align_right">
+                                                        {!v.coverageDetail.Deductible_Total_Theft__c}
+                                                    </div>
+                                                </aura:set>
+                                            </aura:if>
+                                        </div>
+                                    </aura:if>
+
+                                    <aura:if isTrue="{!v.coverageDetail.Uninsured_Motorist_Deductible_Waiver__c == 'Yes'}">
+                                        <div class="highlight-title" style="padding-left: 15px">
+                                            Uninsured/Underinsured Motorist Deductible Waiver
+                                            <aura:if isTrue="{!v.coverageDetail.Uninsured_Motorist_Deductible_Waiver__c == 'Yes'}">
+                                                <i class="icon-checkmark"></i>
+                                                <aura:set attribute="else">
+                                                    <i class="icon-cross"></i>
+                                                </aura:set>
+                                            </aura:if>
+                                        </div>
+                                    </aura:if>
+                                </div>
+                            </div>
+
+                            <aura:if isTrue="{!!empty(v.coverageDetail.Labor_Rates__c)}">
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        Labor Rates
+                                        <aura:if isTrue="{!empty(v.coverageDetail.Labor_Rates__c)}">
+                                            <span style="position: absolute;right: 0;">N/A</span>
+                                            <aura:set attribute="else">
+                                                <div class="slds-text-align_right">
+                                                    {!v.coverageDetail.Labor_Rates__c}
+                                                </div>
+                                            </aura:set>
+                                        </aura:if>
+                                    </div>
+                                </div>
+                            </aura:if>
+
+                            <aura:if isTrue="{!v.coverageDetail.Glass_Breakage__c == 'Yes'}">
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        Glass Breakage
+                                        <aura:if isTrue="{!v.coverageDetail.Glass_Breakage__c == 'Yes'}">
+                                            <i class="icon-checkmark"></i>
+                                            <aura:set attribute="else">
+                                                <i class="icon-cross"></i>
+                                            </aura:set>
+                                        </aura:if>
+                                    </div>
+                                </div>
+                            </aura:if>
+
+                            <aura:if isTrue="{!v.coverageDetail.Roadside_Assistance__c == 'Yes'}">
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        Roadside assistance
+                                        <aura:if isTrue="{!v.coverageDetail.Roadside_Assistance__c == 'Yes'}">
+                                            <i class="icon-checkmark"></i>
+                                            <aura:set attribute="else">
+                                                <i class="icon-cross"></i>
+                                            </aura:set>
+                                        </aura:if>
+                                    </div>
+                                    <aura:if isTrue="{!not(empty(v.coverageDetail.Roadside_Details__c))}">
+                                        <div class="slds-text-align_right">
+                                            {!v.coverageDetail.Roadside_Details__c}
+                                        </div>
+                                    </aura:if>
+                                </div>
+                            </aura:if>
+
+                            <aura:if isTrue="{!v.coverageDetail.Towing__c == 'Yes'}">
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        Towing
+                                        <aura:if isTrue="{!v.coverageDetail.Towing__c == 'Yes'}">
+                                            <i class="icon-checkmark"></i>
+                                            <aura:set attribute="else">
+                                                <i class="icon-cross"></i>
+                                            </aura:set>
+                                        </aura:if>
+                                    </div>
+                                    <aura:if isTrue="{!not(empty(v.coverageDetail.Towing_Details__c))}">
+                                        <div class="slds-text-align_right">
+                                            {!v.coverageDetail.Towing_Details__c}
+                                        </div>
+                                    </aura:if>
+                                </div>
+                            </aura:if>
+
+                            <aura:if isTrue="{!v.coverageDetail.Rental_Car__c == 'Yes'}">
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        Rental Car
+                                        <aura:if isTrue="{!v.coverageDetail.Rental_Car__c == 'Yes'}">
+                                            <i class="icon-checkmark"></i>
+                                            <aura:set attribute="else">
+                                                <i class="icon-cross"></i>
+                                            </aura:set>
+                                        </aura:if>
+                                    </div>
+                                </div>
+                            </aura:if>
+
+                            <div class="quote-highlight">
+                                <div class="highlight-title">
+                                    Legal Defense and Bail
+                                    <aura:if isTrue="{!v.coverageDetail.Legal_Defense_and_Bail__c == 'Yes'}">
+                                        <i class="icon-checkmark"></i>
+                                        <aura:set attribute="else">
+                                            <i class="icon-cross"></i>
+                                        </aura:set>
+                                    </aura:if>
+                                </div>
+                                <aura:if isTrue="{!not(empty(v.coverageDetail.Legal_Defense_and_Bail_Details__c))}">
+                                    <div class="slds-text-align_right">
+                                        {!v.coverageDetail.Legal_Defense_and_Bail_Details__c}
+                                    </div>
+                                </aura:if>
+                            </div>
+
+                            <aura:if isTrue="{!v.coverageDetail.Vandalism__c == 'Yes'}">
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        Vandalism
+                                        <aura:if isTrue="{!v.coverageDetail.Vandalism__c == 'Yes'}">
+                                            <i class="icon-checkmark"></i>
+                                            <aura:set attribute="else">
+                                                <i class="icon-cross"></i>
+                                            </aura:set>
+                                        </aura:if>
+                                    </div>
+                                </div>
+                            </aura:if>
+
+                            <aura:if isTrue="{!v.coverageDetail.Partial_Theft__c == 'Yes'}">
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        Partial Theft
+                                        <aura:if isTrue="{!v.coverageDetail.Partial_Theft__c == 'Yes'}">
+                                            <i class="icon-checkmark"></i>
+                                            <aura:set attribute="else">
+                                                <i class="icon-cross"></i>
+                                            </aura:set>
+                                        </aura:if>
+                                    </div>
+                                </div>
+                            </aura:if>
+
+                            <aura:if isTrue="{!v.coverageDetail.Plane_Tickets_Home__c == 'Yes'}">
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        Plane Tickets Home
+                                        <aura:if isTrue="{!v.coverageDetail.Plane_Tickets_Home__c == 'Yes'}">
+                                            <i class="icon-checkmark"></i>
+                                            <aura:set attribute="else">
+                                                <i class="icon-cross"></i>
+                                            </aura:set>
+                                        </aura:if>
+                                    </div>
+                                </div>
+                            </aura:if>
+
+                            <aura:if isTrue="{!!empty(v.coverageDetail.Bonus_Coverage__c)}">
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        Bonus Coverage
+                                        <aura:if isTrue="{!empty(v.coverageDetail.Bonus_Coverage__c)}">
+                                            <span style="position: absolute;right: 0;">N/A</span>
+                                            <aura:set attribute="else">
+                                                <div class="slds-text-align_right">
+                                                    {!v.coverageDetail.Bonus_Coverage__c}
+                                                </div>
+                                            </aura:set>
+                                        </aura:if>
+                                    </div>
+                                </div>
+                            </aura:if>
+                        </div>
+                        
+                        <div class="quote-button">
+                            <button class="button -ternary -wider" name="step_5" onclick="{!c.onNextClick}">Purchase</button>
+                        </div>
+
+                        <div class="quote-terms">
+                            <a href="{!$Label.c.Terms_and_Conditions_Watercraft}" class="simple-link" target="_blank">Full terms <i class="icon-new-tab"></i></a>
+                        </div>
+                    </div>
+                </aura:if>
+
+            </div><!-- end #quotes-highlights-view -->
+            <!--div class="align-center _mg-t-sm _mg-b-xs">
+                            <a href="javascript:void(0)" class="simple-link">Email me the quotes</a>
+                        </div -->
+            <aura:if isTrue="{!!v.renewPolicy}">
+                <div class="align-center _mg-t-sm _mg-b-xs">
+                    <!-- <a href="javascript:void(0)"  class="simple-link" onclick="{!c.openSaveQuoteModal}">Save quote</a> -->
+                    <button label="My Button" class="simple-link slds-button" disabled = "{!v.QuoteSave}" onclick="{!c.openSaveQuoteModal}">Save quote</button>
+                </div>
+            </aura:if>
+        </section>
+
+        <aura:if isTrue="{!v.saveQuotePop}">
+            <!-- Modal/Popup Box starts here-->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- Modal/Popup Box Header Starts here-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeSaveQuoteModal }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Save Quote</h2>
+                    </header>
+                    <!--Modal/Popup Box Body Starts here-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <div class="slds-size_12-of-12">
+                            <div class="form-container">
+                                <lightning:input aura:Id="validateField" type="text" name="firstName" 
+                                    placeholder="First Name" value="{!v.leadRecord.Firstname}" 
+                                    variant="label-hidden" required="true" />
+                                <lightning:input aura:Id="validateField" type="text" name="lastName" 
+                                    placeholder="Last Name" value="{!v.leadRecord.Lastname}" required="true" 
+                                    variant="label-hidden" class="slds-m-top_small"/>
+
+                                <lightning:input aura:Id="validateField" type="Email" name="Email"
+                                                 placeholder="Email" value="{!v.Leadrecord.Email}" required="true"
+                                                 variant="label-hidden" class="slds-m-top_small"/>
+                                <lightning:input aura:Id="validateField" type="tel" name="Phone"
+                                                 placeholder="Phone" value="{!v.leadRecord.Phone}"
+                                                 onchange="{!c.updatePhoneValue}"
+                                                 pattern="^\(\d{3}\)\s\d{3}-\d{4}$"
+                                                 messageWhenPatternMismatch="Not a valid phone number"
+                                                 variant="label-hidden" class="slds-m-top_small"/>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Modal/Popup Box Footer Starts here-->
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral" label="Cancel" title="Cancel"
+                                          onclick="{! c.closeSaveQuoteModal }"/>
+                        <lightning:button variant="brand" label="Save Quote" title="Save Quote"
+                                          onclick="{!c.saveQuote}"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+
+    </lightning:layoutItem>
+</aura:component>

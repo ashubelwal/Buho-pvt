@@ -1,0 +1,104 @@
+<template>
+    <div class="userDetails">
+        <div class="pageTitle slds-m-bottom_medium">
+            <h2 class="slds-text-heading_medium">
+                User Details
+            </h2>
+        </div>
+
+        <!-- Email  -->
+        <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_small">
+            <div class="slds-size_1-of-1 slds-medium-size_5-of-12 slds-large-size_5-of-12 slds-p-around_small">
+                <lightning-input type="email" name="Email" label="Email" class="input Email"
+                    placeholder="Enter your email" onchange={handleInputChange} onblur={handleEmailInput} required>
+                </lightning-input>
+                <template if:false={flag.isCustomer}>
+                    <template if:false={flag.customerWithPortelAccess}>
+                        <div class="i-helptext slds-p-left_x-small slds-text-body_small">We will send the policy document to
+                        this email.</div>
+                    </template>
+                </template>                
+                <template if:true={flag.isCustomer}>
+                    <template if:false = {flag.customerWithPortelAccess}>
+                        <p style="font-size: 15px;">Your account already exists. Please proceed with <a
+                            href="/login">Login</a></p>
+                    </template>
+                    <template if:true = {flag.customerWithPortelAccess}>
+                        <div style="display: flex; flex-direction: column; align-items: left; text-align: left;">
+                            <p style="font-size: 20px;"> 
+                                Click on the "Continue with Create Account" button to receive the Welcome email, then proceed to login
+                            </p>
+                            <lightning-button 
+                                style="margin: 20px;" 
+                                label="Continue With Create Account" 
+                                variant="brand" 
+                                onclick={handleConfirmPortelAccess}>
+                            </lightning-button>
+                        </div>
+
+                    </template>
+
+                    
+               </template>
+                <template if:true={flag.isInActiveCustomer}>
+                    <p style="font-size: 15px;">Your account already exists. Please proceed with <a
+                            href="/activateaccount">Activate your account</a></p>
+                </template>
+            </div>
+        </div>
+
+        <template if:false={flag.isCustomer}>
+            <!-- Full name -->
+            <div class="slds-grid slds-wrap slds-gutters">
+                <!-- First Name -->
+                <div class="slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-p-around_small">
+                    <lightning-input type="text" name="FirstName" label="First Name" class="input FirstName"
+                        placeholder="Enter first name" onchange={handleInputChange} required pattern="^[A-Za-zÀ-ÿ\s]+$"
+                        message-when-pattern-mismatch="Only letters and spaces are allowed">
+                    </lightning-input>
+                </div>
+
+                <!-- Last Name -->
+                <div class="slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-p-around_small">
+                    <lightning-input type="text" name="LastName" label="Last Name" class="input LastName"
+                        placeholder="Enter last name" onchange={handleInputChange} required pattern="^[A-Za-zÀ-ÿ\s]+$"
+                        message-when-pattern-mismatch="Only letters and spaces are allowed">
+                    </lightning-input>
+                </div>
+
+            </div>
+
+            <!-- phone number with country code -->
+            <div class="slds-grid slds-wrap slds-gutters ">
+                <div class="slds-size_1-of-1 slds-medium-size_2-of-12 slds-large-size_2-of-12 slds-p-around_small">
+                    <lightning-combobox class="input countryCode" name="countryCode" label="Country Code"
+                        value={inputValues.countryCode} placeholder="Code" options={countryCodes}
+                        onchange={handleInputChange}>
+                    </lightning-combobox>
+                </div>
+                <!-- <div class="slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12 slds-p-around_small">
+                    <lightning-input type="tel" name="Phone" label="Phone" class="input Phone"
+                        placeholder="Enter phone number" onchange={handleInputChange}
+                        maxlength="14"
+                        title="Enter a valid US phone number (e.g., (123) 456-7890)"
+                        message-when-pattern-mismatch="Enter a valid US phone number (e.g., (123) 456-7890)"> </lightning-input>
+                </div> -->
+                <!-- <div class="slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12 slds-p-around_small">
+                    <lightning-input type="tel" name="Phone" label="Phone" class="input Phone"
+                        placeholder="(123) 456-7890" pattern="^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$"
+                        title="Enter a valid US phone number (e.g., (123) 456-7890)"
+                        message-when-pattern-mismatch="Enter a valid US phone number (e.g., (123) 456-7890)"
+                        maxlength="14" onchange={handleInputChange}>
+                    </lightning-input>
+                </div> -->
+                <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                    <lightning-input name="Phone" label="Phone" value={inputValues.Phone} type="tel" max-length="14"
+                        class="Validation" placeholder="(123) 456-7890" onchange={handleInputChange}
+                        required>
+                    </lightning-input>
+                </div>
+
+            </div>
+        </template>
+    </div>
+</template>

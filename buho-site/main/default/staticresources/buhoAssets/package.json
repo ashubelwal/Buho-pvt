@@ -1,0 +1,11 @@
+{
+  "name": "buho",
+  "version": "1.0.0",
+  "description": "A modern, responsive login page for BÚHO Insurance Brokerage, designed for Salesforce Community integration.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

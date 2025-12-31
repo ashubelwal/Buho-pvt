@@ -1,0 +1,6 @@
+.dummy{
+	color : black;
+}
+.managePayment .slds-form-element__control.slds-grow {
+	display : none !important;
+}

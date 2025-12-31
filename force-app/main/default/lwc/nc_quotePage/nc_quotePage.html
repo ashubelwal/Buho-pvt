@@ -1,0 +1,271 @@
+<template>
+    <div class="slds-tabs_default tabs-container" style="position: relative">
+        <!-- Tab Navigation -->
+        <div class={stickyClass}>
+            <ul class="slds-tabs_default__nav" role="tablist">
+                <template for:each={computedTabs} for:item="tab">
+                    <li class={tab.class} key={tab.id} role="presentation" title={tab.label}>
+                        <div class="slds-grid slds-wrap slds-m-bottom_small sticky-wrap">
+                            <div class="slds-col">
+                                <a class="slds-tabs_default__link" href="javascript:void(0);" role="tab"
+                                    tabindex={tab.tabIndex} aria-selected={tab.isSelected} aria-controls={tab.id}
+                                    id={tab.id} data-tab-id={tab.id} onclick={handleTabClick}>
+                                    {tab.label} | ${tab.total}
+                                </a>
+                            </div>
+                            <div class="slds-col sticky-content">
+                                <button class="slds-button slds-button_brand" data-buy-id={tab.id} data-direction="next"
+                                    onclick={handleBuyBtn}>Buy ${tab.total} </button>
+                            </div>
+                        </div>
+                    </li>
+                </template>
+            </ul>
+        </div>
+
+        <!-- Tab Panels -->
+        <template for:each={computedTabs} for:item="tab">
+            <template if:true={tab.isSelected}>
+                <div id={tab.id} key={tab.id} class="slds-tabs_default__content slds-show" role="tabpanel"
+                    aria-labelledby={tab.id}>
+
+                    <!-- Quote Section -->
+                    <div class="quote-page slds-m-bottom_small">
+                        <!-- <h2 class="slds-text-heading_medium">Here's Your Quote : {tab.content.name}</h2>
+                        <h4 class="quote-amount slds-text-heading_large slds-m-bottom_small">{tab.content.price}</h4> -->
+
+                        <div class="coverageAdjustment">
+                            <div class="slds-grid slds-wrap slds-gutters slds-p-around_small">
+
+                                <div
+                                    class="slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12 slds-p-around_small">
+                                    <!-- Liability Section -->
+                                    <label for="combinedLiability" style="font-size: 15px"> Combined Liability </label>
+                                    <div class="number-input-container">
+                                        <button class="adjust-btn" onclick={decrementLiability}
+                                            disabled={isMinLiabilityDisabled}>-</button>
+                                        <input id="combinedLiability" type="text" class="number-input"
+                                            value={combinedLiabilityValue} readonly />
+                                        <button class="adjust-btn" onclick={incrementLiability}
+                                            disabled={isMaxLiabilityDisabled}>+</button>
+                                    </div>
+                                </div>
+
+                                <div class="slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12 slds-p-around_small">
+                                    <template if:true={tab.showMedical}>
+                                        <!-- Medical Section -->
+                                        <label for="medical" style="font-size: 15px"> Medical </label>
+                                        <div class="number-input-container">
+                                            <button class="adjust-btn" onclick={decrementMedical}
+                                                disabled={isMinMedicalDisabled}>-</button>
+                                            <input id="medical" type="text" class="number-input" value={medicalValue}
+                                                readonly />
+                                            <button class="adjust-btn" onclick={incrementMedical}
+                                                disabled={isMaxMedicalDisabled}>+</button>
+                                        </div>
+                                    </template>
+                                </div>
+
+                                <!-- <template if:true={tab.Gold}>
+                                    <div
+                                        class="slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-p-around_small">
+                                        <lightning-input name="Gold__c" type="checkbox" label="Gold"
+                                            checked={checkedData.Gold__c} onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </div>
+                                </template>
+
+                                <template if:true={tab.Max}>
+                                    <div
+                                        class="slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-p-around_small">
+                                        <lightning-input name="Max__c" type="checkbox" label="Max"
+                                            checked={checkedData.Max__c} onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </div>
+                                </template> -->
+                                <template if:true={tab.Gold}>
+                                    <div class={goldClass}>
+                                        <lightning-input name="Gold__c" type="checkbox" label="Gold" checked={checkedData.Gold__c}
+                                            onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </div>
+                                </template>
+                                
+                                <template if:true={tab.Max}>
+                                    <div class={maxClass}>
+                                        <lightning-input name="Max__c" type="checkbox" label="Max" checked={checkedData.Max__c}
+                                            onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </div>
+                                </template>
+
+                                <template if:true={tab.Platinum}>
+                                    <div
+                                        class="slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-p-around_small">
+                                        <lightning-input name="Platinum__c" type="checkbox" label="Platinum"
+                                            title="All Tourist Vehicle policies on MexInsrurance are Platinum. This cannot be deselected."
+                                            checked disabled onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </div>
+                                </template>
+
+
+                                <div
+                                    class="slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-p-around_small">
+                                    <lightning-input name="Coverage__c" type="checkbox" label="Liability Only"
+                                        checked={liabilityOnly} disabled={liabilityDisabled}
+                                        onchange={handleInputChange}></lightning-input>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="slds-grid slds-wrap slds-p-around_small slds-grid_align-spread">
+                            <div class="slds-col">
+                               <button class="slds-button slds-button_brand" data-buy-id={tab.id} data-direction="next"
+                            onclick={handleBuyBtn}>Buy ${tab.total} </button>
+                            </div>
+                            <div class="slds-col">
+                               <lightning-button 
+                                     label="Download Quote PDF" 
+                                     name="quote"
+                                     variant="brand" 
+                                     data-buy-id={tab.id}
+                                     data-send-email = false
+                                     data-direction="current"
+                                     onclick={handleEmailandDownloadQuote}>
+                               </lightning-button>
+                               <lightning-button 
+                                     style="margin-left: 8px;"
+                                     label="Email Quote PDF" 
+                                     name="quote"
+                                     data-buy-id={tab.id}
+                                     data-send-email = true
+                                     data-direction="current"
+                                     variant="brand" 
+                                     onclick={handleEmailandDownloadQuote}>
+                               </lightning-button>
+                            </div>
+                        </div>
+                        
+                       <div class="slds-m-top_x-small slds-text-body_small slds-text-color_weak">
+                            <p>
+                                View our Complete Coverage Details &#40;<a href="#" onclick={handleOpenEngDriveLink}
+                                    data-buy-id={tab.id} class="slds-text-link">
+                                    English
+                                </a>,
+                                <a href="#" onclick={handleOpenSpnDriveLink} data-buy-id={tab.id}
+                                    class="slds-text-link">
+                                    Spanish
+                                </a>&#41; &nbsp;
+                                for more information.
+                            </p>
+                        </div>
+                    </div>
+
+                    <template if:true={coverageList.length}>
+                        <lightning-layout multiple-rows>
+                            <template for:each={coverageList} for:item="item">
+                                <lightning-layout-item key={item.key} size="12" class="coverage">
+                                    <div class="slds-grid slds-wrap">
+                                        <div
+                                            class="slds-col slds-size_1-of-1 slds-large-size_2-of-12 slds-m-bottom_small">
+                                            <img src={item.image} alt={item.key}
+                                                style="max-width: 100px; width: 100%; height: auto;" />
+                                        </div>
+
+                                        <div
+                                            class="slds-col slds-size_1-of-1 slds-large-size_10-of-12 slds-p-left_medium">
+                                            <div class="slds-text-heading_small slds-m-bottom_xx-small"
+                                                style="font-weight: 600">
+                                                {item.key}
+                                            </div>
+                                            <div class={item.classList}>{item.description}</div>
+                                            <!-- Conditionally show "See More" button -->
+                                            <template if:true={item.showSeeMore}>
+                                                <div class="slds-m-top_small">
+                                                    <c-nc_modal modal-title={item.key} data-key={item.key}
+                                                        btn-name='See more' class-names='cBtn'
+                                                        modal-content={item.fullDescription}>
+                                                    </c-nc_modal>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+                            </template>
+                        </lightning-layout>
+                    </template>
+
+                    <template if:false={coverageList.length}>
+                        <p class="slds-text-color_error slds-p-around_medium">No coverage data available.</p>
+                    </template>
+
+
+                    <!-- <template if:true={chubbCoverageList.length}>
+                        <lightning-layout multiple-rows>
+                            <template for:each={chubbCoverageList} for:item="item">
+                                <lightning-layout-item key={item.key} size="12" class="coverage">
+                                    <div class="slds-grid slds-wrap">
+                                        <div
+                                            class="slds-col slds-size_1-of-1 slds-large-size_2-of-12 slds-m-bottom_small">
+                                            <img src={item.image} alt={item.key} style="max-width: 60px;" />
+                                        </div>
+                                        
+                                        <div
+                                            class="slds-col slds-size_1-of-1 slds-large-size_10-of-12 slds-p-left_medium">
+                                            <div class="slds-text-heading_small slds-m-bottom_xx-small" style="font-weight: 600">{item.key}</div>
+                                            <div class="slds-text-body_regular">{item.description}</div>
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+                            </template>
+                        </lightning-layout>
+                    </template>
+
+                    <template if:false={chubbCoverageList.length}>
+                        <p class="slds-text-color_error slds-p-around_medium">No coverage data available.</p>
+                    </template> -->
+
+
+                    <!-- Coverage List -->
+                    <!-- <div class="contacts-list">
+                        <template if:true={activeTabCoverage}>
+                            <div class="company-section">                                
+                                <template for:each={activeTabCoverage} for:item="coverage">
+                                    <template if:true={coverage.title}>
+                                        <div key={coverage.title} class="coverage">
+                                            <div class="slds-grid slds-grid_align-center">                                                
+                                                <div class="slds-col slds-size_1-of-1 slds-large-size_2-of-12">
+                                                    <img src={coverage.img} alt={coverage.title} class="coverage-image"/>
+                                                </div>
+                                                
+                                                <div class="slds-col slds-size_1-of-1 slds-large-size_8-of-12">
+                                                    <h2 class="slds-m-bottom_x-small"
+                                                        style="font-size: 17px;font-weight: 600">
+                                                        {coverage.title}
+                                                    </h2>
+                                                    <p class="slds-text-title slds-m-bottom_xx-small">
+                                                        {coverage.desc}
+                                                    </p>
+                                                </div>
+                                                
+                                                <div class="slds-col slds-size_1-of-1 slds-large-size_2-of-12">
+                                                    <p class="slds-text-title slds-m-bottom_xx-small">
+                                                        {coverage.price}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </template>
+                            </div>
+                        </template>
+
+                    </div> -->
+                </div>
+            </template>
+        </template>
+    </div>
+</template>

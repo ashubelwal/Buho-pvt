@@ -1,0 +1,98 @@
+<template>
+	<div class="maindiv notranslate slds-m-top_xx-large">
+		
+		<div class="slds-m-bottom_small">
+			<div class="blue slds-text-heading_large screenHeading">{label.Driverdetails}</div>
+			<div class="blue slds-text">{label.ownerof}</div>
+		</div>
+		
+		<template if:true={communityUser}> 
+			<lightning-combobox name="progress" disabled={disableEditDriver} placeholder={label.Selectadriverfromyouraccount} value={selectedDriverId} options={loginUserDriverOption} onchange={changeDriverOption}></lightning-combobox>
+			
+			<!-- <lightning-accordion allow-multiple-sections-open="true" onsectiontoggle={handleSectionToggle} active-section-name={activeAccordinSection}>
+				<lightning-accordion-section name="A" class="slds-align_absolute-center" label="ADD A DIFFERENT VEHICLE">
+
+				</lightning-accordion-section>
+			</lightning-accordion> -->
+		</template>
+		<div class="datatable slds-m-top_medium">
+
+			<table class="listing-table">
+				<tr>
+					<th>{label.name}</th>
+					<th>{label.dob}</th>
+					<th>{label.license}</th>
+					<th></th>
+					<th></th>
+
+				</tr>
+				<template for:each={driverList} for:item="driverItem" for:index="index">
+					<tr key={driverItem.Index}>
+						<td>{driverItem.First_Name__c} &nbsp; {driverItem.Last_Name__c}</td>
+						<td>{driverItem.Dob__c}</td>
+						<td>{driverItem.license_number__c}</td>
+
+						<td>
+							<lightning-button-icon data-id={driverItem.license_number__c} disabled={disableEditDriver}
+								data-index={index} name={driverItem.License_Number__c} icon-name="utility:edit"
+								variant="bare" onclick={editDriverDetail} alternative-text="edit"
+								title="Edit Unit"></lightning-button-icon>
+						</td>
+						<td style="width: 0px;">
+							<lightning-button-icon data-id={driverItem.Index} data-index={index} name={driverItem.index}
+								disabled={disableEditDriver} icon-name="utility:close" variant="bare"
+								onclick={deleteDriver} alternative-text="close"
+								title="Delete Unit"></lightning-button-icon>
+						</td>
+					</tr>
+				</template>
+
+			</table>
+
+			<div class="underline">
+				<hr />
+			</div>
+		</div>
+
+		<div class="slds-align_absolute-center slds-m-top_medium">
+			<lightning-accordion allow-multiple-sections-open="true" onsectiontoggle={handleSectionToggle}>
+				<lightning-accordion-section name="A" label={label.oradda} active-section-name={activeAccordinSection}></lightning-accordion-section>
+			</lightning-accordion>
+		</div>
+
+		<template if:true={newDriverSectionOpen}>
+			<!-- when edit driver details -->
+			<!-- <template if:true={isEditSectionOpen}> -->
+			<c-add-driver-register onnewdriveradd={handleAddNewDriver} driver-list={driverList}
+				is-edit={isEdit} edit-driver-data={editDriverData} review-vehicle-data={reviewVehicleData}
+				leaddata={leaddata} policy-type={policyType}>
+			</c-add-driver-register>
+			<!-- </template> -->
+			<!-- <c-add-driver-register onnewdriveradd={handleAddNewDriver} driver-list={driverList} leaddata={leaddata}>
+            </c-add-driver-register> -->
+		</template>
+
+
+
+		<template if:false={newDriverSectionOpen}>
+			<div class="horizontalAlign slds-m-top--x-large">
+                <div class="">
+                    <button class="buttonPrev btnHover" onclick={handlePrevClick}><span class="icon-prev"><i
+                                class="icon-prevs"></i></span>{label.prev}</button>
+                </div>
+                <div class="">
+                    <button class="buttonNext btnHover" onclick={handleNextClick}><span class="icon-next"><i
+                                class="icon-nexts"></i></span>{label.next}</button>
+                </div>
+            </div>
+			<!-- <div class="horizontalAlign">
+			
+				<button class="buttonPrev" onclick={handlePrevClick}>Prev</button>
+				<button class="buttonNext" onclick={handleNextClick}>Next</button>
+			</div> -->
+		</template>
+
+
+
+	</div>
+</template>

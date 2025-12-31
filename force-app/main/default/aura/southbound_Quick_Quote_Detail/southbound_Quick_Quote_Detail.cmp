@@ -1,0 +1,1574 @@
+<aura:component controller="QuickQuotationCtrl" implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="title" type="String" access="public"/>
+    <aura:attribute name="communityUser" type="Boolean" access="public" default="false"/>
+    <aura:attribute name="backButtonVisibility" type="Boolean" default="false" access="public" />
+    <aura:attribute name="saveQuotePop" type="Boolean" default="false" />
+    <aura:attribute name="purchaseQuotePop" type="Boolean" default="false" />
+    <aura:attribute name="clickedItemValue" type="String" />
+    
+    <aura:attribute name="policyType" type="String" access="public"/>
+    <aura:attribute name="towedpolicyType" type="String" access="public"/>
+    <aura:attribute name="rateRecord" type="object" access="public" />
+    <aura:attribute name="countVehicle" type="Integer" access="public" />
+    <aura:attribute name="liability" type="String" default="200,000" />
+    <aura:attribute name="highLiability" type="String"  />
+    <aura:attribute name="lowLiability" type="String"  />
+    <aura:attribute name="firstName" type="String"  />
+    <aura:attribute name="lastName" type="String"  />
+    <aura:attribute name="emailAdder" type="String"/>
+    <aura:attribute name="phoneNumber" type="String"/>
+    
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    <aura:attribute name="onNextClick" type="Aura.Action"/>
+    <aura:attribute name="normalView" type="boolean" default="true" />
+    <aura:attribute name="highlightView" type="boolean" default="false" />
+    <aura:attribute name="coverageDetail" type="object"/>
+    <aura:attribute name="coverageMap" type="Map" />
+    <aura:attribute name="maincoverageMap" type="Map" />
+    <aura:attribute name="quoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" access="public"/>
+    <aura:attribute name="leadRecord" type="Lead" default="{ 'sobjectType': 'Lead'}" access="public"/>
+    
+    <aura:attribute name="physicalDamagePayment" type="decimal" />
+    <aura:attribute name="LiabilityPayment" type="decimal" />
+    <aura:attribute name="medicalPayment" type="decimal" />
+    <aura:attribute name="platinumEndorsementPayment" type="decimal" />
+    <aura:attribute name="totalTheftPayment" type="decimal" />
+    
+    <aura:attribute name="primaryquoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" access="public"/>
+    <aura:attribute name="liabilitylist" type="list"/>
+    <aura:attribute name="medicallist" type="list"/>
+    <aura:attribute name="qualitasRateValue" type="decimal" />
+    <aura:attribute name="chubbRateValue" type="decimal" />
+    <aura:attribute name="mapfreRateValue" type="decimal" />
+    <aura:attribute name="qualitasLiability" type="String" default="300000" />
+    <aura:attribute name="qualitasMedical" type="String" default="$10,000/$50,000" />
+    
+    <aura:attribute name="chubbLiability" type="String" default="300000" />
+    <aura:attribute name="chubbMedical" type="String" default="$10,000/$50,000" />
+    
+    <aura:attribute name="mapfreLiability" type="String" default="300000" />
+    <aura:attribute name="mapfreMedical" type="String" default="$10,000/$50,000" />
+    
+    <aura:attribute name="qualitasLiablityOnly" type="Boolean" default="false" />
+    <aura:attribute name="chubbLiablityOnly" type="Boolean" default="false" />
+    <aura:attribute name="mapfreLiablityOnly" type="String" default="Max" />
+    
+    <aura:attribute name="qualitasBroker_Policy_Fee" type="decimal" />
+    <aura:attribute name="chubbBroker_Policy_Fee" type="decimal" />
+    <aura:attribute name="mapfreBroker_Policy_Fee" type="decimal" />
+    
+    <aura:attribute name="legalAssist_Policy_Fee" type="decimal" />
+    <aura:attribute name="mapfreMedicalPayments_Fee" type="decimal" />
+    
+    <aura:attribute name="auto_collision_deductible" type="decimal" />
+    <aura:attribute name="auto_theft_Total" type="decimal" />
+    <aura:attribute name="auto_mapfre_collision_deductible" type="decimal" />
+    <aura:attribute name="auto_mapfre_theft_Total" type="decimal" />
+    
+    <aura:attribute name="rv_collision_deductible" type="decimal" />
+    <aura:attribute name="rv_theft_Total" type="decimal" />
+    
+    <aura:attribute name="moto_qual_collision_deductible" type="decimal" />
+    <aura:attribute name="moto_qual_theft_Total" type="decimal" />
+    <aura:attribute name="moto_map_collision_deductible" type="decimal" />
+    <aura:attribute name="moto_map_theft_Total" type="decimal" />
+    <aura:attribute name="qualitas_Iva" type="decimal" />
+    <aura:attribute name="mapfre_iva" type="decimal" />
+    <aura:attribute name="qualitas_Surcharge" type="decimal" />
+    <aura:attribute name="chub_SurCharge" type="decimal" />
+    
+    <aura:attribute name="Final_total_Premium" type="Decimal" />
+    
+    <aura:attribute name="additional_towunit" type="object" />
+    <aura:attribute name="additional_quoteRecord" type="object" />
+    <aura:attribute name="additional_towunit_Index" type="Integer" default="0" />
+    <aura:attribute name="days" type="Integer" default="0" />
+    <aura:attribute name="isMedicalPayment" type="Boolean" default="true" />
+    <aura:attribute name="showQualitas" type="Boolean" default="true" />
+    <aura:attribute name="showChubb" type="Boolean" default="true" />
+    <aura:attribute name="showMapfre" type="Boolean" default="true" />
+
+    <aura:attribute name="liabilityshowQualitas" type="Boolean" default="true" />
+    <aura:attribute name="liabilityshowChubb" type="Boolean" default="true" />
+    <aura:attribute name="liabilityshowMapfre" type="Boolean" default="true" />
+
+    <aura:attribute name="daysTootip" type="String" />
+    <aura:attribute name="daysIntowTootip" type="String" />
+    <aura:attribute name="minDate" type="String" />
+    <aura:attribute name="endMinDate" type="String" />
+
+    <aura:attribute name="liabiltyOnly" type="Boolean" default="false" />
+    <aura:attribute name="renewPolicy" type="Boolean" default="false" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <c:Insurance_Flow_Steps step="step1"/>
+    <lightning:layoutItem padding="around-small" size="12" class="align-center slds-m-top_xx-large">
+        <div class="page-title">
+            <button class="button -plain -back-button" name="step_5" onclick="{! v.onBackClick }">
+                <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/> Back
+            </button>
+            <aura:if isTrue="{!v.additional_towunit}" >
+                {!v.title}
+            </aura:if>
+            <aura:if isTrue="{!!v.additional_towunit}" >
+                <b>About your Quotes: </b> Sometimes it's cheaper to purchase a six-month policy than it is a 30-day-policy. Below are the best rates offered for the time period you selected. If your selection in days was more expensive at the Daily rate, then we automatically adjusted it to a less expensive, longer term.
+            </aura:if>
+        </div>
+    </lightning:layoutItem> 
+
+    <lightning:layoutItem size="12">  
+        <section class="quick-quote">
+            <div class="wrap -size-md">
+                <div id="quotes-normal-view">
+                    <aura:if isTrue="{!v.normalView}" >
+                        <div class="align-center _mg-b-sm">
+                            <button class="button -secondary" id="show-quote-highlights" onclick="{!c.highlightView}">Compare</button>
+                        </div>
+                        <div class="grid -spacing-md">
+                            <aura:if isTrue="{!v.showQualitas}">
+                                <div class="grid_1-3 grid_1-lg">
+                                    <div class="quote-box">
+                                        <div class="quote-provider">
+                                            <img src="{!$Resource.mexJs  + '/mexJs/images/qualitas.png'}" alt="Qualitas"/>
+                                        </div>
+                                        <div class="quote-pricing">
+                                            <lightning:formattedNumber value="{!v.qualitasRateValue}" style="currency" currencyCode="USD" />
+                                        </div>
+                                        <div class="quote-body">
+                                            <div class="unit">
+                                                <h6 class="red" >Vehicle {!v.countVehicle}: {!v.quoteRecord.Vehicle_Type__c}</h6>
+                                                <div class="grid -spacing-sm">
+                                                    <div class="grid_1-2">
+                                                        <div class="datepicker">
+                                                            <lightning:input aura:Id="validateField" required="true" name="Start_Date_for_Coverage__c" type="date" variant="label-hidden" value="{!v.quoteRecord.Start_Date_for_Coverage__c}" onchange="{!c.fetchRateData}" min="{!v.minDate}"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="grid_1-2">
+                                                        <div class="datepicker">
+                                                            <lightning:input aura:Id="validateField" required="true" name="End_Date_for_Coverage__c" type="date" variant="label-hidden" value="{!v.quoteRecord.End_Date_for_Coverage__c}" onchange="{!c.fetchRateData}" min="{!v.endMinDate}"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="grid -spacing-sm">
+                                                    <div class="grid_1-2">
+                                                        <div class="datepicker">
+                                                            <lightning:input type="time" name="Start_Time__c" label="START TIME" variant="label-hidden" placeholder="" value="{!v.quoteRecord.Start_Time__c}" disabled="true"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="grid_1-2">
+                                                        <div class="datepicker">
+                                                            <lightning:input type="time" name="End_Time__c" label="End Time" variant="label-hidden" placeholder="" value="{!v.quoteRecord.End_Time__c}" disabled="true"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="adjustable-fields">
+                                                    <div class="adjustable-field">
+                                                        <span class="field-label">
+                                                            <i class="icon-info" title="{!v.daysTootip}"></i>
+                                                            Days
+                                                        </span>
+                                                        <span class="field-item">
+                                                            <lightning:input variant="label-hidden" type="number" class="full-width-field" disabled="true" value="{!v.days}" varient="label-hidden" />
+                                                        </span>
+                                                    </div>
+                                                    <aura:if isTrue="{!v.additional_towunit}" >
+                                                        <div class="adjustable-field">
+                                                            <span class="field-label">
+                                                                <i class="icon-info" title="{!v.daysIntowTootip}"></i> 
+                                                                    Days in tow
+                                                            </span>
+                                                            <span class="field-item">
+                                                                <lightning:input variant="label-hidden" type="number" class="full-width-field" disabled="true" value="{!v.additional_towunit.Days_in_Tow__c}" varient="label-hidden" />
+                                                            </span>
+                                                        </div>
+                                                    </aura:if>
+                                                    <div class="adjustable-field">
+                                                        <span class="field-label">
+                                                            <i class="icon-info" title="Your estimate of vehicle value in case of a total loss.  This amount will be your limit for damages to, or total theft of your vehicle.  If you owe money on the vehicle you must list at least as much as you owe.  There is no gap coverage, but the lienholder will need to see their risk covered.  For guidance on value check Kelly Blue Book or NADA guides for Actual Cash Value or Private Party Value"></i>
+                                                            Vehicle Value
+                                                        </span>
+                                                        <span class="field-item">
+                                                            <lightning:input variant="label-hidden" type="number" class="full-width-field" formatter="currency" step="0.01" disabled="true" value="{!v.quoteRecord.Vehicle_Value__c}" varient="label-hidden" />
+                                                        </span>
+                                                    </div>
+                                                    <div class="adjustable-field">
+                                                        <span class="field-label">
+                                                            <i class="icon-info" title="This amount goes toward damages to the other party (3rd party) that you are responsible for.  This includes property damage, medical expenses and death benefits combined. "></i> 
+                                                            Combined Liability
+                                                        </span>
+                                                        <span class="field-item">
+                                                            <button class="field-minus" name="qualitasLiability" data-type="low" onclick="{!c.updateLiability}" ></button>
+                                                            <lightning:formattedNumber value="{!v.qualitasLiability}" style="currency" currencyCode="USD"/>
+                                                            <button class="field-plus" name="qualitasLiability" data-type="high" onclick="{!c.updateLiability}"></button>
+                                                        </span>
+                                                    </div>
+                                                    <aura:if isTrue="{!v.isMedicalPayment &amp;&amp; v.policyType != 'Motorcycle/Street Legal ATV'}">
+                                                        <div class="adjustable-field">
+                                                            <span class="field-label">
+                                                                <i class="icon-info" title="This is the amount of coverage for medical expenses as result of accident for you and your vehicle occupants.  The first number is maximum per person, the second value is total limit per event."></i> 
+                                                                Medical
+                                                            </span>
+                                                            <span class="field-item">
+                                                                <button class="field-minus" name="qualitasMedical" data-type="low" onclick="{!c.updateMedical}" ></button>
+                                                                <input type="text" value="{!v.qualitasMedical}"/>
+                                                                <button class="field-plus" name="qualitasMedical"  data-type="high" onclick="{!c.updateMedical}"></button>
+                                                            </span>
+                                                        </div>
+                                                    </aura:if>	
+                                                </div><!-- end adjustable-fields -->
+                                                <div class="checkbox-field">
+                                                    <lightning:input type="checkbox" name="qualitasLiablityOnly" label="Liability Only" checked="{!v.qualitasLiablityOnly}" onchange="{!c.updateLibilityValue}"/>
+                                                </div>
+                                            </div><!-- end unit -->
+                                            
+                                            <!--<aura:if isTrue="{v.policyType == 'Motorcycle/Street Legal ATV'}">
+                                                <div class="unit">
+                                                    <h6 class="red">Towed Unit 1: ATV</h6>
+                                                    
+                                                    <div class="adjustable-fields">
+                                                        <div class="adjustable-field">
+                                                            <span class="field-label">
+                                                                <i class="icon-info">How many days will the towed unit be attached to the towing vehicle?  You’ll only be charged the additional towing premium for those days in tow (as opposed to the entire term).  Keep in mind that with Qualitas and Mapfre, when a towed unit is detached from the towing vehicle, it no longer has coverage.  If you select Chubb, your towed trailer will have coverage even after it is detached if you match “days in tow” with the term.  If you are towing a travel trailer and select Chubb you should match the 'Days in Tow' with the Term of the Policy.  Example 365 day policy, days in tow = 365.</i> Days in tow
+                                                            </span>
+                                                            <span class="field-item">
+                                                                <button class="field-minus"></button>
+                                                                <input type="text" value="10" />
+                                                                <button class="field-plus"></button>
+                                                            </span>
+                                                        </div>
+                                                    </div> end adjustable-fields
+                                                </div> 
+                                            </aura:if>-->
+
+                                            <div class="quote-button">
+                                                <button class="button -secondary -wider" name="qualitasRate" onclick="{!c.onNextClick}" disabled="{!and(!v.qualitasLiablityOnly, !v.liabilityshowQualitas)}" style="{!if(and(!v.qualitasLiablityOnly, !v.liabilityshowQualitas), 'background: #e9eaec;', '')}">Purchase</button>
+                                            </div>
+
+                                            <div class="quote-terms">
+                                                <aura:if isTrue="{!v.policyType == 'Automobile'}">
+                                                    <a href="{!$Label.c.Terms_and_Conditions_Automobile_Qualitas}" class="simple-link"
+                                                    target="_blank">Full terms <i class="icon-new-tab"></i></a>
+                                                </aura:if>
+                                                <aura:if isTrue="{!v.policyType == 'RV'}">
+                                                    
+                                                    <a href="{!$Label.c.Terms_and_Conditions_RV_Qualitas}" class="simple-link"
+                                                    target="_blank">Full terms <i class="icon-new-tab"></i></a>
+                                                </aura:if>
+                                                <aura:if isTrue="{!v.policyType == 'Motorcycle/Street Legal ATV'}">
+                                                    <a href="{!$Label.c.Terms_and_Conditions_Motorcycle_Qualitas}" class="simple-link"
+                                                    target="_blank">Full terms <i class="icon-new-tab"></i></a>
+                                                </aura:if>
+                                                <!--a href="#" class="simple-link" target="_blank">Full terms <i class="icon-new-tab"></i></a-->
+                                            </div>
+                                        </div>
+                                    </div><!-- end quote-box -->
+                                </div>
+                            </aura:if>
+
+                            <aura:if isTrue="{!v.showChubb}">
+                                <div class="grid_1-3 grid_1-lg">
+                                    <div class="quote-box -recommended">
+                                        <div class="quote-provider">
+                                            <img src="{!$Resource.mexJs  + '/mexJs/images/chubb.png'}" alt="Chubb" /> 
+                                            <div class="recommended-label">Recommended</div>
+                                        </div>
+                                        <div class="quote-pricing">
+                                            <lightning:formattedNumber value="{!v.chubbRateValue}" style="currency" currencyCode="USD"/>
+                                        </div>
+                                        <!--    chubb part     -->
+                                        <div class="quote-body">
+                                            <div class="unit">
+                                                <h6 class="red">Vehicle {!v.countVehicle}: {!v.quoteRecord.Vehicle_Type__c}</h6>
+                                                <div class="grid -spacing-sm">
+                                                    <div class="grid_1-2">
+                                                        <div class="datepicker">
+                                                            <lightning:input aura:Id="validateField" required="true" name="Start_Date_for_Coverage__c" type="date" variant="label-hidden" value="{!v.quoteRecord.Start_Date_for_Coverage__c}" onchange="{!c.fetchRateData}" min="{!v.minDate}"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="grid_1-2">
+                                                        <div class="datepicker">
+                                                            <lightning:input aura:Id="validateField" required="true" name="End_Date_for_Coverage__c" type="date" variant="label-hidden" value="{!v.quoteRecord.End_Date_for_Coverage__c}" onchange="{!c.fetchRateData}" min="{!v.endMinDate}"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="grid -spacing-sm">
+                                                    <div class="grid_1-2">
+                                                        <div class="datepicker">
+                                                            <lightning:input type="time" name="Start_Time__c" label="START TIME" variant="label-hidden" placeholder="" value="{!v.quoteRecord.Start_Time__c}" disabled="true"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="grid_1-2">
+                                                        <div class="datepicker">
+                                                            <lightning:input type="time" name="End_Time__c" label="End Time" variant="label-hidden" placeholder="" value="{!v.quoteRecord.End_Time__c}" disabled="true"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="adjustable-fields">
+                                                    <div class="adjustable-field">
+                                                        <span class="field-label">
+                                                            <i class="icon-info" title="{!v.daysTootip}"></i> 
+                                                            Days
+                                                        </span>
+                                                        <span class="field-item">
+                                                            <lightning:input variant="label-hidden" type="number" class="full-width-field" disabled="true" value="{!v.days}" varient="label-hidden" />
+                                                        </span>
+                                                    </div>
+                                                    <aura:if isTrue="{!v.additional_towunit}" >
+                                                        <div class="adjustable-field">
+                                                            <span class="field-label">
+                                                                <i class="icon-info" title="{!v.daysIntowTootip}"></i> 
+                                                                    Days in tow
+                                                            </span>
+                                                            <span class="field-item">
+                                                                <lightning:input variant="label-hidden" type="number" class="full-width-field" disabled="true" value="{!v.additional_towunit.Days_in_Tow__c}" varient="label-hidden" />
+                                                            </span>
+                                                        </div>
+                                                    </aura:if>
+                                                    <div class="adjustable-field">
+                                                        <span class="field-label">
+                                                            <i class="icon-info" title="Your estimate of vehicle value in case of a total loss.  This amount will be your limit for damages to, or total theft of your vehicle.  If you owe money on the vehicle you must list at least as much as you owe.  There is no gap coverage, but the lienholder will need to see their risk covered.  For guidance on value check Kelly Blue Book or NADA guides for Actual Cash Value or Private Party Value."></i>
+                                                            Vehicle Value
+                                                        </span>
+                                                        <span class="field-item">
+                                                            <lightning:input variant="label-hidden" type="number" class="full-width-field" formatter="currency" step="0.01" disabled="true" value="{!v.quoteRecord.Vehicle_Value__c}" varient="label-hidden" />
+                                                        </span>
+                                                    </div>
+                                                    <div class="adjustable-field">
+                                                        <span class="field-label">
+                                                            <i class="icon-info" title="This amount goes toward damages to the other party (3rd party) that you are responsible for.  This includes property damage, medical expenses and death benefits combined. "></i> 
+                                                            Combined Liability
+                                                        </span>
+                                                        <span class="field-item">
+                                                            <button class="field-minus" name="chubbLiability" data-type="low" onclick="{!c.updateLiability}" ></button>
+                                                            <!--input type="text" value="{!v.chubbLiability}"/ -->
+                                                            <lightning:formattedNumber value="{!v.chubbLiability}" style="currency" currencyCode="USD"/>
+                                                            <button class="field-plus" name="chubbLiability" data-type="high" onclick="{!c.updateLiability}"></button>
+                                                        </span>
+                                                    </div>
+                                                    <aura:if isTrue="{!v.isMedicalPayment &amp;&amp; v.policyType != 'Motorcycle/Street Legal ATV'}">
+                                                        <div class="adjustable-field">
+                                                            <span class="field-label">
+                                                                <i class="icon-info" title="This is the amount of coverage for medical expenses as result of accident for you and your vehicle occupants.  The first number is maximum per person, the second value is total limit per event."></i> 
+                                                                Medical
+                                                            </span>
+                                                            <span class="field-item">
+                                                                <button class="field-minus" name="chubbMedical" data-type="low" onclick="{!c.updateMedical}" ></button>
+                                                                <input type="text" value="{!v.chubbMedical}"/>
+                                                                <button class="field-plus" name="chubbMedical"  data-type="high" onclick="{!c.updateMedical}"></button>
+                                                            </span>
+                                                        </div>
+                                                    </aura:if>
+                                                </div><!-- end adjustable-fields -->
+                                                <div class="checkbox-field">
+                                                    <lightning:input type="checkbox" name="chubbLiablityOnly" label="Liability Only" checked="{!v.chubbLiablityOnly}" onchange="{!c.updateLibilityValue}"/>
+                                                </div>
+                                            </div><!-- end unit -->
+                                            
+                                            <!--<aura:if isTrue="{!v.policyType != 'Motorcycle/Street Legal ATV'}">
+                                                <div class="unit">
+                                                    <h6 class="red">Towed Unit 1: ATV</h6>
+                                                    
+                                                    <div class="adjustable-fields">
+                                                        <div class="adjustable-field">
+                                                            <span class="field-label">
+                                                                <i class="icon-info"></i> Days in tow
+                                                            </span>
+                                                            <span class="field-item">
+                                                                <button class="field-minus"></button>
+                                                                <input type="text" value="10" />
+                                                                <button class="field-plus"></button>
+                                                            </span>
+                                                        </div>
+                                                    </div> end adjustable-fields
+                                                </div>
+                                            </aura:if>-->
+
+                                            <div class="quote-button">
+                                                <button class="button -ternary -wider" name="chubbRate" onclick="{!c.onNextClick}" disabled="{!and(!v.chubbLiablityOnly, !v.liabilityshowChubb)}" style="{!if(and(!v.chubbLiablityOnly, !v.liabilityshowChubb), 'background: #e9eaec;', '')}">Purchase</button>
+                                            </div>
+
+                                            <div class="quote-terms">
+                                                <aura:if isTrue="{!v.policyType == 'Automobile'}">
+                                                <a href="{!$Label.c.Terms_and_Conditions_Automobile_Chubb}" class="simple-link"
+                                                    target="_blank">Full terms <i class="icon-new-tab"></i></a>
+                                                </aura:if>
+                                                <aura:if isTrue="{!v.policyType == 'RV'}">
+                                                    <a href="{!$Label.c.Terms_and_Conditions_RV_Chubb}" class="simple-link"
+                                                    target="_blank">Full terms <i class="icon-new-tab"></i></a>
+                                                </aura:if>
+                                                <aura:if isTrue="{!v.policyType == 'Motorcycle/Street Legal ATV'}">
+                                                    <a href="{!$Label.c.Terms_and_Conditions_Motorcycle_Chubb}" class="simple-link"
+                                                    target="_blank">Full terms <i class="icon-new-tab"></i></a>
+                                                </aura:if>
+                                                <!--a href="#" class="simple-link" target="_blank">Full terms <i class="icon-new-tab"></i></a-->
+                                            </div>
+                                        </div>
+                                    </div><!-- end quote-box -->
+                                </div>
+                            </aura:if>
+
+                            <aura:if isTrue="{!v.showMapfre}">
+                                <div class="grid_1-3 grid_1-lg">
+                                    <div class="quote-box">
+                                        <div class="quote-provider">
+                                            <img src="{!$Resource.mexJs  + '/mexJs/images/mapfre-logo.png'}" alt="Mapfre"/>
+                                            <!--img src="{!$Resource.mexJs  + '/mexJs/images/qualitas.png'}" alt="Qualitas"/-->
+                                        </div>
+                                        <div class="quote-pricing">
+                                            <lightning:formattedNumber value="{!v.mapfreRateValue}" style="currency" currencyCode="USD"/>
+                                        </div>
+                                        
+                                        <div class="quote-body">
+                                            
+                                            <div class="unit">
+                                                <h6 class="red">Vehicle {!v.countVehicle}: {!v.quoteRecord.Vehicle_Type__c}</h6>
+                                                <div class="grid -spacing-sm">
+                                                    <div class="grid_1-2">
+                                                        <div class="datepicker">
+                                                            <lightning:input aura:Id="validateField" required="true"  name="Start_Date_for_Coverage__c" type="date" variant="label-hidden" value="{!v.quoteRecord.Start_Date_for_Coverage__c}" onchange="{!c.fetchRateData}" min="{!v.minDate}"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="grid_1-2">
+                                                        <div class="datepicker">
+                                                            <lightning:input aura:Id="validateField" required="true" name="End_Date_for_Coverage__c" type="date" variant="label-hidden" value="{!v.quoteRecord.End_Date_for_Coverage__c}" onchange="{!c.fetchRateData}" min="{!v.endMinDate}"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="grid -spacing-sm">
+                                                    <div class="grid_1-2">
+                                                        <div class="datepicker">
+                                                            <lightning:input type="time" name="Start_Time__c" label="START TIME" variant="label-hidden" placeholder="" value="{!v.quoteRecord.Start_Time__c}" disabled="true"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="grid_1-2">
+                                                        <div class="datepicker">
+                                                            <lightning:input type="time" name="End_Time__c" label="End Time" variant="label-hidden" placeholder="" value="{!v.quoteRecord.End_Time__c}" disabled="true"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="adjustable-fields">
+                                                    <div class="adjustable-field">
+                                                        <span class="field-label">
+                                                            <i class="icon-info" title="{!v.daysTootip}"></i> 
+                                                            Days
+                                                        </span>
+                                                        <span class="field-item">
+                                                            <lightning:input variant="label-hidden" type="number" class="full-width-field" disabled="true" value="{!v.days}" varient="label-hidden" />
+                                                        </span>
+                                                    </div>
+                                                    <aura:if isTrue="{!v.additional_towunit}" >
+                                                        <div class="adjustable-field">
+                                                            <span class="field-label">
+                                                                <i class="icon-info" title="{!v.daysIntowTootip}"></i> 
+                                                                    Days in tow
+                                                            </span>
+                                                            <span class="field-item">
+                                                                <lightning:input variant="label-hidden" type="number" class="full-width-field" disabled="true" value="{!v.additional_towunit.Days_in_Tow__c}" varient="label-hidden" />
+                                                            </span>
+                                                        </div>
+                                                    </aura:if>
+                                                    <div class="adjustable-field">
+                                                        <span class="field-label">
+                                                            <i class="icon-info" title="Your estimate of vehicle value in case of a total loss.  This amount will be your limit for damages to, or total theft of your vehicle.  If you owe money on the vehicle you must list at least as much as you owe.  There is no gap coverage, but the lienholder will need to see their risk covered.  For guidance on value check Kelly Blue Book or NADA guides for Actual Cash Value or Private Party Value."></i>
+                                                            Vehicle Value
+                                                        </span>
+                                                        <span class="field-item">
+                                                            <lightning:input variant="label-hidden" type="number" class="full-width-field" formatter="currency" step="0.01" disabled="true" value="{!v.quoteRecord.Vehicle_Value__c}" varient="label-hidden" />
+                                                        </span>
+                                                    </div>
+                                                    <div class="adjustable-field">
+                                                        <span class="field-label">
+                                                            <i class="icon-info" title="This amount goes toward damages to the other party (3rd party) that you are responsible for.  This includes property damage, medical expenses and death benefits combined. "></i>
+                                                            Combined Liability
+                                                        </span>
+                                                        <span class="field-item">
+                                                            <button class="field-minus" name="mapfreLiability" data-type="low" onclick="{!c.updateLiability}" ></button>
+                                                            <!--<input type="text" value="{!v.mapfreLiability}"/ -->
+                                                            <lightning:formattedNumber value="{!v.mapfreLiability}" style="currency" currencyCode="USD"/>
+                                                            <button class="field-plus" name="mapfreLiability" data-type="high" onclick="{!c.updateLiability}"></button>
+                                                        </span>
+                                                    </div>
+                                                    <aura:if isTrue="{!v.isMedicalPayment &amp;&amp; v.policyType != 'Motorcycle/Street Legal ATV'}">
+                                                        
+                                                            <div class="adjustable-field">
+                                                                <span class="field-label">
+                                                                    <i class="icon-info" title="This is the amount of coverage for medical expenses as result of accident for you and your vehicle occupants.  The first number is maximum per person, the second value is total limit per event."></i>
+                                                                    Medical
+                                                                </span>
+                                                                <span class="field-item">
+                                                                    <button class="field-minus" name="mapfreMedical" data-type="low" onclick="{!c.updateMedical}" ></button>
+                                                                    <input type="text" value="{!v.mapfreMedical}"/>
+                                                                    <button class="field-plus" name="mapfreMedical"  data-type="high" onclick="{!c.updateMedical}"></button>
+                                                                    
+                                                                </span>
+                                                            </div>
+                                                        
+                                                    </aura:if>
+                                                        
+                                                </div><!-- end adjustable-fields -->
+                                                <aura:if isTrue="{!v.policyType == 'Automobile'}">
+                                                    <div class="checkbox-field">
+                                                        <lightning:input type="radio" name="select" label="Liability Only" onchange="{!c.onGroup}" checked="{!v.mapfreLiablityOnly == 'Liability'}"/>
+                                                        <lightning:input type="radio" name="select" label="Full Coverage"  onchange="{!c.onGroup}" checked="{!v.mapfreLiablityOnly == 'Complete'}"/>
+                                                        <lightning:input type="radio" name="select" label="Max Coverage" onchange="{!c.onGroup}" checked="{!v.mapfreLiablityOnly == 'Max'}"/>
+                                                    </div>
+                                                    <aura:set attribute="else">
+                                                        <div class="checkbox-field">
+                                                            <lightning:input type="radio" name="select" label="Liability Only" onchange="{!c.onGroup}" checked="{!v.mapfreLiablityOnly == 'Liability'}"/>
+                                                            <lightning:input type="radio" name="select" label="Liability + Theft"  onchange="{!c.onGroup}" checked="{!v.mapfreLiablityOnly == 'LiabilityTheft'}"/>
+                                                            <lightning:input type="radio" name="select" label="Complete Coverage" onchange="{!c.onGroup}" checked="{!v.mapfreLiablityOnly == 'Complete'}"/>
+                                                        </div>
+                                                    </aura:set>
+                                                </aura:if>
+                                            </div><!-- end unit -->
+                                            
+                                            <!--<aura:if isTrue="{v.policyType == 'Motorcycle/Street Legal ATV'}">
+                                                <div class="unit">
+                                                    <h6 class="red">Towed Unit 1: ATV</h6>
+                                                    
+                                                    <div class="adjustable-fields">
+                                                        <div class="adjustable-field">
+                                                            <span class="field-label">
+                                                                <i class="icon-info"></i> Days in tow
+                                                            </span>
+                                                            <span class="field-item">
+                                                                <button class="field-minus"></button>
+                                                                <input type="text" value="10" />
+                                                                <button class="field-plus"></button>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </aura:if>-->
+
+                                            <div class="quote-button">
+                                                <button class="button -secondary -wider" name="mapfreRate" onclick="{!c.onNextClick}" disabled="{!and(v.mapfreLiablityOnly != 'Liability', !v.liabilityshowMapfre)}" style="{!if(and(v.mapfreLiablityOnly != 'Liability',  !v.liabilityshowMapfre), 'background: #e9eaec;', '')}">Purchase</button>
+                                            </div>
+                                            
+                                            <div class="quote-terms">
+                                                <aura:if isTrue="{!v.policyType == 'Automobile'}">
+                                                    <a href="{!$Label.c.Terms_and_Conditions_Automobile_Mapfre}" class="simple-link"
+                                                    target="_blank">Full terms <i class="icon-new-tab"></i></a>
+                                                </aura:if>
+                                                <aura:if isTrue="{!v.policyType == 'RV'}">
+                                                    <a href="{!$Label.c.Terms_and_Conditions_RV_Mapfre}" class="simple-link"
+                                                    target="_blank">Full terms <i class="icon-new-tab"></i></a>
+                                                </aura:if>
+                                                <aura:if isTrue="{!v.policyType == 'Motorcycle/Street Legal ATV'}">
+                                                    <a href="{!$Label.c.Terms_and_Conditions_Motorcycle_Mapfre}" class="simple-link"
+                                                    target="_blank">Full terms <i class="icon-new-tab"></i></a>
+                                                </aura:if>
+                                                <!--a href="#" class="simple-link" target="_blank">Full terms <i class="icon-new-tab"></i></a-->
+                                            </div>
+                                            
+                                            
+                                        </div>
+                                    </div><!-- end quote-box -->
+                                </div>
+                            </aura:if>
+                        </div><!-- end grid -->
+                    </aura:if>
+                </div><!-- end #quotes-normal-view -->
+                
+                <aura:if isTrue="{!v.highlightView}">
+                    <div class="quotes-highlights-view">
+                        <div class="align-center _mg-b-sm">
+                            <button class="button -secondary" id="show-normal-view" onclick="{!c.normalView}">Quote Detail</button>
+                        </div>
+                        
+                        <div class="grid -spacing-md">
+                            
+                            <aura:if isTrue="{!v.showQualitas}">
+                                <div class="grid_1-3 grid_1-lg">
+                                    <div class="quote-box">
+                                        <div class="quote-provider">
+                                            <img src="{!$Resource.mexJs  + '/mexJs/images/qualitas.png'}" alt="Qualitas"/>
+                                        </div>
+                                        <div class="quote-pricing">
+                                            <lightning:formattedNumber value="{!v.qualitasRateValue}" style="currency" currencyCode="USD" />
+                                        </div>
+                                        
+                                        <div class="quote-body">
+                                            <div class="quote-highlight">
+                                                <div class="highlight-title">
+                                                    Deductibles
+                                                    <aura:if isTrue="{!v.coverageMap.Qualitas.Deductibles__c == 'Yes'}">
+                                                        <i class="icon-checkmark"></i>
+                                                        <aura:set attribute="else">
+                                                            <!--<i class="icon-cross"></i>-->
+                                                            <i style="text-align=right;">{!v.coverageMap.Qualitas.Deductibles__c}</i>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </div>
+                                                
+                                                <aura:if isTrue="{!!v.qualitasLiablityOnly}">
+                                                    <aura:if isTrue="{!v.policyType == 'Northbound'}">
+                                                        <div class="highlight-details-list">
+                                                            <div class="clearfix">
+                                                                <div class="highlight-list-item">
+                                                                    Third Party Liability Damage
+                                                                </div>
+                                                                <div class="highlight-list-desc">
+                                                                    <aura:if isTrue="{!not(empty(v.coverageMap.Qualitas.Deductible_Damage__c))}">
+                                                                        ${!v.coverageMap.Qualitas.Deductible_Damage__c}
+                                                                        <aura:set attribute="else">
+                                                                            $0
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </aura:if>
+                                                </aura:if>
+                                                
+                                                <div class="highlight-list-desc">
+                                                    <aura:if isTrue="{!!v.qualitasLiablityOnly}">
+                                                        <div class="highlight-title" style="padding-left: 15px">
+                                                            Collision Deductible
+                                                            <aura:if isTrue="{!or(v.policyType == 'Automobile')}">
+                                                                <span style="position: absolute;right: 0;">
+                                                                    <aura:if isTrue="{!empty(v.auto_collision_deductible)}">
+                                                                        N/A
+                                                                        <aura:set attribute="else">
+                                                                            <lightning:formattedNumber value="{!v.auto_collision_deductible}" style="currency" currencyCode="USD" />
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                </span>
+                                                            </aura:if>
+                                                            <aura:if isTrue="{!or(v.policyType == 'RV')}">
+                                                                <span style="position: absolute;right: 0;">
+                                                                    <aura:if isTrue="{!empty(v.rv_collision_deductible)}">
+                                                                        N/A
+                                                                        <aura:set attribute="else">
+                                                                            <lightning:formattedNumber value="{!v.rv_collision_deductible}" style="currency" currencyCode="USD" />
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                </span>
+                                                            </aura:if>
+                                                            <aura:if isTrue="{!or(v.policyType == 'Motorcycle/Street Legal ATV')}">
+                                                                <span style="position: absolute;right: 0;">
+                                                                    <aura:if isTrue="{!empty(v.moto_qual_collision_deductible)}">
+                                                                        N/A
+                                                                        <aura:set attribute="else">
+                                                                            <lightning:formattedNumber value="{!v.moto_qual_collision_deductible}" style="currency" currencyCode="USD" />
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                </span>
+                                                            </aura:if>
+                                                            <aura:if isTrue="{!and(v.policyType != 'Automobile', v.policyType != 'RV')}">
+                                                                <aura:if isTrue="{!and(v.policyType != 'Motorcycle/Street Legal ATV' )}">
+                                                                    <aura:if isTrue="{!empty(v.coverageMap.Qualitas.Collision_Deductible__c)}">
+                                                                        <span style="position: absolute;right: 0;">N/A</span>
+                                                                        <aura:set attribute="else">
+                                                                            <div class="slds-text-align_right">
+                                                                                <lightning:formattedNumber value="{!v.coverageMap.Qualitas.Collision_Deductible__c}" style="currency" currencyCode="USD" />
+                                                                            </div>
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                </aura:if>
+                                                            </aura:if>
+                                                        </div>
+                                                        
+                                                        <div class="highlight-title" style="padding-left: 15px">
+                                                            Total Theft Deductible
+                                                            <aura:if isTrue="{!or(v.policyType == 'Automobile')}">
+                                                                <span style="position: absolute;right: 0;">
+                                                                    <aura:if isTrue="{!empty(v.auto_theft_Total)}">
+                                                                        N/A
+                                                                        <aura:set attribute="else">
+                                                                            <lightning:formattedNumber value="{!v.auto_theft_Total}" style="currency" currencyCode="USD" />
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                </span>
+                                                            </aura:if>
+                                                            <aura:if isTrue="{!or(v.policyType == 'RV')}">
+                                                                <span style="position: absolute;right: 0;">
+                                                                    <aura:if isTrue="{!empty(v.rv_theft_Total)}">
+                                                                        N/A
+                                                                        <aura:set attribute="else">
+                                                                            <lightning:formattedNumber value="{!v.rv_theft_Total}" style="currency" currencyCode="USD" />
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                </span>
+                                                            </aura:if>
+                                                            <aura:if isTrue="{!or(v.policyType == 'Motorcycle/Street Legal ATV')}">
+                                                                <span style="position: absolute;right: 0;">
+                                                                    <aura:if isTrue="{!empty(v.moto_qual_theft_Total)}">
+                                                                        N/A
+                                                                        <aura:set attribute="else">
+                                                                            <lightning:formattedNumber value="{!v.moto_qual_theft_Total}" style="currency" currencyCode="USD" />
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                </span>
+                                                            </aura:if>
+                                                            <aura:if isTrue="{!and(v.policyType != 'Automobile', v.policyType != 'RV')}">
+                                                                <aura:if isTrue="{!and(v.policyType != 'Motorcycle/Street Legal ATV')}">
+                                                                    <aura:if isTrue="{!empty(v.coverageMap.Qualitas.Total_Theft_Deductible__c)}">
+                                                                        <span style="position: absolute;right: 0;">N/A</span>
+                                                                        <aura:set attribute="else">
+                                                                            <div class="slds-text-align_right">
+                                                                                <lightning:formattedNumber value="{!v.coverageMap.Qualitas.Total_Theft_Deductible__c}" style="currency" currencyCode="USD" />
+                                                                            </div>
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                </aura:if>
+                                                            </aura:if>
+                                                        </div>
+                                                    </aura:if>
+                                                    <div class="highlight-title" style="padding-left: 15px">
+                                                        Uninsured/Underinsured Motorist Deductible Waiver
+                                                        <aura:if isTrue="{!v.coverageMap.Qualitas.Uninsured_Motorist_Deductible_Waiver__c == 'Yes'}">
+                                                            <i class="icon-checkmark"></i>
+                                                            <aura:set attribute="else">
+                                                                <!--<i class="icon-cross"></i> -->
+                                                                <i style="text-align=right;">{!v.coverageMap.Qualitas.Uninsured_Motorist_Deductible_Waiver__c}</i>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <aura:if isTrue="{!!v.qualitasLiablityOnly}">
+                                                <div class="quote-highlight">
+                                                    <div class="highlight-title">
+                                                        Labor Rates
+                                                        <aura:if isTrue="{!empty(v.coverageMap.Qualitas.Labor_Rates__c)}">
+                                                            <span style="position: absolute;right: 0;">N/A</span>
+                                                            <aura:set attribute="else">
+                                                                <div class="slds-text-align_right">
+                                                                    {!v.coverageMap.Qualitas.Labor_Rates__c}
+                                                                </div>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="quote-highlight">
+                                                    <div class="highlight-title">
+                                                        Glass Breakage
+                                                        <aura:if isTrue="{!v.coverageMap.Qualitas.Glass_Breakage__c == 'Yes'}">
+                                                            <i class="icon-checkmark"></i>
+                                                            <aura:set attribute="else">
+                                                                <i class="icon-cross"></i>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                            </aura:if>
+                                            
+                                            <div class="quote-highlight">
+                                                <div class="highlight-title">
+                                                    Roadside assistance
+                                                    <aura:if isTrue="{!v.coverageMap.Qualitas.Roadside_Assistance__c == 'Yes'}">
+                                                        <i class="icon-checkmark"></i>
+                                                        <aura:set attribute="else">
+                                                            <i class="icon-cross"></i>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </div>
+                                                <aura:if isTrue="{!not(empty(v.coverageMap.Qualitas.Roadside_Details__c))}">
+                                                    <div class="slds-text-align_right">
+                                                        {!v.coverageMap.Qualitas.Roadside_Details__c}
+                                                    </div>
+                                                </aura:if>
+                                            </div>
+                                            
+                                            <div class="quote-highlight">
+                                                <div class="highlight-title">
+                                                    Towing
+                                                    <aura:if isTrue="{!v.coverageMap.Qualitas.Towing__c == 'Yes'}">
+                                                        <i class="icon-checkmark"></i>
+                                                        <aura:set attribute="else">
+                                                            <i class="icon-cross"></i>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </div>
+                                                <aura:if isTrue="{!not(empty(v.coverageMap.Qualitas.Towing_Details__c))}">
+                                                    <div class="slds-text-align_right">
+                                                        {!v.coverageMap.Qualitas.Towing_Details__c}
+                                                    </div>
+                                                </aura:if>
+                                            </div>
+                                            
+                                            <aura:if isTrue="{!!v.qualitasLiablityOnly}">
+                                                <div class="quote-highlight">
+                                                    <div class="highlight-title">
+                                                        Rental Car
+                                                        <aura:if isTrue="{!v.coverageMap.Qualitas.Rental_Car__c == 'Yes'}">
+                                                            <i class="icon-checkmark"></i>
+                                                            <aura:set attribute="else">
+                                                                <i class="icon-cross"></i>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                            </aura:if>
+                                            
+                                            <div class="quote-highlight">
+                                                <div class="highlight-title">
+                                                    Legal Defense and Bail
+                                                    <aura:if isTrue="{!v.coverageMap.Qualitas.Legal_Defense_and_Bail__c == 'Yes'}">
+                                                        <i class="icon-checkmark"></i>
+                                                        <aura:set attribute="else">
+                                                            <i class="icon-cross"></i>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </div>
+                                                <aura:if isTrue="{!not(empty(v.coverageMap.Qualitas.Legal_Defense_and_Bail_Details__c))}">
+                                                    <div class="slds-text-align_right">
+                                                        {!v.coverageMap.Qualitas.Legal_Defense_and_Bail_Details__c}
+                                                    </div>
+                                                </aura:if>
+                                            </div>
+                                            
+                                            <aura:if isTrue="{!!v.qualitasLiablityOnly}">
+                                                <div class="quote-highlight">
+                                                    <div class="highlight-title">
+                                                        Vandalism
+                                                        <aura:if isTrue="{!v.coverageMap.Qualitas.Vandalism__c == 'Yes'}">
+                                                            <i class="icon-checkmark"></i>
+                                                            <aura:set attribute="else">
+                                                                <i class="icon-cross"></i>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="quote-highlight">
+                                                    <div class="highlight-title">
+                                                        
+                                                        Partial Theft
+                                                        <aura:if isTrue="{!v.coverageMap.Qualitas.Partial_Theft__c == 'Yes'}">
+                                                            <i class="icon-checkmark"></i>
+                                                            <aura:set attribute="else">
+                                                                <i class="icon-cross"></i>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="quote-highlight">
+                                                    <div class="highlight-title">
+                                                        
+                                                        Plane Tickets Home
+                                                        <aura:if isTrue="{!v.coverageMap.Qualitas.Plane_Tickets_Home__c == 'Yes'}">
+                                                            <i class="icon-checkmark"></i>
+                                                            <aura:set attribute="else">
+                                                                <i class="icon-cross"></i>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="quote-highlight">
+                                                    <div class="highlight-title">
+                                                        Bonus Coverage
+                                                        <aura:if isTrue="{!empty(v.coverageMap.Qualitas.Bonus_Coverage__c)}">
+                                                            <span style="position: absolute;right: 0;">N/A</span>
+                                                            <aura:set attribute="else">
+                                                                <div class="slds-text-align_right">
+                                                                    {!v.coverageMap.Qualitas.Bonus_Coverage__c}
+                                                                </div>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                            </aura:if>
+
+                                            <div class="quote-button slds-p-top_large">
+                                                <button class="button -secondary -wider" name="qualitasRate" onclick="{!c.onNextClick}" disabled="{!and(!v.qualitasLiablityOnly, !v.liabilityshowQualitas)}" style="{!if(and(!v.qualitasLiablityOnly, !v.liabilityshowQualitas), 'background: #e9eaec;', '')}" >Purchase</button>
+                                            </div>
+
+                                            <div class="quote-terms">
+                                                <aura:if isTrue="{!v.policyType == 'Automobile'}">
+                                                    <a href="{!$Label.c.Terms_and_Conditions_Automobile_Qualitas}" class="simple-link"
+                                                    target="_blank">Full terms <i class="icon-new-tab"></i></a>
+                                                </aura:if>
+                                                <aura:if isTrue="{!v.policyType == 'RV'}">
+                                                    
+                                                    <a href="{!$Label.c.Terms_and_Conditions_RV_Qualitas}" class="simple-link"
+                                                    target="_blank">Full terms <i class="icon-new-tab"></i></a>
+                                                </aura:if>
+                                                <aura:if isTrue="{!v.policyType == 'Motorcycle/Street Legal ATV'}">
+                                                    <a href="{!$Label.c.Terms_and_Conditions_Motorcycle_Qualitas}" class="simple-link"
+                                                    target="_blank">Full terms <i class="icon-new-tab"></i></a>
+                                                </aura:if>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </aura:if>
+
+                            <aura:if isTrue="{!v.showChubb}">
+                                <div class="grid_1-3 grid_1-lg">
+                                    
+                                    <div class="quote-box -recommended">
+                                        <div class="quote-provider">
+                                            <img src="{!$Resource.mexJs  + '/mexJs/images/chubb.png'}" alt="Chubb" />
+                                            <div class="recommended-label">Recommended</div>
+                                        </div>
+                                        <div class="quote-pricing">
+                                            <lightning:formattedNumber value="{!v.chubbRateValue}" style="currency" currencyCode="USD"/>
+                                        </div>
+                                        
+                                        <div class="quote-body">
+                                            <div class="quote-highlight">
+                                                <div class="highlight-title">
+                                                    Deductibles
+                                                    <aura:if isTrue="{!v.coverageMap.Chubb.Deductibles__c == 'Yes'}">
+                                                        <i class="icon-checkmark"></i>
+                                                        <aura:set attribute="else">
+                                                            <!--<i class="icon-cross"></i>-->
+                                                            <i style="text-align=right;">{!v.coverageMap.Chubb.Deductibles__c}</i> 
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </div>
+                                                
+                                                <aura:if isTrue="{!!v.chubbLiablityOnly}">
+                                                    <aura:if isTrue="{!v.policyType == 'Northbound'}">
+                                                        <div class="highlight-details-list">
+                                                            <div class="clearfix">
+                                                                <div class="highlight-list-item">
+                                                                    Third Party Liability Damage
+                                                                </div>
+                                                                <div class="highlight-list-desc">
+                                                                    <aura:if isTrue="{!not(empty(v.coverageMap.Chubb.Deductible_Damage__c))}">
+                                                                        ${!v.coverageMap.Chubb.Deductible_Damage__c}
+                                                                        <aura:set attribute="else">
+                                                                            $0
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </aura:if>
+                                                </aura:if>
+                                                
+                                                
+                                                <div class="highlight-list-desc">
+                                                    <aura:if isTrue="{!!v.chubbLiablityOnly}">
+                                                        <div class="highlight-title" style="padding-left: 15px">
+                                                            Collision Deductible
+                                                            <aura:if isTrue="{!empty(v.coverageMap.Chubb.Collision_Deductible__c)}">
+                                                                <span style="position: absolute;right: 0;">N/A</span>
+                                                                <aura:set attribute="else">
+                                                                    <div class="slds-text-align_right">
+                                                                        {!v.coverageMap.Chubb.Collision_Deductible__c}<!--lightning:formattedNumber value="" style="currency" currencyCode="USD" /-->
+                                                                    </div>
+                                                                </aura:set>
+                                                            </aura:if>
+                                                        </div>
+                                                        
+                                                        <div class="highlight-title" style="padding-left: 15px">
+                                                            Total Theft Deductible
+                                                            <aura:if isTrue="{!empty(v.coverageMap.Chubb.Total_Theft_Deductible__c)}">
+                                                                <span style="position: absolute;right: 0;">N/A</span>
+                                                                <aura:set attribute="else">
+                                                                    <div class="slds-text-align_right">
+                                                                        {!v.coverageMap.Chubb.Total_Theft_Deductible__c}<!--lightning:formattedNumber value="" style="currency" currencyCode="USD" /-->
+                                                                        <!-- this are commented because value have fixed $like this-->
+                                                                    </div>
+                                                                </aura:set>
+                                                            </aura:if>
+                                                        </div>
+                                                    </aura:if>
+                                                    
+                                                    <div class="highlight-title" style="padding-left: 15px">
+                                                        Uninsured/Underinsured Motorist Deductible Waiver
+                                                        <aura:if isTrue="{!v.coverageMap.Chubb.Uninsured_Motorist_Deductible_Waiver__c == 'Yes'}">
+                                                            <i class="icon-checkmark"></i>
+                                                            <aura:set attribute="else">
+                                                                <!--<i class="icon-cross"></i> -->
+                                                                <i style="text-align=right;">{!v.coverageMap.Chubb.Uninsured_Motorist_Deductible_Waiver__c}</i>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <aura:if isTrue="{!!v.chubbLiablityOnly}">
+                                                <div class="quote-highlight">
+                                                    <div class="highlight-title">
+                                                        Labor Rates
+                                                        <aura:if isTrue="{!empty(v.coverageMap.Chubb.Labor_Rates__c)}">
+                                                            <span style="position: absolute;right: 0;">N/A</span>
+                                                            <aura:set attribute="else">
+                                                                <div class="slds-text-align_right">
+                                                                    {!v.coverageMap.Chubb.Labor_Rates__c}
+                                                                </div>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                            
+                                            
+                                                <div class="quote-highlight">
+                                                    <div class="highlight-title">
+                                                        Glass Breakage
+                                                        <aura:if isTrue="{!v.coverageMap.Chubb.Glass_Breakage__c == 'Yes'}">
+                                                            <i class="icon-checkmark"></i>
+                                                            <aura:set attribute="else">
+                                                                <i class="icon-cross"></i>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                            </aura:if>
+                                            
+                                            <div class="quote-highlight">
+                                                <div class="highlight-title">
+                                                    Roadside assistance
+                                                    <aura:if isTrue="{!v.coverageMap.Chubb.Roadside_Assistance__c == 'Yes'}">
+                                                        <i class="icon-checkmark"></i>
+                                                        <aura:set attribute="else">
+                                                            <i class="icon-cross"></i>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </div>
+                                                <aura:if isTrue="{!not(empty(v.coverageMap.Chubb.Roadside_Details__c))}">
+                                                    <div class="slds-text-align_right">
+                                                        {!v.coverageMap.Chubb.Roadside_Details__c}
+                                                    </div>
+                                                </aura:if>
+                                            </div>
+                                            
+                                            <div class="quote-highlight">
+                                                <div class="highlight-title">
+                                                    Towing
+                                                    <aura:if isTrue="{!v.coverageMap.Chubb.Towing__c == 'Yes'}">
+                                                        <i class="icon-checkmark"></i>
+                                                        <aura:set attribute="else">
+                                                            <i class="icon-cross"></i>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </div>
+                                                <aura:if isTrue="{!not(empty(v.coverageMap.Chubb.Towing_Details__c))}">
+                                                    <div class="slds-text-align_right">
+                                                        {!v.coverageMap.Chubb.Towing_Details__c}
+                                                    </div>
+                                                </aura:if>
+                                            </div>
+                                            
+                                            <aura:if isTrue="{!!v.chubbLiablityOnly}">
+                                                <div class="quote-highlight">
+                                                    <div class="highlight-title">
+                                                        Rental Car
+                                                        <aura:if isTrue="{!v.coverageMap.Chubb.Rental_Car__c == 'Yes'}">
+                                                            <i class="icon-checkmark"></i>
+                                                            <aura:set attribute="else">
+                                                                <i class="icon-cross"></i>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                            </aura:if>
+                                            
+                                            <div class="quote-highlight">
+                                                <div class="highlight-title">
+                                                    Legal Defense and Bail
+                                                    <aura:if isTrue="{!v.coverageMap.Chubb.Legal_Defense_and_Bail__c == 'Yes'}">
+                                                        <i class="icon-checkmark"></i>
+                                                        <aura:set attribute="else">
+                                                            <i class="icon-cross"></i>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </div>
+                                                <aura:if isTrue="{!not(empty(v.coverageMap.Chubb.Legal_Defense_and_Bail_Details__c))}">
+                                                    <div class="slds-text-align_right">
+                                                        {!v.coverageMap.Chubb.Legal_Defense_and_Bail_Details__c}
+                                                    </div>
+                                                </aura:if>
+                                            </div>
+                                            
+                                            <aura:if isTrue="{!!v.chubbLiablityOnly}">
+                                                <div class="quote-highlight">
+                                                    <div class="highlight-title">
+                                                        Vandalism
+                                                        <aura:if isTrue="{!v.coverageMap.Chubb.Vandalism__c == 'Yes'}">
+                                                            <i class="icon-checkmark"></i>
+                                                            <aura:set attribute="else">
+                                                                <i class="icon-cross"></i>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="quote-highlight">
+                                                    <div class="highlight-title">
+                                                        Partial Theft
+                                                        <aura:if isTrue="{!v.coverageMap.Chubb.Partial_Theft__c == 'Yes'}">
+                                                            <i class="icon-checkmark"></i>
+                                                            <aura:set attribute="else">
+                                                                <i class="icon-cross"></i>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="quote-highlight">
+                                                    <div class="highlight-title">
+                                                        Plane Tickets Home
+                                                        <aura:if isTrue="{!v.coverageMap.Chubb.Plane_Tickets_Home__c == 'Yes'}">
+                                                            <i class="icon-checkmark"></i>
+                                                            <aura:set attribute="else">
+                                                                <i class="icon-cross"></i>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="quote-highlight">
+                                                    <div class="highlight-title">
+                                                        Bonus Coverage
+                                                        <aura:if isTrue="{!empty(v.coverageMap.Chubb.Bonus_Coverage__c)}">
+                                                            <span style="position: absolute;right: 0;">N/A</span>
+                                                            <aura:set attribute="else">
+                                                                <div class="slds-text-align_right">
+                                                                    {!v.coverageMap.Chubb.Bonus_Coverage__c}
+                                                                </div>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                            </aura:if>
+
+                                            <div class="quote-button slds-p-top_large">
+                                                <button class="button -ternary -wider" name="chubbRate" onclick="{!c.onNextClick}" disabled="{!and(!v.chubbLiablityOnly, !v.liabilityshowChubb)}" style="{!if(and(!v.chubbLiablityOnly, !v.liabilityshowChubb), 'background: #e9eaec;', '')}">Purchase</button>
+                                            </div>
+
+                                            <div class="quote-terms">
+                                                <aura:if isTrue="{!v.policyType == 'Automobile'}">
+                                                    <a href="{!$Label.c.Terms_and_Conditions_Automobile_Chubb}" class="simple-link"
+                                                    target="_blank">Full terms <i class="icon-new-tab"></i></a>
+                                                </aura:if>
+                                                <aura:if isTrue="{!v.policyType == 'RV'}">
+                                                    <a href="{!$Label.c.Terms_and_Conditions_RV_Chubb}" class="simple-link"
+                                                    target="_blank">Full terms <i class="icon-new-tab"></i></a>
+                                                </aura:if>
+                                                <aura:if isTrue="{!v.policyType == 'Motorcycle/Street Legal ATV'}">
+                                                    <a href="{!$Label.c.Terms_and_Conditions_Motorcycle_Chubb}" class="simple-link"
+                                                    target="_blank">Full terms <i class="icon-new-tab"></i></a>
+                                                </aura:if>
+                                                <!--a href="#" class="simple-link" target="_blank">Full terms <i class="icon-new-tab"></i></a-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </aura:if>
+
+                            <aura:if isTrue="{!v.showMapfre}">
+                                <div class="grid_1-3 grid_1-lg">
+                                    
+                                    <div class="quote-box">
+                                        <div class="quote-provider">
+                                            <img src="{!$Resource.mexJs  + '/mexJs/images/mapfre-logo.png'}" alt="Mapfre"/>
+                                        </div>
+                                        <div class="quote-pricing">
+                                            <lightning:formattedNumber value="{!v.mapfreRateValue}" style="currency" currencyCode="USD"/>
+                                        </div>
+                                        
+                                        <div class="quote-body">
+                                            <div class="quote-highlight">
+                                                <div class="highlight-title">
+                                                    Deductibles
+                                                    <aura:if isTrue="{!v.coverageMap.Mapfre.Deductibles__c == 'Yes'}">
+                                                        <i class="icon-checkmark"></i>
+                                                        <aura:set attribute="else">
+                                                            <!-- <i class="icon-cross"></i> -->
+                                                            <i style="text-align=right;">{!v.coverageMap.Mapfre.Deductibles__c}</i>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </div>
+                                                <aura:if isTrue="{!v.mapfreLiablityOnly != 'Liability'}">
+                                                    <aura:if isTrue="{!v.policyType == 'Northbound'}">
+                                                        <div class="highlight-details-list">
+                                                            <div class="clearfix">
+                                                                <div class="highlight-list-item">
+                                                                    Third Party Liability Damage
+                                                                </div>
+                                                                <div class="highlight-list-desc">
+                                                                    <aura:if isTrue="{!not(empty(v.coverageMap.Mapfre.Deductible_Damage__c))}">
+                                                                        ${!v.coverageMap.Mapfre.Deductible_Damage__c}
+                                                                        <aura:set attribute="else">
+                                                                            $0
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </aura:if>
+                                                </aura:if>
+                                                
+                                                
+                                                <div class="highlight-list-desc">
+                                                    <aura:if isTrue="{!v.mapfreLiablityOnly != 'Liability'}">
+                                                        <div class="highlight-title" style="padding-left: 15px">
+                                                            Collision Deductible
+                                                            <aura:if isTrue="{!or(v.policyType == 'RV')}">
+                                                                <span style="position: absolute;right: 0;">
+                                                                    <aura:if isTrue="{!empty(v.rv_collision_deductible)}">
+                                                                        N/A
+                                                                        <aura:set attribute="else">
+                                                                            <lightning:formattedNumber value="{!v.rv_collision_deductible}" style="currency" currencyCode="USD" />
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                </span>
+                                                            </aura:if>
+                                                            <aura:if isTrue="{!or(v.policyType == 'Motorcycle/Street Legal ATV')}">
+                                                                <span style="position: absolute;right: 0;">
+                                                                    <aura:if isTrue="{!empty(v.moto_map_collision_deductible)}">
+                                                                        N/A
+                                                                        <aura:set attribute="else">
+                                                                            <lightning:formattedNumber value="{!v.moto_map_collision_deductible}" style="currency" currencyCode="USD" />
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                </span>
+                                                            </aura:if>
+                                                            <aura:if isTrue="{!or(v.policyType == 'Automobile')}">
+                                                                <aura:if isTrue="{!or(v.mapfreLiablityOnly == 'Complete', v.mapfreLiablityOnly == 'Max')}">
+                                                                    <span style="position: absolute;right: 0;">
+                                                                        <aura:if isTrue="{!empty(v.auto_mapfre_collision_deductible)}">
+                                                                            N/A
+                                                                            <aura:set attribute="else">
+                                                                                <lightning:formattedNumber value="{!v.auto_mapfre_collision_deductible}" style="currency" currencyCode="USD" />
+                                                                            </aura:set>
+                                                                        </aura:if>
+                                                                    </span>
+                                                                </aura:if>
+                                                                <aura:if isTrue="{!or(v.mapfreLiablityOnly == 'Liability')}">
+                                                                    <aura:if isTrue="{!empty(v.coverageMap.Mapfre.Collision_Deductible__c)}">
+                                                                        <span style="position: absolute;right: 0;">N/A</span>
+                                                                        <aura:set attribute="else">
+                                                                            <div class="slds-text-align_right">
+                                                                                <lightning:formattedNumber value="{!v.coverageMap.Mapfre.Collision_Deductible__c}" style="currency" currencyCode="USD" />
+                                                                            </div>
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                </aura:if>
+                                                            </aura:if>
+                                                            
+                                                            <aura:if isTrue="{!and(v.policyType != 'RV', v.policyType != 'Motorcycle/Street Legal ATV')}">
+                                                                <aura:if isTrue="{!and(v.policyType != 'Automobile')}">
+                                                                    <aura:if isTrue="{!empty(v.coverageMap.Mapfre.Collision_Deductible__c)}">
+                                                                        <span style="position: absolute;right: 0;">N/A</span>
+                                                                        <aura:set attribute="else">
+                                                                            <div class="slds-text-align_right">
+                                                                                <lightning:formattedNumber value="{!v.coverageMap.Mapfre.Collision_Deductible__c}" style="currency" currencyCode="USD" />
+                                                                            </div>
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                </aura:if>
+                                                            </aura:if>
+                                                        </div>
+                                                        
+                                                        <div class="highlight-title" style="padding-left: 15px">
+                                                            Total Theft Deductible
+                                                            <aura:if isTrue="{!or(v.policyType == 'RV')}">
+                                                                <span style="position: absolute;right: 0;">
+                                                                    <aura:if isTrue="{!empty(v.rv_theft_Total)}">
+                                                                        N/A
+                                                                        <aura:set attribute="else">
+                                                                            <lightning:formattedNumber value="{!v.rv_theft_Total}" style="currency" currencyCode="USD" />
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                </span>
+                                                            </aura:if>
+                                                            <aura:if isTrue="{!or(v.policyType == 'Motorcycle/Street Legal ATV')}">
+                                                                <span style="position: absolute;right: 0;">
+                                                                    <aura:if isTrue="{!empty(v.moto_map_theft_Total)}">
+                                                                        N/A
+                                                                        <aura:set attribute="else">
+                                                                            <lightning:formattedNumber value="{!v.moto_map_theft_Total}" style="currency" currencyCode="USD" />
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                </span>
+                                                            </aura:if>
+                                                            <aura:if isTrue="{!or(v.policyType == 'Automobile')}">
+                                                                <aura:if isTrue="{!or(v.mapfreLiablityOnly == 'Complete', v.mapfreLiablityOnly == 'Max')}">
+                                                                    <span style="position: absolute;right: 0;">
+                                                                        <aura:if isTrue="{!empty(v.auto_mapfre_theft_Total)}">
+                                                                            N/A
+                                                                            <aura:set attribute="else">
+                                                                                <lightning:formattedNumber value="{!v.auto_mapfre_theft_Total}" style="currency" currencyCode="USD" />
+                                                                            </aura:set>
+                                                                        </aura:if>
+                                                                    </span>
+                                                                </aura:if>
+                                                                <aura:if isTrue="{!or(v.mapfreLiablityOnly == 'Liability')}">
+                                                                    <aura:if isTrue="{!empty(v.coverageMap.Mapfre.Total_Theft_Deductible__c)}">
+                                                                        <span style="position: absolute;right: 0;">N/A</span>
+                                                                        <aura:set attribute="else">
+                                                                            <div class="slds-text-align_right">
+                                                                                <lightning:formattedNumber value="{!v.coverageMap.Mapfre.Total_Theft_Deductible__c}" style="currency" currencyCode="USD" />
+                                                                                
+                                                                            </div>
+                                                                        </aura:set> 
+                                                                    </aura:if>
+                                                                </aura:if>
+                                                            </aura:if>
+                                                            
+                                                            <aura:if isTrue="{!and(v.policyType != 'RV', v.policyType != 'Motorcycle/Street Legal ATV')}">
+                                                                <aura:if isTrue="{!and(v.policyType != 'Automobile')}">
+                                                                    <aura:if isTrue="{!empty(v.coverageMap.Mapfre.Total_Theft_Deductible__c)}">
+                                                                        <span style="position: absolute;right: 0;">N/A</span>
+                                                                        <aura:set attribute="else">
+                                                                            <div class="slds-text-align_right">
+                                                                                <lightning:formattedNumber value="{!v.coverageMap.Mapfre.Total_Theft_Deductible__c}" style="currency" currencyCode="USD" />
+                                                                                
+                                                                                
+                                                                            </div>
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                </aura:if>
+                                                            </aura:if>
+                                                        </div>
+                                                    </aura:if>
+                                                    
+                                                    <div class="highlight-title" style="padding-left: 15px">
+                                                        Uninsured/Underinsured Motorist Deductible Waiver
+                                                        <aura:if isTrue="{!v.coverageMap.Mapfre.Uninsured_Motorist_Deductible_Waiver__c == 'Yes'}">
+                                                            <i class="icon-checkmark"></i>
+                                                            <aura:set attribute="else">
+                                                                <!--<i class="icon-cross"></i>-->
+                                                                <i style="text-align=right;">{!v.coverageMap.Mapfre.Uninsured_Motorist_Deductible_Waiver__c}</i>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <aura:if isTrue="{!v.mapfreLiablityOnly != 'Liability'}">
+                                                <div class="quote-highlight">
+                                                    <div class="highlight-title">
+                                                        Labor Rates
+                                                        <aura:if isTrue="{!empty(v.coverageMap.Mapfre.Labor_Rates__c)}">
+                                                            <span style="position: absolute;right: 0;">N/A</span>
+                                                            <aura:set attribute="else">
+                                                                <div class="slds-text-align_right">
+                                                                    {!v.coverageMap.Mapfre.Labor_Rates__c}
+                                                                </div>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="quote-highlight">
+                                                    <div class="highlight-title">
+                                                        Glass Breakage
+                                                        <aura:if isTrue="{!v.coverageMap.Mapfre.Glass_Breakage__c == 'Yes'}">
+                                                            <i class="icon-checkmark"></i>
+                                                            <aura:set attribute="else">
+                                                                <i class="icon-cross"></i>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                            </aura:if>
+                                            
+                                            <div class="quote-highlight">
+                                                <div class="highlight-title">
+                                                    Roadside assistance
+                                                    <aura:if isTrue="{!v.coverageMap.Mapfre.Roadside_Assistance__c == 'Yes'}">
+                                                        <i class="icon-checkmark"></i>
+                                                        <aura:set attribute="else">
+                                                            <i class="icon-cross"></i>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </div>
+                                                <aura:if isTrue="{!not(empty(v.coverageMap.Mapfre.Roadside_Details__c))}">
+                                                    <div class="slds-text-align_right">
+                                                        {!v.coverageMap.Mapfre.Roadside_Details__c}
+                                                    </div>
+                                                </aura:if>
+                                            </div>
+                                            
+                                            <div class="quote-highlight">
+                                                <div class="highlight-title">
+                                                    Towing
+                                                    <aura:if isTrue="{!v.coverageMap.Mapfre.Towing__c == 'Yes'}">
+                                                        <i class="icon-checkmark"></i>
+                                                        <aura:set attribute="else">
+                                                            <i class="icon-cross"></i>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </div>
+                                                <aura:if isTrue="{!not(empty(v.coverageMap.Mapfre.Towing_Details__c))}">
+                                                    <div class="slds-text-align_right">
+                                                        {!v.coverageMap.Mapfre.Towing_Details__c}
+                                                    </div>
+                                                </aura:if>
+                                            </div>
+                                            
+                                            <aura:if isTrue="{!v.mapfreLiablityOnly != 'Liability'}">
+                                                <div class="quote-highlight">
+                                                    <div class="highlight-title">
+                                                        Rental Car
+                                                        <aura:if isTrue="{!v.coverageMap.Mapfre.Rental_Car__c == 'Yes'}">
+                                                            <i class="icon-checkmark"></i>
+                                                            <aura:set attribute="else">
+                                                                <i class="icon-cross"></i>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                            </aura:if>
+                                                
+                                            <div class="quote-highlight">
+                                                <div class="highlight-title">
+                                                    Legal Defense and Bail
+                                                    <aura:if isTrue="{!v.coverageMap.Mapfre.Legal_Defense_and_Bail__c == 'Yes'}">
+                                                        <i class="icon-checkmark"></i>
+                                                        <aura:set attribute="else">
+                                                            <i class="icon-cross"></i>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </div>
+                                                <aura:if isTrue="{!not(empty(v.coverageMap.Mapfre.Legal_Defense_and_Bail_Details__c))}">
+                                                    <div class="slds-text-align_right">
+                                                        {!v.coverageMap.Mapfre.Legal_Defense_and_Bail_Details__c}
+                                                    </div>
+                                                </aura:if>
+                                            </div>
+                                            <aura:if isTrue="{!v.mapfreLiablityOnly != 'Liability'}">
+                                                <div class="quote-highlight">
+                                                    <div class="highlight-title">
+                                                        Vandalism
+                                                        <aura:if isTrue="{!v.coverageMap.Mapfre.Vandalism__c == 'Yes'}">
+                                                            <i class="icon-checkmark"></i>
+                                                            <aura:set attribute="else">
+                                                                <i class="icon-cross"></i>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="quote-highlight">
+                                                    <div class="highlight-title">
+                                                        Partial Theft
+                                                        <aura:if isTrue="{!v.coverageMap.Mapfre.Partial_Theft__c == 'Yes'}">
+                                                            <i class="icon-checkmark"></i>
+                                                            <aura:set attribute="else">
+                                                                <i class="icon-cross"></i>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="quote-highlight">
+                                                    <div class="highlight-title">
+                                                        Plane Tickets Home
+                                                        <aura:if isTrue="{!v.coverageMap.Mapfre.Plane_Tickets_Home__c == 'Yes'}">
+                                                            <i class="icon-checkmark"></i>
+                                                            <aura:set attribute="else">
+                                                                <i class="icon-cross"></i>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="quote-highlight">
+                                                    <div class="highlight-title">
+                                                        Bonus Coverage
+                                                        <aura:if isTrue="{!empty(v.coverageMap.Mapfre.Bonus_Coverage__c)}">
+                                                            <span style="position: absolute;right: 0;">N/A</span>
+                                                            <aura:set attribute="else">
+                                                                <div class="slds-text-align_right">
+                                                                    {!v.coverageMap.Mapfre.Bonus_Coverage__c}
+                                                                </div>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                            </aura:if>
+
+                                            <div class="quote-button slds-p-top_large">
+                                                <button class="button -secondary -wider" name="mapfreRate" onclick="{!c.onNextClick}" disabled="{!and(v.mapfreLiablityOnly != 'Liability', !v.liabilityshowMapfre)}" style="{!if(and(v.mapfreLiablityOnly != 'Liability', !v.liabilityshowMapfre), 'background: #e9eaec;', '')}"> Purchase</button>
+                                            </div>
+
+                                            <div class="quote-terms">
+                                                <aura:if isTrue="{!v.policyType == 'Automobile'}">
+                                                    <a href="{!$Label.c.Terms_and_Conditions_Automobile_Mapfre}" class="simple-link"
+                                                    target="_blank">Full terms <i class="icon-new-tab"></i></a>
+                                                </aura:if>
+                                                <aura:if isTrue="{!v.policyType == 'RV'}">
+                                                    <a href="{!$Label.c.Terms_and_Conditions_RV_Mapfre}" class="simple-link"
+                                                    target="_blank">Full terms <i class="icon-new-tab"></i></a>
+                                                </aura:if>
+                                                <aura:if isTrue="{!v.policyType == 'Motorcycle/Street Legal ATV'}">
+                                                    <a href="{!$Label.c.Terms_and_Conditions_Motorcycle_Mapfre}" class="simple-link"
+                                                    target="_blank">Full terms <i class="icon-new-tab"></i></a>
+                                                </aura:if>
+                                                <!--a href="#" class="simple-link" target="_blank">Full terms <i class="icon-new-tab"></i></a-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </aura:if>
+                            
+                        </div><!-- end grid -->
+                        
+                    </div><!-- end #quotes-highlights-view -->
+                </aura:if>
+                
+                
+                <div class="align-center _mg-b-md">
+                    <aura:if isTrue="{!!v.additional_towunit}">
+                        <a href="javascript:void(0)" class="simple-link" onclick="{!c.openModel}">Save quotes</a>
+                        <aura:set attribute="else">
+                            <a href="javascript:void(0)" class="simple-link" onclick="{!v.onNextClick}" >NO, THANKS I'M FINE</a>
+                        </aura:set>
+                    </aura:if>
+                </div>
+            </div>
+            
+        </section>
+        
+        <aura:if isTrue="{!v.saveQuotePop}">
+            <!-- Modal/Popup Box starts here-->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- Modal/Popup Box Header Starts here-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Save Quote</h2>
+                    </header>
+                    <!--Modal/Popup Box Body Starts here-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <div class="slds-size_12-of-12">
+                            <div class="form-container">
+                                <lightning:input aura:Id="validateField" type="text" name="firstName" placeholder="First Name" value="{!v.leadRecord.Firstname}" variant="label-hidden" required="true" />
+                                <lightning:input aura:Id="validateField" type="text" name="lastName" placeholder="Last Name" value="{!v.leadRecord.Lastname}" required="true" variant="label-hidden" class="slds-m-top_small"/>
+                                <lightning:input aura:Id="validateField" type="Email" name="Email"
+                                                 placeholder="Email" value="{!v.leadRecord.Email}" required="true"
+                                                 variant="label-hidden" class="slds-m-top_small"/>
+                                <lightning:input aura:Id="validateField" type="tel" name="phone"
+                                                 placeholder="Phone" value="{!v.leadRecord.Phone}"
+                                                 onchange="{!c.updatePhoneValue}"
+                                                 pattern="^\(\d{3}\)\s\d{3}-\d{4}$"
+                                                 messageWhenPatternMismatch="Not a valid phone number"
+                                                 variant="label-hidden" class="slds-m-top_small"/>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Modal/Popup Box Footer Starts here-->
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral" label="Cancel" title="Cancel"
+                                          onclick="{! c.closeModel }"/>
+                        <lightning:button variant="brand" label="Save Quote" title="Save Quote"
+                                          onclick="{!c.saveQuote}"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+
+    </lightning:layoutItem>
+</aura:component>

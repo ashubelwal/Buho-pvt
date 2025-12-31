@@ -1,0 +1,69 @@
+<template>
+    <div class={computedContainerClass}>
+        <!-- Input Type -->
+        <template if:true={isInput}>
+            <template if:true={label}>
+                <label for={name} class={computedLabelClass}>{label}</label>
+            </template>
+
+            <!-- Input with Icon -->
+            <template if:true={hasIcon}>
+                <div class="input-with-icon">
+                    <i class={icon}></i>
+                    <input type={inputType} id={name} name={name} value={value} placeholder={placeholder}
+                        class={computedInputClass} disabled={disabled} onchange={handleInputChange}
+                        oninput={handleInput} onkeyup={handleKeyUp} />
+                </div>
+            </template>
+
+            <!-- Input without Icon -->
+            <template if:false={hasIcon}>
+                <input type={inputType} id={name} name={name} value={value} placeholder={placeholder}
+                    class={computedInputClass} disabled={disabled} onchange={handleInputChange} oninput={handleInput}
+                    onkeyup={handleKeyUp} />
+            </template>
+        </template>
+
+        <!-- Combobox Type -->
+        <template if:true={isCombobox}>
+            <template if:true={label}>
+                <label for={name} class={computedLabelClass}>{label}</label>
+            </template>
+            <div class="dropdown-container">
+                <select id={name} name={name} class={computedDropdownClass} disabled={disabled}
+                    onchange={handleComboboxChange}>
+                    <template for:each={comboboxOptions} for:item="option">
+                        <option key={option.value} value={option.value} selected={option.isSelected}>
+                            {option.label}
+                        </option>
+                    </template>
+                </select>
+            </div>
+        </template>
+
+        <!-- Checkbox Type -->
+        <template if:true={isCheckbox}>
+            <input type="checkbox" id={name} name={name} checked={checked} disabled={disabled}
+                onchange={handleCheckboxChange} />
+            <template if:true={label}>
+                <label for={name}>
+                    <span class={computedLabelTitleClass}>{label}</span>
+                    <template if:true={hint}>
+                        <span class="checkbox-hint">{hint}</span>
+                    </template>
+                </label>
+            </template>
+        </template>
+
+        <!-- Radio Type -->
+        <template if:true={isRadio}>
+            <div class="radio-container">
+                <input type="radio" id={name} name={name} value={value} checked={checked} disabled={disabled}
+                    onchange={handleCheckboxChange} />
+                <template if:true={label}>
+                    <label for={name} class={computedLabelClass}>{label}</label>
+                </template>
+            </div>
+        </template>
+    </div>
+</template>

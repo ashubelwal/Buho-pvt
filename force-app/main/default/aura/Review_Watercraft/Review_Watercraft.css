@@ -1,0 +1,12 @@
+/* .THIS .flagInput {
+    display: flex;
+    flex-direction: row-reverse;
+} */
+
+.THIS .slds-form-element__control {
+    padding-right: 5px;
+}
+
+.THIS .flagInput > lightning-helptext > .slds-form-element__icon .slds-button > lightning-primitive-icon > .slds-button__icon {
+    fill: #328081;
+}

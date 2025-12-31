@@ -1,0 +1,17 @@
+<template>
+
+    <div class="slds-card slds-grid slds-wrap slds-align_absolute-center" style="width:100%;height:100vh;background:#003A70">
+       <template if:true={loadMessage}>
+            <a href="https://www.mexinsurance.com/" class="slds-align_absolute-center" style="width:100%;"> <img src={imgUrl} class="imgStyle"/> </a>
+
+            <p class="headerStyle">
+                {Pagemessage.Header}
+            </p>
+            <p class="noteStyle">
+                {Pagemessage.SubNote}
+            </p>
+        </template>
+    </div>
+
+
+</template>

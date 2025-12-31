@@ -1,0 +1,24 @@
+<template>
+    <div class="notranslate">
+        <button onclick={downloadFiles}>Download</button>
+        <table>
+            
+            <tbody>
+                <template for:each={AllData} for:item="eachData" for:index="index">
+                    <tr key={eachData.Index}>
+                        <td>{eachData.Name} &nbsp; {eachData.BodyLength}</td>
+                        <td>{eachData.Body}</td>
+                        <td>{eachData.CreatedDate}</td>
+            
+                        <td>
+                            <a data-id={eachData.Id} href={eachData.url} download={eachData.Name} target="_blank">{eachData.Name}</a>
+                        </td>
+                    
+                    </tr>
+                    </template>
+            </tbody>
+        </table>
+
+    </div>
+    
+</template>

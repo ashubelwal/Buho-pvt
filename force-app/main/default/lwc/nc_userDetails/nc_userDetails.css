@@ -1,0 +1,23 @@
+@import 'c/nc_globalStyle';
+
+.input {
+    --slds-c-input-color-border: #dfc9c9 !important;
+    --slds-c-input-color-border-focus: #f2f2f2 !important;
+    /* --slds-c-input-shadow: #eeeeee !important; */
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-3px);
+    }
+}
+
+.doc {
+    animation: bounce 1.5s infinite;
+}

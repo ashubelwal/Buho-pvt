@@ -1,0 +1,274 @@
+<aura:component controller="PoilcyEditController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>    
+    <aura:attribute name="screenName" type="String" default="terminateDetails" />
+    <aura:attribute name="recordId" type="String" default="" />
+    <aura:attribute name="policyType" type="String" />
+    <aura:attribute name="editPolicyName" type="String" />
+    <aura:attribute name="spinner" type="boolean" default="false" />
+    <aura:attribute name="toggleDetailOpen" type="boolean" default="false" />
+    <aura:attribute name="countVehicle" type="Integer" access="public" />
+    <aura:attribute name="policyRecord" type="Policy__c" default="{ 'sobjectType': 'Policy__c'}" />
+    <aura:attribute name="transactionRecord" type="Object" />
+
+    <aura:attribute name="quoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" />
+    <aura:attribute name="watercraftRecord" type="Watercraft__c" default="{ 'sobjectType': 'Watercraft__c'}" />
+    <aura:attribute name="clonedquoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" />
+    <aura:attribute name="towedunitRecord" type="Towed_Unit__c" default="{ 'sobjectType': 'Towed_Unit__c'}" />
+    <aura:attribute name="vehicleRecord" type="Vehicle__c" default="{ 'sobjectType': 'Vehicle__c'}" />
+    <aura:attribute name="clonedvehicleRecord" type="Vehicle__c" default="{ 'sobjectType': 'Vehicle__c'}" />
+    <aura:attribute name="driverRecord" type="Driver__c" default="{ 'sobjectType': 'Driver__c'}"/>
+    <aura:attribute name="drivers" type="List" access="public" />
+    <aura:attribute name="transactions" type="List" access="public" />
+    <aura:attribute name="watercrafts" type="List" access="public" />
+    <aura:attribute name="transporates" type="List" access="public" />
+    <aura:attribute name="refundObj" type="PoilcyEditController.refundWrapper" access="public" />
+    
+    <aura:attribute name="refundWatercraft" type="Decimal" access="public" />
+    
+    <aura:handler name="paymentIsSuccessful" event="c:paymentIsSuccessful" action="{!c.handleNext}"/>
+    <aura:attribute name="isRefund" type="Boolean" default="true"/>
+    
+    <ltng:require styles="{!$Resource.mexinsurance_assets + '/terminatestyle.css'}" afterScriptsLoaded="{!c.doInit}"/>
+    <lightning:navigation aura:id="navService"/>
+    <!--********Spinner******** -->
+    <aura:if isTrue="{!v.spinner}">
+        <lightning:spinner alternativeText="Loading" variant="brand" />
+    </aura:if> 
+    <div class="page-content">
+        <aura:if isTrue="{!v.screenName == 'terminateDetails'}">
+            <div class="slds-m-top_xx-large slds-p-around_small terminate-policy">
+                <div class="page-title">
+                    <!--button class="button -plain -back-button" name="step_5">
+                        <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/> Back
+                    </button -->
+                    <h1>Terminate Policy {!v.editPolicyName}</h1>
+                </div>
+                <div class="slds-container_large slds-container_center ">		
+                    <div class="summary-box" style="background: #f9fafb !important;">
+                        <div class="summary-box-content">
+                            <h3 class="summary-title green">Refund Calculation</h3>
+                            <ul class="summary-details-list">
+                                <li>Premium Paid: <span class="black">
+                                    <aura:if isTrue="{!v.refundObj.policyType == 'Driver License'}">
+                                        <lightning:formattedNumber value="{!v.refundObj.total}" style="currency" currencyCode="USD"/>
+                                    </aura:if>
+                                    <aura:if isTrue="{! and(v.refundObj.policyType == 'Watercraft', v.refundWatercraft != 0.00)}">
+                                        <lightning:formattedNumber value="{!v.policyRecord.Net_Premium__c - v.refundObj.total}" style="currency" currencyCode="USD"/>
+                                        <aura:set attribute="else">
+                                            <lightning:formattedNumber value="{!v.refundWatercraft}" style="currency" currencyCode="USD"/>
+                                        </aura:set>
+                                    </aura:if>
+                                    <aura:if isTrue="{! and(v.refundObj.policyType != 'Watercraft', v.refundObj.policyType != 'Driver License') }">
+                                        <lightning:formattedNumber value="{!v.policyRecord.Total_Transaction_Amount__c - v.refundObj.total}" style="currency" currencyCode="USD"/>
+                                    </aura:if>
+                                    <!-- <lightning:formattedNumber value="{!v.policyRecord.Total_Transaction_Amount__c}" style="currency" currencyCode="USD"/> -->
+                                    
+                                    
+                                    </span></li>
+                                
+                                <!---  <aura:if isTrue="{!v.refundObj.premium > 0}">
+                                    <li>Short Rate: <span class="black">
+                                        <lightning:formattedNumber value="{!v.refundObj.total}" style="currency" currencyCode="USD"/></span><i aura:id="showDetailButton" class="details-toggle" onclick="{!c.showDetail}"></i>
+                                        <ul aura:id="toggleDetail" class="details-toggle-list slds-hide">
+                                            
+                                            <aura:if isTrue="{!v.refundObj.policyNotStartedYet}">
+                                                <li>This policy has not yet started, so there is no premium charged. The cancellation fee is equal to the broker fee paid.</li>
+                                                <aura:set attribute="else">
+                                                    <li>The <lightning:formattedNumber value="{!v.refundObj.total}" style="currency" currencyCode="USD"/> short rate charge breakdown for the original policy converted to a daily rate for {!v.refundObj.daysUsed} days from {!v.policyRecord.Start_Date__c} to {!v.refundObj.endDate}.</li>
+                                                </aura:set>
+                                            </aura:if>
+                                            
+                                            
+                                            <li>Premium: <span class="black"><lightning:formattedNumber value="{!v.refundObj.premium}" style="currency" currencyCode="USD"/></span></li>
+                                            <li>Surcharge: <span class="black"><lightning:formattedNumber value="{!v.refundObj.surcharge}" style="currency" currencyCode="USD"/></span></li>
+                                            
+                                            <li>Broker Charge: <span class="black"><lightning:formattedNumber value="{!v.refundObj.brokerFee}" style="currency" currencyCode="USD"/></span></li>
+                                            <li>Mexican IVA Tax: <span class="black"><lightning:formattedNumber value="{!v.refundObj.ivaTax}" style="currency" currencyCode="USD"/></span></li>
+                                        </ul>
+                                    </li>
+                                    <aura:set attribute="else">
+                                        <li>Termination Charge: <span class="black"><lightning:formattedNumber value="{!v.refundObj.total}" style="currency" currencyCode="USD"/></span></li>
+                                        
+                                    </aura:set>
+                                </aura:if>
+									-->
+                                <!--
+                                <li>Termination Charge: <span class="black"><lightning:formattedNumber value="{!v.refundObj.total}" style="currency" currencyCode="USD"/></span></li>
+                                -->
+                            </ul>
+                        </div>
+                        <div class="summary-box-footer green-bg">
+                            <div class="summary-total">TOTAL REFUND <span class="summary-amount white">
+                                <aura:if isTrue="{!v.refundObj.policyType == 'Driver License'}">
+                                    <lightning:formattedNumber value="{!v.refundObj.total}" style="currency" currencyCode="USD"/>
+                                </aura:if>
+                                <aura:if isTrue="{! and(v.refundObj.policyType == 'Watercraft', v.refundWatercraft != 0.00)}">
+                                    <lightning:formattedNumber value="{!v.policyRecord.Net_Premium__c - v.refundObj.total}" style="currency" currencyCode="USD"/>
+                                    <aura:set attribute="else">
+                                    	<lightning:formattedNumber value="{!v.refundWatercraft}" style="currency" currencyCode="USD"/>
+                                    </aura:set>
+                                </aura:if>
+                                <aura:if isTrue="{! and(v.refundObj.policyType != 'Watercraft', v.refundObj.policyType != 'Driver License') }">
+                                    <lightning:formattedNumber value="{!v.policyRecord.Total_Transaction_Amount__c - v.refundObj.total}" style="currency" currencyCode="USD"/>
+                                </aura:if>
+                                </span></div>
+                        </div>
+                    </div>	        
+                    
+                    <div class="align-center slds-m-top_x-large">
+                        <p>Once confirmed, your policy will be terminated and your refund will be applied to your original payment method.</p>			
+                    </div>
+                    
+                    <div class="slds-m-bottom_x-large align-center buttons-group">					
+                        <button class="button -secondary -min-width-small" onclick="{! c.handleBack }">Cancel</button>
+                        <button class="button -primary -min-width-small" onclick="{! c.handleNext }">Terminate</button>
+                    </div>
+                    
+                    <h2>Policy Summary</h2>
+                    
+                    <ul class="summary-details-list -size-small">
+                        <li>Status: <span class="black">This policy is up to date</span></li>
+                        <li>Coverage: <span class="black">{!v.quoteRecord.Coverage__c}</span></li>
+                        <li>Policy Type: <span class="black">{!v.quoteRecord.Policy_Type_picklist__c}</span></li>
+                        <li>Term: <span class="black">
+                            <lightning:formattedDateTime value="{!v.quoteRecord.Start_Date_for_Coverage__c}"/>
+                            &nbsp; 
+                            <lightning:formattedTime value="{!v.quoteRecord.Start_Time__c}" />
+                            -
+                            <lightning:formattedDateTime value="{!v.quoteRecord.End_Date_for_Coverage__c}"/>
+                            &nbsp; 
+                            <lightning:formattedTime value="{!v.quoteRecord.End_Time__c}" /> ( {!v.quoteRecord.Term__c} @ {!v.quoteRecord.Term_Days__c} day ) {!v.quoteRecord.Time_Zone__c}
+                            </span></li>
+                        <li>Territory: <span class="black">{!v.quoteRecord.Territory__c}</span></li>
+                        <li>Liability: <span class="black">{!v.quoteRecord.Liability__c}</span></li>
+                        <li>Medical: <span class="black">{!v.quoteRecord.Medical__c}</span></li>
+                        <li>Business Use: <span class="black">
+                            <aura:if isTrue="{!v.quoteRecord.Vehicle_used_for_Business_Purposes__c}">
+                                Yes
+                                <aura:set attribute="else">
+                                    No
+                                </aura:set>
+                            </aura:if>
+                            </span></li>
+                        <li>Rental Vehicle: <span class="black">
+                            <aura:if isTrue="{!v.quoteRecord.Is_this_a_Rental_Vehicle__c}">
+                                Yes
+                                <aura:set attribute="else">
+                                    No
+                                </aura:set>
+                            </aura:if>
+                            </span></li>
+                        <li>Under 21 Driver: <span class="black">
+                            {!v.quoteRecord.Is_there_a_driver_under_21__c}
+                            </span></li>
+                        <li>Collision Deductible: <span class="black">$500</span></li>
+                        <li>Comprehensive Deductible: <span class="black">$1,000</span></li>
+                    </ul>
+                    
+                    <div class="horizontal-divider"></div>
+                    
+                    <div class="slds-grid slds-wrap slds-gutters_medium">
+                        <div class="slds-col slds-size_6-of-12 slds-max-small-size_12-of-12">
+                            <h3 class="red slds-m-top_small slds-m-bottom_small">Vehicle 1</h3>
+                            <ul class="summary-details-list -size-small">
+                                <li>Name: <span class="black">
+                                    {!v.vehicleRecord.Year__c}&nbsp; {!v.vehicleRecord.Make__c} &nbsp; {!v.vehicleRecord.Model__c}
+                                    </span></li>
+                                <li>Owner: <span class="black">{!v.vehicleRecord.Vehicle_Owner_Name__c}</span></li>
+                                <li>Registered Country: <span class="black">{!v.vehicleRecord.Registered_Country__c}</span></li>
+                                <li>Registered State: <span class="black">{!v.vehicleRecord.Registered_State__c}</span></li>
+                                <li>Registration ID: <span class="black">{!v.vehicleRecord.Registered_Plate__c}</span></li>
+                                <li>Business Vehicle: <span class="black">
+                                    <aura:if isTrue="{!v.vehicleRecord.Is_the_vehicle_registered_to_a_business__c}">
+                                        Yes
+                                        <aura:set attribute="else">
+                                            No
+                                        </aura:set>
+                                    </aura:if>
+                                    </span></li>
+                                <li>Business Use: <span class="black">
+                                    <aura:if isTrue="{!v.vehicleRecord.Is_the_vehicle_used_for_business_purpose__c}">
+                                        Yes
+                                        <aura:set attribute="else">
+                                            No
+                                        </aura:set>
+                                    </aura:if></span></li>
+                                <li>Rental Vehicle: <span class="black">{!v.vehicleRecord.Rental__c}</span></li>
+                                <li>Under 21 Driver: <span class="black">{!v.quoteRecord.Is_there_a_driver_under_21__c}</span></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="slds-col slds-size_6-of-12 slds-max-small-size_12-of-12 slds-m-top_large">
+                        </div>
+                    </div>
+                    
+                    <div class="slds-grid slds-wrap slds-gutters_medium">
+                        <aura:iteration items="{!v.drivers}" var="driver" indexVar="index">
+                            <div class="slds-col slds-size_6-of-12 slds-max-small-size_12-of-12 slds-m-top_large">
+                                <h3 class="red slds-m-top_small slds-m-bottom_small">Driver {!index+1}</h3>
+                                <ul class="summary-details-list -size-small">
+                                    <li>Name: <span class="black">{!driver.Name}</span></li>
+                                    <li>Email: <span class="black">{!driver.Email__c}</span></li>
+                                    <li>Phone: <span class="black">{!driver.Phone__c}</span></li>
+                                    <li>Date of Birth: <span class="black">{!driver.Dob__c}</span></li>
+                                    <li>Address: <span class="black">{!driver.Address__c} {!driver.Address__c != null ? ',' : ''} {!driver.Address_Line_2__c}</span></li>
+                                    <li>Country: <span class="black">{!driver.Country__c}</span></li>
+                                    <li>State: <span class="black">{!driver.State_Province__c}</span></li>
+                                    <li>Licence Country: <span class="black">{!driver.License_Country__c}</span></li>
+                                    <li>Licence State: <span class="black">{!driver.License_state__c}</span></li>
+                                    <li>Licence Number: <span class="black">{!driver.license_number__c}</span></li>
+                                </ul>
+                            </div>
+                        </aura:iteration>
+                        
+                        
+                        <!--div class="slds-col slds-size_6-of-12 slds-max-small-size_12-of-12 slds-m-top_large">
+                            <h3 class="red slds-m-top_small slds-m-bottom_small">Driver 2</h3>
+                            <ul class="summary-details-list -size-small">
+                                <li>Name: <span class="black">John Doe</span></li>
+                                <li>Email: <span class="black">john.doe@gmail.com</span></li>
+                                <li>Phone: <span class="black">123456789</span></li>
+                                <li>Date of Birth: <span class="black">10.06.1990</span></li>
+                                <li>Address: <span class="black">45 Bulevard Drive, San Francisco, 200789</span></li>
+                                <li>Country: <span class="black">United States</span></li>
+                                <li>State: <span class="black">California</span></li>
+                                <li>Licence Country: <span class="black">United States</span></li>
+                                <li>Licence State: <span class="black">California</span></li>
+                                <li>Licence Number: <span class="black">xxxxxxxx</span></li>
+                            </ul>
+                        </div -->
+                    </div>   
+                </div>
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.screenName == 'paymentDetail'}">
+            <lightning:layoutItem padding="around-small" size="12" class="slds-align-center slds-m-top_xx-large">
+                <div class="page-title">
+                    <button class="button -plain -back-button" name="step_14" onclick="{! c.handleBack }">
+                        <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/> Back
+                    </button>
+                    <h1>Let's tackle the Payment now</h1>                        
+                </div>
+            </lightning:layoutItem>
+            <aura:if isTrue="{!v.refundObj.policyType == 'Driver License'}">
+                <c:paymentForm onBackClick="{!c.handleBack}" policyId="{!v.recordId}" transactionDetails="{!v.transactionRecord}"
+                               isRefund="{!v.isRefund}" quoteId="{!v.clonedquoteRecord.Id}" communityUser="true" drivers="{!v.drivers}"
+                               refundAmount="{!-(v.refundObj.total)}">
+                </c:paymentForm>
+            </aura:if>
+            <aura:if isTrue="{!v.refundObj.policyType == 'Watercraft'}">
+                <c:paymentForm onBackClick="{!c.handleBack}" policyId="{!v.recordId}" transactionDetails="{!v.transactionRecord}"
+                               isRefund="{!v.isRefund}" quoteId="{!v.clonedquoteRecord.Id}" communityUser="true" drivers="{!v.drivers}"
+                               refundAmount="{!v.refundWatercraft}">
+                </c:paymentForm>
+            </aura:if>
+            <aura:if isTrue="{! and(v.refundObj.policyType != 'Watercraft', v.refundObj.policyType != 'Driver License') }">
+                <c:paymentForm onBackClick="{!c.handleBack}" policyId="{!v.recordId}" transactionDetails="{!v.transactionRecord}"
+                               isRefund="{!v.isRefund}" quoteId="{!v.clonedquoteRecord.Id}" communityUser="true" drivers="{!v.drivers}"
+                               refundAmount="{!v.refundObj.total - v.policyRecord.Total_Transaction_Amount__c}">
+                </c:paymentForm>
+            </aura:if>
+        </aura:if>
+    </div>
+</aura:component>

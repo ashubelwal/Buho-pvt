@@ -1,0 +1,14 @@
+.backgroundInverse {
+  position: fixed;
+  background-color: #a6a6a6;
+  top: 0;
+  width: 100%;
+  left: 0px;
+  height: 100%;
+  z-index: 9999 !important;
+}
+.center {
+  font-size: large;
+  margin-top: 100px;
+  text-align: center;
+}

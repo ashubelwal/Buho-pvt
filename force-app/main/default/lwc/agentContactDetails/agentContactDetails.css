@@ -1,0 +1,14 @@
+.searchListTitle {
+	font-weight: 700;	
+}
+
+.actionBtn {
+    background: #00a1e00a !important;
+    color: #0176d3 !important;
+    border-radius: 30px !important;
+    text-transform: uppercase;
+    padding: 3px 11px !important;
+    line-height: unset !important;
+    font-size: 10px !important;
+    cursor: pointer;
+}

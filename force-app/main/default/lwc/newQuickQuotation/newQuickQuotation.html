@@ -1,0 +1,597 @@
+<template>
+	<template if:true={isInsuranceScreen}>
+		<div class="maindiv slds-m-top_large notranslate">
+
+			<div class=" slds-p-vertical--large titleQuotation">
+				<h4>{label.whatkindof}</h4>
+			</div>
+
+			<div class="quickQuote">
+				<div class="quoteSection slds-m-top_x-large">
+                    <!-- <lightning-button label="Test Method" variant="brand" onclick={testMethodHandler}></lightning-button> -->
+					<div class="slds-grid slds-wrap slds-gutters">
+						<div
+							class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds slds-large-size_6-of-12 slds-m-bottom_x-large">
+							<div class="boxStyle firstDiv">
+								<div class="slds-text-heading_medium slds-text-align_center"><strong>{label.touristauto}</strong></div>
+								<div class="slds-col slds-m-top--large optionsChoice">
+									<div class=" horizontalAlign slds-m-top--x-small insuranceType">
+
+										<div class="optionDivs">
+
+                                            <div class="uppderDiv">
+                                                <div class="vehicleIconSection">
+                                                    <template if:true={isAutomobile}>
+                                                        <span class="vehicleIcon"><i class="icon-Automobile-white"></i></span>
+                                                    </template>
+                                                    <template if:false={isAutomobile}>
+                                                        <span class="vehicleIcon"><i class="icon-Automobile-blue"></i></span>
+                                                    </template>
+                                                </div>
+                                                <div class="VehicleLabel">
+                                                    <label for="Automobile"
+                                                        class=" slds-text-heading_small slds-p-top--small slds-p-left--small ">
+                                                        <input class="radiotype"
+                                                               type="radio" checked={isAutomobile} id="Automobile" name="insured"
+                                                                value="Automobile" onchange={handleChange} /><strong>{label.automobile}</strong>
+                                            
+                                                    </label>
+                                                </div>
+                                                <div class="checkedsection"> 
+                                                    <template if:true={isAutomobile}><span class="checkedIcon"><i
+                                                        class="icon-checkmark"></i></span>
+                                                    </template>
+                                                </div>
+
+                                            </div>
+                                            <div class="lowerDiv">
+                                                <template if:true={isAutomobile}>
+                                                    <span class="towedSection">
+                                                        <lightning-input type="checkbox" onchange={handleChange} label={label.withTowedUnit} value="Yes" name="isTowing"></lightning-input>
+                                                    </span>
+                                                </template>
+                                            </div>
+										</div>
+
+									</div>
+								</div>
+								<!-- <div class="slds-col ">
+                                    <div class=" horizontalAlign slds-m-top--x-small insuranceType">
+                                        
+                                        <label for="AutomobileTowed"
+                                            class=" slds-text-heading_small slds-p-around_small">
+                                            <template if:true={isAutomobileTowed}>
+                                                <span class=""><i class="icon-Automobile-white"></i></span>
+                                            </template>
+                                            <template if:false={isAutomobileTowed}>
+                                                <span class=""><i class="icon-Automobile-blue"></i></span>
+                                            </template>
+                                            <input class="radiotype slds-align_absolute-center slds-p-around_small"
+                                                type="radio" checked={isAutomobileTowed} id="AutomobileTowed"
+                                                name="insured" value="AutomobileTowed"
+                                                onchange={handleChange} /><strong>Automobile with
+                                                Towed Unit</strong>
+                                            <template if:true={isAutomobileTowed}><span class="checkedIcon"><i
+                                                        class="icon-checkmark"></i></span></template>
+                                        </label>
+                                    </div>
+                                </div> -->
+								<div class="slds-col slds-m-vertical--large">
+									<div class=" horizontalAlign slds-m-top--x-small insuranceType">
+                                        <div class="optionDivs">
+
+                                            <div class="uppderDiv">
+                                                <div class="vehicleIconSection">
+                                                    <template if:true={isRV}>
+                                                        <span class=""><i class="icon-rv-white"></i></span>
+                                                    </template>
+                                                    <template if:false={isRV}>
+                                                        <span class=""><i class="icon-rv-blue"></i></span>
+                                                    </template>
+                                                </div>
+                                                <div class="VehicleLabel">
+                                                    <label for="RV" class=" slds-text-heading_small slds-p-top--small slds-p-left--small">
+                                                        <input class="radiotype slds-align_absolute-center slds-p-around_small"
+                                                            type="radio" checked={isRV} id="RV" name="insured" value="RV"
+                                                            onchange={handleChange} /><strong>{label.RV}</strong>    
+                                                    </label>
+                                                    
+                                                </div>
+                                                <div class="checkedsection">
+                                                    <template if:true={isRV}><span class="checkedIcon"><i
+                                                        class="icon-checkmark"></i></span></template>
+                                                </div>
+
+                                            </div>
+                                            <div class="lowerDiv">
+                                                <template if:true={isRV}>
+                                                    <span class="towedSection">
+                                                        <lightning-input type="checkbox" onchange={handleChange} label={label.withTowedUnit} value="Yes" name="isTowing"></lightning-input>
+                                                    </span>
+                                                </template>
+                                            </div>
+										</div>
+
+										
+										
+									</div>
+								</div>
+								<!-- <div class="slds-col ">
+                                    <div class=" horizontalAlign slds-m-top--x-small insuranceType">
+                                      
+                                        
+                                        <label for="RVTowed" class=" slds-text-heading_small slds-p-around_small">
+                                            <template if:true={isRVTowed}>
+                                                <span class=""><i class="icon-rv-white"></i></span>
+                                            </template>
+                                            <template if:false={isRVTowed}>
+                                                <span class=""><i class="icon-rv-blue"></i></span>
+                                            </template>
+                                            <input class="radiotype slds-align_absolute-center slds-p-around_small"
+                                                type="radio" checked={isRVTowed} id="RVTowed" name="insured"
+                                                value="RVTowed" onchange={handleChange} /><strong>RV with Towed
+                                                Unit</strong>
+                                            <template if:true={isRVTowed}><span class="checkedIcon"><i
+                                                        class="icon-checkmark"></i></span></template>
+                                        </label>
+                                    </div>
+                                </div> -->
+								<div class="slds-col ">
+									<div class=" horizontalAlign slds-m-top--x-small insuranceType">
+                                        <div class="optionDivs">
+
+                                            <div class="uppderDiv">
+                                                <div class="vehicleIconSection">
+                                                    <template if:true={isMotorcycle}>
+                                                        <span class=""><i class="icon-motorcycle-white"></i></span>
+                                                    </template>
+                                                    <template if:false={isMotorcycle}>
+                                                        <span class=""><i class="icon-motorcycle-blue"></i></span>
+                                                    </template>
+                                                </div>
+                                                <div class="VehicleLabel">
+                                                    <label for="Motorcycle" class=" slds-text-heading_small slds-p-top--small slds-p-left--small">
+                                            
+                                                        <input class="radiotype slds-align_absolute-center"
+                                                            type="radio" checked={isMotorcycle} id="Motorcycle" name="insured"
+                                                            value="Motorcycle/Street Legal ATV" onchange={handleChange} />
+                                                        <strong>{label.motorcycle}</strong>
+                                                        
+                                                    </label>
+                                                </div>
+                                                <div class="checkedsection">
+                                                    <template if:true={isMotorcycle}><span class="checkedIcon"><i
+                                                        class="icon-checkmark"></i></span></template>
+                                                </div>
+
+                                            </div>
+                                            <div class="lowerDiv">
+                                                
+                                            </div>
+										</div>
+
+										
+									</div>
+								</div>
+								<!-- <lightning-layout class="slds-m-top_large" multiple-rows="true">
+                                <lightning-layout-item size="12" flexibility="auto" small-device-size="12"
+                                    medium-device-size="12" large-device-size="12" class="slds-grid slds-grid_vertical">
+
+                                
+
+
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="12" flexibility="auto" small-device-size="12"
+                                    medium-device-size="12" large-device-size="12" class="slds-grid slds-grid_vertical">
+
+                                    
+
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" flexibility="auto" small-device-size="12"
+                                    medium-device-size="12" large-device-size="12" class="slds-grid slds-grid_vertical">
+
+                                    
+
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="12" flexibility="auto" small-device-size="12"
+                                    medium-device-size="12" large-device-size="12" class="slds-grid slds-grid_vertical">
+
+                                    
+
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" flexibility="auto" small-device-size="12"
+                                    medium-device-size="12" large-device-size="12" class="slds-grid slds-grid_vertical">
+                                    
+                                </lightning-layout-item>
+                            </lightning-layout> -->
+
+							</div>
+						</div>
+						<div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds slds-large-size_6-of-12">
+							<div class="boxStyle secondDiv">
+
+								<div class="slds-text-heading_medium slds-text-align_center">
+									<strong>{label.othermexinsurance} </strong>
+								</div>
+
+								<div if:true={showNorthbound} class="slds-col ">
+									<div class=" horizontalAlign slds-m-top--large insuranceType">
+
+                                        <div class="optionDivs">
+
+                                            <div class="uppderDiv">
+                                                <div class="vehicleIconSection">
+                                                    <template if:true={isNorthbound}>
+                                                        <span class=""><i class="icon-northbound-white"></i></span>
+                                                    </template>
+                                                    <template if:false={isNorthbound}>
+                                                        <span class=""><i class="icon-northbound-blue"></i></span>
+                                                    </template>
+                                                </div>
+                                                <div class="VehicleLabel">
+                                                    <label for="Northbound" data-id="isNorthbound"
+                                            class=" slds-text-heading_small slds-p-left--small slds-p-top--xx-small">
+                                            
+                                            <input class="radiotype slds-align_absolute-center"
+                                                type="radio" checked={isNorthbound} id="Northbound" name="insured"
+                                                value="Northbound" onchange={handleChange} />
+                                            <strong>{label.northboundinsurance}</strong>
+                                            
+                                        </label>
+                                                </div>
+                                                <div class="checkedsection">
+                                                    <template if:true={isNorthbound}><span class="checkedIcon"><i
+                                                        class="icon-checkmark"></i></span></template>
+                                                </div>
+
+                                            </div>
+                                            <div class="lowerDiv">
+                                                
+                                            </div>
+										</div>
+
+										
+
+									</div>
+								</div>
+
+								<div class="slds-col">
+									<div class=" horizontalAlign insuranceType slds-m-vertical--large">
+                                        <div class="optionDivs">
+
+                                            <div class="uppderDiv">
+                                                <div class="vehicleIconSection">
+                                                    <template if:true={isHomeowner}>
+                                                        <span class=""><i class="icon-home-white"></i></span>
+                                                    </template>
+                                                    <template if:false={isHomeowner}>
+                                                        <span class=""><i class="icon-home-blue"></i></span>
+                                                    </template>
+                                                </div>
+                                                <div class="VehicleLabel">
+                                                    <label for="Homeowner" data-id="isHomeowner"
+                                            class=" slds-text-heading_small slds-p-around_small">
+                                            
+                                            <input class="radiotype slds-align_absolute-center slds-p-around_small"
+                                                type="radio" checked={isHomeowner} id="Homeowner" name="insured"
+                                                value="Homeowner" onchange={handleChange} />
+                                            <strong>{label.privateresidence}</strong>
+                                            
+                                        </label>
+                                                </div>
+                                                <div class="checkedsection">
+                                                    <template if:true={isHomeowner}><span class="checkedIcon"><i
+                                                        class="icon-checkmark"></i></span></template>
+                                                </div>
+
+                                            </div>
+                                            <div class="lowerDiv">
+                                                
+                                            </div>
+										</div>
+
+										
+
+
+
+									</div>
+								</div>
+
+								<div class="slds-col">
+									<div class=" horizontalAlign insuranceType">
+
+                                        <div class="optionDivs">
+
+                                            <div class="uppderDiv">
+                                                <div class="vehicleIconSection">
+                                                    <template if:true={isWatercraft}>
+                                                        <span class=""><i class="icon-watercraft-white"></i></span>
+                                                    </template>
+                                                    <template if:false={isWatercraft}>
+                                                        <span class=""><i class="icon-watercraft-blue"></i></span>
+                                                    </template>
+                                                </div>
+                                                <div class="VehicleLabel">
+                                                    <label for="Watercraft" data-id="isWatercraft"
+                                            class=" slds-text-heading_small slds-p-around_small">
+                                            
+                                            <input class="radiotype" type="radio" checked={isWatercraft} id="Watercraft"
+                                                name="insured" value="Watercraft" onchange={handleChange} />
+                                            <strong>{label.watercraftinmex}</strong>
+                                            
+                                        </label>
+                                                </div>
+                                                <div class="checkedsection">
+                                                    <template if:true={isWatercraft}><span class="checkedIcon"><i
+                                                        class="icon-checkmark"></i></span></template>
+                                                </div>
+
+                                            </div>
+                                            <div class="lowerDiv">
+                                                
+                                            </div>
+										</div>
+										
+
+
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div class=" slds-m-top_large slds-float--right">
+						<button class="navigationButton btnHover" onclick={handleNextClick}><span class="icon-next"><i
+                                    class="icon-nexts"></i></span>{label.next}</button>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	</template>
+
+	<template if:true={southboundFlow}>
+		<template if:true={isCommunityUser}>
+			<c-existing-customer-main-screen-south policy-type={policyType} is-community-user={isCommunityUser}
+				vehicle-data={vehicleData} driver-data={DriverData} is-towing-option={Is_Towing__c}
+				towed-unit-data={towedUnitData}>
+			</c-existing-customer-main-screen-south>
+		</template>
+		<template if:false={isCommunityUser}>
+			<c-southbound-main-screen policytype={policyType} is-towing-option={Is_Towing__c}>
+			</c-southbound-main-screen>
+		</template>
+	</template>
+
+	<template if:true={northboundFlow}>
+		<template if:false={isCommunityUser}>
+			<c-northbound-main-screen-flow policytype={policyType}></c-northbound-main-screen-flow>
+		</template>
+		<template if:true={isCommunityUser}>
+			<c-existing-customer-main-screen-south policy-type={policyType} is-towing-option={Is_Towing__c}
+				is-community-user={isCommunityUser} vehicle-data={vehicleData} driver-data={DriverData}
+				towed-unit-data={towedUnitData}>
+			</c-existing-customer-main-screen-south>
+		</template>
+	</template>
+
+	<template if:true={watercraftFlow}>
+
+		<template if:true={isCommunityUser}>
+			<c-existing-customer-main-screen-watercraft policy-type={policyType} is-community-user={isCommunityUser}
+				watercraft-data={watercraftData} driver-data={DriverData}>
+			</c-existing-customer-main-screen-watercraft>
+		</template>
+		<template if:false={isCommunityUser}>
+			<c-watercraft-main-screen policytype={policyType} is-towing-option={Is_Towing__c}>
+			</c-watercraft-main-screen>
+		</template>
+	</template>
+</template>
+
+<!-- <template>
+    <template if:true={isInsuranceScreen}>
+        <div class="maindiv slds-m-top_large">
+
+            <div class="slds-text-heading_large slds-text-align_center">What kind of insurance do you want us to quote?
+            </div>
+
+            <div class="slds-m-top_x-large">
+                <lightning-layout multiple-rows="true">
+
+                    <lightning-layout-item class="slds-p-around_small" size="12" flexibility="auto"
+                        small-device-size="12" medium-device-size="6" large-device-size="6" padding="around-small">
+                        <div class="boxStyle firstDiv">
+                            <div class="slds-text-heading_medium slds-text-align_center"><strong>Tourist Auto Insurance
+                                    for
+                                    Mexico</strong></div>
+
+                            <lightning-layout class="slds-m-top_large" multiple-rows="true">
+                                <lightning-layout-item size="12" flexibility="auto" small-device-size="12"
+                                    medium-device-size="6" large-device-size="6" class="slds-grid slds-grid_vertical">
+
+                                    <label for="Automobile"
+                                        class="insuranceType slds-text-heading_small slds-p-around_small">
+                                        <input class="radiotype slds-align_absolute-center slds-p-around_small"
+                                            type="radio" checked={isAutomobile} id="Automobile" name="insured"
+                                            value="Automobile" onchange={handleChange} /><strong>Automobile</strong>
+                                        <template if:true={isAutomobile}><span class="checkedIcon"><i
+                                                    class="icon-checkmark"></i></span></template>
+                                    </label>
+
+
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="12" flexibility="auto" small-device-size="12"
+                                    medium-device-size="6" large-device-size="6" class="slds-grid slds-grid_vertical">
+
+                                    <label for="AutomobileTowed"
+                                        class="insuranceType slds-text-heading_small slds-p-around_small">
+                                        <input class="radiotype slds-align_absolute-center slds-p-around_small"
+                                            type="radio" checked={isAutomobileTowed} id="AutomobileTowed" name="insured"
+                                            value="AutomobileTowed" onchange={handleChange} /><strong>Automobile with
+                                            Towed Unit</strong>
+                                        <template if:true={isAutomobileTowed}><span class="checkedIcon"><i
+                                                    class="icon-checkmark"></i></span></template>
+                                    </label>
+
+                                </lightning-layout-item>
+                            </lightning-layout>
+
+                            <lightning-layout class="slds-m-top_large" multiple-rows="true">
+                                <lightning-layout-item size="12" flexibility="auto" small-device-size="12"
+                                    medium-device-size="6" large-device-size="6" class="slds-grid slds-grid_vertical">
+
+                                    <label for="RV" class="insuranceType slds-text-heading_small slds-p-around_small">
+                                        <input class="radiotype slds-align_absolute-center slds-p-around_small"
+                                            type="radio" checked={isRV} id="RV" name="insured" value="RV"
+                                            onchange={handleChange} /><strong>RV</strong>
+                                        <template if:true={isRV}><span class="checkedIcon"><i
+                                                    class="icon-checkmark"></i></span></template>
+                                    </label>
+
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="12" flexibility="auto" small-device-size="12"
+                                    medium-device-size="6" large-device-size="6" class="slds-grid slds-grid_vertical">
+
+                                    <label for="RVTowed"
+                                        class="insuranceType slds-text-heading_small slds-p-around_small">
+                                        <input class="radiotype slds-align_absolute-center slds-p-around_small"
+                                            type="radio" checked={isRVTowed} id="RVTowed" name="insured" value="RVTowed"
+                                            onchange={handleChange} /><strong>RV with Towed Unit</strong>
+                                        <template if:true={isRVTowed}><span class="checkedIcon"><i
+                                                    class="icon-checkmark"></i></span></template>
+                                    </label>
+
+                                </lightning-layout-item>
+                            </lightning-layout>
+
+                            <lightning-layout class="slds-m-top_large" multiple-rows="true">
+                                <lightning-layout-item size="12" flexibility="auto" small-device-size="12"
+                                    medium-device-size="6" large-device-size="6" class="slds-grid slds-grid_vertical">
+                                    <label for="Motorcycle"
+                                        class="insuranceType slds-text-heading_small slds-p-around_small">
+                                        <input class="radiotype slds-align_absolute-center slds-p-around_small"
+                                            type="radio" checked={isMotorcycle} id="Motorcycle" name="insured"
+                                            value="Motorcycle/Street Legal ATV" onchange={handleChange} />
+                                        <strong>Motorcycle/ATV</strong>
+                                        <template if:true={isMotorcycle}><span class="checkedIcon"><i
+                                                    class="icon-checkmark"></i></span></template>
+                                    </label>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </div>
+
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" flexibility="auto" small-device-size="12" medium-device-size="6"
+                        large-device-size="6" padding="around-small"
+                        class="slds-grid slds-p-around_small slds-grid_vertical">
+                        <div class="boxStyle secondDiv">
+
+                            <div class="slds-text-heading_medium slds-text-align_center">
+                                <strong>Other Mexican Insurance </strong>
+                            </div>
+
+                            <div class="slds-col ">
+                                <div class=" horizontalAlign slds-m-top--large">
+                                    <label for="Northbound" data-id="isNorthbound"
+                                        class="insuranceType slds-text-heading_small slds-p-around_small">
+                                        <input class="radiotype slds-align_absolute-center slds-p-around_small"
+                                            type="radio" checked={isNorthbound} id="Northbound" name="insured"
+                                            value="Northbound" onchange={handleChange} />
+                                        <strong>Northbound Insurance for Mexican Vehicles</strong>
+                                        <template if:true={isNorthbound}><span class="checkedIcon"><i
+                                                    class="icon-checkmark"></i></span></template>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="slds-col slds-m-vertical--large">
+                                <div class=" horizontalAlign">
+
+                                    <label for="Homeowner" data-id="isHomeowner"
+                                        class="insuranceType slds-text-heading_small slds-p-around_small">
+                                        <input class="radiotype slds-align_absolute-center slds-p-around_small"
+                                            type="radio" checked={isHomeowner} id="Homeowner" name="insured"
+                                            value="Homeowner" onchange={handleChange} />
+                                        <strong>Private Residence (Home or Condo) in Mexico</strong>
+                                        <template if:true={isHomeowner}><span class="checkedIcon"><i
+                                                    class="icon-checkmark"></i></span></template>
+                                    </label>
+
+
+
+                                </div>
+                            </div>
+
+                            <div class="slds-col">
+                                <div class=" horizontalAlign">
+
+                                    <label for="Watercraft" data-id="isWatercraft"
+                                        class="insuranceType slds-text-heading_small slds-p-around_small">
+                                        <input class="radiotype" type="radio" checked={isWatercraft} id="Watercraft"
+                                            name="insured" value="Watercraft" onchange={handleChange} />
+                                        <strong>Watercraft in Mexico</strong>
+                                        <template if:true={isWatercraft}><span class="checkedIcon"><i
+                                                    class="icon-checkmark"></i></span></template>
+                                    </label>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+
+                </lightning-layout>
+            </div>
+
+        </div>
+        <div class="slds-align_absolute-center slds-m-top_large">
+            <button class="navigationButton btnHover" onclick={handleNextClick}>Next</button>
+        </div>
+    </template>
+
+
+    <template if:true={southboundFlow}>
+        <template if:true={isCommunityUser}>
+            <c-existing-customer-main-screen-south policy-type={policyType} is-community-user={isCommunityUser}
+                vehicle-data={vehicleData} driver-data={DriverData} is-towing-option={Is_Towing__c}
+                towed-unit-data={towedUnitData}>
+            </c-existing-customer-main-screen-south>
+        </template>
+        <template if:false={isCommunityUser}>
+            <c-southbound-main-screen policytype={policyType}
+                is-towing-option={Is_Towing__c}></c-southbound-main-screen>
+        </template>
+    </template>
+
+    <template if:true={northboundFlow}>
+        <template if:false={isCommunityUser}>
+            <c-northbound-main-screen-flow policytype={policyType}></c-northbound-main-screen-flow>
+        </template>
+        <template if:true={isCommunityUser}>
+            <c-existing-customer-main-screen-south policy-type={policyType} is-towing-option={Is_Towing__c}
+                is-community-user={isCommunityUser} vehicle-data={vehicleData} driver-data={DriverData}
+                towed-unit-data={towedUnitData}>
+            </c-existing-customer-main-screen-south>
+        </template>
+    </template>
+
+    <template if:true={watercraftFlow}>
+
+        <template if:true={isCommunityUser}>
+            <c-existing-customer-main-screen-watercraft policy-type={policyType} is-community-user={isCommunityUser}
+                watercraft-data={watercraftData} driver-data={DriverData}>
+            </c-existing-customer-main-screen-watercraft>
+        </template>
+        <template if:false={isCommunityUser}>
+            <c-watercraft-main-screen policytype={policyType}
+                is-towing-option={Is_Towing__c}></c-watercraft-main-screen>
+        </template>
+    </template>
+</template> -->

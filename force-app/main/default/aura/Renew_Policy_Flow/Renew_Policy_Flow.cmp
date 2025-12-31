@@ -1,0 +1,190 @@
+<aura:component controller="PoilcyEditController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:attribute name="screenName" type="String" />
+    <aura:attribute name="recordId" type="String" default="" />
+    <aura:attribute name="policyType" type="String" />
+    <aura:attribute name="editPolicyName" type="String" />
+    <aura:attribute name="spinner" type="boolean" default="false" />
+    <aura:attribute name="countVehicle" type="Integer" access="public" />
+    <aura:attribute name="policyRecord" type="Policy__c" default="{ 'sobjectType': 'Policy__c'}" />
+    <aura:attribute name="transactionRecord" type="Object" />
+    <aura:attribute name="refundAmount" type="decimal" access="public" />
+    <aura:attribute name="quoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" />
+    <aura:attribute name="watercraftRecord" type="Watercraft__c" default="{ 'sobjectType': 'Watercraft__c'}" />
+    <aura:attribute name="clonedquoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" />
+    <aura:attribute name="towedunitRecord" type="Towed_Unit__c" default="{ 'sobjectType': 'Towed_Unit__c'}" />
+    <aura:attribute name="vehicleRecord" type="Vehicle__c" default="{ 'sobjectType': 'Vehicle__c'}" />
+    <aura:attribute name="clonedvehicleRecord" type="Vehicle__c" default="{ 'sobjectType': 'Vehicle__c'}" />
+    <aura:attribute name="driverRecord" type="Driver__c" default="{ 'sobjectType': 'Driver__c'}"/>
+    <aura:attribute name="drivers" type="List" access="public" />
+    <aura:attribute name="transactions" type="List" access="public" />
+    <aura:attribute name="watercrafts" type="List" access="public" />
+    <aura:attribute name="transporates" type="List" access="public" />
+    <aura:attribute name="driverOptions" type="list"  />
+    <aura:attribute name="vehicleTypeOptions" type="list"  />
+	<aura:attribute name="leadRecord" type="Lead" default="{ 'sobjectType': 'Lead'}" access="public"/>
+    <aura:attribute name="dateChange" type="Boolean" default="false" />
+    <aura:attribute name="vehicleValueChange" type="Boolean" default="false" />
+    <aura:attribute name="dateOfBirthChange" type="Boolean" default="false"  />
+    <aura:attribute name="territoryCoverageChange" type="Boolean"  default="false" />
+    <aura:attribute name="liabilityChange" type="Boolean"  default="false" />
+    <aura:attribute name="medicalChange" type="Boolean" default="false"  />
+
+    <aura:attribute name="iscloneConditionPass" type="Boolean" default="false" />
+    <aura:attribute name="annualTerm" type="Boolean" access="public" default="false" />
+    <aura:attribute name="renderInit" type="Boolean" default="false" />
+    <aura:attribute name="newPolicyId" type="String" />
+    <aura:attribute name="oldQuoteId" type="String" />
+    <aura:attribute name="minDate" type="String" />
+    <aura:attribute name="endMinDate" type="String" />
+    <aura:attribute name="rateRecord" type="object" />
+    
+    <aura:attribute name="quoteIds" type="List" access="public" />
+	<aura:attribute name="Final_total_Premium" type="Decimal" access="public"/>
+
+    <aura:attribute name="qualitasLiability" type="String" default="300000" />
+    <aura:attribute name="qualitasMedical" type="String" default="$10,000/$50,000" />
+    <aura:attribute name="chubbLiability" type="String" default="300000" />
+    <aura:attribute name="chubbMedical" type="String" default="$10,000/$50,000" />
+    <aura:attribute name="mapfreLiability" type="String" default="300000" />
+    <aura:attribute name="mapfreMedical" type="String" default="$10,000/$50,000" />
+    <aura:attribute name="qualitasLiablityOnly" type="Boolean" default="false" />
+    <aura:attribute name="chubbLiablityOnly" type="Boolean" default="false" />
+    <aura:attribute name="mapfreLiablityOnly" type="String" default="Max" />
+    <aura:attribute name="liabiltyOnly" type="Boolean" default="false" description="If rate not exist then make it true" />
+    
+
+    
+    <ltng:require styles="{!$Resource.mexinsurance_assets + '/style.css'}" afterScriptsLoaded="{!c.doInit}"/>
+    <lightning:navigation aura:id="navService"/>
+
+    <!--********Payment******** -->
+    <aura:handler name="paymentIsSuccessful" event="c:paymentIsSuccessful" action="{!c.handleNext}"/>
+
+    <!--********Spinner******** -->
+    <aura:if isTrue="{!v.spinner}">
+        <lightning:spinner alternativeText="Loading" variant="brand" />
+    </aura:if> 
+    
+    <!--********Header******* *-->
+    <header class="page-header">
+        <div class="wrap">
+            <span class="product-name">Renew Policy - {!v.editPolicyName}</span>
+        </div>
+    </header>
+
+    <div class="wrap -size-md">
+        <lightning:layout multipleRows="true">
+            <!--********Please fill in vehicle options below:******* *-->
+            <aura:if isTrue="{!v.screenName == 'TermOptions'}">
+                <c:Policy_Edit_Term_Option quoteRecord="{!v.quoteRecord}" renderInit="{!v.renderInit}" clonedquoteRecord="{!v.clonedquoteRecord}" 
+                                           dateChange="{!v.dateChange}" liabilityChange="{!v.liabilityChange}" medicalChange="{!v.medicalChange}"
+                                           territoryCoverageChange="{!v.territoryCoverageChange}" dateOfBirthChange="{!v.dateOfBirthChange}"
+                                           vehicleValueChange = "{!v.vehicleValueChange}" editPolicy="false" renewPolicy="true" backButtonVisibility="false"
+                                           policyType="{!v.policyType}" title="Do you want to change the Term or Coverage Limits?" onBackClick="{!c.handleBack}"
+                                           onNextClick="{!c.handleNext}" annaul="{!v.annualTerm}" oldQuoteId="{!v.oldQuoteId}"
+                                           minDate="{!v.minDate}" endMinDate="{!v.endMinDate}"
+                                           watercraftRecord="{!v.watercraftRecord}" drivers="{!v.drivers}"  watercrafts="{!v.watercrafts}"
+                                           transporates="{!v.transporates}" vehicleRecord="{!v.vehicleRecord}"
+                                           qualitasLiability="{!v.qualitasLiability}" qualitasMedical="{!v.qualitasMedical}"
+                                           chubbLiability="{!v.chubbLiability}" chubbMedical="{!v.chubbMedical}"
+                                           mapfreLiability="{!v.mapfreLiability}" mapfreMedical="{!v.mapfreMedical}"
+                                           towedunitRecord="{!v.towedunitRecord}"/>
+            </aura:if> 
+
+            <!--********Review vehicle information******* *-->
+            <aura:if isTrue="{!v.screenName == 'ReviewVehicle'}">
+                <c:Review_Vehicle quoteRecord="{!v.quoteRecord}" communityUser="true" renewPolicy="true" vehicleRecord="{!v.vehicleRecord}" 
+                                        policyType="{!v.policyType}" title="Review vehicle information" onBackClick="{!c.handleBack}"
+                                        onNextClick="{!c.handleNext}" />
+            </aura:if>
+
+            <aura:if isTrue="{!v.screenName == 'ReviewWatercraft'}">
+                <c:Review_Watercraft quoteRecord="{!v.quoteRecord}" renewPolicy="true" communityUser="true" 
+                                    watercraftRecord="{!v.watercraftRecord}" policyType="{!v.policyType}"
+                                    title="Review watercraft information" onBackClick="{!c.handleBack}" onNextClick="{!c.handleNext}" />
+            </aura:if>
+
+            <!--********Review vehicle information******* *-->
+            <aura:if isTrue="{!v.screenName == 'RegisteredVehicle'}">
+                <c:Driver_Registration quoteRecord="{!v.quoteRecord}" driverRecord="{!v.driverRecord}"
+                                        isCommunityUser="true" vehicleRecord="{!v.vehicleRecord}" 
+                                        drivers="{!v.drivers}" renewPolicy="true"
+                                        policyType="{!v.policyType}" title="Review vehicle information" onBackClick="{!c.handleBack}"
+                                        onNextClick="{!c.handleNext}" />
+            </aura:if>
+
+            <!--********Are you towing anything?:******* *-->
+            <aura:if isTrue="{!v.screenName == 'TowningAnything'}">
+                <c:Towing_Anything quoteRecord="{!v.quoteRecord}"
+                                     policyType="{!v.policyType}" title="Are you towing anything?" onBackClick="{!c.handleBack}"
+                                     onNextClick="{!c.handleNext}" />
+            </aura:if>
+
+            <aura:if isTrue="{!v.screenName == 'TowningInfo'}">
+                <aura:if isTrue="{!v.policyType == 'Northbound'}">
+                    <c:Towing_Info quoteRecord="{!v.quoteRecord}" towedunitRecord="{!v.towedunitRecord}" 
+                                    vehicleRecord="{!v.vehicleRecord}" iscommunityUser="true"
+                                    renewPolicy="true"
+                                     policyType="{!v.policyType}" title="Tell us more about what you're towing?" onBackClick="{!c.handleBack}"
+                                     onNextClick="{!c.handleNext}" />
+                </aura:if>
+                <aura:if isTrue="{!and(v.policyType != 'Northbound', v.policyType != 'WaterCraft') }">
+                    <c:Add_TransporateAtvs quoteRecord="{!v.quoteRecord}" transporates="{!v.transporates}" 
+                        isCommunityUser="true" vehicleRecord="{!v.vehicleRecord}" renewPolicy="true"
+                        policyType="{!v.policyType}" title="Tell us more about what you're towing?" onBackClick="{!c.handleBack}"
+                        onNextClick="{!c.handleNext}" />
+                </aura:if>
+            </aura:if>
+
+            <aura:if isTrue="{!v.screenName == 'confirmScreen'}">
+                <aura:if isTrue="{!or(v.policyType == 'Northbound', v.policyType == 'Driver License')}">
+                    <c:Quick_Quote_Detail quoteRecord="{!v.quoteRecord}" countVehicle="1" rateRecord="{!v.rateRecord}"
+                                        communityUser="true" policyType="{!v.policyType}" 
+                                        title="Get your quick quote!" onBackClick="{!c.handleBack}"
+                                        onNextClick="{!c.handleNext}" renewPolicy="true"
+                                        minDate="{!v.minDate}" 
+                                           Final_total_Premium="{!v.Final_total_Premium}"
+                                        endMinDate="{!v.endMinDate}" />
+                </aura:if>
+                <aura:if isTrue="{!v.policyType == 'Watercraft'}">
+                    <c:Watercraft_Quick_Quote_Detail quoteRecord="{!v.quoteRecord}" leadRecord="{!v.leadRecord}" 
+                        communityUser="true" renewPolicy="true"
+                        rateRecord="{!v.rateRecord}" policyType="{!v.policyType}" 
+                                                     Final_total_Premium="{!v.Final_total_Premium}"
+                        title="Get your quick quote!" annualTerm="{!v.annualTerm}"
+                        onBackClick="{!c.handleBack}" onNextClick="{!c.handleNext}" />
+                </aura:if>
+                <aura:if isTrue="{!and(and(v.policyType != 'Northbound', v.policyType != 'Watercraft'), v.policyType != 'Driver License')}">
+                    <c:southbound_Quick_Quote_Detail quoteRecord="{!v.quoteRecord}" countVehicle="1" rateRecord="{!v.rateRecord}"
+                        leadRecord = "{!v.leadRecord}" communityUser="true" renewPolicy="true"
+                                                     Final_total_Premium="{!v.Final_total_Premium}"
+                        policyType="{!v.policyType}" title="Get your quick quote!"
+                        onBackClick="{!c.handleBack}" onNextClick="{!c.handleNext}"
+                        qualitasLiability="{!v.qualitasLiability}" qualitasMedical="{!v.qualitasMedical}"
+                        chubbLiability="{!v.chubbLiability}" chubbMedical="{!v.chubbMedical}"
+                        mapfreLiability="{!v.mapfreLiability}" mapfreMedical="{!v.mapfreMedical}"
+                        qualitasLiablityOnly="{!v.qualitasLiablityOnly}" chubbLiablityOnly="{!v.chubbLiablityOnly}"
+                        mapfreLiablityOnly="{!v.mapfreLiablityOnly}"
+                        liabiltyOnly="{!v.liabiltyOnly}" 
+                        minDate="{!v.minDate}" endMinDate="{!v.endMinDate}" />
+                </aura:if>
+            </aura:if>
+
+            <aura:if isTrue="{!v.screenName == 'PaymentDetail'}">
+                <lightning:layoutItem padding="around-small" size="12" class="slds-align-center slds-m-top_xx-large">
+                    <div class="page-title">
+                        <button class="button -plain -back-button" name="step_14" onclick="{! c.handleBack }">
+                            <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/> Back
+                        </button>
+                           <h1>Let's tackle the Payment now</h1>  
+                    </div>
+                </lightning:layoutItem>
+                <c:paymentForm drivers="{!v.drivers}"
+                                Final_total_Premium="{!v.Final_total_Premium}"
+                               onBackClick="{!c.handleBack}" quoteIds="{!v.quoteIds}" communityUser="true" quoteRecord="{!v.quoteRecord}" quoteId="{!v.quoteRecord.Id}"></c:paymentForm>
+            </aura:if>
+        </lightning:layout>
+    </div>
+</aura:component>

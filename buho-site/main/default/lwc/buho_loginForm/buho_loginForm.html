@@ -1,0 +1,64 @@
+<template>
+    <div class="modal-login-form">
+        <!-- Error Message -->
+        <template if:true={errorMessage}>
+            <div class="modal-error-message">
+                {errorMessage}
+            </div>
+        </template>
+
+        <!-- Username/Email Field -->
+        <div class="modal-form-group">
+            <label for="loginUsername">{usernameLabel}</label>
+            <input
+                type="email"
+                id="loginUsername"
+                name="loginUsername"
+                value={username}
+                placeholder={usernamePlaceholder}
+                oninput={handleUsernameChange}
+                onkeyup={handleKeyUp}
+                class="modal-input"
+                disabled={isLoading}
+            />
+        </div>
+
+        <!-- Password Field -->
+        <div class="modal-form-group">
+            <label for="loginPassword">{passwordLabel}</label>
+            <input
+                type="password"
+                id="loginPassword"
+                name="loginPassword"
+                value={password}
+                placeholder={passwordPlaceholder}
+                oninput={handlePasswordChange}
+                onkeyup={handleKeyUp}
+                class="modal-input"
+                disabled={isLoading}
+            />
+        </div>
+
+        <!-- Forgot Password Link -->
+        <template if:true={showForgotPassword}>
+            <div class="modal-form-group" style="margin-top: 8px;">
+                <a href="javascript:void(0);" class="forgot-link" onclick={handleForgotPassword}>
+                    {forgotPasswordText}
+                </a>
+            </div>
+        </template>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="modal-actions-large modal-actions-single">
+        <button class="btn-dark" onclick={handleSubmit} disabled={isLoading}>
+            <template if:false={isLoading}>
+                {submitButtonLabel}
+            </template>
+            <template if:true={isLoading}>
+                {loadingButtonLabel}
+            </template>
+        </button>
+    </div>
+</template>
+

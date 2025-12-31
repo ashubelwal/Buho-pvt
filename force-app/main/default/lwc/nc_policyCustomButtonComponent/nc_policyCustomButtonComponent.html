@@ -1,0 +1,42 @@
+<template>
+    <div class="maindiv notranslate">
+        <template if:false={isHomeownersPolicy}>
+            <lightning-layout multiple-rows="true" class="whiteBackgroundCustom">
+                <template if:true={spinner}>
+                    <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+                </template>
+                <template if:false={spinner}>
+                    <div class="slds-m-bottom--xx-small">
+                        <button title={label.Displaypolicy} onclick={handleDisplayClick} class="actionButton">{label.Displaypolicy}
+                            </button>
+                    </div>
+                    
+                    <div if:false={isHiddenRenewButton} class="slds-m-bottom--xx-small slds-m-left_medium">
+                        <button title={label.RenewPolicy} onclick={handleRenewClick} disabled={isRenewBtnDisabled}
+                            class="slds-m-left_x-small actionButton">{label.RenewPolicy}
+                        </button>
+                    </div>
+                    <div class="slds-m-bottom--xx-small slds-m-left_medium">
+                        <button title={label.Edit} disabled={isDisabled} onclick={handleEditClick}
+                            class="slds-m-left_x-small actionButton">{label.Edit}</button>
+                    </div>
+                    <div class="slds-m-bottom--xx-small slds-m-left_medium">
+                        <button title={label.Terminate} disabled={isDisabled} onclick={handleTerminateClick}
+                            class="slds-m-left_x-small actionButton">{label.Terminate}</button>
+                    </div>
+
+                    <div class="slds-grid slds-wrap" style="padding-top:5px;width:100%;">
+    
+                        <div class="slds-m-bottom--xx-small " style="display:inline;">
+                            <button lwc:if={isDisableYellowCard} title='Policy Yellow Card' onclick={generatePolicyGreenCard}
+                                class=" actionButton">Policy Yellow Card</button>
+                        </div>
+                    </div>
+
+                    
+                </template>
+
+            </lightning-layout>
+        </template>
+    </div>    
+</template>

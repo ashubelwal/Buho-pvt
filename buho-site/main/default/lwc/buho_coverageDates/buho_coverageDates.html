@@ -1,0 +1,115 @@
+<template>
+    <div class="wizard-step active" id="step3">
+        <div class="step-header">
+            <h1>Select your <span class="highlight">Dates for Coverage.</span></h1>
+            <p class="step-subtitle">Sharing these details helps us ensure you get the right coverage</p>
+        </div>
+
+        <form class="wizard-form" id="datesForm">
+            <!-- Term Type Selection -->
+            <div class="form-group">
+                <label>Select Term Type</label>
+                <div class="term-type-selector">
+                    <button type="button" 
+                            class={dailyBtnClass} 
+                            data-term="daily" 
+                            onclick={handleTermChange}>
+                        Daily
+                    </button>
+                    <button type="button" 
+                            class={semiAnnualBtnClass} 
+                            data-term="semi-annual" 
+                            onclick={handleTermChange}>
+                        Semi Annual
+                    </button>
+                    <button type="button" 
+                            class={annualBtnClass} 
+                            data-term="annual" 
+                            onclick={handleTermChange}>
+                        Annual
+                    </button>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="startDate">Start Date</label>
+                        <div class="input-with-icon">
+                            <i class="bi bi-calendar3"></i>
+                            <input type="date" 
+                                   class="form-control" 
+                                   id="startDate" 
+                                   name="Start_Date__c"
+                                   value={inputValues.Start_Date__c}
+                                   min={minDate}
+                                   onchange={handleStartDateChange}
+                                   required>
+                        </div>
+                        <small class="form-text">Coverage begins at 12:01 AM on this date</small>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="endDate">End Date</label>
+                        <div class="input-with-icon">
+                            <i class="bi bi-calendar3"></i>
+                            <input type="date" 
+                                   class="form-control" 
+                                   id="endDate" 
+                                   name="End_Date__c"
+                                   value={inputValues.End_Date__c}
+                                   min={inputValues.Start_Date__c}
+                                   onchange={handleInputChange}
+                                   required>
+                        </div>
+                        <small class="form-text">Coverage ends at 11:59 PM on this date</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Time Selection (shown for daily) -->
+            <template if:true={showTimeSelection}>
+                <div class="row g-4 time-selection">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="startTime">Start Time</label>
+                            <div class="input-with-icon">
+                                <i class="bi bi-clock"></i>
+                                <input type="time" 
+                                       class="form-control" 
+                                       id="startTime" 
+                                       name="Start_Time__c"
+                                       value={inputValues.Start_Time__c}
+                                       onchange={handleInputChange}>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="endTime">End Time</label>
+                            <div class="input-with-icon">
+                                <i class="bi bi-clock"></i>
+                                <input type="time" 
+                                       class="form-control" 
+                                       id="endTime" 
+                                       name="End_Time__c"
+                                       value={inputValues.End_Time__c}
+                                       onchange={handleInputChange}>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <button type="button" class="btn btn-primary btn-continue" onclick={handleContinue}>
+                Continue to Coverage Selection
+            </button>
+
+            <p class="step-info-text">
+                Rating in Mexico is based on vehicle value, term and other variables, not the driving record or individuals operating. The longer the term, the more the discount on premium. Annual and Semi-Annual term policies offer the best value
+            </p>
+        </form>
+    </div>
+</template>
+

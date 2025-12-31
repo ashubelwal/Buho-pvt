@@ -1,0 +1,89 @@
+<template>
+    <lightning-card>
+        <div class="slds-grid slds-wrap">
+            <!-- Sidebar Navigation -->
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-large-size_1-of-4 slds-p-around_medium slds-m-bottom_small">
+                <h2 class="slds-text-heading_large slds-p-around_medium"> Welcome {getName}! </h2>
+                <nav class="slds-nav-vertical slds-nav-vertical_shaded">
+                    <ul>
+                        <li class="slds-nav-vertical__item slds-is-active" data-tab="profile" onclick={handleTabClick}>
+                            <a class="slds-nav-vertical__action">My Profile</a>
+                        </li>
+                        <li class="slds-nav-vertical__item" data-tab="payment" onclick={handleTabClick}>
+                            <a class="slds-nav-vertical__action">Payment Settings</a>
+                        </li>
+                        <li class="slds-nav-vertical__item" data-tab="team" onclick={handleTabClick}>
+                            <a class="slds-nav-vertical__action">Logout</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- Main Section -->
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-3 slds-large-size_3-of-4 slds-p-around_medium">
+                <div class="slds-box slds-theme_default">
+                    <div class={tabContentClass}>
+
+                        <!-- Profile Tab Content -->
+                        <template if:true={isProfileTab}>
+                            <div class="slds-text-align_center slds-m-bottom_medium">
+                                <lightning-avatar src={userData.SmallPhotoUrl} size="large"
+                                    fallback-icon-name="standard:user"></lightning-avatar>
+                                <h2 class="slds-text-heading_medium">{getName}</h2>
+                                <!-- <p>{getAgency}</p> -->
+                                <p>{getLocation}</p>
+                            </div>
+
+                            <!-- Personal Info -->
+                            <div class="slds-box slds-m-bottom_medium">
+                                <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
+                                    <h3 class="slds-text-heading_small">Personal Information</h3>
+                                    <!-- <lightning-button-icon icon-name="utility:edit" alternative-text="Edit"
+                                        title="Edit"></lightning-button-icon> -->
+                                </div>
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small"><strong>Email:</strong> {getEmail}</div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small"><strong>Phone:</strong> {getPhone}</div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small"><strong>Date of Birth:</strong> {getDOB}</div>
+                                </div>
+                            </div>
+
+                            <!-- Address Info -->
+                            <div class="slds-box">
+                                <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
+                                    <h3 class="slds-text-heading_small">Address</h3>
+                                    <!-- <lightning-button-icon icon-name="utility:edit" alternative-text="Edit"
+                                        title="Edit"></lightning-button-icon> -->
+                                </div>
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small"><strong>Street:</strong> {getStreet}</div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small"><strong>City:</strong> {getCity}</div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small"><strong>State:</strong> {getState}</div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small"><strong>Postal Code:</strong> {getPostalCode}</div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small"><strong>Country:</strong> {getCountry}</div>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- Payment Settings Tab Content -->
+                        <template if:true={isPaymentTab}>
+                            <div class="slds-box">                                
+                                <c-payment-management></c-payment-management>
+                            </div>
+                        </template>
+
+                        <!-- Team Member Tab Content -->
+                        <template if:true={isTeamTab}>
+                            <div class="slds-box">
+                                <h3 class="slds-text-heading_small slds-m-bottom_small">Logout</h3>
+                                <p>You are being logout from Mexinsurance.</p>
+                                <!-- <c-team-members></c-team-members> -->
+                            </div>
+                        </template>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+</template>

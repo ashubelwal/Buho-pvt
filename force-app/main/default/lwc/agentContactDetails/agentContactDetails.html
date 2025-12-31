@@ -1,0 +1,345 @@
+<template>
+	<div style="background: #fff;padding:20px;border-radius: 4px">
+
+		<!-- If action type is equal to Default -->
+		<template if:true={actionTypeDefault}>
+			<div onkeyup={handleKeyUpSearch} class="slds-m-bottom_large">
+				<lightning-input name="enter-search" label="Enter Name or Email" type="search"></lightning-input>
+			</div>
+		</template>
+
+		<div class="slds-m-bottom_large slds-p-top_large slds-p-bottom_large"
+			style="border: 1px solid #eee;border-radius: 4px;padding:20px;">
+			<b> Contact Information </b>
+            <template if:true={booleanVar.contactResult}>  
+				<lightning-layout class="text-left">
+					<lightning-layout-item size="12" small-device-size="6" medium-device-size="6" large-device-size="6" padding="around-small">
+						<p class="slds-p-bottom_xx-small"><strong>Name: </strong> {contactDetails.Name}</p>
+						<p class="slds-p-bottom_xx-small"><strong>Phone:</strong> {contactDetails.Phone}</p>
+						<p class="slds-p-bottom_xx-small"><strong>Email:</strong> {contactDetails.Email}</p>
+						<p class="slds-p-bottom_xx-small"><strong>Created date:</strong> {contactDetails.CreatedDate}</p>
+						<p class="slds-p-bottom_xx-small"><strong>Address:</strong></p>
+						<lightning-formatted-address
+							street={contactDetails.Street__c}
+							city= {contactDetails.City__c}
+							country={contactDetails.Country__c}
+							province={contactDetails.State__c}
+							postal-code={contactDetails.Postal_Code__c}
+						></lightning-formatted-address>
+					</lightning-layout-item>
+				</lightning-layout>															
+            </template>
+
+		</div>
+
+		<!-- If action type is equal to policy -->
+		<template if:true={actionTypeContactDetails}>
+			<!-- Policy  -->
+			<template if:true={booleanVar.policyDataStatus}>
+				<div class="slds-m-bottom_large">
+					<lightning-layout multiple-rows class="">
+						<lightning-layout-item size="12" small-device-size="6" medium-device-size="6"
+							large-device-size="6" padding="around-small">
+							<h2 class="slds-text-title_cap slds-m-bottom_xxx-small searchListTitle"> Policy</h2>
+						</lightning-layout-item>
+
+						<lightning-layout-item size="12" small-device-size="6" medium-device-size="6"
+							large-device-size="6" padding="around-small" class="slds-text-align_right">
+							<!-- <lightning-button label='New Policy' data-id="0038I00000eNwQ3QAK" title='New Policy'
+                                data-actiontype="NEW" data-obj="policy" onclick={handleOperations}></lightning-button> -->
+						</lightning-layout-item>
+					</lightning-layout>
+					<table class="slds-table slds-table_cell-buffer slds-table_bordered">
+						<thead>
+							<tr class="slds-line-height_reset">
+								<th class="">
+									<div class="" title="Status">Status</div>
+								</th>
+								<th class="">
+									<div class="" title="Name">Name</div>
+								</th>
+								<th class="">
+									<div class="" title="Type">Type</div>
+								</th>
+								<th class="">
+									<div class="" title="Term">Term</div>
+								</th>
+								<th class="">
+									<div class="" title="Start Date">Start Date</div>
+								</th>
+								<th class="">
+									<div class="" title="End Date">End Date</div>
+								</th>
+								<th class="">
+									<div class="" title="Action">Action</div>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<template for:each={contactDetails.Policies__r.records} for:item="policy">
+								<tr class="slds-line-height_reset" key={policy.Id}>
+									<td>
+										<div class="slds-truncate activePolicy text-center" title="">
+											{policy.Status_picklist__c}</div>
+									</td>
+									<td>
+										<div class="slds-truncate" title="">
+											{policy.Name}</div>
+									</td>
+									<td>
+										<div class="slds-truncate" title="">
+											{policy.Policy_Type_picklist__c}
+										</div>
+									</td>
+									<td>
+										<div class="slds-truncate" title="">
+											{policy.Term_days__c}
+										</div>
+									</td>
+									<td>
+										<div class="slds-truncate" title="">
+											{policy.Start_Date__c}
+										</div>
+									</td>
+									<td>
+										<div class="slds-truncate" title="">
+											{policy.Start_Time__c}
+										</div>
+									</td>
+									<td>
+										<div class="slds-truncate">											
+											<!-- <span class="actionBtn" data-id={policy.Quote_c__c}
+                                                data-actiontype="VIEW" data-obj="quote" onclick={handleOperations}> Quote </span> -->
+
+											<span class="actionBtn" data-id={policy.Id}
+                                                data-actiontype="EDIT" data-obj="policy" lwc:if={policy.EditBtn} onclick={navigateToPolicyEdit}> Edit </span>
+											<span class="actionBtn" data-id={policy.Id}
+                                                data-actiontype="RENEW" data-obj="policy" lwc:if={policy.RenewBtn} onclick={navigateToPolicyRenew}> Renew </span>
+											<span class="actionBtn" data-id={policy.Id}
+                                                data-actiontype="TERMINATE" data-obj="policy" lwc:if={policy.TerminateBtn} onclick={handleOperations}> Terminate </span>
+										</div>
+									</td>
+								</tr>
+							</template>
+						</tbody>
+					</table>
+				</div>
+			</template>
+
+			<!-- Quote  -->
+			<template if:true={booleanVar.quoteDataStatus}>
+				<div class="slds-m-bottom_large">
+					<lightning-layout multiple-rows class="">
+						<lightning-layout-item size="12" small-device-size="6" medium-device-size="6"
+							large-device-size="6" padding="around-small">
+							<h2 class="slds-text-title_cap slds-m-bottom_xxx-small searchListTitle"> Quote </h2>
+						</lightning-layout-item>
+
+						<lightning-layout-item size="12" small-device-size="6" medium-device-size="6"
+							large-device-size="6" padding="around-small" class="slds-text-align_right">
+							<!-- <lightning-button label='New Quote' data-id="0038I00000eNwQ3QAK" title='New Quote'
+								data-actiontype="NEW" data-obj="quote" onclick={handleOperations}></lightning-button> -->
+						</lightning-layout-item>
+					</lightning-layout>
+
+					<table class="slds-table slds-table_cell-buffer slds-table_bordered">
+						<thead>
+							<tr class="slds-line-height_reset">
+								<th class="">
+									<div class="" title="Type">Name</div>
+								</th>
+								<th class="">
+									<div class="" title="Value">Type</div>
+								</th>
+								<th class="">
+									<div class="" title="Days">Term</div>
+								</th>
+								<th class="">
+									<div class="" title="Days">Start Date</div>
+								</th>
+								<th class="">
+									<div class="" title="Days">End Date</div>
+								</th>
+								<!-- <th class="">
+									<div class="" title="Action">Action</div>
+								</th> -->
+							</tr>
+						</thead>
+						<tbody>
+							<template for:each={contactDetails.Quotes__r.records} for:item="quote">
+								<tr class="slds-line-height_reset" key={quote.Id}>
+									<td>
+										<div class="slds-truncate" title="Quote name">
+											{quote.Name}</div>
+									</td>
+									<td>
+										<div class="slds-truncate" title="Quote type">
+											{quote.Policy_Type_picklist__c}
+										</div>
+									</td>
+									<td>
+										<div class="slds-truncate" title="">
+											{quote.Term_Days__c}
+										</div>
+									</td>
+									<td>
+										<div class="slds-truncate" title="">
+											{quote.Start_Date_for_Coverage__c}
+										</div>
+									</td>
+									<td>
+										<div class="slds-truncate" title="">
+											{quote.End_Date_for_Coverage__c}
+										</div>
+									</td>
+									<!-- <td>
+										<div class="slds-truncate">
+											<span class="actionBtn" data-id={quote.Contact__c}
+                                                            data-actiontype="VIEW" data-obj="contact" onclick={handleOperations}> Contact </span>
+											<span class="actionBtn" data-id={quote.Lead__c}
+                                                            data-actiontype="VIEW" data-obj="Lead" onclick={handleOperations}> Lead </span>
+											<span class="actionBtn" data-id={quote.Id}
+                                                            data-actiontype="VIEW" data-obj="quote" onclick={handleOperations}> Continue quote </span>
+										</div>
+									</td> -->
+								</tr>
+							</template>
+						</tbody>
+					</table>
+				</div>
+			</template>
+
+			<!-- Driver details section -->
+			<template if:true={booleanVar.driverDataStatus}>
+				<div class="slds-m-bottom_large">
+					<lightning-layout multiple-rows class="">
+						<lightning-layout-item size="12" small-device-size="6" medium-device-size="6"
+							large-device-size="6" padding="around-small">
+							<h2 class="slds-text-title_cap slds-m-bottom_xxx-small searchListTitle"> Driver </h2>
+						</lightning-layout-item>
+
+						<lightning-layout-item size="12" small-device-size="6" medium-device-size="6"
+							large-device-size="6" padding="around-small" class="slds-text-align_right">
+							<!-- <lightning-button label='New Driver' data-id="0038I00000eNwQ3QAK" title='New Driver'
+								data-actiontype="NEW" data-obj="driver" onclick={handleNewDriver}></lightning-button> -->
+						</lightning-layout-item>
+					</lightning-layout>
+
+					<table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered"
+						aria-label="Example table of Opportunities with no row hovers">
+						<thead>
+							<tr class="slds-line-height_reset">
+								<th class="" scope="col">
+									<div class="slds-truncate" title="Opportunity Name">Driver Name</div>
+								</th>
+								<th class="" scope="col">
+									<div class="slds-truncate" title="Created Date">Country</div>
+								</th>
+								<th class="" scope="col">
+									<div class="slds-truncate" title="Last Modified Date">State</div>
+								</th>
+								<th class="" scope="col">
+									<div class="slds-truncate" title="Last Modified Date">City</div>
+								</th>
+								<!-- <th class="" scope="col">
+									<div class="slds-truncate" title="Action">Action</div>
+								</th> -->
+							</tr>
+						</thead>
+						<tbody>
+							<template for:each={contactDetails.Drivers__r.records} for:item="driver">
+								<tr class="slds-line-height_reset" key={driver.Id}>
+									<td>
+										<div class="slds-truncate" title="driver name">
+											{driver.Name}</div>
+									</td>
+									<td>
+										<div class="slds-truncate" title="">
+											{driver.License_Country__c}
+										</div>
+									</td>
+									<td>
+										<div class="slds-truncate" title="">
+											{driver.License_state__c}
+										</div>
+									</td>
+									<td>
+										<div class="slds-truncate" title="">
+											{driver.City__c}
+										</div>
+									</td>
+								</tr>
+							</template>
+						</tbody>
+					</table>
+				</div>
+			</template>
+
+			<!-- Vehicle details section -->
+			<template if:true={booleanVar.vehicleDataStatus}>
+				<div class="slds-m-bottom_large">
+					<lightning-layout multiple-rows class="">
+						<lightning-layout-item size="12" small-device-size="6" medium-device-size="6"
+							large-device-size="6" padding="around-small">
+							<h2 class="slds-text-title_cap slds-m-bottom_xxx-small searchListTitle"> Vehicle </h2>
+						</lightning-layout-item>
+
+						<lightning-layout-item size="12" small-device-size="6" medium-device-size="6"
+							large-device-size="6" padding="around-small" class="slds-text-align_right">
+							<!-- <lightning-button label='New Vehicle' data-id="0038I00000eNwQ3QAK" title='New Vehicle'
+								data-actiontype="NEW" data-obj="vehicle" onclick={handleNewVehicle}></lightning-button> -->
+						</lightning-layout-item>
+					</lightning-layout>
+
+					<table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered"
+						aria-label="Example table of Opportunities with no row hovers">
+						<thead>
+							<tr class="slds-line-height_reset">
+								<th class="" scope="col">
+									<div class="slds-truncate" title="Opportunity Name">Vehicle Name</div>
+								</th>
+								<th class="" scope="col">
+									<div class="slds-truncate" title="Created Date">Modal</div>
+								</th>
+								<th class="" scope="col">
+									<div class="slds-truncate" title="Last Modified Date">Make</div>
+								</th>
+								<!-- <th class="" scope="col">
+									<div class="slds-truncate" title="Action">Action</div>
+								</th> -->
+							</tr>
+						</thead>
+						<tbody>
+							<!-- <template for:each={contactDetails.Vehicle__r.records} for:item="vehicle">
+								<tr class="slds-line-height_reset" key={vehicle.Id}>
+									<td>
+										<div class="slds-truncate" title="driver name">
+											{vehicle.Name}</div>
+									</td>
+									<td>
+										<div class="slds-truncate" title="">
+											{vehicle.Model__c}
+										</div>
+									</td>
+									<td>
+										<div class="slds-truncate" title="">
+											{vehicle.Make__c}
+										</div>
+									</td>									
+								</tr>
+							</template> -->
+						</tbody>
+					</table>
+				</div>
+			</template>
+		</template>
+
+		<template if:true={driverDrawer}>
+			<c-agent-driver-opration></c-agent-driver-opration>
+		</template>
+		<template if:true={vehicleDrawer}>
+			<c-agent-vehile-opration></c-agent-vehile-opration>
+		</template>
+	</div>
+
+</template>

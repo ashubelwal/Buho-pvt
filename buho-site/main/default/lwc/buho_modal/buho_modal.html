@@ -1,0 +1,32 @@
+<template>
+    <!-- Trigger Button -->
+    <button class={classNames} onclick={openModal}>{btnName}</button>
+
+    <!-- Modal Overlay -->
+    <template if:true={showModal}>
+        <div class="modal-overlay" onclick={handleOverlayClick}>
+            <div class="modal-content" onclick={handleOverlayClick}>
+                <div class="modal-inner">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h2 class="modal-title">{modalTitle}</h2>
+                        <button class="modal-close-btn" onclick={closeModal}>
+                            <span class="close-icon">×</span>
+                        </button>
+                    </div>
+
+                    <!-- Modal Body -->
+                    <div class="modal-body">
+                        <lightning-formatted-rich-text value={modalContent}></lightning-formatted-rich-text>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="modal-footer">
+                        <button class="btn-dark" onclick={closeModal}>Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>
+

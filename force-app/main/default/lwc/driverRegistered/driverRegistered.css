@@ -1,0 +1,60 @@
+.maindiv{
+    /* background-color: white; */
+    max-width: 100%;
+    margin-left: 2%;
+    background-color: #fff;
+    padding: 12px;
+}
+.datatable{
+    max-width: 98%;
+    width: auto;
+    margin: auto;
+}
+.horizontalAlign {
+    display: flex;
+    justify-content: space-between;
+}
+
+.buttonNext,.buttonPrev{
+    position: relative;
+    cursor: pointer;
+    background: #003a70;
+    border: 2px solid #003a70;
+    color: #fff;
+    font-weight: 600;
+    height: 33px;
+    width: 120px;
+    user-select: none;
+    outline: none;
+    border-radius: 2px;
+    transition: all ease-in 0.4s;
+}
+
+.loading {
+    background-color: transparent;
+    border: 4px solid #ABA8AF;
+    border-top-color: #003a70;
+    user-select: none;
+    font-size: 0;
+    outline: none;
+    height: 33px;
+    width: 33px;
+    border-radius: 50%;
+    animation: rotate 0.4s linear infinite;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .datatable{
+        overflow-x: scroll;
+    }
+}

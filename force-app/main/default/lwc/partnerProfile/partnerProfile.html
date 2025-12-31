@@ -1,0 +1,109 @@
+<template>
+	<div>
+		<c-custom-toast auto-close-time="8000"></c-custom-toast>
+	</div>
+	<lightning-tabset>
+
+		<lightning-tab label="User Details" title="User Details">
+			<lightning-record-form record-id={recordId} object-api-name="User" mode="view" fields={fields}
+				onsubmit={handleSubmit}>
+			</lightning-record-form>
+		</lightning-tab>
+		<template if:true={userTypeAgency}>
+			<lightning-tab label="Reference" title="Reference">
+
+
+				<template if:true={isLoading}>
+					<div class="spinner">
+						<lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+					</div>
+				</template>
+
+				<div class="customMeteDataMainClass">
+					<lightning-input type="color" label="Primary Colour" name="Primary_Color__c" value={primaryColor}
+						onchange={handleMDTFieldHandler}></lightning-input>
+					<lightning-input type="text" label="Partner Name" name="Partner_Name__c" value={partnerName}
+						onchange={handleMDTFieldHandler}></lightning-input>
+					<lightning-input type="text" label="Partner Email" name="Partner_email__c" value={email}
+						onchange={handleMDTFieldHandler}></lightning-input>
+					<lightning-input type="text" label="Logo URL" name="Logo_URL__c" value={url}
+						onchange={handleMDTFieldHandler}></lightning-input>
+					<lightning-input type="text" label="Partner Id" name="Partner_Id__c" value={PartnerId}
+						onchange={handleMDTFieldHandler}></lightning-input>
+					<lightning-button variant="brand" label="Update" title="Update" disabled={isDisabled}
+						onclick={handleUpdateMdtClick} class="slds-m-left_x-small"></lightning-button>
+
+				</div>
+			</lightning-tab>
+		</template>
+		<lightning-tab label="Affiliate Details" title="Affiliate Details">
+			<div style="padding-bottom:10px">
+				<div>
+					<p>Copy this code and paste it where you want it to appear on your webpage.
+					</p>
+				</div>
+				<div class="text-area-containe slds-grid slds-gutters">
+					<div class="slds-col">
+						<span><textarea id="editable" class="text-area" style="width: 400px;"
+								oninput={handleUrlInput}>{editableText}</textarea></span>
+						<div>
+							<span><lightning-button variant="brand" label="Copy" name="with_frame"
+									onclick={handleFrameButtonClick}></lightning-button></span>
+						</div>
+
+
+					</div>
+					<div class="slds-col">
+
+
+					</div>
+				</div>
+
+
+			</div>
+			<div style="padding-bottom:10px">
+				<div class="text-area-containe slds-grid slds-gutters">
+					<div class="slds-col">
+						<span><textarea id="non-editable" class="text-area"
+								style="width: 400px; background-color: #f4f4f4; color: #000; border: 1px solid #ccc;"
+								readonly>{noneditableText}</textarea></span>
+						<div>
+							<lightning-button variant="brand" label="Copy" name="without_frame"
+								onclick={handleFrameButtonClick}></lightning-button>
+						</div>
+
+
+					</div>
+				</div>
+
+
+				<div class="slds-col">
+
+
+				</div>
+			</div>
+
+
+		</lightning-tab>
+
+		<!-- <lightning-tab label="Social Media" title="Social Media">
+			<lightning-record-edit-form
+				object-api-name='User'
+				record-id={recordId}
+				mode="view" >
+			<lightning-messages></lightning-messages>
+			<div class="slds-grid">
+				<div class="slds-col slds-size_1-of-2">
+					<lightning-input-field field-name="Facebook__c"></lightning-input-field>                   
+				</div>
+				<div class="slds-col slds-size_1-of-2">
+					<lightning-input-field field-name="Twitter__c"></lightning-input-field>
+				</div>
+			</div>
+			<div class="slds-m-top_medium">
+				<lightning-button type="submit" variant="brand" label="Save"></lightning-button>
+			</div>
+			</lightning-record-edit-form>
+		</lightning-tab> -->
+	</lightning-tabset>
+</template>

@@ -1,0 +1,53 @@
+<template>
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+    </template>
+
+    <lightning-card title="Create Agent" icon-name="standard:form">
+        <div class="slds-p-around_medium">
+            <!-- Form Fields -->
+            <div class="slds-grid slds-wrap slds-gutters">
+                <!-- First Name -->
+                <div class="slds-col slds-size_1-of-2 slds-p-right_small">
+                    <lightning-input class="validateFields" label="First Name" pattern="^[A-Za-z]+(\s[A-Za-z]+)*$" type="text"
+                        value={firstName} onchange={handleInputChange} data-id="firstName" required>
+                    </lightning-input>
+                </div>
+
+                <!-- Last Name -->
+                <div class="slds-col slds-size_1-of-2 slds-p-left_small">
+                    <lightning-input class="validateFields" label="Last Name" pattern="^[A-Za-z]+(\s[A-Za-z]+)*$" type="text" value={lastName}
+                        onchange={handleInputChange} data-id="lastName" required>
+                    </lightning-input>
+                </div>
+
+                <!-- Email -->
+                <div class="slds-col slds-size_1-of-2 slds-p-right_small slds-m-top_medium">
+                    <lightning-input class="validateFields" label="Email" value={email} onchange={handleInputChange} data-id="email"
+                        type="email" required>
+                    </lightning-input>
+                </div>
+
+                <!-- Phone -->
+                <div class="slds-col slds-size_1-of-2 slds-p-left_small slds-m-top_medium">
+                    <lightning-input class="validateFields" label="Phone" value={phone} onchange={handleInputChange} data-id="phone"
+                        max-length="15" pattern="[0-9]*">
+                    </lightning-input>
+                </div>
+
+                <div class="slds-col slds-size_1-of-2 slds-p-right_small">
+                    <lightning-combobox class="validateFields" name="User_Type__c" label="User Type" value={UserTypeValue}
+                        placeholder="Select User Type" data-id="User_Type__c" options={UserTypeoptions}
+                        onchange={handleInputChange} required></lightning-combobox>
+
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="slds-grid slds-m-top_medium slds-grid_align-end">
+                <lightning-button label="Submit" variant="brand" onclick={handleSubmit}>
+                </lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+</template>

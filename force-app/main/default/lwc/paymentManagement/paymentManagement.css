@@ -1,0 +1,102 @@
+.mainDiv {
+  background-color: white;
+}
+.addNewCard {
+    position: fixed;
+    width: 85%;
+    height: 100%;
+    right: 0;
+    top: 0px;
+    z-index: 9999;
+    background: #fff;
+    border-left: 2px solid #003a708c;
+    padding: 20px;
+}
+
+.aCard {
+    background: #f9f9f9;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    padding: 15px 5px;
+    margin-bottom: 15px;
+    transition: ease-in .3s;
+}
+
+.aCard:hover {
+    background: #ffffff;    
+    transition: ease-out .3s;
+    cursor: pointer;
+}
+
+.cardTypeText {
+    font-weight: 800;
+    font-size: large;
+}
+.cardNum {
+  margin: 7px 0px;
+}
+
+.slds-tabs_default__nav .slds-is-active {
+  background-color: #ffffff;
+}
+
+.cardHolderName {
+  font-size: 17px;
+}
+
+.PolicyName{
+  font-size: 13px;
+  color: red;
+}
+
+.loadingCard {
+    background: #ffffff;
+    border: 1px solid #f5f5f5;    
+    padding: 15px 5px;
+    margin-bottom: 15px;
+    transition: ease-in .3s;    
+}
+
+.w50 {
+  width: 50% !important;
+}
+
+.w65 {
+  width: 65% !important;
+}
+
+.w90 {
+  width: 90% !important;
+}
+
+.loadingBtn {
+    width: 32px;
+    height: 32px;
+    border: 0px;
+    border-radius: 4px;
+}
+
+.skeleton {
+  min-height: 20px;
+  margin-bottom: 7px;
+  background-color: #ededed;
+  background-image: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+  background-size: 40px 100%;
+  background-repeat: no-repeat;
+  background-position: left -40px top 0;
+  border-radius: 1px;
+  -webkit-animation: shine 1.9s ease infinite;
+          animation: shine 1.9s ease infinite;
+}
+
+@-webkit-keyframes shine {
+  to {
+    background-position: right -40px top 0;
+  }
+}
+
+@keyframes shine {
+  to {
+    background-position: right -40px top 0;
+  }
+}

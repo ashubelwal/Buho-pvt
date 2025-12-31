@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BÚHO - Insurance Brokerage Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <!-- Left Section - Login Form -->
+        <div class="login-section">
+            <div class="login-content">
+                <!-- Logo -->
+                <div class="logo">
+                    <img src="assets/Logo.svg" alt="BÚHO" class="logo-icon">
+
+                </div>
+
+                <!-- Welcome Text -->
+                <div class="welcome-text">
+                    <h2>Welcome Back to Mexico <span class="highlight">insurance quote.</span></h2>
+                </div>
+
+                <!-- Login Form -->
+                <form class="login-form" id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Email address" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    </div>
+
+                    <div class="forgot-password">
+                        <a href="reset-password.html" class="forgot-link">Forget Password ?</a>
+                    </div>
+
+                    <button type="submit" class="btn-signin">Sign in</button>
+
+                    <!-- Social Login Buttons -->
+                    <button type="button" class="btn-social btn-google">
+                        <img src="assets/google-icon.svg" alt="Google" class="social-icon">
+                        Sign In with Google
+                    </button>
+
+                    <button type="button" class="btn-social btn-twitter">
+                        <img src="assets/twitter-icon.svg" alt="Twitter" class="social-icon">
+                        Sign In with Twitter
+                    </button>
+
+                    <div class="signup-text">
+                        New to Logger? <a href="#" class="signup-link">Sign Up</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right Section - Carousel -->
+        <div class="carousel-section">
+            <div class="carousel-container">
+                <div class="carousel-slide active">
+                    <div class="carousel-image">
+                        <img src="assets/lady image.png" alt="Smart protection for your Mexican adventures">
+                    </div>
+                    <div class="carousel-content">
+                        <h3>Smart protection for your Mexican adventures</h3>
+                    </div>
+                </div>
+                
+                <!-- Additional slides (hidden by default) -->
+                <div class="carousel-slide">
+                    <div class="carousel-image">
+                        <img src="assets/lady image.png" alt="Comprehensive coverage">
+                    </div>
+                    <div class="carousel-content">
+                        <h3>Comprehensive coverage for every journey</h3>
+                    </div>
+                </div>
+
+                <div class="carousel-slide">
+                    <div class="carousel-image">
+                        <img src="assets/lady image.png" alt="Easy claims">
+                    </div>
+                    <div class="carousel-content">
+                        <h3>Fast and easy claims process</h3>
+                    </div>
+                </div>
+
+                <div class="carousel-slide">
+                    <div class="carousel-image">
+                        <img src="assets/lady image.png" alt="24/7 Support">
+                    </div>
+                    <div class="carousel-content">
+                        <h3>24/7 customer support</h3>
+                    </div>
+                </div>
+
+                <div class="carousel-slide">
+                    <div class="carousel-image">
+                        <img src="assets/lady image.png" alt="Best rates">
+                    </div>
+                    <div class="carousel-content">
+                        <h3>Best rates for your peace of mind</h3>
+                    </div>
+                </div>
+
+                <!-- Carousel Controls -->
+                <div class="carousel-controls">
+                    <span class="carousel-counter"><span id="currentSlide">1</span> of <span id="totalSlides">5</span></span>
+                    <div class="carousel-buttons">
+                        <button class="carousel-btn prev" id="prevBtn">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        <button class="carousel-btn next" id="nextBtn">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
+

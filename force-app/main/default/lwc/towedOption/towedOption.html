@@ -1,0 +1,38 @@
+<template>
+    <div class="maindiv notranslate">
+        <template if:true={spinner}>
+            <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+        </template>
+        <template if:false={spinner}>                
+            <div class="pageTitle slds-m-bottom_medium">
+                <h2 class="slds-text-heading_medium">
+                    {label.areyoutowing}           
+                </h2>
+            </div>
+            
+            <div class="inputfield slds-grid slds-gutters">
+                <div class="slds-col">
+                    <div class="slds-text slds-p-around_small slds-align_absolute-center">{label.yes}</div>
+                    <lightning-input class="radiotype slds-align_absolute-center slds-p-around_small slds-text-align_center" type="radio" label=""
+                        name="isTowing" value={isTowingYes} checked={isTowingYes} text="Yes" onchange={handleChange}></lightning-input>
+                </div>
+                <div class="slds-col">
+                    <div class="slds-text slds-p-around_small slds-align_absolute-center">{label.no}</div>
+                    <lightning-input class="radiotype slds-align_absolute-center slds-p-around_small slds-text-align_center" type="radio" label=""
+                        name="isTowing" value={isTowingNo} checked={isTowingNo} text="No" onchange={handleChange}></lightning-input>
+                </div>
+            </div>
+            <div class="slds-m-top_large horizontalAlign">
+                    <div class="">
+                        <button class="buttonPrev" onclick={handlePrevClick}><span class="icon-prev"><i
+                            class="icon-prevs"></i></span>{label.prev}</button>
+                    </div>
+                    <div class="">
+                        <button class="buttonNext" onclick={handleNextClick}><span class="icon-next"><i
+                            class="icon-nexts"></i></span>{label.next}</button></button>
+                    </div>
+            </div>
+        </template>
+        
+    </div>
+</template>

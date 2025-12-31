@@ -1,0 +1,76 @@
+<apex:page >
+    
+    <div class="container" style="font-size:12px;" >
+        <div>
+            If you are involved in an accident, lost your vehicle/suspect theft of vehicle, or even if you locked your keys in the car or ran out of gas....following the steps below will ensure a smooth claims process with the insurance company.
+        </div>
+
+        <div>
+            <ol type="1">
+                <li>
+                    Call the Claims Hotline
+                    <ol type="1">
+                        <li>
+                            Regardless of fault, call Qualitas claims hotline immediately, To follow up on a pre-existing
+                            claim please contact 01 52 664 634 27 81 and have your claim # ready.
+                        </li>
+                        <li>
+                            From Mexico with Mexico calling: 555-258-2880 or 01-800-800-2880
+                        </li>
+                        <li>
+                            From Mexico to a US number: 555-258-2880 or 01-800-800-2880
+                        </li>
+                    </ol>
+                </li>
+                <li>
+                    Wait for Claims Adjuster to Arrive at the scene
+                    <ol type="1">
+                        <li>
+                            Do not make agreements with the third party, let Qualitas handle the settlement. 
+                        </li>
+                        <li>
+                            Let Qualitas take photos, assess damages 
+                        </li>
+                        <li>
+                            If you are detained (at-fault) Qualitas will send staff attorney
+                        </li>
+                        <li>
+                            If medical assistance is required, Qualitas will send medical transport*
+                        </li>
+                    </ol>
+                </li>
+                <li>
+                    The claims adjuster will provide you his/her contact información.
+                    <ol type="1">
+                        <li>
+                            If this is a rental, send the claim number and assigned adjuster to your rental company as soon as possible
+                        </li>
+                    </ol>
+                </li>
+                <li>
+                    If the vehicle is not repairable, you will be provided accommodations unit arrangements can be made to return to U.S.*
+                </li>
+            </ol>
+            <div>
+                *Subject to Terms and Condition of the Tourist Auto Policy and Terms and Condition of the AVQ(Roadside Assistance Package)
+            </div>
+        </div>
+        <!--div>
+            <table width="100">
+                <tr>
+                    <td>
+                        Claims: 555-258-2880 or 01-800-800-2880
+                    </td>
+                    <td>
+                        https://www.mexinsurance.com/s/
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        You must report a claim in Mexico prior to returning to the U.S.
+                    </td>
+                </tr>
+            </table>
+        </div-->
+    </div>
+</apex:page>

@@ -1,0 +1,66 @@
+<template>
+    <div class="slds-card">
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning-icon icon-name="standard:document" alternative-text="Import Dairyland"
+                        title="Import Dairyland"></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <span class="slds-text-heading_medium">Import Dairyland Leads</span>
+                    </h2>
+                </div>
+            </header>
+        </div>
+
+        <div class="slds-card__body slds-card__body_inner">
+            <!-- Instructions -->
+            <p class="slds-text-body_regular slds-m-bottom_medium">{instructions}</p>
+
+            <!-- File Uploader -->
+            <div class="slds-form-element slds-m-bottom_medium">
+                <div class="slds-form-element__control">
+                    <lightning-input type="file" label="Select CSV File" accept=".csv" onchange={handleFileChange}>
+                    </lightning-input>
+                </div>
+            </div>
+
+            <!-- Selected File Info -->
+            <template if:true={isFileUploaded}>
+                <div class="slds-box slds-box_xx-small slds-m-bottom_medium">
+                    <lightning-icon icon-name="doctype:csv" alternative-text="CSV" class="slds-m-right_x-small"
+                        size="small"></lightning-icon>
+                    <span>{fileName}</span>
+                </div>
+            </template>
+
+            <!-- Buttons -->
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col">
+                    <lightning-button label="Import Leads" variant="brand" onclick={handleImportClick}
+                        disabled={uploadDisabled} class="slds-m-right_x-small">
+                    </lightning-button>
+                    <lightning-button label="Clear" variant="neutral" onclick={handleResetClick}>
+                    </lightning-button>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <template if:true={results.success}>
+                <div class="slds-m-top_medium slds-box slds-theme_success">
+                    <lightning-icon icon-name="utility:success" alternative-text="Success" class="slds-m-right_x-small"
+                        size="small"></lightning-icon>
+                    <span>{results.message}</span>
+                </div>
+            </template>
+
+            <!-- Spinner -->
+            <template if:true={showSpinner}>
+                <div class="slds-is-relative" style="height: 100px;">
+                    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

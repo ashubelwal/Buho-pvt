@@ -1,0 +1,24 @@
+.autorenewToggle{
+    width: 150px !important;
+    max-width: 150px !important;
+}
+
+.toggleContainer{
+    display: inline-flex;
+    padding: 10px 10px 10px 10px;
+} 
+.mt23{
+    margin-top: 23px !important;
+}
+.managePadding{
+    padding-left: 20px;
+}
+
+@media only screen and (max-width:767px) {
+    .toggleContainer{
+        display: inline-block;
+    }
+    .managePadding{
+        padding-left: 0;
+    }
+}

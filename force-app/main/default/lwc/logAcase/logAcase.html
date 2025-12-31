@@ -1,0 +1,38 @@
+<template>
+	<template if:true={IsError}>
+		<section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+			aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+			<div class="slds-modal__container">
+				<header class="slds-modal__header">
+					<h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate slds-m-bottom--none">Create Quick Case
+					</h2>
+				</header>
+				<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+					
+					
+						<div class="">
+							<lightning-combobox label="Select Reason" name="Case_Type__c" value={value} required="true"
+								placeholder="Select Reason" options={caseTypeOptions} onchange={handleChange}
+								class="validateField">
+							</lightning-combobox>
+							<lightning-textarea class="validateField" label="Description" name="Description"
+								required={handleRequireDescribleField} placeholder="Please provide brief detail about this case."
+								onchange={handleChange} max-length="250"></lightning-textarea>
+							<div class="submitButtonSection">
+								<button class="buttonSubmit btnHover" title="Submit" onclick={handleSubmit}>Submit</button>
+							</div>
+						</div>
+				
+					
+				</div>
+				<footer class="slds-modal__footer">
+					<button class="slds-button slds-button_neutral" onclick={cancle}>Cancel</button>
+				</footer>
+			</div>
+		</section>
+	</template>
+	<div class="CreateCase">
+		<button class="CreateCasebtn" title="Can We Improve?" onclick={handleCreateCase}>Can We Improve?<br/><span class="icon-create-case-blue"><i
+						class="icon-create-case-blues"></i></span>Create Case</button>
+	</div>
+</template>

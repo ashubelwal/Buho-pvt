@@ -1,0 +1,10 @@
+<template>
+    <lightning-card title="Article Details" class="custom-card">
+        <template if:true={article}>
+            <div class="slds-p-around_medium">
+                <h1 class="slds-text-heading_large slds-m-bottom_medium">{article.Title}</h1>
+                <div class="article-body slds-text-longform" lwc:dom="manual"></div>
+            </div>
+        </template>
+    </lightning-card>
+</template>

@@ -1,0 +1,99 @@
+<template>
+    <template if:true={spinner}>
+        <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+    </template>
+    <template if:false={spinner}>
+
+        <div class="maindiv notranslate slds-m-top_xx-large">
+            <div class="">
+                <div class="slds-text-heading_large blue slds-p-around_small screenHeading">{label.Reviewwatercraftinformation}</div>
+            </div>
+            <!-- <div class="icon slds-p-around_small">
+                <lightning-icon class="slds-col slds-p-around_small slds-align_absolute-center slds-size_1-of-12"
+                    icon-name="custom:custom92">
+                </lightning-icon>
+            </div> -->
+            <lightning-layout multiple-rows="true">
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                    class="slds-p-around_x-small">
+                    <lightning-input class="inputfield Validation" pattern="^(?![\s-])[\w\s-]+$" name="Year__c"
+                        type="text" label={label.Year} disabled="true" placeholder={label.Year} onchange={handleChange} value={setYearValue}
+                        required>
+                    </lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                    class="slds-p-around_x-small">
+                    <lightning-input class="inputfield Validation" pattern="^(?![\s-])[\w\s-]+$" name="Make__c"
+                        type="text" label={label.Make} disabled="true" placeholder={label.Make} onchange={handleChange} value={setMakeValue}
+                        required>
+                    </lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                    class="slds-p-around_x-small">
+                    <lightning-input class="inputfield Validation" pattern="^(?![\s-])[\w\s-]+$" name="Model__c"
+                        type="text" label={label.Model} disabled="true" placeholder={label.Model} onchange={handleChange} value={setModelValue}
+                        required>
+                    </lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                    class="slds-p-around_x-small">
+                    <lightning-input class="inputfield Validation" pattern="^(?![\s-])[\w\s-]+$" name="Value__c"
+                        type="text" label={label.Value} disabled="true" placeholder={label.Value} value={setVehicleValue} onchange={handleChange}
+                        required>
+                    </lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                    class="slds-p-around_x-small">
+                    <lightning-input name="Type_of_Vessel__c" class="Validation" label={label.VesselType}
+                        value={setVesselType} placeholder="" options={VesselType} onchange={handleChange}
+                        disabled="true" required>
+                    </lightning-input>
+                </lightning-layout-item>
+                <template if:false={showVesselLength}>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                        class="slds-p-around_x-small">
+                        <lightning-input name="Vessel_Length__c" label={label.VesselLength} value={setVesselLength}
+                            class="Validation" options={VesselType} onchange={handleChange} disabled="true" required>
+                        </lightning-input>
+                    </lightning-layout-item>
+                </template>
+
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                    class="slds-p-around_x-small">
+                    <lightning-input class="inputfield Validation" pattern="^\S.*\S$" name="VIN_Number__c"
+                        type="text" label={label.VINNumber} placeholder={label.VINNumber} onchange={handleChange} value={setVinNumberValue} required>
+                    </lightning-input>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                    class="slds-p-around_x-small">
+                    <lightning-input class="inputfield" pattern="^\S.*\S$" type="text" name="Beam__c"
+                        label={label.Beamwidth} placeholder={label.Beamwidth} onchange={handleChange} value={setBeamValue}>
+                    </lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                    class="slds-p-around_x-small">
+                    <div class="lgc-bg"> 
+                        <lightning-helptext
+                            content={label.Internationallawrequiresthatevery}>
+                        </lightning-helptext>
+                    </div>
+                    <lightning-input class="inputfield" pattern="^\S.*\S$" type="text" name="Flag__c"
+                        label={label.Flag} placeholder={label.Flag} onchange={handleChange} value={setFlagValue}></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                    class="slds-p-around_x-small">
+                    <lightning-input class="inputfield Validation" pattern="^\S.*\S$" name="Engine_Type__c"
+                        type="text" label={label.EngineType} placeholder={label.EngineTypeInboardOutboard}
+                        value={setEngineTypeValue} onchange={handleChange} required></lightning-input>
+                </lightning-layout-item>
+            </lightning-layout>
+            <div class="horizontalAlign">
+                <button class="buttonPrev btnHover" onclick={handlePrevClick}>{label.Prev}</button>
+                <button class="buttonNext btnHover" onclick={handleNextClick}>{label.Next}</button>
+            </div>
+        </div>
+
+    </template>
+
+</template>

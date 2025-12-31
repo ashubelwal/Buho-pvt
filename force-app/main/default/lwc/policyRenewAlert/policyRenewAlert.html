@@ -1,0 +1,114 @@
+<template>
+    <div style="background-color: white;">
+
+        <div class="slds-p-around_small">
+            <template if:true={isRunningDays}>
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col">
+                        <p><b>Policy Running Days - {totalRunningDays}</b></p>
+                    </div>
+                    <div class="slds-col">
+                        <p><b>Policy Days Left - {totalDaysLeft}</b></p>
+                    </div>
+
+                </div>
+            </template>
+
+            <template if:true={isStaringDays}>
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col">
+                        <p><b>Policy is starting in - {totalStartingDays}</b></p>
+                    </div>
+                </div>
+
+            </template>
+        </div>
+
+        <template if:true={isAnnualPolicy}>
+            
+            <div class="toggleContainer" >
+                 
+                    <div class="autorenewToggle">
+                        <lightning-input class="" type="toggle" name="AutoRenew"
+                            label="Auto renew" onchange={handleAutoRenewToggle} checked={isAutoRenewChecked}></lightning-input>
+                    </div>
+
+                <template if:true={isShowCards}>
+                    <div class="">
+                        <lightning-combobox placeholder="Saved cards" variant = "label-hidden" name="savedcards" value={selectedCard}
+                            options={showCardsOptions} onchange={handleSelectedCards}></lightning-combobox>
+                    </div>
+                </template>
+
+                <div class="managePadding">
+                    <lightning-button label="Manage payment" variant="Brand" name="managePayment"
+                        onclick={handleManagePayment}></lightning-button>
+                </div>
+                
+            </div>
+            
+            <div class="slds-grid slds-wrap">
+                <template if:true={isShowCards}>
+                    <div class="slds-p-left_small slds-p-around_small slds-col slds-p-bottom_large">
+                        <lightning-button label="Submit" variant="Brand" name="Submit"
+                            onclick={handleAutoRenew}></lightning-button>
+                    </div>
+                </template>
+            </div>
+            
+            <template if:true={isShowCardNote}>
+                <div class="slds-p-left_small">
+                    <p><b>Note : Please add card for policy auto-renew from Manage Payment and after that click on Submit
+                        button to update the details.</b></p>
+                </div>
+            </template>
+
+            <template if:true={policyRenewConfirmed}>
+                <div class="slds-p-left_small">
+                    <p><b>Note : Auto-renewal of this policy has been enabled. Before the 15 and 30 days, an email will be sent to the registered email address for confirmation.</b></p>
+                </div>
+            </template>
+
+            <template if:true={updateCardDetails}>
+                <div class="slds-p-left_small">
+                    <p style="color:red;"><b>Note : Since you have deleted the chosen card from payment, kindly update the payment information. Otherwise, auto-renewal will fail.</b></p>
+                </div>
+            </template>
+
+
+            <template if:true={showCardModal}>
+                <div class="slds-modal slds-fade-in-open slds-modal_large">
+                    <div class="slds-modal__container">
+                        <c-Payment-management></c-Payment-management>
+                        <footer class="slds-modal__footer">
+                            <button class="slds-button slds-button_brand" onclick={closeModal}>Close</button>
+                        </footer>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+
+            <template if:true={isAutoRenewDisabled}>
+                <div class="slds-modal slds-fade-in-open slds-modal_small">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Disable Auto Renewal</h1>
+                        </div>
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <p>Would you like to disable auto-renewal? Please confirm your preference for policy
+                                automatic renewal.</p>
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <lightning-button label="Disable Auto Renew" variant="brand" name="disabled"
+                                onclick={handleAutoRenew}></lightning-button>
+                            <button class="slds-m-left_small slds-button slds-button_brand"
+                                onclick={closeRenewModal}>Close</button>
+                        </footer>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+
+        </template>
+    </div>
+</template>

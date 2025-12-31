@@ -1,0 +1,71 @@
+.mainDiv{
+	background-color : #fff;
+}
+.slds-modal{
+    background-color: #1f1f1fde;
+}
+.actionButton {
+    background: #fff;
+    border: 2px solid #003a70;
+    color: #003a70;
+    font-weight: 600;
+    width: 50%;
+    height: 33px;
+    padding: 0 20px;
+    border-radius: 20px;
+    user-select: none;
+    outline: none;
+}
+.backButtonAction{
+	background-color: #fff;
+}
+.buttonPrev, .buttonSubmit{
+    position: relative;
+    cursor: pointer;
+    background: #003a70;
+    border: 2px solid #003a70;
+    color: #fff;
+    font-weight: 600;
+    height: 33px;
+    width: 120px;
+    /* border-radius: 20px; */
+    user-select: none;
+    outline: none;
+}
+.caseSectionBox{
+    display: block;
+    background-color: #E7F3FF;
+}
+.alginRight{
+    text-align: right;
+}
+.alginCenter{
+    text-align: center;
+}
+.eachCaseSection{
+    width: 100%;
+}
+.CreateCase{
+    position: fixed;
+    right: 0px;
+    top: 20%;
+    transition: all 1.5s ease-in-out;
+}
+.CreateCasebtn{
+    cursor: pointer;
+    background-color: #003a70;
+    padding: 6px;
+    border: 2px solid #003a70;
+    color: #fff;
+    width: 120px;
+    border-radius: 10px 0px 0px 10px;
+    transition: all 1.5s ease-in-out;
+}
+
+
+.caseSection{
+   /* background : linear-gradient(90deg, rgba(0, 132, 255,0.15), rgba(255 255 255));
+   border-left: 4px solid #003A70;
+    padding: 6px 20px; */
+    width: 100%;;
+}

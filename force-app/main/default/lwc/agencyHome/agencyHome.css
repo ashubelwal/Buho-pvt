@@ -1,0 +1,112 @@
+:host {
+	--lwc-fontSize2: 14px !important;
+}
+.heading-1 {
+	font-size: 2.5rem;
+	font-weight: 700;
+}
+
+.heading-2 {
+	font-size: 1.75rem;
+	font-weight: 600;
+}
+
+.heading-4 {
+	font-size: 1.25rem;
+	font-weight: 500;
+}
+
+.container {		
+	width: 90%;
+	margin: 0 auto;
+    padding: 10px;
+}
+
+.homeWrap {
+	background-color: #fff;
+	border-radius: 4px;	
+}
+
+.bannerWrapper {
+	background-color: #e5f7ff;
+	min-height: 500px;
+}
+
+.process {
+	min-height: 500px;	
+	background-color: #fff;
+}
+
+.benefits {
+	min-height: 600px;
+	background: #fff6ea;
+}
+
+.partnerBenefits {
+	position: relative;
+}
+
+.ourSupport {
+	min-height: 600px;
+}
+
+.faq {
+	min-height: 600px;
+	    background: #fcfcfc;
+}
+
+.box {
+	border: 1px solid #eee;
+	background-color: #ffffff;
+    padding: 20px;
+    width: 200px;
+    border-radius: 4px;
+	box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+}
+
+.box:first-child {
+	position: absolute;
+    min-height: 100px;
+    top: 0;
+    left: 25%;
+}
+
+.box:nth-child(2) {
+	position: absolute;
+    min-height: 100px;
+    top: 168px;
+    left: 38%;
+}
+
+.box:last-child {
+	position: absolute;
+    min-height: 100px;
+    top: 143px;
+    left: 7%
+}
+
+.support {	
+	background-color: #e8f6fc;
+    border-radius: 4px;
+    position: relative;
+    padding: 25px 10px;
+    max-width: 400px;    
+    text-wrap: pretty;
+}
+
+.supportBox {
+	padding: 30px;
+	border-bottom: 1px solid #eee;
+	transition: ease-out .3s;
+}
+.supportBox:not(:last-child) {
+	border-bottom: 1px solid #d0e6ef;
+}
+
+.supportBox:hover {
+	background: #fff;
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+    margin: -2px -30px 0 15px;
+	border-radius: 4px;
+	transition: cubic-bezier(0.99, 0.11, 0.88, 1.2) .4s;
+}

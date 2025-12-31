@@ -1,0 +1,102 @@
+<template>
+    <div class="buho-container">
+        <div class="buho-login-container">
+            <!-- Left Section - Login Form -->
+            <div class="buho-login-section">
+                <div class="buho-login-content">
+                    <!-- Logo -->
+                    <div class="buho-logo">
+                        <img src={logoUrl} alt="BÚHO" class="buho-logo-icon">
+                    </div>
+
+                    <!-- Welcome Text -->
+                    <div class="buho-welcome-text">
+                        <h2>Welcome Back to Mexico <span class="buho-highlight">insurance quote.</span></h2>
+                    </div>
+
+                    <!-- Success Message -->
+                    <template lwc:if={successMessage}>
+                        <div class="buho-success-message">
+                            {successMessage}
+                        </div>
+                    </template>
+
+                    <!-- Login Form - Using Reusable Component -->
+                    <div class="buho-form">
+                        <c-buho_login-form
+                            username={email}
+                            password={password}
+                            error-message={errorMessage}
+                            is-loading={isLoading}
+                            show-forgot-password={showForgotPasswordLink}
+                            username-label="Email"
+                            password-label="Password"
+                            username-placeholder="Email address"
+                            password-placeholder="Enter your password"
+                            submit-button-label="Sign in"
+                            loading-button-label="Signing in..."
+                            forgot-password-text="Forget Password ?"
+                            onusernamechange={handleUsernameChange}
+                            onpasswordchange={handlePasswordChange}
+                            onsubmit={handleLogin}
+                            onforgotpassword={handleForgotPassword}>
+                        </c-buho_login-form>
+
+                        <!-- Social Login Buttons -->
+                        <!--template lwc:if={showSocialLogin}>
+                            <button type="button" class="buho-btn-social" onclick={handleGoogleLogin}>
+                                <img src={googleIconUrl} alt="Google" class="buho-social-icon">
+                                Sign In with Google
+                            </button>
+
+                            <button type="button" class="buho-btn-social" onclick={handleTwitterLogin}>
+                                <img src={twitterIconUrl} alt="Twitter" class="buho-social-icon">
+                                Sign In with Twitter
+                            </button>
+                        </template>
+
+                        <div class="buho-signup-text">
+                            New to BÚHO? <a class="buho-signup-link" onclick={handleSignUp}>Sign Up</a>
+                        </div-->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Section - Carousel -->
+            <template lwc:if={showCarousel}>
+                <div class="buho-carousel-section">
+                    <div class="buho-carousel-container">
+                        <template for:each={slides} for:item="slide" for:index="index">
+                            <div key={slide.id} class={slide.cssClass}>
+                                <div class="buho-carousel-image">
+                                    <img src={slide.imageUrl} alt={slide.title}>
+                                </div>
+                                <div class="buho-carousel-content">
+                                    <h3>{slide.title}</h3>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- Carousel Controls -->
+                        <div class="buho-carousel-controls">
+                            <span class="buho-carousel-counter">{currentSlideNumber} of {totalSlides}</span>
+                            <div class="buho-carousel-buttons">
+                                <button class="buho-carousel-btn" onclick={handlePrevSlide}>
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                                    </svg>
+                                </button>
+                                <button class="buho-carousel-btn" onclick={handleNextSlide}>
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>
+

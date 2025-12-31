@@ -1,0 +1,118 @@
+<template>
+    <div class="test">
+        <div class="pageTitle slds-m-bottom_medium">
+            <h2 class="slds-text-heading_medium"> Vehicle Details </h2>
+        </div>
+        <template if:true={currentUserType}>
+            <div class="slds-grid slds-wrap slds-gutters">
+                <div class ="slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12 slds-p-around_small">
+                    <lightning-combobox name="progress" placeholder={label.selectavehicle} value={selectedVehicleId}
+                        options={vehicleDetails.vehicleList} onchange={changevehicleOption}></lightning-combobox>
+                </div>
+            </div>
+        </template>
+
+        <div class="slds-grid slds-wrap slds-gutters vehicleDetails">            
+            <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                <lightning-combobox name="Vehicle_sub_type__c" type="combobox" label="Select type" class="input"
+                    value={vehicleType} options={vehicleTypeOptions} onchange={handleInputChange} required>
+                </lightning-combobox>                
+            </div>
+            <!-- Year -->
+            <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small"> 
+                <lightning-combobox name="Year__c" type="combobox" label="Year" class="input" value={year}
+                    options={yearOptions} onchange={handleInputChange} required></lightning-combobox>
+            </div>
+        </div>
+
+        <div class="slds-grid slds-wrap slds-gutters vehicleDetails">
+            <!-- Make -->
+            <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                <c-nc_combobox input-label="Make" options={makeOptions} onselect={handleOptionClick} name="Make"
+                    onreset={handleChildComboboxReset} onaddnew={handleAddValue} search-value={make} ontype={handleTypedValue}
+                    inputrequired="true"></c-nc_combobox>                
+            </div>
+            <!-- Model -->
+            <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small slds-is-relative">                
+                <c-nc_combobox input-label="Model" options={modelOptions} onselect={handleOptionClick} name="Model"
+                    onaddnew={handleAddValue} inputrequired="true" search-value={model} ontype={handleTypedValue}
+                    inputdisabled={booleanVar.isModelLoaded}></c-nc_combobox>
+                <template if:true={booleanVar.isModelLoaded}>
+                    <!-- <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner> -->
+                </template>
+            </div>
+
+            <!-- Vehicle Value -->
+            <!-- <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                <lightning-input name="Value__c" type="number" label="Vehicle Value" value={vehicleValue}
+                    placeholder="Enter vehicle value" class="input slds-m-bottom_none" onchange={handleInputChange} required>
+                </lightning-input>
+                <lightning-input name="Coverage__c" type="checkbox" label="Liability Only" checked={liabilityOnly}
+                    onchange={handleLiabilityOnly}></lightning-input>
+            </div> -->
+            <!-- Vehicle Value -->
+            <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+
+                <lightning-input name="Value__c" type="number" label="Vehicle Value" value={vehicleValue}
+                    placeholder="Enter vehicle value" class="input slds-m-bottom_none" onchange={handleInputChange} required min="0" max="200000"
+                    step="1" message-when-range-underflow="Value must be 0 or greater"  message-when-range-overflow="Maximum allowed value is 200000"
+                    message-when-step-mismatch="Only whole numbers are allowed">
+                </lightning-input>
+            
+                <lightning-input name="Coverage__c" type="checkbox" label="Liability Only" checked={liabilityOnly}
+                    onchange={handleLiabilityOnly}>
+                </lightning-input>
+            </div>
+
+        </div>
+
+        <div class="slds-grid slds-wrap slds-p-around_small slds-gutters vehicleDetails">
+
+            <!-- Business Purposes -->
+            <div class="slds-col slds-p-around_small">
+                <lightning-input name="Is_the_vehicle_used_for_business_purpose__c" type="checkbox"
+                    label="Is the vehicle for business use?" checked={businessUse} onchange={handleInputChange}>
+                </lightning-input>
+            </div>
+
+            <!-- Under Age 21 -->
+            <div class="slds-col slds-p-around_small">
+                <lightning-input name="is_there_a_driver_under_21__c" type="checkbox" label="Is the driver under 21?"
+                    checked={underAge21} onchange={handleInputChange}></lightning-input>
+            </div>
+
+            <!-- Salvage Vehicle -->
+            <div class="slds-col slds-p-around_small">
+                <lightning-input name="Salvage_Vehicle__c" type="checkbox" label="Is this a salvage vehicle?"
+                    checked={salvageVehicle} onchange={handleInputChange}></lightning-input>
+            </div>
+
+            <!-- Rental Vehicle -->
+            <div class="slds-col slds-p-around_small">
+                <lightning-input name="Is_this_a_Rental_Vehicle__c" type="checkbox" label="Is this a rental vehicle?"
+                    checked={rentalVehicle} onchange={handleInputChange}></lightning-input>
+            </div>
+
+            <!-- Electric Hybrid -->
+            <div class="slds-col slds-p-around_small">
+                <lightning-input name="Electric_Hybrid__c" type="checkbox" label="Is this a Electric Hybrid vehicle?"
+                    checked={electricHybrid} onchange={handleInputChange}></lightning-input>
+            </div>
+
+            <!-- Is towing? -->
+            <div class="slds-size_1-of-1 slds-medium-size_12-of-12 slds-large-size_12-of-12 slds-p-around_xx-small">
+                <lightning-input name="isTowing" type="checkbox" label="Are you towing?" checked={inputValues.isTowing}
+                    onchange={handleisTowing}></lightning-input>
+            </div>            
+            <!-- Add towed -->
+            <template if:true={inputValues.isTowing}>
+                <div class="slds-size_1-of-1 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+                    <c-nc_towed ontowedadd={getTowData} towed-units={inputValues.towunits} current-user-type={currentUserType} existingtowed-units={vehicleDetails.towunitsList} ></c-nc_towed>
+                    <template if:true={booleanVar.towNotAdded}>
+                        <div class="slds-text-color_error">Please add at least one tow.</div>
+                    </template>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

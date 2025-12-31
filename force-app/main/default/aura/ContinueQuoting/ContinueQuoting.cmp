@@ -1,0 +1,10 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" controller="QuickQuotationCtrl">
+    <lightning:navigation aura:id="navService"/>
+    <aura:attribute name="pageReference" type="Object"/>
+    <aura:attribute name="url" type="String"/>
+    <aura:attribute name="quoteRecord" type="Object"/>
+
+    <aura:handler name="init" value="{!this}" action="{! c.init }"/>
+
+    <lightning:button class="slds-button_stretch" label="Continue Quoting" title="Continue Quoting" onclick="{! c.redirectToQuickQuote }" />
+</aura:component>

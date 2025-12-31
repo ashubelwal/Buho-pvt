@@ -1,0 +1,63 @@
+<apex:page showHeader="false" sidebar="false" title="{!$Label.site.in_maintenance}" cache="false" standardStylesheets="false">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .maintenance-wrapper {
+            max-width: 600px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(6px);
+            text-align: center;
+            color: #ffffff;
+        }
+        .maintenance-wrapper h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .maintenance-wrapper p {
+            font-size: 1.2rem;
+            margin-top: 0;
+            color: #e0e0e0;
+        }
+        .maintenance-wrapper .icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        a.email-link {
+            color: #90caf9;
+            text-decoration: underline;
+        }
+    </style>
+
+    <div class="maintenance-wrapper">
+        <div class="icon">🔧</div>
+        <h1>Mexinsurance is down for maintenance.</h1>
+        <p>
+            Our site is currently undergoing scheduled maintenance.<br/>
+            We expect to be back online <strong>soon</strong>. <br/><br/>
+            {!$Label.site.sorry_for_inconvenience_back_shortly}
+        </p>
+        <p>
+            <apex:outputText escape="false" value="{!$Label.site.get_in_touch}">
+                <apex:param value="mailto:tech@mexinsurance.com"/>
+                <apex:param value="{!$Label.site.email_us}"/>
+            </apex:outputText>
+        </p>
+        <div class="footer">— Thank you for your patience,<br/>Mexinsurance Team</div>
+    </div>
+</apex:page>

@@ -1,0 +1,173 @@
+<apex:page controller="renewalsurvey"  sidebar="false" showheader="false" docType="html">
+   
+    <title>Mexico Insurance | Mexican Auto Insurance Services | Mexinsurance</title>
+
+    <apex:stylesheet value="{!URLFOR($Resource.EmailTemplates, '/css/4.css')}"/>
+    <style>
+        fieldset {
+            width: 100%;
+            float: left;
+        }
+        .navbar .container {
+           padding-top: 20px;
+           padding-bottom: 0px;
+        }
+    </style>
+
+    <script>
+
+        function goTovalue(val){
+            if(val=='I am not in Mexico anymore.'){
+                document.getElementById("showwhy").style.display= "block";
+            }else{
+                document.getElementById("showwhy").style.display= "none";
+            }
+            if(val=='I went with another company.'){
+                document.getElementById("showText").style.display= "block";
+            }
+            else{
+                document.getElementById("showText").style.display= "none";
+            }
+            if(val=='Other.'){
+                document.getElementById("showTextArea").style.display= "block";
+            }
+            else{
+                document.getElementById("showTextArea").style.display= "none";
+            }
+        }
+    </script>
+    <body class="home">
+        <div class="content-wrapper">
+            <!-- START HEADER CONTENT -->
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <div class="container">
+                        <a class="brand hide-text" href="http://www.mexinsurance.com/">Mex Insurance Home</a>
+                        
+                        <div class="row">
+                            <div class="nav-collapse">
+                                <div style="height: 73px;" class="span4 equal-height hidden-phone hidden-tablet">
+                                    <div class="divider" style="height: 70%;"></div>
+                                </div><!-- span4 -->
+                                <div class="span2 equal-height" style="height: 48px;margin-left: 0px;">
+                                    <ul class="nav">
+                                        <li class="plus">
+                                            <a href="http://www.mexinsurance.com/about/">About Us</a>
+                                        </li>
+                                        <li class="plus">
+                                            <a href="http://www.mexinsurance.com/quote/">Quick Quote</a>
+                                        </li>
+                                    </ul>
+                                </div><!-- span2 -->
+                                <div class="span2 equal-height" style="height: 48px;">
+                                    <ul class="nav">
+                                        <li class="plus">
+                                            <a href="http://support.mexinsurance.com">Help and Support</a>
+                                        </li>
+                                        <li class="plus">
+                                            <a href="http://www.mexinsurance.com/blog/">Blog</a>
+                                        </li>
+                                    </ul>
+                                </div><!-- span2 -->
+                                <div class="span2 equal-height" style="height: 48px; margin-right: 20px;">
+                                    <ul class="nav">
+                                        <li class="plus">
+                                            <a href="http://www.mexinsurance.com/default/register/create/">Register</a>
+                                        </li>
+                                    </ul>
+                                </div><!-- span2 -->
+                                <div class="span2 equal-height" style="height: 48px;">
+                                    <div class="sign-in-column equal-height" style="height: 48px; padding-left: 0px;">
+                                        <ul class="nav">
+                                            <li>
+                                                <a href="http://www.mexinsurance.com/user/auth/login/" data-toggle="modal" class="login-btn">Sign In</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div><!-- span2 -->
+                            </div><!-- nav-collapse -->
+                        </div><!-- row -->
+                    </div><!-- container -->
+                </div><!-- navbar-inner -->
+                <center>   
+                    <apex:outputPanel rendered="{!thankYou}">
+                        <b><i><h1>Your survey has been submitted. Thank you for taking our survey. </h1></i></b>
+                    </apex:outputPanel>
+                </center>
+                <apex:pageMessages />
+            </div><!-- navbar -->
+            <!-- END HEADER CONTENT -->
+
+            <header>
+                <apex:form id="myform" rendered="{!mform}">
+                    <div class="hero">
+                       <img class="hero-img" src="http://www.mexinsurance.com/assets/themes/default/img/default/home/hero.jpg?1393894077" alt="" height="467" width="1280" />       
+                        <div class="pattern"></div>
+                        <div class="container">
+                           
+                            <div class="row" >
+                                <div class="cta" >
+                                    <div class ="row" >
+                                        <div class ="span12" >
+                                            <div class="tagline">
+                                                <h1> What is the reason for not renewing?</h1>
+                                            </div>
+                                            <apex:selectRadio id="myoption" onclick="goTovalue(this.value)" value="{!selectedans}" layout="pageDirection" >
+                                                <apex:selectOptions value="{!items}"/>
+                                            </apex:selectRadio>
+                                            <div id="showText" >
+                                                <apex:inputText html-placeholder="Which Company" value="{!whccom}"/> <br/>
+                                                <apex:inputtextarea html-placeholder="How can we get you back?" value="{!getback}"/>
+                                            </div>
+                                            <div id="showwhy">
+                                                <apex:inputText style="margin-top: 10px;" html-placeholder="Why" value="{!why}"/>
+                                            </div>
+                                        </div>
+                                        <div id="showfee">
+                                            <apex:inputtextarea html-placeholder="How can we be a better company?" value="{!better}"/>
+                                        </div>
+                                        <div id="showTextArea">
+                                            <apex:inputtextarea html-placeholder="Please explain" value="{!explain}"/>
+                                        </div>
+                                        <div id="showfee">
+                                            <apex:inputtextarea html-placeholder="Please provide any additional feedback" value="{!provide}"/>
+                                        </div>
+                                    </div>
+                                    <div class="container">
+                                        <div class="row" style="margin-bottom: 25px">
+                                            <div class="span12">
+                                                <div class="get-started-holder">
+                                                    <!-- <button class="get-started hide-text" id="get-started-now">Get Started Now</button> -->
+                                                   <apex:commandButton value="Submit" action="{!save}"  styleclass="sub" style="box-shadow: 0 1px 0 0 #fee9c3 inset;color: #fff;
+                                    display: block;font-size: 20px;font-weight: bold;text-shadow: 0 1px 1px #be7d04;text-transform: uppercase;background: rgb(236,179,78);border: 1px solid #f09e05;border-radius: 5px;box-shadow: 0 1px 2px 0 #333;
+                                    height: 60px;
+                                    line-height: 60px;
+                                    padding: 0;
+                                    right: 0;
+                                     margin-left:8%;
+                                    margin-top:22px;
+                                    text-align: center;
+                                    top: -45px;
+                                    z-index: 1010;" /> 
+                                            <!--         <button class="cta-btn cta-btn-large pull-right" id="get-started-now" ><span>Submit</span></button> -->
+                                                </div><!-- get-started-holder -->
+                                            </div><!-- span4 -->
+                                        </div><!-- row -->
+                                    </div><!-- container -->
+                                </div>
+                            </div>
+                        </div> 
+                 <!--       <div class="row">
+                          <div class="span4">
+                            <div class="cta">
+                              <div class="uno"></div>
+                              <h1>Enter Your Info</h1>
+                              </div>
+                                </div>
+                                </div> -->
+                    </div>
+                </apex:form>
+            </header>
+        </div><!-- content-wrapper -->
+    </body>
+</apex:page>

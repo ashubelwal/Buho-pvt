@@ -1,0 +1,12 @@
+.custom-container{
+	color : black;
+}
+
+.box {
+	max-height: 150px;
+}
+
+.pageTitle h2 {
+	border-bottom: 1px solid #eee;
+    padding: 10px 0;
+}

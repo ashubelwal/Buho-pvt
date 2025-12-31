@@ -1,0 +1,153 @@
+/* Accordion Container */
+.accordion-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    width: 100%;
+    align-items: flex-start;
+}
+
+/* Accordion Item */
+.accordion-item {
+    flex: 0 0 calc(50% - 0.5rem);
+    background: white;
+    border: 1px solid #e0e5ee;
+    border-radius: 8px;
+    margin-bottom: 0;
+    overflow: hidden;
+}
+
+.accordion-item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Accordion Header */
+.accordion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .5rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    user-select: none;
+}
+
+.accordion-header:hover {
+    background-color: #f9fafb;
+}
+
+.accordion-header-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.accordion-icon {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.accordion-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #16325c;
+    margin: 0;
+}
+
+/* Expand Icon */
+.expand-icon {
+    color: #54698d;
+    font-size: 0.875rem;
+    transition: transform 0.3s ease;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.expand-icon.expanded {
+    transform: rotate(180deg);
+}
+
+/* Accordion Body */
+.accordion-body {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.accordion-description {
+    font-size: 0.95rem;
+    color: #54698d;
+    line-height: 1.6;
+    margin: 0 0 1rem 0;
+    padding-left: 66px; /* Align with title (icon width + gap) */
+}
+
+.accordion-modal-trigger {
+    padding-left: 66px; /* Align with description */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .accordion-header {
+        padding: 1rem;
+    }
+
+    .accordion-header-content {
+        gap: 0.75rem;
+    }
+
+    .accordion-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .accordion-title {
+        font-size: 1rem;
+    }
+
+    .accordion-body {
+        padding: 0 1rem 1rem 1rem;
+    }
+
+    .accordion-description,
+    .accordion-modal-trigger {
+        padding-left: 0;
+    }
+
+    .accordion-item {
+        flex: 0 0 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .accordion-header {
+        padding: 0.875rem;
+    }
+
+    .accordion-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .accordion-title {
+        font-size: 0.95rem;
+    }
+
+    .accordion-description {
+        font-size: 0.875rem;
+    }
+}
+

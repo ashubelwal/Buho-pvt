@@ -1,0 +1,183 @@
+<template>
+    <div class="notranslate">
+        <template if:true={spinner}>
+            <lightning-spinner alternative-text="Loading" variant="brand"></lightning-spinner>
+        </template>
+        <header class="page-header slds-text-align--center">
+            <div class="wrap">
+                <span class="product-name">{label.RenewPolicy} - {renewalPolicyName}</span>
+            </div>
+        </header>
+        <div class="wrap-size-md">
+            <lightning-layout multiple-rows="true" class="pagelayout">
+                <template if:true={isTermOptions}>
+                    <lightning-layout-item size="3">
+                        <c-policy-edit-flow-steps steps='steps1' policy-type={policyType}
+                            completed-steps='1'></c-policy-edit-flow-steps>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="9">
+                        <c-policy-edit-term-option disable-date={disableDate} is-renewal-policy={isRenewalPolicy} connectedcallback={connectedcallback} onrenewconnectedcallback={renewconnectedcallback}
+                            oneditpolicyvaluechange={handleEditPolicyChange} policy-type={policyType} onerrorgenerated={showLogaCase}
+                            editpolicydata={renewalPolicy} changesnextscreen={changeNextScreen} oldpolicydata={oldPolicy}
+                            policy-exist={policyExist} changeprevscreen={changePrevScreen}></c-policy-edit-term-option>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
+            <lightning-layout multiple-rows="true" class="pagelayout">
+                <template if:true={isReviewVehicle}>
+                    <lightning-layout-item size="3">
+                        <c-policy-edit-flow-steps steps='steps2' policy-type={policyType}
+                            completed-steps='2'></c-policy-edit-flow-steps>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="9">
+                        <c-review-vehicle policy-type={policyType} changesnextscreen={changeNextScreen} onerrorgenerated={showLogaCase}
+                            is-renewal-policy={isRenewalPolicy} oneditpolicyvaluechange={handleEditPolicyChange}
+                            editpolicydata={renewalPolicy} oldpolicydata={oldPolicy}
+                            changeprevscreen={changePrevScreen}></c-review-vehicle>
+                    </lightning-layout-item>
+                </template>
+
+                <template if:true={isReviewWatercraft}>
+                    <lightning-layout-item size="3">
+                        <c-policy-edit-flow-steps steps='steps2' policy-type={policyType}
+                            completed-steps='2'></c-policy-edit-flow-steps>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="9">
+                        <c-watercraft-review policy-type={policyType} changesnextscreen={changeNextScreen} onerrorgenerated={showLogaCase}
+                            is-renewal-policy={isRenewalPolicy} oneditpolicyvaluechange={handleEditPolicyChange}
+                            editpolicydata={renewalPolicy} changeprevscreen={changePrevScreen}></c-watercraft-review>
+                    </lightning-layout-item>
+                </template>
+
+                <template if:true={isCompanyInfo}>
+                    <lightning-layout-item size="3">
+                        <c-policy-edit-flow-steps steps='steps2' policy-type={policyType}
+                            completed-steps='2'></c-policy-edit-flow-steps>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="9">
+                        <c-company-information policy-type={policyType} changesnextscreen={changeNextScreen} onerrorgenerated={showLogaCase}
+                            oneditpolicyvaluechange={handleEditPolicyChange} editpolicydata={renewalPolicy}
+                            changeprevscreen={changePrevScreen}></c-company-information>
+                    </lightning-layout-item>
+                </template>
+
+                <template if:true={isLienholderDetails}>
+                    <lightning-layout-item size="3">
+                        <c-policy-edit-flow-steps steps='steps2' policy-type={policyType}
+                            completed-steps='2'></c-policy-edit-flow-steps>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="9">
+                        <c-lienholder-information policy-type={policyType} changesnextscreen={changeNextScreen} onerrorgenerated={showLogaCase}
+                            oneditpolicyvaluechange={handleEditPolicyChange} editpolicydata={renewalPolicy}
+                            changeprevscreen={changePrevScreen}></c-lienholder-information>
+                    </lightning-layout-item>
+                </template>
+                <template if:true={isDriverDetail}>
+                    <lightning-layout-item size="3">
+                        <c-policy-edit-flow-steps steps='steps3' policy-type={policyType}
+                            completed-steps='3'></c-policy-edit-flow-steps>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="9">
+                        <c-driver-registered policy-type={policyType} changesnextscreen={changeNextScreen}
+                            oneditpolicyvaluechange={handleEditPolicyChange} editpolicydata={renewalPolicy} onerrorgenerated={showLogaCase}
+                            is-renewal-policy={isRenewalPolicy} changeprevscreen={changePrevScreen} community-user={isCommunityUser} driver-data={DriverData}></c-driver-registered>
+                    </lightning-layout-item>
+                </template>
+                <template if:true={isTowingAnything}>
+                    <lightning-layout-item size="3">
+                        <c-policy-edit-flow-steps steps='steps4' policy-type={policyType}
+                            completed-steps='4'></c-policy-edit-flow-steps>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="9">
+                        <c-towed-option policy-type={policyType} changesnextscreen={changeNextScreen} onerrorgenerated={showLogaCase}
+                            oneditpolicyvaluechange={handleEditPolicyChange} editpolicydata={renewalPolicy}
+                            is-renewal-policy={isRenewalPolicy} changeprevscreen={changePrevScreen}></c-towed-option>
+                    </lightning-layout-item>
+                </template>
+                <template if:true={isTowedDetails}>
+                    <lightning-layout-item size="3">
+                        <c-policy-edit-flow-steps steps='steps4' policy-type={policyType}
+                            completed-steps='4'></c-policy-edit-flow-steps>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="9">
+                        <c-towed-details policy-type={policyType} community-user={isCommunityUser} changesnextscreen={changeNextScreen}
+                            oneditpolicyvaluechange={handleEditPolicyChange} editpolicydata={renewalPolicy} onerrorgenerated={showLogaCase}
+                            is-renewal-policy={isRenewalPolicy} changeprevscreen={changePrevScreen}
+                            step="1" towed-unit-data={towedUnitData}></c-towed-details>
+                    </lightning-layout-item>
+                </template>
+
+                <template if:true={isConfirmScreen}>
+                    <!-- <lightning-layout-item size="3">
+                        <c-policy-edit-flow-steps steps='steps1' completed-steps='1'></c-policy-edit-flow-steps>
+                    </lightning-layout-item> -->
+                    <lightning-layout-item size="12">
+                        <template if:true={isNorthbound}>
+                            <c-northbound-quick-quote policy-type={policyType} changesnextscreen={changeNextScreen} onerrorgenerated={showLogaCase}
+                                handle-insert-data={handleInsert} oneditpolicyvaluechange={handleEditPolicyChange} is-renewal-policy={isRenewalPolicy}
+                                changeprevscreen={changePrevScreen} editpolicydata={renewalPolicy}>
+                            </c-northbound-quick-quote>
+                        </template>
+                        <template if:true={isWatercraft}>
+                            <c-watercraft-quick-quote-details policy-type={policyType} changesnextscreen={changeNextScreen}
+                                handle-insert-data={handleInsert} changeprevscreen={changePrevScreen} onerrorgenerated={showLogaCase}
+                                is-renewal-policy={isRenewalPolicy} oneditpolicyvaluechange={handleEditPolicyChange}
+                                editpolicydata={renewalPolicy}></c-watercraft-quick-quote-details>
+
+                        </template>
+                        <template if:true={isSouthboundpolicy}>
+                            <c-southbound-quick-quote policy-type={policyType} changesnextscreen={changeNextScreen}
+                                oneditpolicyvaluechange={handleEditPolicyChange} handle-insert-data={handleInsert}
+                                changeprevscreen={changePrevScreen} onleadvaluechange={handleLeadChange} onerrorgenerated={showLogaCase}
+                                editpolicydata={renewalPolicy} is-renewal-policy={isRenewalPolicy}>
+                            </c-southbound-quick-quote>
+
+                        </template>
+
+                        <!-- <c-policy-edit-confirm-screen policy-type={policyType} refund-amount={refundAmount}
+                            oneditpolicyvaluechange={handleEditPolicyChange} onrefundamountchange={handleRefundAmountChange}
+                            changesnextscreen={changeNextScreen} editpolicydata={renewalPolicy}
+                            changeprevscreen={changePrevScreen}></c-policy-edit-confirm-screen> -->
+                    </lightning-layout-item>
+                </template>
+
+                <template if:true={isTowedDetailsFinal}>
+                    <lightning-layout-item size="3">
+                        <c-policy-edit-flow-steps steps='steps6' policy-type={policyType}
+                            completed-steps='6'></c-policy-edit-flow-steps>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="9">
+                        <c-towed-details policy-type={policyType} changesnextscreen={changeNextScreen} onerrorgenerated={showLogaCase}
+                            oneditpolicyvaluechange={handleEditPolicyChange} editpolicydata={renewalPolicy}
+                            is-renewal-policy={isRenewalPolicy} changeprevscreen={changePrevScreen} step="2">
+                        </c-towed-details>
+                    </lightning-layout-item>
+                </template>
+
+                <template if:true={isPaymentDetail}>
+                    <lightning-layout-item size="3">
+                        <c-policy-edit-flow-steps steps='steps7' policy-type={policyType}
+                            completed-steps='7'></c-policy-edit-flow-steps>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="9">
+                        <lightning-layout padding="around-small" size="12" class="slds-align-center slds-m-top_xx-large">
+                            <div class="page-title">
+                                <h1
+                                    class="slds-text slds-text-heading_medium slds-p-around_small slds-align_absolute-center">
+                                    {label.LetstacklethePaymentnow}</h1>
+                            </div>
+                        </lightning-layout>
+                        <c-payment policy-type={policyType} refund-amount={refundAmount} editpolicydata={renewalPolicy}
+                            is-renewal-policy={isRenewalPolicy} changesnextscreen={changeNextScreen}
+                            old-policy-data={oldPolicy} changeprevscreen={changePrevScreen} onerrorgenerated={showLogaCase}
+                            renew-quote-id={renewQuoteId}></c-payment>
+                    </lightning-layout-item>
+                </template>
+
+
+
+            </lightning-layout>
+        </div>
+    </div>   
+    <c-log-acase lwc:if={isShowCaseLog} onopenlogcasemodalsection={openModalLogCase}></c-log-acase> 
+</template>

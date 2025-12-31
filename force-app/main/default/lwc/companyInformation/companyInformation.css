@@ -1,0 +1,52 @@
+.maindiv {
+    margin-left: 2%;
+    max-width: 100%;
+    /* width: 750px; */
+    /* transform: translateY(12%); */
+    background-color: #fff;
+    padding: 12px;
+}
+.horizontalAlign {
+    display: flex;
+    /* margin: auto; */
+    max-width: 98%;
+    /* width: 750px; */
+    justify-content: space-between;
+}
+.buttonNext,.buttonPrev{
+    position: relative;
+    /* transform: translate(-50%, -50%); */
+    cursor: pointer;
+    background: #003a70;
+    border: 2px solid #003a70;
+    color: #fff;
+    font-weight: 600;
+    height: 33px;
+    width: 120px;
+    border-radius: 2px;
+    user-select: none;
+    outline: none;
+}
+
+.loading {
+    background-color: transparent;
+    border: 4px solid #ABA8AF;
+    border-top-color: #003a70;
+    user-select: none;
+    font-size: 0;
+    outline: none;
+    height: 33px;
+    width: 33px;
+    border-radius: 50%;
+    animation: rotate 0.4s linear infinite;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

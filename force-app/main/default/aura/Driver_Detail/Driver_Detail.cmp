@@ -1,0 +1,110 @@
+<aura:component controller="DriverDetailController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction"
+                access="global">
+    <aura:attribute name="title" type="String" default="test" access="public"/>
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    <aura:attribute name="onNextClick" type="Aura.Action"/>
+    <aura:attribute name="quoteRecord" type="Quote__c" access="public"/>
+    <aura:attribute name="leadRecord" type="Lead" access="public"/>
+    <aura:attribute name="isCommunityUser" type="Boolean"/>
+    <aura:attribute name="maxBirthdayDate" type="Date"/>
+	<aura:attribute name="policyType" type="String" access="public"/>
+    <aura:attribute name="countryOption" type="List"/>
+    <aura:attribute name="stateOptions" type="list"/>
+    <aura:attribute name="showStatePick" type="boolean" default="false"/>
+    <aura:attribute name="showCountryInput" type="Boolean" default="false"/>
+    <aura:attribute name="countryPicklistValue" type="String"/>
+    <aura:attribute name="countryInputValue" type="String"/>
+    <aura:attribute name="driverRecord" type="Driver__c" default="{ 'sobjectType': 'Driver__c'}"/>
+    <aura:attribute name="drivers" type="List" access="public"/>
+    <aura:attribute name="loginUserDrivers" type="List"/>
+    <aura:attribute name="loginUserDriverOption" type="List"/>
+    <aura:attribute name="isDriverScreenOpen" type="boolean" default="false"/>
+    <aura:attribute name="newSectionOpen" type="Boolean" default="false" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <lightning:layoutItem padding="around-small" size="12" class="align-center slds-m-top_xx-large">
+        <div class="page-title">
+            <h1>{!v.title}</h1>
+            <img class="slds-m-bottom_large" src="{!$Resource.mexinsurance_assets + '/images/icon-driver-license.svg'}"
+                 alt="Vehicle"/>
+        </div>
+    </lightning:layoutItem>
+
+    <div class="slds-size_12-of-12">
+        <div class="form-container">
+            <aura:if isTrue="{!v.isCommunityUser}">
+                <lightning:combobox name="progress" placeholder="Select a driver from your account" 
+                    options="{!v.loginUserDriverOption}" 
+                    onchange="{!c.handleChange}"/>
+                <lightning:accordion allowMultipleSectionsOpen="true" onsectiontoggle="{! c.handleSectionToggle }" >
+                    <lightning:accordionSection name="A" label="ADD A DIFFERENT DRIVER"></lightning:accordionSection>
+                </lightning:accordion>
+            </aura:if>
+            
+            <aura:if isTrue="{!v.newSectionOpen}">
+                <lightning:input aura:id="validateField" type="text" name="FirstName" label="First Name"
+                                placeholder="First Name" value="{!v.leadRecord.FirstName}" required="true"
+                                onchange="{!c.updateLeadValue}" variant="label-hidden"/>
+                
+                <lightning:input aura:id="validateField" type="text" name="LastName" label="Last Name"
+                                placeholder="Last Name" value="{!v.leadRecord.LastName}" required="true"
+                                onchange="{!c.updateLeadValue}" variant="label-hidden"/>
+                
+                <lightning:input aura:id="validateField" type="tql" name="Phone" label="Phone" placeholder="Phone"
+                                value="{!v.leadRecord.Phone}" 
+                                required="true" 
+                                pattern="^\(\d{3}\)\s\d{3}-\d{4}$"
+                                messageWhenPatternMismatch="Not a valid phone number"
+                                onchange="{!c.updateLeadValue}"
+                                variant="label-hidden"/>
+                
+                <lightning:input aura:id="validateField" type="text" name="Street" label="Street" placeholder="Address"
+                                value="{!v.leadRecord.Street}" required="true" onchange="{!c.updateLeadValue}"
+                                variant="label-hidden"/>
+                <lightning:input aura:id="validateField" type="text" name="City" label="City" placeholder="City"
+                                value="{!v.leadRecord.City}" required="true" onchange="{!c.updateLeadValue}"
+                                variant="label-hidden"/>
+
+                <lightning:combobox name="Country" variant="label-hidden" label="Country"
+                                    placeholder="Country" value="{!v.countryPicklistValue}"
+                                    options="{! v.countryOption }" onchange="{!c.updateLeadValue}"/>
+                <aura:if isTrue="{!v.showCountryInput}">
+                    <lightning:input name="Country" type="text" label="" placeholder="Country" variant="label-hidden"
+                                    onchange="{!c.updateLeadValue}" maxlength="20" value="{!v.countryInputValue}"/>
+                </aura:if>
+
+                <aura:if isTrue="{!v.showStatePick}">
+                    <lightning:combobox name="State" label="State" variant="label-hidden"
+                                        placeholder="State" value="{!v.leadRecord.State}"
+                                        options="{! v.stateOptions }" onchange="{!c.updateLeadValue}"/>
+                    <aura:set attribute="else">
+                        <lightning:input name="State" type="text" label=""
+                                        value="{!v.leadRecord.State}"
+                                        placeholder="State" variant="label-hidden"
+                                        onchange="{!c.updateLeadValue}"/>
+                    </aura:set>
+                </aura:if>
+                
+                <lightning:input aura:id="validateField" type="text" name="PostalCode" label="Postal Code"
+                                placeholder="Postal Code" value="{!v.leadRecord.PostalCode}" required="true"
+                                onchange="{!c.updateLeadValue}" variant="label-hidden" pattern="^[A-Z0-9_-]{3,12}$" messageWhenPatternMismatch="Please Fill Valid Postal Code"/>
+                <!--lightning:input aura:id="validateField" type="date" name="Date_of_Birth__c" label="Date of Birth"
+                                placeholder="Date of Birth" value="{!v.leadRecord.Date_of_Birth__c}"
+                                max="{!v.maxBirthdayDate}" required="true" onchange="{!c.updateLeadValue}"
+                                variant="label-hidden"/-->
+                <c:customDate label="Date of Birth" custDate="{!v.leadRecord.Date_of_Birth__c}" 
+                                required="true" aura:id="customValidateField"/>
+                <lightning:input aura:id="validateField" type="email" name="Email" label="Email" placeholder="Email"
+                                value="{!v.leadRecord.Email}" required="true" onchange="{!c.updateLeadValue}"
+                                variant="label-hidden" class="slds-m-top_medium"/>
+            </aura:if>
+        </div>
+    </div>
+
+    <lightning:layoutItem size="12" class="slds-m-top_large align-center">
+        <button class="button -secondary -wider" onclick="{!c.onNextClick}">Next</button>
+    </lightning:layoutItem>
+
+</aura:component>

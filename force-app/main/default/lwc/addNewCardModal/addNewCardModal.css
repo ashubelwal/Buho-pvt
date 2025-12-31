@@ -1,0 +1,39 @@
+div {
+    background-color: #fff;
+}
+
+.btn {
+    padding: 6px 13px;
+    background: #003a70;
+    color: #fff;
+    border: 1px solid #003a70;
+    border-radius: 4px;
+}
+
+.newCardForm {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: 9999;
+    background-color: #0009;
+    overflow-x: scroll;
+    backdrop-filter: blur(5px);
+}
+.formCard {
+    width: 65%;
+    min-height: 100%;
+    border-right: 2px solid #dfdfdf;
+    padding: 15px;
+}
+
+.closeBtn {
+    position: relative;
+}
+
+@media only screen and (max-width: 768px) {
+    .formCard {
+        width: 100%;
+    }
+}

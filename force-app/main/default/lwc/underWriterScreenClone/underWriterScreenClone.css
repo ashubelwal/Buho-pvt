@@ -1,0 +1,222 @@
+.h6{
+    font-size: 14px;
+}
+.slds-form-element {
+    position: static !important;
+}
+.quote-body .slds-grid{
+    float: none !important;
+}
+.icon-checkmark, .icon-cross{
+    position: absolute;
+    right: 0;
+}
+.half-width-field {
+    width: 100%;
+}
+.maindiv{
+    margin: auto;
+    background-color: #fff;
+    padding: 15px;
+}
+.horizontalAlign {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1%;
+}
+.qualitasDetails{
+    background-color: #fff;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+    border-radius: 4px;
+}
+.chubbDetails{
+    background-color: #C8D9EA;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+    border-radius: 4px;
+}
+.mapfreDetails{
+    background-color: #fff;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+    border-radius: 4px;
+}
+.quoteBox {
+    min-height: 580px;
+    position: relative;
+    transition: opacity 300ms;
+}
+
+.slds-grid:hover .quoteBox:not(:hover) {
+    opacity: 0.6;
+}
+
+.recommended-label{
+    display: inline;
+    float: right;
+    color: #fff;
+    font-weight: 600;
+}
+.quote-pricing {
+    text-align: center;
+    font-size: 48px;
+    font-weight: 700;
+    color: #003a70;
+}
+.button.-secondary {
+    border: 2px solid #003a70;
+    background: #fff;
+    color: #003a70;
+}
+.button.-terniry {
+    border: 2px solid #003a70;
+    background: #fff;
+    color: #003a70;
+}
+.noteOfQuote{
+    width: 100%;
+}
+.button, .slds-scope .button {
+    height: 44px;
+    padding: 0 16px;
+    border: none;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    position: relative;
+    -webkit-appearance: none;
+    border-radius: 44px;
+    text-decoration: none;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    text-transform: uppercase;
+}
+button.-wider{
+    padding: 0 40px;
+}
+.quoteBox h6 {
+    margin-bottom: 8px !important;
+    text-align: center;
+}
+.red {
+    color: #cf614d;
+}
+.blue{
+    color: #003a70;
+}
+.field-item {
+    display: flex;
+    justify-content: flex-end;
+}
+.inputText{
+    width: 80% !important;
+}
+.field-minus {
+    width: 22px;
+    height: 22px;
+    border-radius: 100%;
+    border: 1px solid #dcdcdc;
+    background: #f2f2f2;
+    vertical-align: middle;
+    padding: 0;
+    position: relative;
+}
+
+.field-minus::before{
+    content: " ";
+    position: absolute;
+    width: 14px;
+    height: 2px;
+    left: 50%;
+    top: 50%;
+    margin-left: -7px;
+    margin-top: -1px;
+    background: #003a70;
+
+}
+
+.field-plus {
+    width: 22px;
+    height: 22px;
+    border-radius: 100%;
+    border: 1px solid #dcdcdc;
+    background: #f2f2f2;
+    vertical-align: middle;
+    padding: 0;
+    position: relative;
+}
+.field-plus::after{
+    content: " ";
+    position: absolute;
+    width: 2px;
+    height: 14px;
+    left: 50%;
+    top: 50%;
+    margin-left: -1px;
+    margin-top: -7px;
+    background: #003a70;
+
+}
+.field-plus::before{
+    content: " ";
+    position: absolute;
+    width: 14px;
+    height: 2px;
+    left: 50%;
+    top: 50%;
+    margin-left: -7px;
+    margin-top: -1px;
+    background: #003a70;
+
+}
+.quoteBox .adjustable-field {
+    /* display: flex; */
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    /* padding: 5px 0; */
+    border-bottom: 1px solid #f1f1f187;
+}
+
+.quoteBox .quote-highlight {
+    border-bottom: 1px solid #dcdcdc;
+    font-size: 13px;
+    /* text-transform: uppercase; */
+    padding: 5px 0;
+    position: relative;
+}
+.buttonNext,.buttonPrev{
+    position: relative;
+    cursor: pointer;
+    background: #003a70;
+    border: 2px solid #003a70;
+    color: #fff;
+    font-weight: 600;
+    height: 33px;
+    width: 120px;
+    /* border-radius: 20px; */
+    user-select: none;
+    outline: none;
+}
+
+.button{
+    text-transform: capitalize;
+    position: relative;
+    cursor: pointer;
+    background: #003a70;
+    border: 2px solid #003a70;
+    color: #fff;
+    font-weight: 600;
+    height: 33px;
+    min-width: 120px;
+    border-radius: 2px;
+    user-select: none;
+    outline: none;
+}
+
+/* .buttonNext:hover,.buttonPrev:hover {
+    background: #8883A5;
+    color: white;
+} */

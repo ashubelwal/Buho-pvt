@@ -1,0 +1,16 @@
+.custom-container{
+	color : black;
+}
+
+.summary-title {
+	border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+    margin: 15px 0;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.summary-refund {
+    font-weight: 700;
+}

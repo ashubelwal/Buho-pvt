@@ -1,0 +1,4305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>AmountDueMessage</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>AmountDueMessage</shortDescription>
+        <value>Amount Due</value>
+    </labels>
+    <labels>
+        <fullName>Chubb_English_Automobile</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Chubb English Automobile</shortDescription>
+        <value>Chubb Automobile SB English2024</value>
+    </labels>
+    <labels>
+        <fullName>Chubb_English_Motorcycle</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Chubb English Motorcycle</shortDescription>
+        <value>Chubb Motorcycle SB English2024</value>
+    </labels>
+    <labels>
+        <fullName>Chubb_English_RV</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Chubb English RV</shortDescription>
+        <value>Chubb RV SB English2024</value>
+    </labels>
+    <labels>
+        <fullName>Chubb_Spanish_Automobile</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Chubb Spanish Automobile</shortDescription>
+        <value>Chubb Automobile SB Spanish2024</value>
+    </labels>
+    <labels>
+        <fullName>Chubb_Spanish_Motorcycle</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Chubb Spanish Motorcycle</shortDescription>
+        <value>Chubb Motorcycle SB Spanish2024</value>
+    </labels>
+    <labels>
+        <fullName>Chubb_Spanish_RV</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Chubb Spanish RV</shortDescription>
+        <value>Chubb RV SB Spanish2024</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_AddQuestion</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Add Question</shortDescription>
+        <value>Add Question</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Anonymous</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Anonymous</shortDescription>
+        <value>Anonymous</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Answer_as</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Answer as</shortDescription>
+        <value>Answer as</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Cancel</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Cancel</shortDescription>
+        <value>Cancel</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Chatter</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Chatter</shortDescription>
+        <value>Chatter</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Chatter_Link</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Chatter Link</shortDescription>
+        <value>Chatter Link</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Community</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Community</shortDescription>
+        <value>Community</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_ContactWithCase</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Contact with Case</shortDescription>
+        <value>Contact with Case:</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_CurrentSurveys</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Current Surveys</shortDescription>
+        <value>Current Surveys</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Delete</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Delete</shortDescription>
+        <value>Delete</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Delete_Confirm</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Are you sure you want to delete this survey?</shortDescription>
+        <value>Are you sure you want to delete this survey?</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Edit</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Edit</shortDescription>
+        <value>Edit</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Email_Link_Anonymous</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Email Link, Anonymous</shortDescription>
+        <value>Email Link, Anonymous</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Email_Link_w_Contact_Case_Merge</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Email Link w/ Contact &amp; Case Merge</shortDescription>
+        <value>Email Link w/ Contact &amp; Case Merge</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Email_Link_w_Contact_Merge</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Email Link w/ Contact Merge</shortDescription>
+        <value>Email Link w/ Contact Merge</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_EnterSurveyName</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Enter Survey Name</shortDescription>
+        <value>Enter Survey Name</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_External_Please_Create_Site</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>For external facing surveys, please create a site first.  You may still create i</shortDescription>
+        <value>For external facing surveys, please create a site first.  You may still create internal surveys without creating a site.</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_For_community_assistance_with_Survey_Force</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>For community assistance with Survey Force</shortDescription>
+        <value>For community assistance with Survey Force</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Getting_Help</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Getting Help</shortDescription>
+        <value>Getting Help</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_HeaderAndThankYou</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Header and Thank You</shortDescription>
+        <value>Header, Thank You &amp; CSS</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Installation_Guide</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Installation Guide</shortDescription>
+        <value>Installation Guide</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Internal</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Internal</shortDescription>
+        <value>Internal</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_JustContact</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Just Contact</shortDescription>
+        <value>Just Contact</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Learn_More</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Learn More</shortDescription>
+        <value>Learn More</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_MakeANewSurvey</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Make A New Survey</shortDescription>
+        <value>Make A New Survey</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_MakeNewSurvey</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Make New Survey</shortDescription>
+        <value>Make New Survey</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Make_a_Sample_Survey</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Make a Sample Survey</shortDescription>
+        <value>Make a Sample Survey</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Next_Steps</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Next Steps</shortDescription>
+        <value>Next Steps</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_PleaseEnterTheList</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Please enter the list</shortDescription>
+        <value>Please enter the list of answers/responses in the field below. Each value should be separated by a new line.</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Question</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Question</shortDescription>
+        <value>Question</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Required</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Required</shortDescription>
+        <value>required</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_RequiredQuestion</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Required Question</shortDescription>
+        <value>Required Question</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Resources</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Resources</shortDescription>
+        <value>Resources</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Results</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Results</shortDescription>
+        <value>Results</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_SELECTSITE</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>SELECT SITE</shortDescription>
+        <value>--SELECT SITE--</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_SELECTTYPE</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>--SELECT--</shortDescription>
+        <value>--SELECT--</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Salesforce_Answers</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Salesforce Answers</shortDescription>
+        <value>Salesforce Answers</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Save</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Save</shortDescription>
+        <value>Save</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_SaveOrder</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Save Order</shortDescription>
+        <value>Save Order</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_SelectQuestionType</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Select Question Type</shortDescription>
+        <value>Select Question Type</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_SelectSitetodisplaySurvey</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Select Site to display Survey</shortDescription>
+        <value>Select Site to display Survey</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Share</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Share</shortDescription>
+        <value>Share</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Share_My_Survey</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Share My Survey</shortDescription>
+        <value>Share My Survey</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Sharing_Options</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Sharing Options</shortDescription>
+        <value>Sharing Options</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_SubmitSurvey</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Submit Survey</shortDescription>
+        <value>Submit Survey</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_SurveyForceIsOpenSource</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>SurveyForceIsOpenSource</shortDescription>
+        <value>Survey Force is Open Source software.  We welcome your issue reports, ideas, documentation, code tweaks and all other participation.</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_SurveyURLLink</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Survey URL Link</shortDescription>
+        <value>Survey URL Link</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Survey_Force_is_unsupported</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Survey Force is unsupported</shortDescription>
+        <value>Survey Force is unsupported.</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Survey_Force_on_Github</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Survey Force on Github</shortDescription>
+        <value>Survey Force on Github</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Survey_Name_Is_Required</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Survey Name Is Required</shortDescription>
+        <value>Survey Name is Required</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Survey_Site_Is_Required</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Survey Site Is Required</shortDescription>
+        <value>Survey Site Is Required</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Survey_Submitted_Thank_you</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Your survey has been submitted. Thank you for taking our survey.</shortDescription>
+        <value>Your survey has been submitted. Thank you for taking our survey.</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_To_submit_ideas_or_issues</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>To submit ideas or issues</shortDescription>
+        <value>To submit ideas or issues</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_User_Guide</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>User Guide</shortDescription>
+        <value>User Guide</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_View_Results_In_New_Window</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>View Results In New Window</shortDescription>
+        <value>View Results In New Window</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_View_Sample_Survey</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>View Sample Survey</shortDescription>
+        <value>View Sample Survey</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Welcome_to_Survey_Force</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Welcome to Survey Force</shortDescription>
+        <value>Welcome to Survey Force</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_X1_Create_a_sample_survey</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>1. Create a sample survey by clicking the button below.</shortDescription>
+        <value>1. Create a sample survey by clicking the button below.</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_X2_External_Setup_Site</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>2. Set up a site if you would like to have external-facing surveys.</shortDescription>
+        <value>2. Set up a site if you would like to have external-facing surveys.</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_X3_Start_creating_your_first_survey</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>3. Start creating your first survey.</shortDescription>
+        <value>3. Start creating your first survey.</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_You_have_already_taken_this_survey</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>You have already taken this survey!</shortDescription>
+        <value>You have already taken this survey!</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_Your_next_few_steps_are_easy</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Your next few steps are easy.</shortDescription>
+        <value>Your next few steps are easy.</value>
+    </labels>
+    <labels>
+        <fullName>LABS_SF_please_visit</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>please visit</shortDescription>
+        <value>please visit</value>
+    </labels>
+    <labels>
+        <fullName>MySiteURL</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>MySiteURL</shortDescription>
+        <value>https://at.mexinsurance.com/apex/</value>
+    </labels>
+    <labels>
+        <fullName>Org_wide_Email_Address</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Org wide Email Address</shortDescription>
+        <value>agent@mexinsurance.com</value>
+    </labels>
+    <labels>
+        <fullName>Prefilled_Agency</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Prefilled Agency Id</shortDescription>
+        <value>003Uj00000E5YU2IAN</value>
+    </labels>
+    <labels>
+        <fullName>Prefilled_Agent_Id</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Prefilled Agent Id</shortDescription>
+        <value>003Uj00000Kr0uPIAR</value>
+    </labels>
+    <labels>
+        <fullName>Public_Site_URL</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Public Site URL</shortDescription>
+        <value>https://mexinsurance.my.salesforce-sites.com</value>
+    </labels>
+    <labels>
+        <fullName>RemainderEmail</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>RemainderEmail</shortDescription>
+        <value>agent@mexinsurance.com</value>
+    </labels>
+    <labels>
+        <fullName>TR_0</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_ $0</shortDescription>
+        <value>$0</value>
+    </labels>
+    <labels>
+        <fullName>TR_ADD_A_DIFFERENT_TOWED</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_ADD A DIFFERENT TOWED</shortDescription>
+        <value>ADD A DIFFERENT TOWED</value>
+    </labels>
+    <labels>
+        <fullName>TR_ADD_A_DIFFERENT_VEHICLE</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_ADD A DIFFERENT VEHICLE</shortDescription>
+        <value>ADD A DIFFERENT VEHICLE</value>
+    </labels>
+    <labels>
+        <fullName>TR_ADD_A_DIFFERENT_WATERCRAFT</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_ADD A DIFFERENT WATERCRAFT</shortDescription>
+        <value>ADD A DIFFERENT WATERCRAFT</value>
+    </labels>
+    <labels>
+        <fullName>TR_ATV_UTV</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_ATV-UTV</shortDescription>
+        <value>ATV-UTV</value>
+    </labels>
+    <labels>
+        <fullName>TR_A_vehicle_with_a_Salvage_Title_indicates_that_the_vehicle_was_re_built</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_A vehicle with a Salvage Title indicates that the vehicle was re-built.</shortDescription>
+        <value>A vehicle with a Salvage Title indicates that the vehicle was re-built.</value>
+    </labels>
+    <labels>
+        <fullName>TR_About_your_Quotes</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_About your Quotes:</shortDescription>
+        <value>About your Quotes:</value>
+    </labels>
+    <labels>
+        <fullName>TR_Accidents_must_be_reported_to_Chubb_Seguros_before_I_return_to_Mexico</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Accidents must be reported to Chubb Seguros before I return to Mexico</shortDescription>
+        <value>Accidents must be reported to Chubb Seguros before I return to Mexico</value>
+    </labels>
+    <labels>
+        <fullName>TR_Add</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Add</shortDescription>
+        <value>Add</value>
+    </labels>
+    <labels>
+        <fullName>TR_Add_a_New_driver</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Add a New driver</shortDescription>
+        <value>Add a New driver</value>
+    </labels>
+    <labels>
+        <fullName>TR_Add_a_new_credit_card</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Add a new credit card</shortDescription>
+        <value>Add a new credit card</value>
+    </labels>
+    <labels>
+        <fullName>TR_Add_at_least_one_Towed</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Add at least one Towed!!...</shortDescription>
+        <value>Add at least one Towed!!...</value>
+    </labels>
+    <labels>
+        <fullName>TR_Add_driver</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Add driver</shortDescription>
+        <value>Add driver</value>
+    </labels>
+    <labels>
+        <fullName>TR_Additional_Quick_Quote</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Additional Quick Quote</shortDescription>
+        <value>Additional Quick Quote</value>
+    </labels>
+    <labels>
+        <fullName>TR_Address</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Address</shortDescription>
+        <value>Address</value>
+    </labels>
+    <labels>
+        <fullName>TR_Address_Information</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Address Information</shortDescription>
+        <value>Address Information</value>
+    </labels>
+    <labels>
+        <fullName>TR_Address_Line_2</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Address Line 2</shortDescription>
+        <value>Address Line 2</value>
+    </labels>
+    <labels>
+        <fullName>TR_All_cancellations_will_be_assessed_a_nominal_cancellation_fee</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_All cancellations will be assessed a nominal cancellation fee</shortDescription>
+        <value>All cancellations will be assessed a nominal cancellation fee</value>
+    </labels>
+    <labels>
+        <fullName>TR_All_policies_are_issued_in_Pacific_Time_so_please_be_sure_to_make_the_adjust</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_All policies are issued in Pacific Time, so please be sure to make the adjust</shortDescription>
+        <value>All policies are issued in Pacific Time, so please be sure to make the adjustment, if you are crossing in Texas (Central Time) or Mountain Time (Arizona/New Mexico)</value>
+    </labels>
+    <labels>
+        <fullName>TR_Amount</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Amount</shortDescription>
+        <value>Amount</value>
+    </labels>
+    <labels>
+        <fullName>TR_Amount_towed</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Amount towed</shortDescription>
+        <value>Amount towed</value>
+    </labels>
+    <labels>
+        <fullName>TR_Announcements</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Announcements</shortDescription>
+        <value>Announcements</value>
+    </labels>
+    <labels>
+        <fullName>TR_Annual</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Annual</shortDescription>
+        <value>Annual</value>
+    </labels>
+    <labels>
+        <fullName>TR_Any_Boat_Operator_Under_22</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Any Boat Operator Under 22?</shortDescription>
+        <value>Any Boat Operator Under 22?</value>
+    </labels>
+    <labels>
+        <fullName>TR_Any_misrepresentation_or_attempts_to_violate_these_terms_may_be_constituted_a</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Any misrepresentation or attempts to violate these terms may be constituted a</shortDescription>
+        <value>Any misrepresentation or attempts to violate these terms may be constituted as attempted fraud and will be forwarded to the appropriate authorities</value>
+    </labels>
+    <labels>
+        <fullName>TR_Are_you_towing_anything</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Are you towing anything?</shortDescription>
+        <value>Are you towing anything?</value>
+    </labels>
+    <labels>
+        <fullName>TR_Auto_Insurance</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Auto Insurance</shortDescription>
+        <value>Auto Insurance</value>
+    </labels>
+    <labels>
+        <fullName>TR_Automobile</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Automobile</shortDescription>
+        <value>Automobile</value>
+    </labels>
+    <labels>
+        <fullName>TR_Automobile_Sedan</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Automobile/Sedan</shortDescription>
+        <value>Automobile/Sedan</value>
+    </labels>
+    <labels>
+        <fullName>TR_Automobile_with_Towed_Unit</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Automobile with Towed Unit</shortDescription>
+        <value>Automobile with Towed Unit</value>
+    </labels>
+    <labels>
+        <fullName>TR_Back</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Back</shortDescription>
+        <value>Back</value>
+    </labels>
+    <labels>
+        <fullName>TR_Baja_Sonora</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Baja/Sonora</shortDescription>
+        <value>Baja/Sonora</value>
+    </labels>
+    <labels>
+        <fullName>TR_Baja_Sonora_Chihuahua_Coahuila_Nuevo_Leon_Tamaulipas</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Baja, Sonora, Chihuahua, Coahuila, Nuevo Leon, Tamaulipas</shortDescription>
+        <value>Baja, Sonora, Chihuahua, Coahuila, Nuevo Leon, Tamaulipas</value>
+    </labels>
+    <labels>
+        <fullName>TR_Beam</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Beam</shortDescription>
+        <value>Beam</value>
+    </labels>
+    <labels>
+        <fullName>TR_Beam_width</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Beam(width)</shortDescription>
+        <value>Beam(width)</value>
+    </labels>
+    <labels>
+        <fullName>TR_Before_inception_you_can_cancel_any_policy</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Before inception, you can cancel any policy</shortDescription>
+        <value>Before inception, you can cancel any policy</value>
+    </labels>
+    <labels>
+        <fullName>TR_Boat</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Boat</shortDescription>
+        <value>Boat</value>
+    </labels>
+    <labels>
+        <fullName>TR_Bonus_Coverage</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Bonus Coverage</shortDescription>
+        <value>Bonus Coverage</value>
+    </labels>
+    <labels>
+        <fullName>TR_Broker_Charge</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Broker Charge</shortDescription>
+        <value>Broker Charge</value>
+    </labels>
+    <labels>
+        <fullName>TR_Broker_Fee</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Broker Fee</shortDescription>
+        <value>Broker Fee</value>
+    </labels>
+    <labels>
+        <fullName>TR_Business_Address_Information</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Business Address Information</shortDescription>
+        <value>Business Address Information</value>
+    </labels>
+    <labels>
+        <fullName>TR_By_accepting_the_Terms_of_Purchase_above_you_also_agree_that_you_accept_the</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_By accepting the Terms of Purchase above, you also agree that you accept the</shortDescription>
+        <value>By accepting the Terms of Purchase above, you also agree that you accept the Terms of Cancellation below</value>
+    </labels>
+    <labels>
+        <fullName>TR_Camper</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Camper</shortDescription>
+        <value>Camper</value>
+    </labels>
+    <labels>
+        <fullName>TR_Cancel</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Cancel</shortDescription>
+        <value>Cancel</value>
+    </labels>
+    <labels>
+        <fullName>TR_Captain_s_Date_of_Birth</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Captain&apos;s Date of Birth</shortDescription>
+        <value>Captain&apos;s Date of Birth</value>
+    </labels>
+    <labels>
+        <fullName>TR_Car_Truck_Auto</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Car/Truck/Auto</shortDescription>
+        <value>Car/Truck/Auto</value>
+    </labels>
+    <labels>
+        <fullName>TR_Card_Details</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Card Details</shortDescription>
+        <value>Card Details</value>
+    </labels>
+    <labels>
+        <fullName>TR_Card_Holder_Name</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Card Holder Name</shortDescription>
+        <value>Card Holder Name</value>
+    </labels>
+    <labels>
+        <fullName>TR_Card_Number</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Card Number</shortDescription>
+        <value>Card Number</value>
+    </labels>
+    <labels>
+        <fullName>TR_Check_your_email_for_the_link_button</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Check your email for the link button</shortDescription>
+        <value>Check your email for the link button</value>
+    </labels>
+    <labels>
+        <fullName>TR_Chihuahua_Coahuila_Nuevo_Leon_Tamaulipas</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Chihuahua, Coahuila, Nuevo Leon, Tamaulipas</shortDescription>
+        <value>Chihuahua, Coahuila, Nuevo Leon, Tamaulipas</value>
+    </labels>
+    <labels>
+        <fullName>TR_Chubb</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Chubb</shortDescription>
+        <value>Chubb</value>
+    </labels>
+    <labels>
+        <fullName>TR_Cities</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Cities</shortDescription>
+        <value>Cities</value>
+    </labels>
+    <labels>
+        <fullName>TR_City</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_City</shortDescription>
+        <value>City</value>
+    </labels>
+    <labels>
+        <fullName>TR_Click_here</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Click here</shortDescription>
+        <value>Click here</value>
+    </labels>
+    <labels>
+        <fullName>TR_Collect</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Collect</shortDescription>
+        <value>Collect</value>
+    </labels>
+    <labels>
+        <fullName>TR_Collision_Deductible</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Collision Deductible</shortDescription>
+        <value>Collision Deductible</value>
+    </labels>
+    <labels>
+        <fullName>TR_Combined_Liability</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Combined Liability</shortDescription>
+        <value>Combined Liability</value>
+    </labels>
+    <labels>
+        <fullName>TR_Commercial_watercraft_are_not_covered_under_this_policy</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Commercial watercraft are not covered under this policy</shortDescription>
+        <value>Commercial watercraft are not covered under this policy</value>
+    </labels>
+    <labels>
+        <fullName>TR_Commercial_watercraft_are_not_covered_under_this_policy_For_special_conside</fullName>
+        <categories>salesforce</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Commercial watercraft are not covered under this policy.For special conside</shortDescription>
+        <value>Commercial watercraft are not covered under this policy.  For special consideration please contact broker@mexinsurance.com</value>
+    </labels>
+    <labels>
+        <fullName>TR_Company_Information</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Company Information</shortDescription>
+        <value>Company Information</value>
+    </labels>
+    <labels>
+        <fullName>TR_Company_Name</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Company Name</shortDescription>
+        <value>Company Name</value>
+    </labels>
+    <labels>
+        <fullName>TR_Compare</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Compare</shortDescription>
+        <value>Compare</value>
+    </labels>
+    <labels>
+        <fullName>TR_Complete</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Complete</shortDescription>
+        <value>Complete</value>
+    </labels>
+    <labels>
+        <fullName>TR_Complete_Coverage</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Complete Coverage</shortDescription>
+        <value>Complete Coverage</value>
+    </labels>
+    <labels>
+        <fullName>TR_Complete_this_Field</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Complete this Field</shortDescription>
+        <value>Complete this Field</value>
+    </labels>
+    <labels>
+        <fullName>TR_Completed</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Completed</shortDescription>
+        <value>Completed</value>
+    </labels>
+    <labels>
+        <fullName>TR_Confirm</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Confirm</shortDescription>
+        <value>Confirm</value>
+    </labels>
+    <labels>
+        <fullName>TR_Confirm_Terminate</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Confirm Terminate</shortDescription>
+        <value>Confirm Terminate</value>
+    </labels>
+    <labels>
+        <fullName>TR_Confirm_the_dates_and_type_of_coverage_and_pay_online_via_credit_card</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Confirm the dates and type of coverage and pay online via credit card</shortDescription>
+        <value>Confirm the dates and type of coverage and pay online via credit card</value>
+    </labels>
+    <labels>
+        <fullName>TR_Confirmation</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Confirmation</shortDescription>
+        <value>Confirmation</value>
+    </labels>
+    <labels>
+        <fullName>TR_Continue_Quoting</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Continue Quoting</shortDescription>
+        <value>Continue Quoting</value>
+    </labels>
+    <labels>
+        <fullName>TR_Copy_address_from_company_info</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Copy address from company info</shortDescription>
+        <value>Copy address from company info</value>
+    </labels>
+    <labels>
+        <fullName>TR_Country</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Country</shortDescription>
+        <value>Country</value>
+    </labels>
+    <labels>
+        <fullName>TR_Coverage</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Coverage</shortDescription>
+        <value>Coverage</value>
+    </labels>
+    <labels>
+        <fullName>TR_Coverage_Details</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Coverage Details</shortDescription>
+        <value>Coverage Details</value>
+    </labels>
+    <labels>
+        <fullName>TR_Coverage_applies_to_trailer_rv_even_when_detached_from_towing_vehicle_if_days</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Coverage applies to trailer/rv even when detached from towing vehicle if days</shortDescription>
+        <value>Coverage applies to trailer/rv even when detached from towing vehicle if days in tow matches term</value>
+    </labels>
+    <labels>
+        <fullName>TR_Coverage_is_not_available_for_the_risks_below</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Coverage is not available for the risks below</shortDescription>
+        <value>Coverage is not available for the risks below</value>
+    </labels>
+    <labels>
+        <fullName>TR_DOB</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_DOB</shortDescription>
+        <value>DOB</value>
+    </labels>
+    <labels>
+        <fullName>TR_Daily</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Daily</shortDescription>
+        <value>Daily</value>
+    </labels>
+    <labels>
+        <fullName>TR_Daily_Policy_Cancellation</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Daily Policy Cancellation</shortDescription>
+        <value>Daily Policy Cancellation</value>
+    </labels>
+    <labels>
+        <fullName>TR_Daily_policies_are_purchased_in_24_hour_increments</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Daily policies are purchased in 24 hour increments</shortDescription>
+        <value>Daily policies are purchased in 24 hour increments</value>
+    </labels>
+    <labels>
+        <fullName>TR_Daily_term_policies_are_fully_earned_as_soon_as_coverage_begins</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Daily term policies are fully earned as soon as coverage begins.  .</shortDescription>
+        <value>Daily term policies are fully earned as soon as coverage begins. There are no cancellations on daily term policies. You may cancel online prior to term inception.</value>
+    </labels>
+    <labels>
+        <fullName>TR_Date_of_Birth</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Date of Birth</shortDescription>
+        <value>Date of Birth</value>
+    </labels>
+    <labels>
+        <fullName>TR_Days</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Days</shortDescription>
+        <value>Days</value>
+    </labels>
+    <labels>
+        <fullName>TR_Days_in_Tow_value_can_t_be_greater_than_Term_Kindly_fix_that_and_try_again</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Days in Tow value can\&apos;t be greater than Term. Kindly fix that and try again.</shortDescription>
+        <value>Days in Tow value can\&apos;t be greater than Term. Kindly fix that and try again.</value>
+    </labels>
+    <labels>
+        <fullName>TR_Days_in_tow</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_ Days in tow</shortDescription>
+        <value>Days in tow</value>
+    </labels>
+    <labels>
+        <fullName>TR_Days_was_more_expensive_at_the_daily_rate_than_this_full_term_annual_policy_q</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Days was more expensive at the daily rate than this full-term annual policy q</shortDescription>
+        <value>Days was more expensive at the daily rate than this full-term annual policy quote below.  Your term has been adjusted automatically to save you money.</value>
+    </labels>
+    <labels>
+        <fullName>TR_Deductibles</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Deductibles</shortDescription>
+        <value>Deductibles</value>
+    </labels>
+    <labels>
+        <fullName>TR_Delete_Unit</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Delete Unit</shortDescription>
+        <value>Delete Unit</value>
+    </labels>
+    <labels>
+        <fullName>TR_Display_Policy</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Display Policy</shortDescription>
+        <value>Display Policy</value>
+    </labels>
+    <labels>
+        <fullName>TR_Do_you_want_to_change_the_Termor_Coverage_Limits</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Do you want to change the Termor Coverage Limits</shortDescription>
+        <value>Do you want to change the Term or Coverage Limits?</value>
+    </labels>
+    <labels>
+        <fullName>TR_Download</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Download</shortDescription>
+        <value>Download</value>
+    </labels>
+    <labels>
+        <fullName>TR_Download_PDF</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Download PDF</shortDescription>
+        <value>Download PDF</value>
+    </labels>
+    <labels>
+        <fullName>TR_Download_your_insurance_policy_immediately_and_print_it_out</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Download your insurance policy immediately and print it out</shortDescription>
+        <value>Download your insurance policy immediately and print it out</value>
+    </labels>
+    <labels>
+        <fullName>TR_Driver</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Driver</shortDescription>
+        <value>Driver</value>
+    </labels>
+    <labels>
+        <fullName>TR_Driver_Name</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Driver Name</shortDescription>
+        <value>Driver Name</value>
+    </labels>
+    <labels>
+        <fullName>TR_Driver_Type</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Driver Type</shortDescription>
+        <value>Driver Type</value>
+    </labels>
+    <labels>
+        <fullName>TR_Driver_details</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Driver details</shortDescription>
+        <value>Driver details</value>
+    </labels>
+    <labels>
+        <fullName>TR_Driver_index_1</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Driver {!index + 1}</shortDescription>
+        <value>Driver {!index + 1}</value>
+    </labels>
+    <labels>
+        <fullName>TR_Driver_s_0_has_some_missing_info_kindly_add_them_to_proceed</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Driver(s) {0} has some missing info, kindly add them to proceed!!</shortDescription>
+        <value>Driver(s) {0} has some missing info, kindly add them to proceed!!</value>
+    </labels>
+    <labels>
+        <fullName>TR_Driver_s_License_Information</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Driver&apos;s License Information</shortDescription>
+        <value>Driver&apos;s License Information</value>
+    </labels>
+    <labels>
+        <fullName>TR_Edit</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Edit</shortDescription>
+        <value>Edit</value>
+    </labels>
+    <labels>
+        <fullName>TR_Edit_Driver</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Edit Driver</shortDescription>
+        <value>Edit Driver</value>
+    </labels>
+    <labels>
+        <fullName>TR_Edit_Rate</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Edit Rate</shortDescription>
+        <value>Edit Rate</value>
+    </labels>
+    <labels>
+        <fullName>TR_Edit_Towed_Unit</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Edit Towed Unit</shortDescription>
+        <value>Edit Towed Unit</value>
+    </labels>
+    <labels>
+        <fullName>TR_Edit_Unit</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Edit Unit</shortDescription>
+        <value>Edit Unit</value>
+    </labels>
+    <labels>
+        <fullName>TR_Edit_Vehicle</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Edit Vehicle</shortDescription>
+        <value>Edit Vehicle</value>
+    </labels>
+    <labels>
+        <fullName>TR_Edit_Watercraft</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Edit Watercraft</shortDescription>
+        <value>Edit Watercraft</value>
+    </labels>
+    <labels>
+        <fullName>TR_Email</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Email</shortDescription>
+        <value>Email</value>
+    </labels>
+    <labels>
+        <fullName>TR_Email_PDF</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Email PDF</shortDescription>
+        <value>Email PDF</value>
+    </labels>
+    <labels>
+        <fullName>TR_Email_has_been_Sent</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Email has been Sent</shortDescription>
+        <value>Email has been Sent</value>
+    </labels>
+    <labels>
+        <fullName>TR_Email_me_the_quotes</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Email me the quotes</shortDescription>
+        <value>Email me the quotes</value>
+    </labels>
+    <labels>
+        <fullName>TR_Email_sent_successfully</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Email sent successfully!</shortDescription>
+        <value>Email sent successfully!</value>
+    </labels>
+    <labels>
+        <fullName>TR_End_Date</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_End Date</shortDescription>
+        <value>End Date</value>
+    </labels>
+    <labels>
+        <fullName>TR_End_Date_for_Coverage</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_End Date for Coverage</shortDescription>
+        <value>End Date for Coverage</value>
+    </labels>
+    <labels>
+        <fullName>TR_End_Time</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_End Time</shortDescription>
+        <value>End Time</value>
+    </labels>
+    <labels>
+        <fullName>TR_Engine_Type</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Engine Type</shortDescription>
+        <value>Engine Type</value>
+    </labels>
+    <labels>
+        <fullName>TR_Engine_Type_Inboard_Outboard</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Engine Type(Inboard, Outboard)</shortDescription>
+        <value>Engine Type(Inboard, Outboard)</value>
+    </labels>
+    <labels>
+        <fullName>TR_Enter_City</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Enter City</shortDescription>
+        <value>Enter City</value>
+    </labels>
+    <labels>
+        <fullName>TR_Enter_Postal_Code</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Enter Postal Code</shortDescription>
+        <value>Enter Postal Code</value>
+    </labels>
+    <labels>
+        <fullName>TR_Enter_State</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Enter State</shortDescription>
+        <value>Enter State</value>
+    </labels>
+    <labels>
+        <fullName>TR_Enter_a_valid_year</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Enter a valid year</shortDescription>
+        <value>Enter a valid year</value>
+    </labels>
+    <labels>
+        <fullName>TR_Enter_the_captain_s_date_of_birth</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Enter the captain’s date of birth</shortDescription>
+        <value>Enter the captain’s date of birth</value>
+    </labels>
+    <labels>
+        <fullName>TR_Enter_the_date_of_birth_of_the_registered_owner_or_primary_driver</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Enter the date of birth of the registered owner, or primary driver</shortDescription>
+        <value>Enter the date of birth of the registered owner, or primary driver</value>
+    </labels>
+    <labels>
+        <fullName>TR_Entire_Mexico</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Entire Mexico</shortDescription>
+        <value>Entire Mexico</value>
+    </labels>
+    <labels>
+        <fullName>TR_Expiration_Month</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Expiration Month</shortDescription>
+        <value>Expiration Month</value>
+    </labels>
+    <labels>
+        <fullName>TR_Expiration_Year</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Expiration Year</shortDescription>
+        <value>Expiration Year</value>
+    </labels>
+    <labels>
+        <fullName>TR_Failure_to_check_this_box_can_limit_your_claims_ability_for_full_recovery_on</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_ Failure to check this box can limit your claims ability for full recovery on</shortDescription>
+        <value>Failure to check this box can limit your claims ability for full recovery on a business vehicle.</value>
+    </labels>
+    <labels>
+        <fullName>TR_Fax</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Fax</shortDescription>
+        <value>Fax</value>
+    </labels>
+    <labels>
+        <fullName>TR_Fields_are_not_filled_as_required</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Fields are not filled as required</shortDescription>
+        <value>Fields are not filled as required</value>
+    </labels>
+    <labels>
+        <fullName>TR_Final_Details</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Final Details</shortDescription>
+        <value>Final Details</value>
+    </labels>
+    <labels>
+        <fullName>TR_Finalize_Tow_Details</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Finalize Tow Details</shortDescription>
+        <value>Finalize Tow Details</value>
+    </labels>
+    <labels>
+        <fullName>TR_Finalize_Vehicle</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Finalize Vehicle</shortDescription>
+        <value>Finalize Vehicle</value>
+    </labels>
+    <labels>
+        <fullName>TR_Finalize_Vehicle_Details</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Finalize Vehicle Details</shortDescription>
+        <value>Finalize Vehicle Details</value>
+    </labels>
+    <labels>
+        <fullName>TR_First_Name</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_First Name</shortDescription>
+        <value>First Name</value>
+    </labels>
+    <labels>
+        <fullName>TR_Flag</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Flag</shortDescription>
+        <value>Flag</value>
+    </labels>
+    <labels>
+        <fullName>TR_Footage</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Footage</shortDescription>
+        <value>Footage</value>
+    </labels>
+    <labels>
+        <fullName>TR_For_guidance_on_value_check_Kelly_Blue_Book_or_NADA_guides_for_Actual_Cash_V</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_ For guidance on value check Kelly Blue Book or NADA guides for Actual Cash V</shortDescription>
+        <value>For guidance on value check Kelly Blue Book or NADA guides for Actual Cash Value or Private Party Value</value>
+    </labels>
+    <labels>
+        <fullName>TR_For_guidance_on_value_check_Kelly_Blue_Book_or_NADA_guides_for_Actual_Cash_Va</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_For guidance on value check Kelly Blue Book or NADA guides for Actual Cash Va</shortDescription>
+        <value>For guidance on value check Kelly Blue Book or NADA guides for Actual Cash Value or Private Party Value.</value>
+    </labels>
+    <labels>
+        <fullName>TR_For_special_consideration_please_contact_broker_mexinsurance_com</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_ For special consideration please contact broker@mexinsurance.com</shortDescription>
+        <value>For special consideration please contact broker@mexinsurance.com</value>
+    </labels>
+    <labels>
+        <fullName>TR_Full_Coverage</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Full Coverage</shortDescription>
+        <value>Full Coverage</value>
+    </labels>
+    <labels>
+        <fullName>TR_Full_Terms</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Full Terms</shortDescription>
+        <value>Full Terms</value>
+    </labels>
+    <labels>
+        <fullName>TR_Get_your_quick_quote</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Get your quick quote!</shortDescription>
+        <value>Get your quick quote!</value>
+    </labels>
+    <labels>
+        <fullName>TR_Getting_value_out_of_a_complete_coverage_policy_can_be_challenging_so_usually</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Getting value out of a complete coverage policy can be challenging so usually</shortDescription>
+        <value>Getting value out of a complete coverage policy can be challenging so usually Liability Only is the best choice</value>
+    </labels>
+    <labels>
+        <fullName>TR_Glass_Breakage</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Glass Breakage</shortDescription>
+        <value>Glass Breakage</value>
+    </labels>
+    <labels>
+        <fullName>TR_Grab_your_vehicle_s_VIN_number</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Grab your vehicle’s VIN number &amp;amp; your registration, and then enter a few</shortDescription>
+        <value>Grab your vehicle’s VIN number &amp;amp; your registration, and then enter a few details here on our website</value>
+    </labels>
+    <labels>
+        <fullName>TR_HOUSE</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_HOUSE</shortDescription>
+        <value>HOUSE</value>
+    </labels>
+    <labels>
+        <fullName>TR_Hey_What_would_you_like_to_insure_today</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Hey! What would you like to insure today?</shortDescription>
+        <value>Hey! What would you like to insure today?</value>
+    </labels>
+    <labels>
+        <fullName>TR_Home_Insurance_for_Mexico</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Home Insurance for Mexico</shortDescription>
+        <value>Home Insurance for Mexico</value>
+    </labels>
+    <labels>
+        <fullName>TR_How_did_you_hear_about_us</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_How did you hear about us?</shortDescription>
+        <value>How did you hear about us?</value>
+    </labels>
+    <labels>
+        <fullName>TR_How_many_days_will_the_towed_unit_be_attached_to_the_towing_vehicle</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_How many days will the towed unit be attached to the towing vehicle?</shortDescription>
+        <value>How many days will the towed unit be attached to the towing vehicle?</value>
+    </labels>
+    <labels>
+        <fullName>TR_IVA_Tax</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_IVA Tax</shortDescription>
+        <value>IVA Tax</value>
+    </labels>
+    <labels>
+        <fullName>TR_I_agree_that_I_have_reviewed_the_information_I_entered_during_the_application</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_I agree that I have reviewed the information I entered during the application</shortDescription>
+        <value>I agree that I have reviewed the information I entered during the application process and that I have answered all of the questions and listed all of the vehicle information truthfully</value>
+    </labels>
+    <labels>
+        <fullName>TR_I_agree_to_the_following_when_I_click_the_next_button_to_purchase_northboun</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_I agree to the following when I click the “next” button to purchase northboun</shortDescription>
+        <value>I agree to the following when I click the “next” button to purchase northbound insurance</value>
+    </labels>
+    <labels>
+        <fullName>TR_I_have_read_understand_and_agree_to_the_Terms_of_Access_and_Use</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_I have read, understand, and agree to the Terms of Access and Use</shortDescription>
+        <value>I have read, understand, and agree to the Terms of Access and Use</value>
+    </labels>
+    <labels>
+        <fullName>TR_I_read_and_agree_with_the_following</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_I read and agree with the following</shortDescription>
+        <value>I read and agree with the following</value>
+    </labels>
+    <labels>
+        <fullName>TR_I_understand_and_agree_that_I_must_print_the_insurance_policy_declaration_pag</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_I understand and agree that I must print the insurance policy declaration pag</shortDescription>
+        <value>I understand and agree that I must print the insurance policy declaration page</value>
+    </labels>
+    <labels>
+        <fullName>TR_I_understand_and_agree_that_I_must_report_all_claims_to_the_insurance_company</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_I understand and agree that I must report all claims to the insurance company</shortDescription>
+        <value>I understand and agree that I must report all claims to the insurance company prior to leaving the country</value>
+    </labels>
+    <labels>
+        <fullName>TR_I_understand_and_agree_that_I_will_only_be_insured_between_the_beginning_and</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_I understand and agree that I will only be insured between the beginning and</shortDescription>
+        <value>I understand and agree that I will only be insured between the beginning and ending date and time I have specified during this application process. I agree that I have reviewed the information I entered during the application  process
+ and that I have answered all of the questions and listed all of the vehicle information truthfully.</value>
+    </labels>
+    <labels>
+        <fullName>TR_I_understand_and_agree_that_coverage_applies_only_to_the_vehicles_and_towed_u</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_I understand and agree that coverage applies only to the vehicles and towed u</shortDescription>
+        <value>I understand and agree that coverage applies only to the vehicles and towed units that I have listed on the policy and coverage will not exceed the maximum values/limits specified</value>
+    </labels>
+    <labels>
+        <fullName>TR_I_understand_and_agree_that_failure_to_report_the_claim_while_in_Mexico_could</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_I understand and agree that failure to report the claim while in Mexico could</shortDescription>
+        <value>I understand and agree that failure to report the claim while in Mexico could result in the claim being denied</value>
+    </labels>
+    <labels>
+        <fullName>TR_I_understand_and_agree_that_the_laws_of_Mexico_do_not_authorize_certain_types</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_I understand and agree that the laws of Mexico do not authorize certain types</shortDescription>
+        <value>I understand and agree that the laws of Mexico do not authorize certain types of coverage sometimes found in automobile insurance policies issued in the United States or in Canada.</value>
+    </labels>
+    <labels>
+        <fullName>TR_I_understand_and_agree_that_the_policy_Northbound_Terms_and_Conditions_can</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_I understand and agree that the policy “Northbound Terms and Conditions” can</shortDescription>
+        <value>I understand and agree that the policy “Northbound Terms and Conditions” can also be printed from this website at any time</value>
+    </labels>
+    <labels>
+        <fullName>TR_I_understand_and_agree_that_the_policy_declarations_page_will_be_available_to</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_I understand and agree that the policy declarations page will be available to</shortDescription>
+        <value>I understand and agree that the policy declarations page will be available to print at the time of purchase, and the policy declarations page can also be accessed and printed by logging into my account at this website</value>
+    </labels>
+    <labels>
+        <fullName>TR_I_understand_and_agree_that_this_northbound_auto_insurance_policy_is_issued_b</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_I understand and agree that this northbound auto insurance policy is issued b</shortDescription>
+        <value>I understand and agree that this northbound auto insurance policy is issued by a Mexican insurance company pursuant to the laws of Mexico. The policy is a standard policy of insurance approved by the Insurance Commission in the country of Mexico (Comision de Seguros y Fianzas)</value>
+    </labels>
+    <labels>
+        <fullName>TR_I_understand_and_agree_that_this_tourist_Northbound_Insurance_only_provides</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_I understand and agree that this “tourist” Northbound Insurance only provides</shortDescription>
+        <value>I understand and agree that this “tourist” Northbound Insurance only provides coverage in the United States and Canada and is subject to the laws of the United States and Canada.</value>
+    </labels>
+    <labels>
+        <fullName>TR_I_understand_and_agree_that_this_tourist_Northbound_auto_insurance_policy_d</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_I understand and agree that this “tourist” Northbound auto insurance policy d</shortDescription>
+        <value>I understand and agree that this “tourist” Northbound auto insurance policy does NOT cover U.S. or Canadian plated vehicles as it is specifically for vehicles registered in the Republic of Mexico. Accidents must be reported to Chubb Seguros before I return to Mexico</value>
+    </labels>
+    <labels>
+        <fullName>TR_I_understand_and_agree_to_the_insurance_policy_contract_of_the_Northbound</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_I understand and agree to the insurance policy contract of the Northbound</shortDescription>
+        <value>I understand and agree to the insurance policy contract of the Northbound Auto Insurance policy made between me (the insured) and the insurance company (Chubb Seguros). The full Chubb “Terms and Conditions” can be read and printed by</value>
+    </labels>
+    <labels>
+        <fullName>TR_I_understand_and_agree_to_the_insurance_policy_contract_of_the_Northbound_Aut</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_I understand and agree to the insurance policy contract of the Northbound Aut</shortDescription>
+        <value>I understand and agree to the insurance policy contract of the Northbound Auto Insurance policy made between me (the insured) and the insurance company (Chubb Seguros)</value>
+    </labels>
+    <labels>
+        <fullName>TR_If_rate_not_exist_then_make_it_true</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_If rate not exist then make it true</shortDescription>
+        <value>If rate not exist then make it true</value>
+    </labels>
+    <labels>
+        <fullName>TR_If_you_are_towing_a_travel_trailer_and_select_Chubb_you_should_match_the_Da</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_ If you are towing a travel trailer and select Chubb you should match the &apos;Da</shortDescription>
+        <value>If you are towing a travel trailer and select Chubb you should match the &apos;Days in Tow&apos; with the Term of the Policyexample365daypolicy, days in tow = 365.&lt;/i&gt; Days in tow</value>
+    </labels>
+    <labels>
+        <fullName>TR_If_you_do_choose_Complete_Coverage_don_t_over_insure</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_ If you do choose Complete Coverage, don’t over-insure</shortDescription>
+        <value>If you do choose Complete Coverage, don’t over-insure</value>
+    </labels>
+    <labels>
+        <fullName>TR_If_you_owe_money_on_the_vehicle_you_must_list_at_least_as_much_as_you_owe</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_If you owe money on the vehicle you must list at least as much as you owe.</shortDescription>
+        <value>If you owe money on the vehicle you must list at least as much as you owe.</value>
+    </labels>
+    <labels>
+        <fullName>TR_If_you_select_Chubb_your_towed_trailer_will_have_coverage_even_after_it_is_d</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_If you select Chubb, your towed trailer will have coverage even after it is d</shortDescription>
+        <value>If you select Chubb, your towed trailer will have coverage even after it is detached if you match “days in tow” with the term</value>
+    </labels>
+    <labels>
+        <fullName>TR_If_your_vehicle_is_registered_to_a_business_or_used_for_business_please_chec</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_If your vehicle is registered to a business, or used for business please chec</shortDescription>
+        <value>If your vehicle is registered to a business, or used for business please check this box.</value>
+    </labels>
+    <labels>
+        <fullName>TR_Important</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Important</shortDescription>
+        <value>Important</value>
+    </labels>
+    <labels>
+        <fullName>TR_InsuranceFinalDetail</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Insurance_Final_Detail</shortDescription>
+        <value>InsuranceFinalDetail</value>
+    </labels>
+    <labels>
+        <fullName>TR_Insurance_Company</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Insurance Company</shortDescription>
+        <value>Insurance Company</value>
+    </labels>
+    <labels>
+        <fullName>TR_International_law_requires_that_every_watercraft_be_registered_in_a_country</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_International law requires that every watercraft be registered in a country,</shortDescription>
+        <value>International law requires that every watercraft be registered in a country, called its flag state. A watercraft is subject to the law of its flag state</value>
+    </labels>
+    <labels>
+        <fullName>TR_Is_the_Maximum_Speed_more_than_50_mph</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Is the Maximum Speed more than 50 mph?</shortDescription>
+        <value>Is the Maximum Speed more than 50 mph?</value>
+    </labels>
+    <labels>
+        <fullName>TR_Is_the_owner_living_in_Mexico</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Is the owner living in Mexico</shortDescription>
+        <value>Is the owner living in Mexico</value>
+    </labels>
+    <labels>
+        <fullName>TR_Is_the_vehicle_registered_to_a_business</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Is the vehicle registered to a business?</shortDescription>
+        <value>Is the vehicle registered to a business?</value>
+    </labels>
+    <labels>
+        <fullName>TR_Is_the_vehicle_used_for_business_purposes</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Is the vehicle used for business purposes?</shortDescription>
+        <value>Is the vehicle used for business purposes?</value>
+    </labels>
+    <labels>
+        <fullName>TR_Is_this_a_rental_vehicle</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Is this a rental vehicle?</shortDescription>
+        <value>Is this a rental vehicle?</value>
+    </labels>
+    <labels>
+        <fullName>TR_Is_this_a_salvage_vehicle</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Is this a salvage vehicle?</shortDescription>
+        <value>Is this a salvage vehicle?</value>
+    </labels>
+    <labels>
+        <fullName>TR_Is_this_account_company_named</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Is this account company named?</shortDescription>
+        <value>Is this account company named?</value>
+    </labels>
+    <labels>
+        <fullName>TR_Is_vehicle_leased_or_financed</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Is vehicle leased or financed</shortDescription>
+        <value>Is vehicle leased or financed</value>
+    </labels>
+    <labels>
+        <fullName>TR_It_will_cover_additional_things_like_automobile_wrap_excess_miles_etc</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_It will cover additional things like automobile wrap, excess miles, etc.</shortDescription>
+        <value>It will cover additional things like automobile wrap, excess miles, etc.</value>
+    </labels>
+    <labels>
+        <fullName>TR_Just_one_more_step_to_go</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Just one more step to go</shortDescription>
+        <value>Just one more step to go</value>
+    </labels>
+    <labels>
+        <fullName>TR_Keep_in_mind_that_with_Qualitas_and_Mapfre_when_a_towed_unit_is_detached_fro</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Keep in mind that with Qualitas and Mapfre, when a towed unit is detached fro</shortDescription>
+        <value>Keep in mind that with Qualitas and Mapfre, when a towed unit is detached from the towing vehicle, it no longer has coverage</value>
+    </labels>
+    <labels>
+        <fullName>TR_Kindly_enter_your_name_and_email_below_so_we_can_securely_store_the_quote_for</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Kindly enter your name and email below so we can securely store the quote for</shortDescription>
+        <value>Kindly enter your name and email below so we can securely store the quote for you.</value>
+    </labels>
+    <labels>
+        <fullName>TR_Kindly_provide_the_required_details_for_the_tow_unit_s</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Kindly provide the required details for the tow unit(s).</shortDescription>
+        <value>Kindly provide the required details (Click the Edit button) for the tow unit(s).</value>
+    </labels>
+    <labels>
+        <fullName>TR_Kindly_select_any_option_first</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Kindly select any option first!!</shortDescription>
+        <value>Kindly select any option first!!</value>
+    </labels>
+    <labels>
+        <fullName>TR_Kindly_verify_if_all_the_details_are_filled</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Kindly verify if all the details are filled!!</shortDescription>
+        <value>Kindly verify if all the details are filled!!</value>
+    </labels>
+    <labels>
+        <fullName>TR_Labor_Rates</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Labor Rates</shortDescription>
+        <value>Labor Rates</value>
+    </labels>
+    <labels>
+        <fullName>TR_Last_Name</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Last Name</shortDescription>
+        <value>Last Name</value>
+    </labels>
+    <labels>
+        <fullName>TR_Legal_Defense_and_Bail</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Legal Defense and Bail</shortDescription>
+        <value>Legal Defense and Bail</value>
+    </labels>
+    <labels>
+        <fullName>TR_Let_s_tackle_the_Payment_now</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Let&apos;s tackle the Payment now</shortDescription>
+        <value>Let&apos;s tackle the Payment now</value>
+    </labels>
+    <labels>
+        <fullName>TR_Liability</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Liability</shortDescription>
+        <value>Liability</value>
+    </labels>
+    <labels>
+        <fullName>TR_Liability_Only</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Liability Only</shortDescription>
+        <value>Liability Only</value>
+    </labels>
+    <labels>
+        <fullName>TR_Liability_Theft</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Liability + Theft</shortDescription>
+        <value>Liability + Theft</value>
+    </labels>
+    <labels>
+        <fullName>TR_Liability_Type</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Liability Type</shortDescription>
+        <value>Liability Type</value>
+    </labels>
+    <labels>
+        <fullName>TR_License</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_License</shortDescription>
+        <value>License</value>
+    </labels>
+    <labels>
+        <fullName>TR_License_Country</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_License Country</shortDescription>
+        <value>License Country</value>
+    </labels>
+    <labels>
+        <fullName>TR_License_Number</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_License Number</shortDescription>
+        <value>License Number</value>
+    </labels>
+    <labels>
+        <fullName>TR_License_Plate</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_License Plate</shortDescription>
+        <value>License Plate</value>
+    </labels>
+    <labels>
+        <fullName>TR_License_State</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_License State</shortDescription>
+        <value>License State</value>
+    </labels>
+    <labels>
+        <fullName>TR_Lienholder_City</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Lienholder City</shortDescription>
+        <value>Lienholder City</value>
+    </labels>
+    <labels>
+        <fullName>TR_Lienholder_Fax</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Lienholder Fax</shortDescription>
+        <value>Lienholder Fax</value>
+    </labels>
+    <labels>
+        <fullName>TR_Lienholder_Information</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Lienholder Information</shortDescription>
+        <value>Lienholder Information</value>
+    </labels>
+    <labels>
+        <fullName>TR_Lienholder_Name</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Lienholder Name</shortDescription>
+        <value>Lienholder Name</value>
+    </labels>
+    <labels>
+        <fullName>TR_Lienholder_Phone</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Lienholder Phone</shortDescription>
+        <value>Lienholder Phone</value>
+    </labels>
+    <labels>
+        <fullName>TR_Lienholder_Postal_Code</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Lienholder Postal Code</shortDescription>
+        <value>Lienholder Postal Code</value>
+    </labels>
+    <labels>
+        <fullName>TR_Lienholder_State</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Lienholder State</shortDescription>
+        <value>Lienholder State</value>
+    </labels>
+    <labels>
+        <fullName>TR_Lienholder_Street_Address</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Lienholder Street Address</shortDescription>
+        <value>Lienholder Street Address</value>
+    </labels>
+    <labels>
+        <fullName>TR_Lienholder_Street_Address_2</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Lienholder Street Address 2</shortDescription>
+        <value>Lienholder Street Address 2</value>
+    </labels>
+    <labels>
+        <fullName>TR_Loading</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Loading</shortDescription>
+        <value>Loading</value>
+    </labels>
+    <labels>
+        <fullName>TR_MY_MEXINSURANCE</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_MY MEXINSURANCE</shortDescription>
+        <value>MY MEXINSURANCE</value>
+    </labels>
+    <labels>
+        <fullName>TR_MY_MEXINSURANCE_trade</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_MY MEXINSURANCE &amp; trade</shortDescription>
+        <value>MY MEXINSURANCE &amp; trade</value>
+    </labels>
+    <labels>
+        <fullName>TR_Make</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Make</shortDescription>
+        <value>Make</value>
+    </labels>
+    <labels>
+        <fullName>TR_Make_payment</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Make payment</shortDescription>
+        <value>Make payment</value>
+    </labels>
+    <labels>
+        <fullName>TR_Make_sure_to_add_us_to_your_whitelist</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Make sure to add us to your whitelist!</shortDescription>
+        <value>Make sure to add us to your whitelist!</value>
+    </labels>
+    <labels>
+        <fullName>TR_Manually_Enter</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Manually Enter</shortDescription>
+        <value>&lt;Manually Enter&gt;</value>
+    </labels>
+    <labels>
+        <fullName>TR_Max</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Max</shortDescription>
+        <value>Max</value>
+    </labels>
+    <labels>
+        <fullName>TR_Max_Coverage</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Max Coverage</shortDescription>
+        <value>Max Coverage</value>
+    </labels>
+    <labels>
+        <fullName>TR_Medical</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Medical</shortDescription>
+        <value>Medical</value>
+    </labels>
+    <labels>
+        <fullName>TR_Medical_Insurance</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Medical Insurance</shortDescription>
+        <value>Medical Insurance</value>
+    </labels>
+    <labels>
+        <fullName>TR_Medical_Type</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Medical Type</shortDescription>
+        <value>Medical Type</value>
+    </labels>
+    <labels>
+        <fullName>TR_Mexican_IVA_TAX</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Mexican IVA TAX</shortDescription>
+        <value>Mexican IVA TAX</value>
+    </labels>
+    <labels>
+        <fullName>TR_Mexican_drivers_licenses_are_not_covered_under_this_tourist_auto_insurance_po</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Mexican drivers licenses are not covered under this tourist auto insurance po</shortDescription>
+        <value>Mexican drivers licenses are not covered under this tourist auto insurance policy                   .</value>
+    </labels>
+    <labels>
+        <fullName>TR_Mexico_for_non_Mexican_registered_vehicles</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Mexico - for non-Mexican registered vehicles</shortDescription>
+        <value>Mexico - for non-Mexican registered vehicles</value>
+    </labels>
+    <labels>
+        <fullName>TR_Model</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Model</shortDescription>
+        <value>Model</value>
+    </labels>
+    <labels>
+        <fullName>TR_Modified_Policy</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Modified Policy</shortDescription>
+        <value>Modified Policy</value>
+    </labels>
+    <labels>
+        <fullName>TR_Month</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Month</shortDescription>
+        <value>Month</value>
+    </labels>
+    <labels>
+        <fullName>TR_Motorcycle</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Motorcycle</shortDescription>
+        <value>Motorcycle</value>
+    </labels>
+    <labels>
+        <fullName>TR_Motorcycle_ATV</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Motorcycle/ATV</shortDescription>
+        <value>Motorcycle/ATV</value>
+    </labels>
+    <labels>
+        <fullName>TR_Motorcycle_Street_Legal_ATV</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Motorcycle/ Street Legal ATV</shortDescription>
+        <value>Motorcycle/ Street Legal ATV</value>
+    </labels>
+    <labels>
+        <fullName>TR_Motorhome_Casa_Rodante</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Motorhome - Casa Rodante</shortDescription>
+        <value>Motorhome - Casa Rodante</value>
+    </labels>
+    <labels>
+        <fullName>TR_NOT_NOW</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_NOT NOW</shortDescription>
+        <value>NOT NOW</value>
+    </labels>
+    <labels>
+        <fullName>TR_N_A</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_N/A</shortDescription>
+        <value>N/A</value>
+    </labels>
+    <labels>
+        <fullName>TR_Name</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Name</shortDescription>
+        <value>Name</value>
+    </labels>
+    <labels>
+        <fullName>TR_Name_on_card</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Name on card</shortDescription>
+        <value>Name on card</value>
+    </labels>
+    <labels>
+        <fullName>TR_Newsletter</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Newsletter</shortDescription>
+        <value>MexInsurance Brokerage Newsletter</value>
+    </labels>
+    <labels>
+        <fullName>TR_Next</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Next</shortDescription>
+        <value>Continue</value>
+    </labels>
+    <labels>
+        <fullName>TR_No</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_No</shortDescription>
+        <value>No</value>
+    </labels>
+    <labels>
+        <fullName>TR_No_Quote_exist_for_the_provided_vehicle_value</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_No Quote exist for the provided vehicle value!!</shortDescription>
+        <value>No Quote exist for the provided vehicle value!!</value>
+    </labels>
+    <labels>
+        <fullName>TR_No_Result_Found</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_No Result Found</shortDescription>
+        <value>No Result Found</value>
+    </labels>
+    <labels>
+        <fullName>TR_No_Towed_Unit_added</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_No Towed Unit added</shortDescription>
+        <value>No Towed Unit added</value>
+    </labels>
+    <labels>
+        <fullName>TR_No_drivers_added</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_No drivers added</shortDescription>
+        <value>No drivers added</value>
+    </labels>
+    <labels>
+        <fullName>TR_None</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_None</shortDescription>
+        <value>None</value>
+    </labels>
+    <labels>
+        <fullName>TR_Northbound</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Northbound</shortDescription>
+        <value>Northbound</value>
+    </labels>
+    <labels>
+        <fullName>TR_Northbound_Insurance_for_Mexican_Vehicles</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Northbound Insurance for Mexican Vehicles</shortDescription>
+        <value>Northbound Insurance for Mexican Vehicles</value>
+    </labels>
+    <labels>
+        <fullName>TR_Not_a_valid_phone_number</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Not a valid phone number</shortDescription>
+        <value>Not a valid phone number</value>
+    </labels>
+    <labels>
+        <fullName>TR_Note</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Note</shortDescription>
+        <value>Note</value>
+    </labels>
+    <labels>
+        <fullName>TR_Once_confirmed_your_policy_will_be_terminated_and_your_refund_will_be_applie</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Once confirmed, your policy will be terminated and your refund will be applie</shortDescription>
+        <value>Once confirmed, your policy will be terminated and your refund will be applied to your original</value>
+    </labels>
+    <labels>
+        <fullName>TR_Online_Insurance_Final_Details</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Online Insurance Final Details</shortDescription>
+        <value>Online Insurance Final Details</value>
+    </labels>
+    <labels>
+        <fullName>TR_Or_Add_a_New_Driver</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Or Add a New Driver</shortDescription>
+        <value>Or Add a New Driver</value>
+    </labels>
+    <labels>
+        <fullName>TR_Original_Policy</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Original Policy</shortDescription>
+        <value>Original Policy</value>
+    </labels>
+    <labels>
+        <fullName>TR_Other_Mexican_Insurance</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Other Mexican Insurance</shortDescription>
+        <value>Other Mexican Insurance</value>
+    </labels>
+    <labels>
+        <fullName>TR_Our_system_found_some_problem_Kindly_try_again_later_Sorry_for_the_inconv</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Our system found some problem. Kindly try again later!! Sorry, for the inconv</shortDescription>
+        <value>Our system found some problem. Kindly try again later!! Sorry, for the inconvenience caused.</value>
+    </labels>
+    <labels>
+        <fullName>TR_Owner_of_the_Registered_Vehicle</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Owner of the Registered Vehicle</shortDescription>
+        <value>Owner of the Registered Vehicle</value>
+    </labels>
+    <labels>
+        <fullName>TR_PDF</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_PDF</shortDescription>
+        <value>PDF</value>
+    </labels>
+    <labels>
+        <fullName>TR_Pacakge</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Pacakge</shortDescription>
+        <value>Pacakge</value>
+    </labels>
+    <labels>
+        <fullName>TR_Partial_Theft</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Partial Theft</shortDescription>
+        <value>Partial Theft</value>
+    </labels>
+    <labels>
+        <fullName>TR_Partial_US_Adjacent</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Partial (US Adjacent)</shortDescription>
+        <value>Partial (US Adjacent)</value>
+    </labels>
+    <labels>
+        <fullName>TR_Pay_Now</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Pay Now</shortDescription>
+        <value>Pay Now</value>
+    </labels>
+    <labels>
+        <fullName>TR_Payment</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Payment</shortDescription>
+        <value>Payment</value>
+    </labels>
+    <labels>
+        <fullName>TR_Payment_Detail</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Payment Detail</shortDescription>
+        <value>Payment Detail</value>
+    </labels>
+    <labels>
+        <fullName>TR_Payment_Successfull</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Payment Successfull</shortDescription>
+        <value>Payment Successfull</value>
+    </labels>
+    <labels>
+        <fullName>TR_Payment_Unsuccessfull_Something_went_wrong</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Payment Unsuccessfull!! Something went wrong</shortDescription>
+        <value>Payment Unsuccessfull!! Something went wrong</value>
+    </labels>
+    <labels>
+        <fullName>TR_Phone</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Phone</shortDescription>
+        <value>Phone</value>
+    </labels>
+    <labels>
+        <fullName>TR_Pickup_Truck_w_or_without_Camper</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Pickup Truck w or without Camper</shortDescription>
+        <value>Pickup Truck w or without Camper</value>
+    </labels>
+    <labels>
+        <fullName>TR_Placas_License_Plate</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Placas-License Plate</shortDescription>
+        <value>Placas-License Plate</value>
+    </labels>
+    <labels>
+        <fullName>TR_Plane_Tickets_Home</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Plane Tickets Home</shortDescription>
+        <value>Plane Tickets Home</value>
+    </labels>
+    <labels>
+        <fullName>TR_Please_Select_Any_One_Option</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Please Select Any One Option</shortDescription>
+        <value>Please Select Any One Option</value>
+    </labels>
+    <labels>
+        <fullName>TR_Please_attest_to_the_following_statements_by_checking_the_box_to_proceed</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_ Please attest to the following statements  by checking the box to proceed.</shortDescription>
+        <value>Please attest to the following statements  by checking the box to proceed.</value>
+    </labels>
+    <labels>
+        <fullName>TR_Please_enter_a_valid_expiration_date</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Please enter a valid expiration date</shortDescription>
+        <value>Please enter a valid expiration date</value>
+    </labels>
+    <labels>
+        <fullName>TR_Please_enter_your_name_and_email_below_so_that_we_can_securely_store_your_quo</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Please enter your name and email below so that we can securely store your quo</shortDescription>
+        <value>Please enter your name and email below so that we can securely store your quote.</value>
+    </labels>
+    <labels>
+        <fullName>TR_Please_fill_in_some_details_below</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Please fill in some details below</shortDescription>
+        <value>Please fill in some details below</value>
+    </labels>
+    <labels>
+        <fullName>TR_Please_fill_in_vehicle_details_below</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Please fill in vehicle details below :</shortDescription>
+        <value>Please fill in vehicle details below:</value>
+    </labels>
+    <labels>
+        <fullName>TR_Please_fill_in_watercraft_details_below</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Please fill in watercraft details below</shortDescription>
+        <value>Please fill in watercraft details below</value>
+    </labels>
+    <labels>
+        <fullName>TR_Please_fill_in_your_details_below</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Please fill in your details below</shortDescription>
+        <value>Please fill in your details below</value>
+    </labels>
+    <labels>
+        <fullName>TR_Please_select_term_options</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Please select term options</shortDescription>
+        <value>Please select term options</value>
+    </labels>
+    <labels>
+        <fullName>TR_Please_select_your_term</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Please select your term</shortDescription>
+        <value>Please select your term</value>
+    </labels>
+    <labels>
+        <fullName>TR_Policy</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Policy</shortDescription>
+        <value>Policy</value>
+    </labels>
+    <labels>
+        <fullName>TR_PolicyDetail</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_PolicyDetail</shortDescription>
+        <value>PolicyDetail</value>
+    </labels>
+    <labels>
+        <fullName>TR_Policy_Created</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Policy Created</shortDescription>
+        <value>Policy Created</value>
+    </labels>
+    <labels>
+        <fullName>TR_Policy_Days</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Policy Days</shortDescription>
+        <value>Policy Days</value>
+    </labels>
+    <labels>
+        <fullName>TR_Policy_Information</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Policy Information</shortDescription>
+        <value>Policy Information</value>
+    </labels>
+    <labels>
+        <fullName>TR_Policy_Premium_Amount</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Policy Premium Amount</shortDescription>
+        <value>Policy Premium Amount</value>
+    </labels>
+    <labels>
+        <fullName>TR_Policy_Summary</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Policy Summary</shortDescription>
+        <value>Policy Summary</value>
+    </labels>
+    <labels>
+        <fullName>TR_Policy_Terms</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Policy Terms</shortDescription>
+        <value>Policy Terms</value>
+    </labels>
+    <labels>
+        <fullName>TR_Policy_Type</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Policy Type</shortDescription>
+        <value>Policy Type</value>
+    </labels>
+    <labels>
+        <fullName>TR_Policy_Used_Days</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Policy Used Days</shortDescription>
+        <value>Policy Used Days</value>
+    </labels>
+    <labels>
+        <fullName>TR_Policy_Used_Premium</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Policy Used Premium</shortDescription>
+        <value>Policy Used Premium</value>
+    </labels>
+    <labels>
+        <fullName>TR_Policy_and_terms</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Policy and terms</shortDescription>
+        <value>Policy &amp; terms</value>
+    </labels>
+    <labels>
+        <fullName>TR_Postal_Code</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Postal Code</shortDescription>
+        <value>Postal Code</value>
+    </labels>
+    <labels>
+        <fullName>TR_Premium</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Premium</shortDescription>
+        <value>Premium</value>
+    </labels>
+    <labels>
+        <fullName>TR_Prev</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Prev</shortDescription>
+        <value>Prev</value>
+    </labels>
+    <labels>
+        <fullName>TR_Previous</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Previous</shortDescription>
+        <value>Previous</value>
+    </labels>
+    <labels>
+        <fullName>TR_Primary_insured</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Primary insured</shortDescription>
+        <value>Primary insured</value>
+    </labels>
+    <labels>
+        <fullName>TR_Prior_to_22_days_you_can_cancel_a_policy_and_the_premium_will_be_short_rated</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Prior to 22 days, you can cancel a policy and the premium will be short-rated</shortDescription>
+        <value>Prior to 22 days, you can cancel a policy and the premium will be short-rated to a daily rate.</value>
+    </labels>
+    <labels>
+        <fullName>TR_Private_Residence_Home_or_Condo_in_Mexico</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Private Residence (Home or Condo) in Mexico</shortDescription>
+        <value>Private Residence (Home or Condo) in Mexico</value>
+    </labels>
+    <labels>
+        <fullName>TR_Purchase</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Purchase</shortDescription>
+        <value>Purchase</value>
+    </labels>
+    <labels>
+        <fullName>TR_Quick_Quote</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Quick Quote</shortDescription>
+        <value>Quick Quote</value>
+    </labels>
+    <labels>
+        <fullName>TR_Quote_Detail</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Quote Detail</shortDescription>
+        <value>Quote Detail</value>
+    </labels>
+    <labels>
+        <fullName>TR_Quote_Summary</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Quote Summary</shortDescription>
+        <value>Quote Summary</value>
+    </labels>
+    <labels>
+        <fullName>TR_RV</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_RV</shortDescription>
+        <value>RV</value>
+    </labels>
+    <labels>
+        <fullName>TR_RV_with_Towed_Unit</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_RV with Towed Unit</shortDescription>
+        <value>RV with Towed Unit</value>
+    </labels>
+    <labels>
+        <fullName>TR_Racing</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Racing</shortDescription>
+        <value>Racing</value>
+    </labels>
+    <labels>
+        <fullName>TR_Reason_for_terminating</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Reason for terminating</shortDescription>
+        <value>Reason for terminating</value>
+    </labels>
+    <labels>
+        <fullName>TR_Recommended</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Recommended</shortDescription>
+        <value>Recommended</value>
+    </labels>
+    <labels>
+        <fullName>TR_Refund_Amount</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Refund Amount</shortDescription>
+        <value>Refund Amount</value>
+    </labels>
+    <labels>
+        <fullName>TR_Refund_Calculation</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Refund Calculation</shortDescription>
+        <value>Refund Calculation</value>
+    </labels>
+    <labels>
+        <fullName>TR_Registered_Country</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Registered Country</shortDescription>
+        <value>Registered Country</value>
+    </labels>
+    <labels>
+        <fullName>TR_Registered_Plate</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Registered Plate</shortDescription>
+        <value>Registered Plate</value>
+    </labels>
+    <labels>
+        <fullName>TR_Registered_State_Province</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Registered State/Province</shortDescription>
+        <value>Registered State/Province</value>
+    </labels>
+    <labels>
+        <fullName>TR_Registration_License_Plate</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Registration #/License Plate</shortDescription>
+        <value>Registration #/License Plate</value>
+    </labels>
+    <labels>
+        <fullName>TR_Remove</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Remove</shortDescription>
+        <value>Remove</value>
+    </labels>
+    <labels>
+        <fullName>TR_Renew_Policy</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Renew Policy</shortDescription>
+        <value>Renew Policy</value>
+    </labels>
+    <labels>
+        <fullName>TR_Rental_Car</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Rental Car</shortDescription>
+        <value>Rental Car</value>
+    </labels>
+    <labels>
+        <fullName>TR_Rental_vehicles_are_owned_by_a_rental_agency_and_often_self_insure_and_handl</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Rental vehicles are owned by a rental agency, and often self-insure and handl</shortDescription>
+        <value>Rental vehicles are owned by a rental agency, and often self-insure and handle their own vehicle repairs.  Check this box if the vehicle is “rented” so that the appropriate surcharge can be applied.  Failure to check this box for a rental car policy can result in denial of a claim.</value>
+    </labels>
+    <labels>
+        <fullName>TR_Review_Vehicle</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Review Vehicle</shortDescription>
+        <value>Review Vehicle</value>
+    </labels>
+    <labels>
+        <fullName>TR_Review_vehicle_information</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Review vehicle information</shortDescription>
+        <value>Review vehicle information</value>
+    </labels>
+    <labels>
+        <fullName>TR_Review_watercraft_information</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Review watercraft information</shortDescription>
+        <value>Review watercraft information</value>
+    </labels>
+    <labels>
+        <fullName>TR_Roadside_Assistance_lockout_fuel_flat_tire_jump_start</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Roadside Assistance (lockout, fuel, flat tire, jump start)</shortDescription>
+        <value>Roadside Assistance (lockout, fuel, flat tire, jump start)</value>
+    </labels>
+    <labels>
+        <fullName>TR_Roadside_assistance</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Roadside assistance</shortDescription>
+        <value>Roadside assistance</value>
+    </labels>
+    <labels>
+        <fullName>TR_SUV</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_SUV</shortDescription>
+        <value>SUV</value>
+    </labels>
+    <labels>
+        <fullName>TR_Same_as_Primary_Insured_Address</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Same as Primary Insured Address</shortDescription>
+        <value>Same as Primary Insured Address</value>
+    </labels>
+    <labels>
+        <fullName>TR_Save</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Save</shortDescription>
+        <value>Save</value>
+    </labels>
+    <labels>
+        <fullName>TR_Save_Card</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Save Card</shortDescription>
+        <value>Save Card</value>
+    </labels>
+    <labels>
+        <fullName>TR_Save_quote</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Save quote</shortDescription>
+        <value>Save quote</value>
+    </labels>
+    <labels>
+        <fullName>TR_Save_the_credit_card</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Save the credit card</shortDescription>
+        <value>Save the credit card</value>
+    </labels>
+    <labels>
+        <fullName>TR_Security_Code</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Security Code</shortDescription>
+        <value>Security Code</value>
+    </labels>
+    <labels>
+        <fullName>TR_Select_Lienholder</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Select Lienholder</shortDescription>
+        <value>Select Lienholder</value>
+    </labels>
+    <labels>
+        <fullName>TR_Select_Quote_And_Download</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Select Quote And Download</shortDescription>
+        <value>Select Quote And Download</value>
+    </labels>
+    <labels>
+        <fullName>TR_Select_a_Towed_Unit_from_your_account</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Select a Towed Unit from your account</shortDescription>
+        <value>Select a Towed Unit from your account</value>
+    </labels>
+    <labels>
+        <fullName>TR_Select_a_Towed_from_your_account</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Select a Towed from your account</shortDescription>
+        <value>Select a Towed from your account</value>
+    </labels>
+    <labels>
+        <fullName>TR_Select_a_Vehicle_from_your_account</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Select a Vehicle from your account</shortDescription>
+        <value>Select a Vehicle from your account</value>
+    </labels>
+    <labels>
+        <fullName>TR_Select_a_Watercraft_from_your_account</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Select a Watercraft from your account</shortDescription>
+        <value>Select a Watercraft from your account</value>
+    </labels>
+    <labels>
+        <fullName>TR_Select_a_driver_from_your_account</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Select a driver from your account</shortDescription>
+        <value>Select a driver from your account</value>
+    </labels>
+    <labels>
+        <fullName>TR_Select_an_existing_credit_card_or_add_a_new_one</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Select an existing credit card or add a new one</shortDescription>
+        <value>Select an existing credit card or add a new one</value>
+    </labels>
+    <labels>
+        <fullName>TR_Semi_Annual</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Semi-Annual</shortDescription>
+        <value>Semi-Annual</value>
+    </labels>
+    <labels>
+        <fullName>TR_Semi_Annual_and_Annual_Policy_Cancellation</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Semi-Annual and Annual Policy Cancellation</shortDescription>
+        <value>Semi-Annual and Annual Policy Cancellation</value>
+    </labels>
+    <labels>
+        <fullName>TR_Semi_annual_and_Annual_policies_are_fully_earned_after_22_days</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Semi-annual and Annual policies are fully earned after 22 days.</shortDescription>
+        <value>Semi-annual and Annual policies are fully earned after 22 days. Prior to 22 days, you can cancel a policy and the premium will be short-rated to a daily rate. Before inception, you can cancel any policy.</value>
+    </labels>
+    <labels>
+        <fullName>TR_Sitemap</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Sitemap</shortDescription>
+        <value>Sitemap</value>
+    </labels>
+    <labels>
+        <fullName>TR_Something_went_wrong_please_try_again_later</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Something went wrong please try again later.</shortDescription>
+        <value>Something went wrong please try again later.</value>
+    </labels>
+    <labels>
+        <fullName>TR_Sometimes_it_s_cheaper_to_purchase_a_six_month_policy_than_it_is_a_30_day_pol</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Sometimes it&apos;s cheaper to purchase a six-month policy than it is a 30-day-pol</shortDescription>
+        <value>Sometimes it&apos;s cheaper to purchase a six-month policy than it is a 30-day-policy. Below are the best rates offered for the time period you selected. If your selection in days was more expensive at the Daily rate, then we automatically adjusted it to a less expensive, longer term.</value>
+    </labels>
+    <labels>
+        <fullName>TR_Start_Date</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Start Date</shortDescription>
+        <value>Start Date</value>
+    </labels>
+    <labels>
+        <fullName>TR_Start_Date_for_Coverage</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Start Date for Coverage</shortDescription>
+        <value>Start Date for Coverage</value>
+    </labels>
+    <labels>
+        <fullName>TR_Start_Online_Insurance_Final_Details</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Start Online Insurance Final Details</shortDescription>
+        <value>Start Online Insurance Final Details</value>
+    </labels>
+    <labels>
+        <fullName>TR_Start_Time</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Start Time</shortDescription>
+        <value>Start Time</value>
+    </labels>
+    <labels>
+        <fullName>TR_State</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_State</shortDescription>
+        <value>State</value>
+    </labels>
+    <labels>
+        <fullName>TR_State_province</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_State province</shortDescription>
+        <value>State/province</value>
+    </labels>
+    <labels>
+        <fullName>TR_States</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_States</shortDescription>
+        <value>States</value>
+    </labels>
+    <labels>
+        <fullName>TR_Step_1</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Step 1</shortDescription>
+        <value>Step 1</value>
+    </labels>
+    <labels>
+        <fullName>TR_Step_2</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Step 2</shortDescription>
+        <value>Step 2</value>
+    </labels>
+    <labels>
+        <fullName>TR_Step_3</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Step 3</shortDescription>
+        <value>Step 3</value>
+    </labels>
+    <labels>
+        <fullName>TR_Step_4</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Step 4</shortDescription>
+        <value>Step 4</value>
+    </labels>
+    <labels>
+        <fullName>TR_Step_5</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Step 5</shortDescription>
+        <value>Step 5</value>
+    </labels>
+    <labels>
+        <fullName>TR_Street_Address</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Street Address</shortDescription>
+        <value>Street Address</value>
+    </labels>
+    <labels>
+        <fullName>TR_Street_Address_2</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Street Address 2</shortDescription>
+        <value>Street Address 2</value>
+    </labels>
+    <labels>
+        <fullName>TR_Success</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Success</shortDescription>
+        <value>Success</value>
+    </labels>
+    <labels>
+        <fullName>TR_Summary</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Summary</shortDescription>
+        <value>Summary</value>
+    </labels>
+    <labels>
+        <fullName>TR_Surcharge</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Surcharge</shortDescription>
+        <value>Surcharge</value>
+    </labels>
+    <labels>
+        <fullName>TR_System_Time_Now</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_System Time Now</shortDescription>
+        <value>System Time Now</value>
+    </labels>
+    <labels>
+        <fullName>TR_TAX_ID</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_TAX ID</shortDescription>
+        <value>TAX ID</value>
+    </labels>
+    <labels>
+        <fullName>TR_TOTAL</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_TOTAL</shortDescription>
+        <value>TOTAL</value>
+    </labels>
+    <labels>
+        <fullName>TR_TOTAL_REFUND</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_TOTAL REFUND</shortDescription>
+        <value>TOTAL REFUND</value>
+    </labels>
+    <labels>
+        <fullName>TR_Tell_us_about_what_you_are_towing</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Tell us about what you are towing?</shortDescription>
+        <value>Tell us about what you are towing?</value>
+    </labels>
+    <labels>
+        <fullName>TR_Tell_us_about_yourself</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Tell us about yourself?</shortDescription>
+        <value>Tell us about yourself?</value>
+    </labels>
+    <labels>
+        <fullName>TR_Tell_us_more_about_what_you_re_towing</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Tell us more about what you&apos;re towing?</shortDescription>
+        <value>Tell us more about what you&apos;re towing?</value>
+    </labels>
+    <labels>
+        <fullName>TR_Term</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Term</shortDescription>
+        <value>Term</value>
+    </labels>
+    <labels>
+        <fullName>TR_Term_Option</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Term Option</shortDescription>
+        <value>Term Option</value>
+    </labels>
+    <labels>
+        <fullName>TR_Term_Type</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Term Type</shortDescription>
+        <value>Term Type</value>
+    </labels>
+    <labels>
+        <fullName>TR_Terminate</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Terminate</shortDescription>
+        <value>Terminate</value>
+    </labels>
+    <labels>
+        <fullName>TR_Terms_of_cancellation</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Terms of cancellation</shortDescription>
+        <value>Terms of cancellation</value>
+    </labels>
+    <labels>
+        <fullName>TR_Terms_of_purchase</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Terms of purchase</shortDescription>
+        <value>Terms of purchase</value>
+    </labels>
+    <labels>
+        <fullName>TR_Territory</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Territory</shortDescription>
+        <value>Territory</value>
+    </labels>
+    <labels>
+        <fullName>TR_Territory_Coverage</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Territory Coverage</shortDescription>
+        <value>Territory Coverage</value>
+    </labels>
+    <labels>
+        <fullName>TR_Text</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Text</shortDescription>
+        <value>Text</value>
+    </labels>
+    <labels>
+        <fullName>TR_The_Insurer_once_it_ascertains_the_authenticity_and_veracity_of_the_Contract</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_The Insurer, once it ascertains the authenticity and veracity of the Contract</shortDescription>
+        <value>The Insurer, once it ascertains the authenticity and veracity of the Contracting Party&apos;s request, will grant the corresponding acknowledgment of receipt</value>
+    </labels>
+    <labels>
+        <fullName>TR_The_Mexico_Insurance_Services_Terms_of_Access_and_Use_can_be_read_and_print</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_The Mexico Insurance Services “Terms of Access and Use” can be read and print</shortDescription>
+        <value>The Mexico Insurance Services “Terms of Access and Use” can be read and printed by</value>
+    </labels>
+    <labels>
+        <fullName>TR_The_amount_of_damage_to_third_party_property_ie_a_dock_another_boat_etc</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_The amount of damage to third party property, ie: a dock, another boat, etc.</shortDescription>
+        <value>The amount of damage to third party property, ie: a dock, another boat, etc.</value>
+    </labels>
+    <labels>
+        <fullName>TR_The_amount_of_liability_coverage_to_third_party_person</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_The amount of liability coverage to third party person</shortDescription>
+        <value>The amount of liability coverage to third party person</value>
+    </labels>
+    <labels>
+        <fullName>TR_The_amount_of_liability_coverage_to_third_party_person_Think_medical_damages</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_The amount of liability coverage to third party person. Think medical damages</shortDescription>
+        <value>The amount of liability coverage to third party person. Think medical damages</value>
+    </labels>
+    <labels>
+        <fullName>TR_The_combination_of_max_limits_below_Liability_is_required_by_the_dockmasters</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_The combination of max limits below. Liability is required by the dockmasters</shortDescription>
+        <value>The combination of max limits below. Liability is required by the dockmasters in Mexico</value>
+    </labels>
+    <labels>
+        <fullName>TR_The_following_are_Terms_of_Cancellation_a_legal_agreement_Agreement</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_The following are Terms of Cancellation, a legal agreement (“Agreement”)</shortDescription>
+        <value>The following are Terms of Cancellation, a legal agreement (“Agreement”) between you and  Mexico Insurance Services, Inc. (“Company”). By accepting the Terms of Purchase above, you also agree that you accept the Terms of Cancellation below. These Cancellations Terms are strictly enforced by the underwriter, Chubb Seguros. Any misrepresentation or
+ attempts to violate these terms may be constituted as attempted fraud and will be forwarded to the appropriate authorities.</value>
+    </labels>
+    <labels>
+        <fullName>TR_The_following_are_Terms_of_Cancellation_a_legal_agreement_Agreement_betw</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_The following are Terms of Cancellation, a legal agreement (“Agreement”) betw</shortDescription>
+        <value>The following are Terms of Cancellation, a legal agreement (“Agreement”) between you and Mexico Insurance Services, Inc. (“Company”)..  .</value>
+    </labels>
+    <labels>
+        <fullName>TR_The_full_Chubb_Terms_and_Conditions_can_be_read_and_printed_by</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_The full Chubb “Terms and Conditions” can be read and printed by</shortDescription>
+        <value>The full Chubb “Terms and Conditions” can be read and printed by</value>
+    </labels>
+    <labels>
+        <fullName>TR_The_insurance_packet_is_on_its_way_to</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_The insurance packet is on its way to</shortDescription>
+        <value>The insurance packet is on its way to</value>
+    </labels>
+    <labels>
+        <fullName>TR_The_policy_is_a_standard_policy_of_insurance_approved_by_the_Insurance_Commis</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_The policy is a standard policy of insurance approved by the Insurance Commis</shortDescription>
+        <value>The policy is a standard policy of insurance approved by the Insurance Commission in the country of Mexico (Comision de Seguros y Fianzas)</value>
+    </labels>
+    <labels>
+        <fullName>TR_The_term_days_can_t_be_greater_than_365</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_The term days can\&apos;t be greater than 365!!</shortDescription>
+        <value>The term days can\&apos;t be greater than 365!!</value>
+    </labels>
+    <labels>
+        <fullName>TR_The_value_of_a_Salvage_vehicle_is_about_50_of_the_vehicle_value</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_ The value of a Salvage vehicle is about 50% of the vehicle value</shortDescription>
+        <value>The value of a Salvage vehicle is about 50% of the vehicle value</value>
+    </labels>
+    <labels>
+        <fullName>TR_There_are_no_cancellations_on_daily_term_policies</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_There are no cancellations on daily term policies</shortDescription>
+        <value>There are no cancellations on daily term policies</value>
+    </labels>
+    <labels>
+        <fullName>TR_There_is_no_gap_coverage_but_the_lienholder_will_need_to_see_their_risk_cove</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_There is no gap coverage, but the lienholder will need to see their risk cove</shortDescription>
+        <value>There is no gap coverage, but the lienholder will need to see their risk covered</value>
+    </labels>
+    <labels>
+        <fullName>TR_There_should_be_single_owner</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_There should be single owner!!!</shortDescription>
+        <value>There should be single owner!!!</value>
+    </labels>
+    <labels>
+        <fullName>TR_These_Cancellations_Terms_are_strictly_enforced_by_the_underwriter_Chubb_Seg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_These Cancellations Terms are strictly enforced by the underwriter, Chubb Seg</shortDescription>
+        <value>These Cancellations Terms are strictly enforced by the underwriter, Chubb Seguros</value>
+    </labels>
+    <labels>
+        <fullName>TR_Think_medical_damages</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Think medical damages</shortDescription>
+        <value>Think medical damages</value>
+    </labels>
+    <labels>
+        <fullName>TR_Third_Party_Bodily_Injury</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Third Party Bodily Injury</shortDescription>
+        <value>Third Party Bodily Injury</value>
+    </labels>
+    <labels>
+        <fullName>TR_Third_Party_Liability</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Third Party Liability</shortDescription>
+        <value>Third Party Liability</value>
+    </labels>
+    <labels>
+        <fullName>TR_Third_Party_Liability_Damage</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Third Party Liability Damage</shortDescription>
+        <value>Third Party Liability Damage</value>
+    </labels>
+    <labels>
+        <fullName>TR_Third_Party_Property_Damage</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Third Party Property Damage</shortDescription>
+        <value>Third Party Property Damage</value>
+    </labels>
+    <labels>
+        <fullName>TR_This_VIN_number_or_license_plate_number_already_used</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_This VIN number or license plate number already used!!!...</shortDescription>
+        <value>This VIN number or license plate number already used!!!...</value>
+    </labels>
+    <labels>
+        <fullName>TR_This_VIN_number_or_license_plate_number_already_used_fields_are_not_valid</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_This VIN number or license plate number already used &amp; fields are not valid!!</shortDescription>
+        <value>This VIN number or license plate number already used &amp; fields are not valid!!!...</value>
+    </labels>
+    <labels>
+        <fullName>TR_This_amount_goes_toward_damages_to_the_other_party_3rd_party_that_you</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_This amount goes toward damages to the other party (3rd party) that you</shortDescription>
+        <value>This amount goes toward damages to the other party (3rd party) that you are responsible for.  This includes property damage, medical expenses and death benefits combined.</value>
+    </labels>
+    <labels>
+        <fullName>TR_This_amount_goes_toward_damages_to_the_other_party_3rd_party_that_you_are_r</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_This amount goes toward damages to the other party (3rd party) that you are r</shortDescription>
+        <value>This amount goes toward damages to the other party (3rd party) that you are responsible for.  This includes property damage, medical expenses and death benefits combined</value>
+    </labels>
+    <labels>
+        <fullName>TR_This_amount_will_be_your_limit_for_damages_to_or_total_theft_of_your_vehicle</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_This amount will be your limit for damages to, or total theft of your vehicle</shortDescription>
+        <value>This amount will be your limit for damages to, or total theft of your vehicle</value>
+    </labels>
+    <labels>
+        <fullName>TR_This_craft_is_not_a_commercial_vessel</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_This craft is not a commercial vessel</shortDescription>
+        <value>This craft is not a commercial vessel</value>
+    </labels>
+    <labels>
+        <fullName>TR_This_is_a_salvage_vehicle</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_This is a salvage vehicle</shortDescription>
+        <value>This is a salvage vehicle</value>
+    </labels>
+    <labels>
+        <fullName>TR_This_is_the_amount_of_coverage_for_medical_expenses_as_result_of_accident</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_This is the amount of coverage for medical expenses as result of accident</shortDescription>
+        <value>This is the amount of coverage for medical expenses as result of accident for you and your vehicle occupants.  The first number is maximum per person, the second value is total limit per event.</value>
+    </labels>
+    <labels>
+        <fullName>TR_This_is_the_amount_of_coverage_for_medical_expenses_as_result_of_accident_for</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_This is the amount of coverage for medical expenses as result of accident for</shortDescription>
+        <value>This is the amount of coverage for medical expenses as result of accident for you and your vehicle occupants.  The first number is maximum per person, the second value is total limit per event.</value>
+    </labels>
+    <labels>
+        <fullName>TR_This_is_where_we_will_email_your_insurance_documents_and_primarily_how_we_co</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_This is where we will email your insurance documents, and primarily how we co</shortDescription>
+        <value>This is where we will email your insurance documents, and primarily how we communicate with you.Make sure to add us to your whitelist!</value>
+    </labels>
+    <labels>
+        <fullName>TR_This_license_number_already_used</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_This license number already used!!!...</shortDescription>
+        <value>This license number already used!!!...</value>
+    </labels>
+    <labels>
+        <fullName>TR_This_tourist_watercraft_policy_is_not_intended_for_vessels_for_hire_includin</fullName>
+        <categories>salesforce</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_This tourist watercraft policy is not intended for vessels-for-hire, includin</shortDescription>
+        <value>This tourist watercraft policy is not intended for vessels-for-hire, including public transportation of cargo or passengers, or used for wholesale or retail delivery.  Please contact broker@mexinsurance.com for special consideration</value>
+    </labels>
+    <labels>
+        <fullName>TR_This_vessel_is_not_competing_or_participating_in_race_events</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_This vessel is not competing or participating in race events</shortDescription>
+        <value>This vessel is not competing or participating in race events</value>
+    </labels>
+    <labels>
+        <fullName>TR_This_vessel_is_not_for_hire</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_This vessel is not “for hire”</shortDescription>
+        <value>This vessel is not “for hire”</value>
+    </labels>
+    <labels>
+        <fullName>TR_This_vessel_is_not_over_40_year_old</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_This vessel is not over 40 year old</shortDescription>
+        <value>This vessel is not over 40 year old</value>
+    </labels>
+    <labels>
+        <fullName>TR_This_will_match_the_start_time_unless_the_policy_is_to_start_immediately</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_This will match the start time unless the policy is to start immediately.</shortDescription>
+        <value>This will match the start time unless the policy is to start immediately.</value>
+    </labels>
+    <labels>
+        <fullName>TR_This_will_match_the_start_time_unless_the_policy_is_to_start_immediately_Da</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_This will match the start time unless the policy is to start immediately.  Da</shortDescription>
+        <value>This will match the start time unless the policy is to start immediately.  Daily policies are purchased in 24 hour increments</value>
+    </labels>
+    <labels>
+        <fullName>TR_Total_Theft_Deductible</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Total Theft Deductible</shortDescription>
+        <value>Total Theft Deductible</value>
+    </labels>
+    <labels>
+        <fullName>TR_Total_Third_Party_Liability</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Total Third Party Liability</shortDescription>
+        <value>Total Third Party Liability</value>
+    </labels>
+    <labels>
+        <fullName>TR_Total_days_cannot_equal_more_than_365</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Total days cannot equal more than 365</shortDescription>
+        <value>Total days cannot equal more than 365</value>
+    </labels>
+    <labels>
+        <fullName>TR_Tourist_Auto_Insurance_for_Mexico</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Tourist Auto Insurance for Mexico</shortDescription>
+        <value>Tourist Auto Insurance for Mexico</value>
+    </labels>
+    <labels>
+        <fullName>TR_Tow_Details</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Tow Details</shortDescription>
+        <value>Tow Details</value>
+    </labels>
+    <labels>
+        <fullName>TR_Towed_Automobile</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Towed Automobile</shortDescription>
+        <value>Towed Automobile</value>
+    </labels>
+    <labels>
+        <fullName>TR_Towed_Option</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Towed Option</shortDescription>
+        <value>Towed Option</value>
+    </labels>
+    <labels>
+        <fullName>TR_Towed_Unit_Value</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Towed Unit Value</shortDescription>
+        <value>Towed Unit Value</value>
+    </labels>
+    <labels>
+        <fullName>TR_Towed_details</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Towed details</shortDescription>
+        <value>Towed details</value>
+    </labels>
+    <labels>
+        <fullName>TR_Towing</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Towing</shortDescription>
+        <value>Towing</value>
+    </labels>
+    <labels>
+        <fullName>TR_Towing_Detail</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Towing Detail</shortDescription>
+        <value>Towing Detail</value>
+    </labels>
+    <labels>
+        <fullName>TR_Travel_Alerts</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Travel Alerts</shortDescription>
+        <value>Mexico Mike Travel Newsletter</value>
+    </labels>
+    <labels>
+        <fullName>TR_Type</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Type</shortDescription>
+        <value>Type</value>
+    </labels>
+    <labels>
+        <fullName>TR_Type_of_Towed_Unit</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Type of Towed Unit</shortDescription>
+        <value>Type of Towed Unit</value>
+    </labels>
+    <labels>
+        <fullName>TR_Type_of_Vessel</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Type of Vessel</shortDescription>
+        <value>Type of Vessel</value>
+    </labels>
+    <labels>
+        <fullName>TR_US_Canada_for_Mexican_registered_vehicles</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_US / Canada - for Mexican registered vehicles</shortDescription>
+        <value>US / Canada - for Mexican registered vehicles</value>
+    </labels>
+    <labels>
+        <fullName>TR_Unfortunately_this_policy_will_not_provide_coverage_for_any_watercraft_parti</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Unfortunately, this policy will not provide coverage for any watercraft parti</shortDescription>
+        <value>Unfortunately, this policy will not provide coverage for any watercraft participating in, or supporting race events.  Please contact broker@mexinsurance.com for special consideration</value>
+    </labels>
+    <labels>
+        <fullName>TR_Unfortunately_we_can_t_provide_coverage_on_a_vessel_over_40_years_old_For_s</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Unfortunately we can’t provide coverage on a vessel over 40 years old.  For s</shortDescription>
+        <value>Unfortunately we can’t provide coverage on a vessel over 40 years old.  For special consideration please contact broker@mexinsurance.com</value>
+    </labels>
+    <labels>
+        <fullName>TR_Uninsured_Underinsured_Motorist_Deductible_Waiver</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Uninsured/Underinsured Motorist Deductible Waiver</shortDescription>
+        <value>Uninsured/Underinsured Motorist Deductible Waiver</value>
+    </labels>
+    <labels>
+        <fullName>TR_Unit_Name</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Unit Name</shortDescription>
+        <value>Unit Name</value>
+    </labels>
+    <labels>
+        <fullName>TR_Update_Detail</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Update Detail</shortDescription>
+        <value>Update Detail</value>
+    </labels>
+    <labels>
+        <fullName>TR_User_Detail</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_User Details</shortDescription>
+        <value>User Details</value>
+    </labels>
+    <labels>
+        <fullName>TR_Utility_Misc_Trailer</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Utility/Misc Trailer</shortDescription>
+        <value>Utility/Misc Trailer</value>
+    </labels>
+    <labels>
+        <fullName>TR_VIN</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_VIN</shortDescription>
+        <value>VIN</value>
+    </labels>
+    <labels>
+        <fullName>TR_VIN_Number</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_VIN Number</shortDescription>
+        <value>VIN Number</value>
+    </labels>
+    <labels>
+        <fullName>TR_Value</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Value</shortDescription>
+        <value>Value</value>
+    </labels>
+    <labels>
+        <fullName>TR_Van</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Van</shortDescription>
+        <value>Van</value>
+    </labels>
+    <labels>
+        <fullName>TR_Vandalism</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Vandalism</shortDescription>
+        <value>Vandalism</value>
+    </labels>
+    <labels>
+        <fullName>TR_Vehicle</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Vehicle</shortDescription>
+        <value>Vehicle</value>
+    </labels>
+    <labels>
+        <fullName>TR_VehicleOptions</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_VehicleOptions</shortDescription>
+        <value>VehicleOptions</value>
+    </labels>
+    <labels>
+        <fullName>TR_Vehicle_Detail</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Vehicle Detail</shortDescription>
+        <value>Vehicle Detail</value>
+    </labels>
+    <labels>
+        <fullName>TR_Vehicle_Details</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Vehicle Details</shortDescription>
+        <value>Vehicle Details</value>
+    </labels>
+    <labels>
+        <fullName>TR_Vehicle_Type</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Vehicle Type</shortDescription>
+        <value>Vehicle Type</value>
+    </labels>
+    <labels>
+        <fullName>TR_Vehicle_Value</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Vehicle Value</shortDescription>
+        <value>Vehicle Value</value>
+    </labels>
+    <labels>
+        <fullName>TR_Verify_and_edit_Policy_details</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Verify and edit Policy details</shortDescription>
+        <value>Verify and edit Policy details</value>
+    </labels>
+    <labels>
+        <fullName>TR_Verify_and_edit_Quote_1_details</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Verify and edit Quote 1 details</shortDescription>
+        <value>Verify and edit Quote 1 details</value>
+    </labels>
+    <labels>
+        <fullName>TR_Verify_the_details</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Verify the details</shortDescription>
+        <value>Verify the details</value>
+    </labels>
+    <labels>
+        <fullName>TR_Vessel_Length</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Vessel Length</shortDescription>
+        <value>Vessel Length</value>
+    </labels>
+    <labels>
+        <fullName>TR_Vessel_Type</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Vessel Type</shortDescription>
+        <value>Vessel Type</value>
+    </labels>
+    <labels>
+        <fullName>TR_Watercraft</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Watercraft</shortDescription>
+        <value>Watercraft</value>
+    </labels>
+    <labels>
+        <fullName>TR_Watercraft_Details</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Watercraft Details</shortDescription>
+        <value>Watercraft Details</value>
+    </labels>
+    <labels>
+        <fullName>TR_Watercraft_Type</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Watercraft Type</shortDescription>
+        <value>Watercraft Type</value>
+    </labels>
+    <labels>
+        <fullName>TR_Watercraft_Value</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Watercraft_Value</shortDescription>
+        <value>Watercraft Value</value>
+    </labels>
+    <labels>
+        <fullName>TR_Watercraft_in_Mexico</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Watercraft in Mexico</shortDescription>
+        <value>Watercraft in Mexico</value>
+    </labels>
+    <labels>
+        <fullName>TR_We_do_not_have_a_program_or_product_to_cover_your_request_Please_GO_BACK_to</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_We do not have a program or product to cover your request. Please GO BACK to</shortDescription>
+        <value>We do not have a program or product to cover your request. Please GO BACK to change the “Stated Value” or call our office for suggestions!!</value>
+    </labels>
+    <labels>
+        <fullName>TR_We_know_that_your_email_is_sacred</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_We know that your email is sacred.</shortDescription>
+        <value>We know that your email is sacred.</value>
+    </labels>
+    <labels>
+        <fullName>TR_We_know_that_your_email_is_sacred_We_will_never_share_and_sell_any_of_your_d</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_We know that your email is sacred. We will never share and sell any of your d</shortDescription>
+        <value>We know that your email is sacred. We will never share and sell any of your details, including email address.</value>
+    </labels>
+    <labels>
+        <fullName>TR_We_know_your_email_is_sacred_and_we_ll_never_share_or_sell_any_of_your_detail</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_We know your email is sacred and we&apos;ll never share or sell any of your detail</shortDescription>
+        <value>We know your email is sacred and we&apos;ll never share or sell any of your details, including email address.</value>
+    </labels>
+    <labels>
+        <fullName>TR_We_will_never_share_and_sell_any_of_your_details_including_email_address</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_We will never share and sell any of your details, including email address.</shortDescription>
+        <value>We will never share and sell any of your details, including email address.</value>
+    </labels>
+    <labels>
+        <fullName>TR_Well_done</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Well done!</shortDescription>
+        <value>Well done!</value>
+    </labels>
+    <labels>
+        <fullName>TR_What_are_you_towing</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_What are you towing?</shortDescription>
+        <value>What are you towing?</value>
+    </labels>
+    <labels>
+        <fullName>TR_What_is_the_purpose_of_trip</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_What is the purpose of trip?</shortDescription>
+        <value>What is the purpose of trip?</value>
+    </labels>
+    <labels>
+        <fullName>TR_What_is_the_trip_purpose</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_What is the trip purpose?</shortDescription>
+        <value>What is the trip purpose?</value>
+    </labels>
+    <labels>
+        <fullName>TR_What_is_your_trip_destination</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_What is your trip destination?</shortDescription>
+        <value>What is your trip destination?</value>
+    </labels>
+    <labels>
+        <fullName>TR_What_kind_of_insurance_do_you_want_me_to_quote</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_What kind of insurance do you want me to quote?</shortDescription>
+        <value>What kind of insurance do you want me to quote?</value>
+    </labels>
+    <labels>
+        <fullName>TR_What_kind_of_insurance_do_you_want_us_to_quote</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_What kind of insurance do you want us to quote?</shortDescription>
+        <value>What kind of insurance do you want us to quote?</value>
+    </labels>
+    <labels>
+        <fullName>TR_What_territory_coverage_are_you_looking_for</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_What territory coverage are you looking for?</shortDescription>
+        <value>What territory coverage are you looking for?</value>
+    </labels>
+    <labels>
+        <fullName>TR_What_vehicle_needs_coverage</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_What vehicle needs coverage?</shortDescription>
+        <value>What vehicle needs coverage?</value>
+    </labels>
+    <labels>
+        <fullName>TR_When_do_you_need_coverage</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_When do you need coverage?</shortDescription>
+        <value>When do you need coverage?</value>
+    </labels>
+    <labels>
+        <fullName>TR_When_the_Contracting_Party_requests_the_early_termination_of_this</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_When the Contracting Party requests the early termination of this</shortDescription>
+        <value>When the Contracting Party requests the early termination of this contract, it will be sufficient to present a written request in the offices of the Insurer; likewise, the request may be submitted through electronic means, through which, if applicable, the insurance was contracted. The Insurer, once it ascertains the authenticity and veracity of the Contracting Party&apos;s request, will grant the corresponding acknowledgment of receipt.</value>
+    </labels>
+    <labels>
+        <fullName>TR_When_the_Contracting_Party_requests_the_early_termination_of_this_contract_i</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_When the Contracting Party requests the early termination of this contract, i</shortDescription>
+        <value>When the Contracting Party requests the early termination of this contract, it will be sufficient to present a written request in the offices of the Insurer; likewise, the request may be submitted through electronic means, through which, if applicable, the insurance was contracted.</value>
+    </labels>
+    <labels>
+        <fullName>TR_Where_do_you_need_coverage</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Where do you need coverage?</shortDescription>
+        <value>Where do you need coverage?</value>
+    </labels>
+    <labels>
+        <fullName>TR_Where_do_you_need_insurance</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Where do you need insurance?</shortDescription>
+        <value>Where do you need insurance?</value>
+    </labels>
+    <labels>
+        <fullName>TR_Whitespace_are_not_allowed</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Whitespace are not allowed</shortDescription>
+        <value>Whitespace are not allowed</value>
+    </labels>
+    <labels>
+        <fullName>TR_Who_is_the_driver_s</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Who is the driver(s)?</shortDescription>
+        <value>Who is the driver(s)?</value>
+    </labels>
+    <labels>
+        <fullName>TR_Why_are_you_terminating</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Why are you terminating?</shortDescription>
+        <value>Why are you terminating?</value>
+    </labels>
+    <labels>
+        <fullName>TR_Will_anyone_operate_the_boat_under_the_age_of_22</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Will anyone operate the boat under the age of 22?</shortDescription>
+        <value>Will anyone operate the boat under the age of 22?</value>
+    </labels>
+    <labels>
+        <fullName>TR_Will_anyone_under_age_21_drive_the_vehicle</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Will anyone under age 21 drive the vehicle?</shortDescription>
+        <value>Will anyone under age 21 drive the vehicle?</value>
+    </labels>
+    <labels>
+        <fullName>TR_Will_anyone_under_the_age_of_21_drive_the_vehicle</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Will anyone under the age of 21 drive the vehicle?</shortDescription>
+        <value>Will anyone under the age of 21 drive the vehicle?</value>
+    </labels>
+    <labels>
+        <fullName>TR_Would_you_like_to_insure_another_vehicle</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Would you like to insure another vehicle?</shortDescription>
+        <value>Would you like to insure another vehicle?</value>
+    </labels>
+    <labels>
+        <fullName>TR_Year</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Year</shortDescription>
+        <value>Year</value>
+    </labels>
+    <labels>
+        <fullName>TR_Year_can_t_be_greater_than</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Year can&apos;t be greater than</shortDescription>
+        <value>Year can&apos;t be greater than</value>
+    </labels>
+    <labels>
+        <fullName>TR_Yellow_Card</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Yellow Card</shortDescription>
+        <value>Yellow Card</value>
+    </labels>
+    <labels>
+        <fullName>TR_Yes</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Yes</shortDescription>
+        <value>Yes</value>
+    </labels>
+    <labels>
+        <fullName>TR_Yes_I_want_to_receive_the_following</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Yes, I want to receive the following</shortDescription>
+        <value>Yes, I want to receive the following</value>
+    </labels>
+    <labels>
+        <fullName>TR_You_are_eligble_to_ensure_your_detached_ATV_s</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_You are eligble to ensure your detached ATV(s)</shortDescription>
+        <value>You are eligble to ensure your detached ATV(s)</value>
+    </labels>
+    <labels>
+        <fullName>TR_You_indicated_your_ATV_was_street_legal_Once_it_is_removed_from_the_Bentley</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_You indicated your ATV was street legal. Once it is removed from the Bentley</shortDescription>
+        <value>You indicated your ATV was street legal. Once it is removed from the Bentley Continental GT it will need it’s own Mexico insurance policy. Purchasing both at the same time qualifies you for multiple vehicle discount</value>
+    </labels>
+    <labels>
+        <fullName>TR_You_ll_only_be_charged_the_additional_towing_premium_for_those_days_in_tow_a</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_You’ll only be charged the additional towing premium for those days in tow (a</shortDescription>
+        <value>You’ll only be charged the additional towing premium for those days in tow (as opposed to the entire term)</value>
+    </labels>
+    <labels>
+        <fullName>TR_You_may_cancel_online_prior_to_term_inception</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_You may cancel online prior to term inception</shortDescription>
+        <value>You may cancel online prior to term inception</value>
+    </labels>
+    <labels>
+        <fullName>TR_You_will_not_recover_full_retail_value_of_a_Salvage_vehicle</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_You will not recover full retail value of a Salvage vehicle.</shortDescription>
+        <value>You will not recover full retail value of a Salvage vehicle.</value>
+    </labels>
+    <labels>
+        <fullName>TR_Your_Account_is_ready_to_go</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Your Account is ready to go!</shortDescription>
+        <value>Your Account is ready to go!</value>
+    </labels>
+    <labels>
+        <fullName>TR_Your_account_already_exist_s_0_to_login</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Your account already exist\&apos;s. {0} to login</shortDescription>
+        <value>Your account already exists. {0} to login</value>
+    </labels>
+    <labels>
+        <fullName>TR_Your_account_already_exist_s_but_is_inactive_0_to_activate_your_account</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Your account already exist\&apos;s but is inactive. {0} to activate your account</shortDescription>
+        <value>Your account already exists but is inactive. {0} to activate your account</value>
+    </labels>
+    <labels>
+        <fullName>TR_Your_estimate_of_vehicle_value_in_case_of_a_total_loss</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Your estimate of vehicle value in case of a total loss.</shortDescription>
+        <value>Your estimate of vehicle value in case of a total loss.</value>
+    </labels>
+    <labels>
+        <fullName>TR_Your_estimate_of_vehicle_value_in_case_of_a_total_loss_This_amount_will_be</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Your estimate of vehicle value in case of a total loss.  This amount will be</shortDescription>
+        <value>Your estimate of vehicle value in case of a total loss.  This amount will be your limit for damages to, or total theft of your vehicle.  If you owe money on the vehicle you must list at least as much as you owe.  There is no gap coverage, but the lienholder will need to see their risk covered.  For guidance on value check Kelly Blue Book or NADA guides for Actual Cash Value or Private Party Value</value>
+    </labels>
+    <labels>
+        <fullName>TR_Your_estimate_of_vehicle_value_in_case_of_a_total_loss_This_amount_will_be_y</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Your estimate of vehicle value in case of a total loss. This amount will be y</shortDescription>
+        <value>Your estimate of vehicle value in case of a total loss. This amount will be your limit for damages to, or total theft of your vehicle.  If you owe money on the vehicle you must list at least as much as you owe.  There is no gap coverage, but the lienholder will need to see their risk covered.  For guidance on value check Kelly Blue Book or NADA guides for Actual Cash Value or Private Party Value</value>
+    </labels>
+    <labels>
+        <fullName>TR_Your_estimate_of_vehicle_value_will_not_be_used_as_a_rating_factor_on_this_po</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Your estimate of vehicle value will not be used as a rating factor on this po</shortDescription>
+        <value>Your estimate of vehicle value will not be used as a rating factor on this policy because it is a Liability Only policy.  Please estimate</value>
+    </labels>
+    <labels>
+        <fullName>TR_Your_quote_for_v_days_days_was_more_expensive_at_the_daily_rate_than_this</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Your quote for {!v.days} days was more expensive at the daily rate than this</shortDescription>
+        <value>Your quote for {!v.days} days was more expensive at the daily rate than this full-term annual policy quote below.  Your term has been adjusted automatically to save you money</value>
+    </labels>
+    <labels>
+        <fullName>TR_Your_quote_fors</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Your quote fors</shortDescription>
+        <value>Your quote for</value>
+    </labels>
+    <labels>
+        <fullName>TR_Your_term_has_been_adjusted_automatically_to_save_you_money</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Your term has been adjusted automatically to save you money</shortDescription>
+        <value>Your term has been adjusted automatically to save you money</value>
+    </labels>
+    <labels>
+        <fullName>TR_ZIP</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_ZIP</shortDescription>
+        <value>ZIP</value>
+    </labels>
+    <labels>
+        <fullName>TR_clicking_here</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_clicking here</shortDescription>
+        <value>clicking here</value>
+    </labels>
+    <labels>
+        <fullName>TR_daystooltips</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_daystooltips</shortDescription>
+        <value>daystooltips</value>
+    </labels>
+    <labels>
+        <fullName>TR_fields_are_not_valid</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_fields are not valid!!!...</shortDescription>
+        <value>Fields are not valid!!!...</value>
+    </labels>
+    <labels>
+        <fullName>TR_have_read_understand_and_agree_to_the_Terms_of_Access_and_Use_The_Mexico</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_ have read, understand, and agree to the Terms of Access and Use. The Mexico</shortDescription>
+        <value>I have read, understand, and agree to the Terms of Access and Use. The Mexico Insurance Services “Terms of Access and Use” can be read and printed by</value>
+    </labels>
+    <labels>
+        <fullName>TR_with_Towed_Unit</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_with Towed Unit</shortDescription>
+        <value>with Towed Unit</value>
+    </labels>
+    <labels>
+        <fullName>TR_your_registration_and_then_enter_a_few_details_here_on_our_website</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_your registration, and then enter a few details here on our website</shortDescription>
+        <value>your registration, and then enter a few details here on our website</value>
+    </labels>
+    <labels>
+        <fullName>Terms_and_Conditions_Automobile_Chubb</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Terms_and_Conditions_Automobile_Chubb</shortDescription>
+        <value>https://mexinsurance--ws.my.salesforce.com/sfc/p/2i0000008c5z/a/2i00000052eF/_9M80W.Kr1aFzHfjFcAtdCi7Ht_e9__agaOYamwt12g</value>
+    </labels>
+    <labels>
+        <fullName>Terms_and_Conditions_Automobile_Mapfre</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Terms_and_Conditions_Automobile_Mapfre</shortDescription>
+        <value>https://mexinsurance--ws.my.salesforce.com/sfc/p/2i0000008c5z/a/2i00000052dq/C_zKV6Ta6va5KFFyGtWNMyUv3AP.rWcQaHmvNZZR9cg</value>
+    </labels>
+    <labels>
+        <fullName>Terms_and_Conditions_Automobile_Qualitas</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Terms_and_Conditions_Automobile_Qualitas</shortDescription>
+        <value>https://mexinsurance--ws.my.salesforce.com/sfc/p/#2i0000008c5z/a/2i00000052cn/wSkZjfoLVlWY6RAlD9dTgcBF5gwwc4T3xBh.JrYQBno</value>
+    </labels>
+    <labels>
+        <fullName>Terms_and_Conditions_Motorcycle_Chubb</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Terms_and_Conditions_Motorcycle_Chubb</shortDescription>
+        <value>https://mexinsurance--ws.my.salesforce.com/sfc/p/2i0000008c5z/a/2i00000052dl/IGbKVsu0N4YAbJ5u.o05UX9tdxXvswUnAK7sDQZK_FM</value>
+    </labels>
+    <labels>
+        <fullName>Terms_and_Conditions_Motorcycle_Mapfre</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Terms_and_Conditions_Motorcycle_Mapfre</shortDescription>
+        <value>https://mexinsurance--ws.my.salesforce.com/sfc/p/2i0000008c5z/a/2i00000052dg/Lvdv6Bxm1twmLeTQky9KfjO_NVFlbvHwsk6wOd1DGh4</value>
+    </labels>
+    <labels>
+        <fullName>Terms_and_Conditions_Motorcycle_Qualitas</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Terms_and_Conditions_Motorcycle_Qualitas</shortDescription>
+        <value>https://mexinsurance--ws.my.salesforce.com/sfc/p/2i0000008c5z/a/2i00000052db/g5R1n8XIsb_ZkmkjbhDdTbMZl5TYI91UxQypLzKAzSE</value>
+    </labels>
+    <labels>
+        <fullName>Terms_and_Conditions_Northbound</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Terms and Conditions Northbound</shortDescription>
+        <value>https://mexinsurance--ws.my.salesforce.com/sfc/p/#2i0000008c5z/a/2i0000004ngS/TgK8MEmuoOqoeaP1rq06LlFlVlJkK0JV.UT67id5ilc</value>
+    </labels>
+    <labels>
+        <fullName>Terms_and_Conditions_RV_Chubb</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Terms_and_Conditions_RV_Chubb</shortDescription>
+        <value>https://mexinsurance--ws.my.salesforce.com/sfc/p/2i0000008c5z/a/2i00000052dv/.nTeH7.geXBZM93nYChCg2k5fHhyRuZJZ4c3dmZS8.o</value>
+    </labels>
+    <labels>
+        <fullName>Terms_and_Conditions_RV_Mapfre</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Terms_and_Conditions_RV_Mapfre</shortDescription>
+        <value>https://mexinsurance--ws.my.salesforce.com/sfc/p/2i0000008c5z/a/2i00000052cs/oLONAr0lMbAFNRBEWOJm6.g.1lYCE54m7vS_VQJemfk</value>
+    </labels>
+    <labels>
+        <fullName>Terms_and_Conditions_RV_Qualitas</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Terms_and_Conditions_RV_Qualitas</shortDescription>
+        <value>https://mexinsurance--ws.my.salesforce.com/sfc/p/2i0000008c5z/a/2i00000052eU/ojQNVrSQ9rgnTSRNzPHNreBa25VgtAVUez5eXRnOIHA</value>
+    </labels>
+    <labels>
+        <fullName>Terms_and_Conditions_Tourist_Drivers_License</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Terms and Conditions - Tourist Drivers License</shortDescription>
+        <value>https://mexinsurance--ws.my.salesforce.com/sfc/p/2i0000008c5z/a/2i0000004niE/srhL0AbzJe8.hcWJQTI3MOU8j7fGWVkXjCjeI1dUYyE</value>
+    </labels>
+    <labels>
+        <fullName>Terms_and_Conditions_Watercraft</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Terms and Conditions Watercraft</shortDescription>
+        <value>https://mexinsurance--ws.my.salesforce.com/sfc/p/2i0000008c5z/a/2i0000004sD6/wW13sCWkkFWeCXhBwsvAYva9ybFEWPQlUlaCB5Bo.c0</value>
+    </labels>
+    <labels>
+        <fullName>TowedErrorLabel</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TowedErrorLabel</shortDescription>
+        <value>Click on the pencil icon to fill in additional information related to towed unit.</value>
+    </labels>
+    <labels>
+        <fullName>Transfer_Ownership</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Transfer Ownership</shortDescription>
+        <value>Transfer_Ownership</value>
+    </labels>
+    <labels>
+        <fullName>URL_To_Get_Makes</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>URL_To_Get_Makes</shortDescription>
+        <value>https://vpic.nhtsa.dot.gov/api/vehicles/GetMakesForVehicleType/car?format=json</value>
+    </labels>
+    <labels>
+        <fullName>URL_To_Get_Models</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>URL_To_Get_Models</shortDescription>
+        <value>https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMakeYear</value>
+    </labels>
+    <labels>
+        <fullName>URL_To_Get_Years</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>URL_To_Get_Years</shortDescription>
+        <value>1941</value>
+    </labels>
+    <labels>
+        <fullName>Watercraft</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>TR_Watercraft</shortDescription>
+        <value>Watercraft</value>
+    </labels>
+    <labels>
+        <fullName>community_Url</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>community Url</shortDescription>
+        <value>https://at.mexinsurance.com</value>
+    </labels>
+    <labels>
+        <fullName>userEmailForAutorenew</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>userEmailForAutorenew</shortDescription>
+        <value>Abhinav</value>
+    </labels>
+</CustomLabels>

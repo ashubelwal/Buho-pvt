@@ -1,0 +1,238 @@
+<template>
+    <div class="quote-page-container">
+        <!-- Header Section with Company Logo and Actions -->
+        <div class="quote-header">
+            <div class="header-content">
+                <!-- Company Logo/Name Section -->
+                <div class="company-section">
+                    <div class="company-logo-wrapper">
+                        <template if:true={isMapfreActive}>
+                            <img src={mapfreLogo} alt="Mapfre" class="company-logo" />
+                        </template>
+                        <template if:false={isMapfreActive}>
+                            <div class="company-name-text">{activeCompanyLabel}</div>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Action Buttons Section -->
+                <div class="action-buttons-vertical">
+                    <button class="other-companies-btn" onclick={toggleOtherCompanies}>
+                        Other Companies
+                    </button>
+
+                    <!-- Other Companies Dropdown -->
+                    <template if:true={showOtherCompanies}>
+                        <div class="other-companies-dropdown">
+                            <template for:each={otherCompaniesList} for:item="company">
+                                <div key={company} class="company-option" data-company-id={company}
+                                    onclick={handleCompanySelect}>
+                                    {company}
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+
+                    <div class="action-buttons-horizontal">
+                        <button class="action-btn btn-download" data-buy-id={activeCompanyId} data-send-email="false"
+                            data-direction="current" onclick={handleEmailandDownloadQuote}>
+                            Download Quote PDF
+                        </button>
+                        <button class="action-btn btn-email" data-buy-id={activeCompanyId} data-send-email="true"
+                            data-direction="current" onclick={handleEmailandDownloadQuote}>
+                            Email Quote PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div  class="quote-content">
+            <!-- Term Coverage Selection -->
+            <div class="term-coverage-section">
+                <h2 class="section-title">
+                    Choose Your <span class="highlight-text">Quote</span>
+                </h2>
+                <p class="section-subtitle">Select Term Type:</p>
+
+                <div class="term-options-grid">
+                    <!-- Single Trip Coverage Card -->
+                    <template if:true={showSingleDayTrip}>
+                        <div class={singleTripCardClass} onclick={handleSelectSingleTrip} data-term="single">
+                            <h3 class="term-title">Single Trip Coverage</h3>
+                            <div class="term-price">${dailyPreviewTotal}</div>
+                            <ul class="term-features">
+                                <li>Ideal if you're traveling for a short period or need coverage for a specific
+                                    trip.</li>
+                                <li>Only pay for the days you need</li>
+                                <li>Perfect for occasional travelers</li>
+                            </ul>
+                        </div>
+                    </template>
+                    <!-- Semi Annual Coverage Card (Upsell) -->
+                    <template if:true={showSemiAnnualTrip}>
+                        <div class={semiAnnualCardClass} onclick={handleSelectSemiAnnual}
+                            data-term="semi-annual">
+                            <h3 class="term-title">Semi Annual Coverage</h3>
+                            <div class="term-price">${semiAnnualPreviewTotal}</div>
+                            <ul class="term-features">
+                                <li>Coverage valid for 6 months. Great for frequent travelers and/or seasonal
+                                    drivers.
+                                </li>
+                                <li>Cost-effective for medium-term needs</li>
+                                <li>Covers multiple trips without daily renewal hassle</li>
+                                <li>Provides flexibility without committing to a full year</li>
+                            </ul>
+                        </div>
+                    </template>
+                    <template if:true={showAnnualTrip}>
+                        <!-- Annual Coverage Card (Upsell) -->
+                        <div class={annualCardClass} onclick={handleSelectAnnual} data-term="annual">
+                            <h3 class="term-title">Annual Coverage</h3>
+                            <div class="term-price">${annualPreviewTotal}</div>
+                            <ul class="term-features">
+                                <li>Ideal for regular Mexico visitors</li>
+                                <li>Perfect for year-round coverage.</li>
+                                <li>Save 15% compared to semi-annual</li>
+                                <li>Automatic renewal available</li>
+                            </ul>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Coverage Adjustment Section -->
+            <div class="coverage-adjustment-section">
+                <div class="coverage-grid-container">
+                    <!-- Liability Section -->
+                    <div class="coverage-field">
+                            <c-buho_input
+                                label="Combined Liability:"
+                                label-class="coverage-label"
+                                container-class="coverage-field"
+                                type="combobox"
+                                name="coverage"
+                                value={combinedLiabilityValue}
+                                options={liabilityOptions}
+                                dropdown-class="coverage-dropdown"
+                                onchange={handleLiabilityChange}>
+                            </c-buho_input>
+
+                        <div class="button-group">
+                            <button class="adjust-btn-pink" onclick={decrementLiability}
+                                disabled={isMinLiabilityDisabled}>-</button>
+                            <button class="adjust-btn-pink" onclick={incrementLiability}
+                                disabled={isMaxLiabilityDisabled}>+</button>
+                        </div>
+                    </div>
+
+                    <!-- Medical Section -->
+                    <template if:true={quotePreviewData.showMedical}>
+                        
+                        <div class="coverage-field">
+                            <c-buho_input
+                                label="Medical:"
+                                label-class="coverage-label"
+                                container-class="coverage-field"
+                                type="combobox"
+                                name="coverage"
+                                value={medicalValue}
+                                options={medicalOptions}
+                                dropdown-class="coverage-dropdown"
+                                onchange={handleMedicalChange}>
+
+                            </c-buho_input>
+                            <div class="button-group">
+                                <button class="adjust-btn-pink" onclick={decrementMedical}
+                                    disabled={isMinMedicalDisabled}>-</button>
+                                <button class="adjust-btn-pink" onclick={incrementMedical}
+                                    disabled={isMaxMedicalDisabled}>+</button>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Checkboxes Section -->
+                    <div class="checkbox-options-container">
+                        <template if:true={quotePreviewData.Gold}>
+                            <c-buho_input
+                                label="Gold:"
+                                label-class="coverage-label"
+                                container-class="custom-checkbox"
+                                type="checkbox"
+                                name="Gold__c"
+                                checked={checkedData.Gold__c}
+                                onchange={handleInputChange}></c-buho_input>
+                        </template>
+
+                        <template if:true={quotePreviewData.Max}>
+                            <c-buho_input
+                                label="Gold"
+                                label-class="coverage-label"
+                                container-class="custom-checkbox"
+                                type="checkbox"
+                                name="Max__c"
+                                checked={checkedData.Max__c}
+                                onchange={handleInputChange}></c-buho_input>
+                        </template>
+
+                        <template if:true={quotePreviewData.Platinum}>
+                            <c-buho_input
+                                label="Platinum"
+                                label-class="coverage-label"
+                                container-class="custom-checkbox"
+                                type="checkbox"
+                                name="Platinum__c"
+                                disabled = "true"
+                                onchange={handleInputChange}></c-buho_input>
+                        </template>
+
+                        <div class="checkbox-option">
+                            <c-buho_input
+                                label="Liability Only"
+                                label-class="coverage-label"
+                                container-class="custom-checkbox"
+                                type="checkbox"
+                                name="Coverage__c"
+                                checked={liabilityOnly} disabled={liabilityDisabled}
+                                onchange={handleInputChange}></c-buho_input>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Buy Button -->
+                <div class="buy-button-container">
+                    <button class="buy-button" data-buy-id={quotePreviewData.id} data-direction="next"
+                        onclick={handleBuyBtn}>
+                        Buy ${quotePreviewData.total}
+                    </button>
+                </div>
+            </div>
+
+            <!-- Complete Coverage Details Link -->
+            <div class="coverage-details-section">
+                <p class="coverage-details-link">
+                    View our Complete Coverage Details (
+                    <a href="#" onclick={handleOpenEngDriveLink} data-buy-id={quotePreviewData.id}
+                        class="coverage-link">English</a>,
+                    <a href="#" onclick={handleOpenSpnDriveLink} data-buy-id={quotePreviewData.id}
+                        class="coverage-link">Spanish</a>
+                    ) for more information.
+                </p>
+            </div>
+
+            <!-- Coverage List Section -->
+            <div class="coverage-list-section">
+                <template if:true={coverageList.length}>
+                    <h3 class="coverage-list-title">Coverage Included</h3>
+                    <c-buho_accordion coverage-list={coverageList}></c-buho_accordion>
+                </template>
+
+                <template if:false={coverageList.length}>
+                    <p class="no-coverage-message">No coverage data available.</p>
+                </template>
+            </div>
+        </div>
+         
+    </div>
+</template>

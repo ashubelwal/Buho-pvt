@@ -1,0 +1,884 @@
+<template>
+    <div>
+        <c-custom-toast auto-close-time="8000"></c-custom-toast>
+
+    </div>
+    <div class="MainBackground slds-p-around_large">
+
+        <lightning-spinner size="medium" alternative-text="Processing" lwc:if={booleanVar.isLoading}></lightning-spinner>
+
+    <lightning-accordion class="example-accordion" onsectiontoggle={handleToggleSection} active-section-name={activeSectionName}>
+    <lightning-accordion-section name="A" label="Pre-Quote Details">
+
+
+        
+        <!-- Term Section -->
+        <div class="card slds-p-around_small slds-m-bottom_large">
+            <h2 class="sectionTitle">Term & Territory</h2>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-radio-group 
+                        name="Term__c" class="Validation Term__c"
+                          label="Policy Term"
+                          options={policyTermOption}
+                          onchange={onGroup}
+                          type="button"></lightning-radio-group>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="slds-grid slds-wrap">
+                
+                <div class="slds-col slds-p-around_small" if:true={isRenewalPolicyFlag}> 
+                    <lightning-input class="quoteValidate Start_Date_for_Coverage__c Validation" type="date"
+                        label="Start Date for Coverage" name="Start_Date_for_Coverage__c"
+                        value={trackVar.startDate} onchange={handleInputChange} min={mindate}
+                        required>
+                    </lightning-input>
+
+                </div>
+                <div class="slds-col slds-p-around_small" if:false={isRenewalPolicyFlag}> 
+                    <lightning-input class="Start_Date_for_Coverage__c" type="date"
+                    label="Start Date for Coverage" name="Start_Date_for_Coverage__c"
+                    value={trackVar.startDate} onchange={handleInputChange} disabled="true"
+                    required>
+                    </lightning-input>
+                </div>
+
+                <div class="slds-col slds-p-around_small" if:true={isEditEndDateFlag}>
+                    <lightning-input class="quoteValidate End_Date_for_Coverage__c Validation" type="date"
+                        label="End Date for Coverage" min={endMinDate} 
+                        name="End_Date_for_Coverage__c" 
+                        onchange={handleInputChange} required>
+                    </lightning-input>
+                </div>
+
+                <div class="slds-col slds-p-around_small" if:false={isEditEndDateFlag}>
+                    <lightning-input class="quoteValidate End_Date_for_Coverage__c Validation" type="date"
+                        label="End Date for Coverage" min={endMinDate} disabled="true"
+                        name="End_Date_for_Coverage__c" 
+                        onchange={handleInputChange} required>
+                    </lightning-input>
+                </div>
+                
+                <template if:true={booleanVar.isShowingEndTerm}>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="quoteValidate Start_Time__c Validation" type="time" label="Start Time"
+                            name="Start_Time__c" onchange={handleInputChange} onblur={handleStartTimeValidation}
+                             min={displayPstTime} disabled={isdisabledstartdate}>
+                        </lightning-input>
+                    </div>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="quoteValidate End_Time__c Validation" type="time" label="End Time"
+                            name="End_Time__c" onchange={handleInputChange} disabled="true"
+                             required>
+                        </lightning-input>
+                    </div>
+                </template>
+            </div>
+            <!-- Territory  -->
+            <div class="">
+                <!-- <h2 class="sectionTitle">Territory</h2> -->
+                <div class="slds-grid slds-wrap" lwc:if={isDiscountVisible}>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-radio-group 
+                        name="Territory__c" class="Territory__c Validation"
+                          label="Territory"
+                          options={territoryOption}
+                          onchange={handleInputChange}
+                          type="button"></lightning-radio-group>
+                    </div>
+                
+                </div>
+            </div>
+
+            <!-- Medical and Liability Options -->
+            <div class="">
+                <!-- <h2 class="sectionTitle">Territory</h2> -->
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-p-around_small" lwc:if={isMedicalVisible}>
+                        <lightning-combobox 
+                            name="Medical__c" class="Medical__c Validation Medicalpicklist"
+                            label="Medical"
+                            placeholder="Select Medical "
+                            options={medicalOption}
+                            onchange={handleChange} ></lightning-combobox>
+                    </div>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-combobox
+                        name="Liability__c"
+                        label="Liability" class="Liability__c Validation LiabilityPicklist"
+                        
+                        placeholder="Select Liability"
+                        options={liabilityOption}
+                        onchange={handleChange} ></lightning-combobox>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slds-grid slds-wrap">
+
+                <div class="slds-col slds-p-around_small">
+                     <lightning-input name="Electric_Hybrid__c" type="checkbox" label="Is this a Electric Hybrid vehicle?"
+                                             checked={booleanVar.Electric_Hybrid__c} onchange={handleChange}></lightning-input>
+                </div>
+
+                <div class="slds-col" lwc:if={isTowedVisible}>
+                    <lightning-input type="checkbox" class="TowedUnit" label="Are you towing anything?"
+                     onchange={updateTowingCheckbox} checked={booleanVar.isTowing}></lightning-input>
+                </div>
+            </div>
+           
+        </div>
+
+        <!-- Vehicle Details -->
+        <div class="card slds-p-around_small slds-m-bottom_large">
+            <h2 class="sectionTitle">Vehicle details</h2>
+
+            <div class="slds-grid slds-wrap">
+
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input type="text" label="Year" disabled="true" class="Validation Vehicle_Year__c" onchange={handleInputChange} required></lightning-input>
+                    </div>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input type="text" label="Make" disabled="true" class=" Validation Vehicle_Make__c" onchange={handleInputChange} required></lightning-input>
+                    </div>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input label="Model" class="Validation Vehicle_Model__c"
+                            name="Make__c" disabled="true" onchange={handleInputChange} required>
+                        </lightning-input>
+                    </div>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="Validation quoteValidate Vehicle_Value__c" label="Vehicle Value" inputmode="numeric" pattern="[0-9]*" maxlength="6"
+                            name="Value__c" onchange={handleInputChange} required>
+                        </lightning-input>
+                    </div>
+            </div>
+
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-p-around_small">
+                    <lightning-input type="text" name="Vin__c" label="VIN Number" class="Validation Vin__c" onchange={handleInputChange} required></lightning-input>
+                </div>
+
+                <div class="slds-col slds-p-around_small">						
+                    <lightning-combobox class="Validation Registered_Country__c" name="Registered_Country__cmbx" label="Registered Country" options={countryoptions} onchange={handleInputChange} required>
+                    </lightning-combobox> 
+                </div>
+
+                <template if:true={otherCountryRegister}>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="Validation Registered_Country__c" label="Registered Country" pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" maxlength="40" name="Registered_Country__c"
+                            onchange={handleInputChange} required></lightning-input>
+                    </div>
+                </template>
+
+                <template if:false={otherCountryRegister}>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-combobox class="Validation Registered_State__c" name="Registered_State__c" label="Registered State/Province"
+                            options={stateOption} onchange={handleInputChange} required></lightning-combobox>
+                    </div>
+                </template>
+
+                <template if:true={otherCountryRegister}>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="Validation Registered_State__c" label="Registered State/Province" name="Registered_State__c"
+                            pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" maxlength="40" onchange={handleInputChange} required></lightning-input>
+                    </div>
+                </template>
+
+                <!-- <div class="slds-col slds-p-around_small">
+                    <lightning-input type="text" name="Registered_Country__c" label="Registered Country" class="Validation Registered_Country__c" onchange={handleInputChange} required></lightning-input>
+                </div>
+                <div class="slds-col slds-p-around_small">
+                    <lightning-input type="text" name="Registered_State__c" label="Registered State/Province" class="Validation Registered_State__c" onchange={handleInputChange} required></lightning-input>
+                </div> -->
+                <div class="slds-col slds-p-around_small">
+                    <lightning-input type="text" name="Registered_Plate__c" label="Placas-License Plate" class="Validation Registered_Plate__c" onchange={handleInputChange} required></lightning-input>
+                </div>
+            </div>
+
+            <!-- Lienholder and Company address option checkbox -->
+            <div class="slds-grid slds-wrap">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input type="checkbox" lwc:if={vehicleData} label="Is vehicle leased or financed?" checked={vehicleData.Is_Lienholder__c}
+                            onchange={handleInputChange} name="lienholder"></lightning-input>
+                    </div>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input type="checkbox" lwc:if={vehicleData} label="Is vehicle rented and/or owned by a company?"
+                        onchange={handleInputChange}  checked={vehicleData.Is_vehicle_owned_by_a_company_or_rented__c}
+                        name="companyAddress"> </lightning-input>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        
+        
+        <!-- Lienholder  -->
+        <template lwc:if={vehicleData}>
+            <template if:true={vehicleData.Is_Lienholder__c}>
+                <div class="card slds-p-around_small slds-m-bottom_large slds-m-top_medium">
+                    <h2 class="sectionTitle">Lienholder</h2>
+                    <c-lienholder-manager onlienholderdetails={updateLienHolderDetails} lienholderdetails={vehicleData}></c-lienholder-manager>
+                </div>
+            </template>
+            
+        </template>
+
+        <!-- Company Address -->
+        <template if:true={vehicleData}>
+            <template if:true={vehicleData.Is_vehicle_owned_by_a_company_or_rented__c}>
+            
+                <div class="card slds-p-around_small slds-m-bottom_large">
+                    <h2 class="sectionTitle">Company Address</h2>
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-p-around_small">
+                            <lightning-input class="Validation purchaseValidate" pattern="^[A-Za-z]+(\s[A-Za-z]+)*$" label="Name" value={vehicleData.Company_Name__c}
+                                name="Company_Name__c" onchange={handleInputChange} required>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-p-around_small">
+                            <c-address-recommendations onsendaddress={handleCompanyAddress}>
+                            </c-address-recommendations>
+                        </div>
+
+                        <!-- <div class="slds-col slds-p-around_small">
+                            <lightning-input class="Validation purchaseValidate" pattern="^[A-Za-z]+(\s[A-Za-z]+)*$" label="Country" value={vehicleData.Company_Country__c}
+                                name="Company_Country__c" onchange={handleInputChange} required>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-col slds-p-around_small">
+                            <lightning-input class="Validation purchaseValidate" pattern="^[A-Za-z]+(\s[A-Za-z]+)*$" label="State" value={vehicleData.Company_State__c}
+                                name="Company_State__c" onchange={handleInputChange} required>
+                            </lightning-input>
+                        </div> -->
+
+
+                        <div class="slds-col slds-p-around_small">
+                            <lightning-combobox class="Validation purchaseValidate" name="Company_Country__cmbx" value={vehicleData.companyCountrycmbx} label="Country" 
+                                options={countryoptions} onchange={handleInputChange} required></lightning-combobox>
+                        </div>
+
+                        <template if:true={otherCountryCompany}>
+                            <div class="slds-col slds-p-around_small">
+                                <lightning-input class="Validation purchaseValidate" label="Country" pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" maxlength="40"
+                                value={vehicleData.Company_Country__c} name="Company_Country__c" onchange={handleInputChange} required></lightning-input>
+                            </div>
+                        </template>
+                        
+                        <template if:false={otherCountryCompany}>
+                            <div class="slds-col slds-p-around_small">
+                                <lightning-combobox class="Validation purchaseValidate" name="Company_State__c" label="State" value={vehicleData.Company_State__c}
+                                    options={CompanyStateOption} onchange={handleInputChange} required></lightning-combobox>
+                            </div>
+                        </template>
+
+                        <template if:true={otherCountryCompany}>
+                            <div class="slds-col slds-p-around_small">
+                                <lightning-input class="Validation purchaseValidate" label="State" pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" maxlength="40"
+                                value={vehicleData.Company_State__c} name="Company_State__c" onchange={handleInputChange} required></lightning-input>
+                            </div>
+                        </template>
+
+                        <div class="slds-col slds-p-around_small">
+                            <lightning-input class="Validation purchaseValidate" pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" label="Postal Code" value={vehicleData.Company_Zip__c}
+                                name="Company_Zip__c" onchange={handleInputChange} required></lightning-input>
+                        </div>
+                       
+                        <div class="slds-col slds-p-around_small">
+                            <lightning-input class="Validation purchaseValidate" pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" label="City" value={vehicleData.Company_City__c}
+                                name="Company_City__c" onchange={handleInputChange} required></lightning-input>
+                        </div>
+                        <div class="slds-col slds-p-around_small">
+                            <lightning-input class="Validation purchaseValidate" pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" label="Address" value={vehicleData.Company_Address__c}
+                                name="Company_Address__c" onchange={handleInputChange} required>
+                            </lightning-input>
+                        </div>
+                        <div class="slds-col slds-p-around_small">
+                            <lightning-input class="Validation purchaseValidate" pattern="\(\d{3}\) \d{3}-\d{4,7}" maxlength="17" label="Phone" value={vehicleData.Company_Phone__c}
+                                name="Company_Phone__c" onchange={handleInputChange} required>
+                            </lightning-input>
+                        </div>
+                    </div>
+                </div>
+            </template> 
+        </template>
+
+        <!-- Driver Details -->
+        <div class="card slds-p-around_small slds-m-bottom_large">
+            <h2 class="sectionTitle">Human Operators and/or Owners</h2>
+            <template if:true={addedDriver}>
+                <table
+                    class="slds-table slds-table_cell-buffer slds-table_bordered driverTable">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="">
+                                <div class="" title="Name">Name</div>
+                            </th>
+                            <th class="">
+                                <div class="" title="Country">Country</div>
+                            </th>
+                            <th class="">
+                                <div class="" title="State">State</div>
+                            </th>
+                            <th class="">
+                                <div class="" title="License #">License #</div>
+                            </th>
+                            <th class="">
+                                <div class="" title="Date of birth">Date of birth</div>
+                            </th>
+                            <th class="">
+                                <div class="" title="Is Owner">Driver Type</div>
+                            </th>
+                            <th class="">
+                                <div class="" title="Action">Action</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={addedDriver} for:item="driver">
+                            <tr class="slds-line-height_reset" style={driver.selectedStyle} key={driver.license_number__c}>
+                                <td>
+                                    <div class="slds-truncate" title="Cloudhub">
+                                        {driver.First_Name__c}
+                                        {driver.Last_Name__c}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate" title="4/14/2015">
+                                        {driver.License_Country__c}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate" title="Prospecting">
+                                        {driver.License_state__c}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate" title="20%">
+                                        {driver.license_number__c}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate" title="$25k">{driver.Dob__c}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">{driver.Driver_Type__c }
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">
+                                        <lightning-button-icon icon-name="utility:edit"
+                                            variant="bare" alternative-text="Edit"
+                                            data-id={driver.license_number__c} title="Edit"
+                                            onclick={handleEditDriver}>
+                                        </lightning-button-icon>
+                                        <lightning-button-icon icon-name="utility:delete"
+                                            variant="bare" alternative-text="Delete" lwc:if={driver.showDeleteButton}
+                                            data-id={driver.license_number__c}
+                                            class="slds-m-left_x-small"
+                                            onclick={handleDeleteDriver} title="Delete">
+                                        </lightning-button-icon>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </template>
+
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-p-around_small">
+                    <lightning-input class="cDriver driverValidation" label="First Name"
+                        pattern="^[A-Za-z]+(\s[A-Za-z]+)*$" maxlength="40" type="text"
+                         value={newDriver.First_Name__c} name="First_Name__c"
+                        onchange={handleDriverFieldsChange} required> </lightning-input>
+                </div>
+                <div class="slds-col slds-p-around_small">
+                    <lightning-input class="cDriver driverValidation" label="Last Name"
+                        pattern="^[A-Za-z]+(\s[A-Za-z]+)*$" maxlength="40"
+                        type="text" value={newDriver.Last_Name__c} name="Last_Name__c"
+                        onchange={handleDriverFieldsChange} required> </lightning-input>
+                </div>
+
+                <!-- <div class="slds-col slds-p-around_small">
+                    <lightning-input class="cDriver driverValidation" label="License Country"
+                        pattern="^[A-Za-z]+(\s[A-Za-z]+)*$" maxlength="40"
+                        value={newDriver.License_Country__c} name="License_Country__c"
+                        onchange={handleDriverFieldsChange} required></lightning-input>
+                </div>
+                <div class="slds-col slds-p-around_small">
+                    <lightning-input class="cDriver driverValidation" label="License State"
+                        pattern="^[A-Za-z]+(\s[A-Za-z]+)*$" maxlength="40"
+                        value={newDriver.License_state__c} name="License_state__c"
+                        onchange={handleDriverFieldsChange} required>
+                    </lightning-input>
+                </div> -->
+
+                <div class="slds-col slds-p-around_small">
+                    <lightning-combobox class="cDriver driverValidation" name="License_Country__cmbx"
+                        label="License Country" value={newDriver.License_Country__cmbx}
+                        options={countryoptions} onchange={handleDriverFieldsChange} required>
+                    </lightning-combobox>
+                </div>
+
+                <template if:true={newDriver.otherCountryVehicle}>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="cDriver driverValidation" label="License Country"
+                            pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" maxlength="40"
+                            value={newDriver.License_Country__c} name="License_Country__c"
+                            onchange={handleDriverFieldsChange} required>
+                        </lightning-input>
+                    </div>
+                </template>		
+                
+                
+                <template if:false={newDriver.otherCountryVehicle}>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-combobox class="cDriver driverValidation" name="License_state__c"
+                            label="License State" value={newDriver.License_state__c}
+                            options={vehicleStateOption} onchange={handleDriverFieldsChange} required>
+                        </lightning-combobox>
+                    </div>
+                </template>
+
+                <template if:true={newDriver.otherCountryVehicle}>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="cDriver driverValidation" label="License State"
+                            pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" maxlength="40"
+                            value={newDriver.License_state__c} name="License_state__c"
+                            onchange={handleDriverFieldsChange} required>
+                        </lightning-input>
+                    </div>
+                </template>
+
+
+                <div class="slds-col slds-p-around_small">
+                    <lightning-input class="cDriver driverValidation" label="License #"
+                        pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" maxlength="40" minlength="4"
+                        value={newDriver.license_number__c} name="license_number__c"
+                        onchange={handleDriverFieldsChange} required>
+                    </lightning-input>
+                </div>
+                <div class="slds-col slds-p-around_small">
+                    <lightning-input class="cDriver driverValidation" label="Date of birth"
+                        value={newDriver.Dob__c} type="date" name="Dob__c" max={maxDOBDate}
+                        onchange={handleDriverFieldsChange} required></lightning-input>
+                </div>
+                <div class="slds-col slds-p-around_small">
+                    <lightning-input class="cDriver driverValidation registeredOwnerCheckbox" type="checkbox"
+                        title="Owner registration" label="Registered Owner?"
+                        name="Driver_Type__c" onchange={handleDriverFieldsChange} value={newDriver.owner}
+                        checked={newDriver.owner} >
+                    </lightning-input>
+                </div>
+                <template if:true={booleanVar.isOwner}>
+
+                    <div class="slds-col slds-p-around_small">
+                        <c-address-recommendations onsendaddress={handleDriverAddress}>
+                        </c-address-recommendations>
+                    </div>
+
+                    <!-- <div class="slds-col slds-p-around_small">
+                        <lightning-input class="cDriver driverValidation" type="text"
+                            pattern="^[A-Za-z]+(\s[A-Za-z]+)*$" maxlength="40"
+                            label="Owner Country" name="Country__c" value={newDriver.Country__c}
+                            onchange={handleDriverFieldsChange} required> </lightning-input>
+                    </div>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="cDriver driverValidation" type="text"
+                            pattern="^[A-Za-z]+(\s[A-Za-z]+)*$" maxlength="40" label="State"
+                            name="State_Province__c" value={newDriver.State_Province__c}
+                            onchange={handleDriverFieldsChange} required> </lightning-input>
+                    </div> -->
+
+
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-combobox class="cDriver driverValidation" name="Country__cmbx" label="Owner Country" value={newDriver.Country__cmbx}
+                            options={countryoptions} onchange={handleDriverFieldsChange} required></lightning-combobox>
+                    </div>
+
+                    <template if:true={newDriver.otherCountryDriver}>
+                        <div class="slds-col slds-p-around_small">
+                            <lightning-input class="cDriver driverValidation" label="Owner Country" pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" maxlength="40" value={newDriver.Country__c} name="Country__c"
+                                onchange={handleDriverFieldsChange} required></lightning-input>
+                        </div>
+                    </template>		
+                    
+                    
+                    <template if:false={newDriver.otherCountryDriver}>
+                        <div class="slds-col slds-p-around_small">
+                            <lightning-combobox class="cDriver driverValidation" name="State_Province__c" label="State" value={newDriver.State_Province__c}
+                                options={driverStateOption} onchange={handleDriverFieldsChange} required></lightning-combobox>
+                        </div>
+                    </template>
+
+                    <template if:true={newDriver.otherCountryDriver}>
+                        <div class="slds-col slds-p-around_small">
+                            <lightning-input class="cDriver driverValidation" label="State" pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" maxlength="40" value={newDriver.State_Province__c} 
+                                name="State_Province__c" onchange={handleDriverFieldsChange} required></lightning-input>
+                        </div>
+                    </template>
+
+
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="cDriver driverValidation" type="text"
+                            inputmode="numeric" pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" maxlength="8"
+                            label="Postal Code" name="Postal_Code__c"
+                            value={newDriver.Postal_Code__c} onchange={handleDriverFieldsChange}
+                            required> </lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="cDriver driverValidation" type="text"
+                        pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" maxlength="40"
+                            label="City" name="City__c" value={newDriver.City__c}
+                            onchange={handleDriverFieldsChange} required>
+                        </lightning-input>
+                    </div>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="cDriver driverValidation" type="text"
+                            pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" maxlength="40"
+                            label="Address" name="Address__c" value={newDriver.Address__c}
+                            onchange={handleDriverFieldsChange} required> </lightning-input>
+                    </div>
+                    <!-- <div class="slds-col slds-p-around_small">
+                        <lightning-input class="cDriver driverValidation" type="text"
+                            inputmode="numeric" pattern="\(\d{3}\) \d{3}-\d{4,7}" maxlength="17"
+                            label="Phone" name="Phone__c" value={newDriver.Phone__c}
+                            onchange={handleDriverFieldsChange} required>
+                        </lightning-input>
+                    </div> -->
+                </template>
+            </div>
+
+            <div class="slds-p-around_small slds-m-bottom_medium">
+                <template if:false={booleanVar.editDriverBtn}>
+                    <lightning-button class="slds-float_right" label="Add driver"
+                        variant="brand" onclick={handleAddNewDriver}></lightning-button>
+                </template>
+                <template if:true={booleanVar.editDriverBtn}>
+                    <lightning-button class="slds-float_right" label="Update driver"
+                        variant="brand" onclick={handleUpdateDriver}></lightning-button>
+                </template>
+            </div>
+        </div>
+
+        <!-- Towed Unit Screen -->
+        <template if:true={booleanVar.isTowing}>
+            
+<!--             
+            <div class="card slds-p-around_small slds-m-bottom_large" lwc:if={isTowedVisible}>
+
+                <h2 class="sectionTitle">Towed Detail</h2>
+
+                <template if:true={addedTowed}>
+                    <table
+                        class="slds-table slds-table_cell-buffer slds-table_bordered driverTable slds-m-top_small">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th class="">
+                                    <div class="" title="Type">Type</div>
+                                </th>
+                                <th class="">
+                                    <div class="" title="Value">Value</div>
+                                </th>
+                                <th class="">
+                                    <div class="" title="Days">Days</div>
+                                </th>
+                                <th class="">
+                                    <div class="" title="Action">Action</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={addedTowed} for:item="towed">
+                                <tr class="slds-line-height_reset" key={towed.towedCount}>
+                                    <td>
+                                        <div class="slds-truncate" title="">
+                                            {towed.Towed_Unit_Type__c}</div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" title="">
+                                            {towed.Towed_Unit_Value__c}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" title="">
+                                            {towed.Days_in_Tow__c}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate">
+                                            <lightning-button-icon icon-name="utility:edit"
+                                                variant="bare" alternative-text="Edit"
+                                                data-id={towed.towedCount} title="Edit"
+                                                onclick={handleEditTowed}>
+                                            </lightning-button-icon>
+                                            <lightning-button-icon icon-name="utility:delete"
+                                                variant="bare" alternative-text="Delete"
+                                                data-id={towed.towedCount}
+                                                class="slds-m-left_x-small"
+                                                onclick={handleDeleteTowned} title="Delete">
+                                            </lightning-button-icon>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </template>
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-combobox class="quoteValidate cTowed"
+                            label="Type of Towed Unit" value={newTowed.Towed_Unit_Type__c}
+                            name="Towed_Unit_Type__c" options={TowedVehicleOptions}
+                            onchange={handleTowedInputChange} required></lightning-combobox>
+                    </div>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="quoteValidate cTowed" label="Towed Unit Value"
+                        inputmode="numeric" pattern="[0-9]*" maxlength="6" type="text"
+                         value={newTowed.Towed_Unit_Value__c}
+                            name="Towed_Unit_Value__c" required
+                            onchange={handleTowedInputChange}></lightning-input>
+                    </div>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="quoteValidate cTowed" label="Days in tow"
+                            type="Number" value={newTowed.Days_in_Tow__c} name="Days_in_Tow__c"
+                            inputmode="numeric" pattern="[0-9]*" maxlength="3"
+                            onchange={handleTowedInputChange} required>
+                        </lightning-input>
+                    </div>
+                    <div class="slds-col slds-p-around_small">
+                        <template if:false={booleanVar.editTowedBtn}>
+                            <lightning-button class="slds-float_right" label="Add Towed unit"
+                                variant="brand" onclick={handleAddNewTowed}></lightning-button>
+                        </template>
+                        <template if:true={booleanVar.editTowedBtn}>
+                            <lightning-button class="slds-float_right" label="Update Towed"
+                                variant="brand" onclick={handleUpdateTowed}></lightning-button>
+                        </template>
+                    </div>
+
+                </div>
+            </div>
+
+             -->
+
+             <c-agent-towed-unit added-towed={addedTowed} onupdatetowed={updateTowedController} enable-new-towed={trueValue} action-type="editRenew"></c-agent-towed-unit>
+        </template>
+
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col">
+                <lightning-button label="Generate Quote" class="slds-float_right slds-p-right_small" onclick={generateQuote}></lightning-button>
+            </div>
+        </div>
+
+    </lightning-accordion-section>                    
+    <lightning-accordion-section name="B" label="Quote Details">
+
+        <template if:true={OldQuote}>
+									<div class="container">
+										<div class="slds-grid slds-wrap slds-gutters">
+											<!-- <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12"> -->
+												<div class="agentValue">
+													Previous Agent Fee
+													<lightning-formatted-number value={OldAgentFee} label="Old Agent Fee" format-style="currency" currency-code="USD"></lightning-formatted-number>
+												</div>
+											<!-- </div> -->
+											<!-- <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12">
+												<div class="agentValue">
+													Previous Quote Value
+													<lightning-formatted-number value={OldQuote} label="Old Quote" format-style="currency" currency-code="USD"></lightning-formatted-number>
+												</div>
+											</div> -->
+										</div>
+									</div>
+								</template>
+
+        <div class="container slds-" if:true={isLoadQuoteScreen}>
+			<lightning-input class="slds-size_1-of-12 " type="number" variant="label-hidden" label="Agent Fee" name="Agent_Fee__c" value={agentFee} onchange={handleAgentFee} step="0.10" formatter="currency" ></lightning-input>
+			<lightning-button class="slds-size_1-of-12 " label="Update Fee" title="Update Fee" disabled={isDisabled} onclick={handleUpdateRateValue} style="margin-left:20px;"></lightning-button>
+		</div>		
+
+        <template if:true={isLoadQuoteScreen}>
+            <c-under-writer-screen-clone lwc:if={policyData} policy-type={policyData.Policy_Type_picklist__c} quote-details={quoteData}
+                                 editpolicydata={editpolicydata} is-renewal-policy={isRenewalPolicy} onnavigatequotescreen={navigateScreen} onnavigatepaymentscreen={navigatePaymentScreen} agent-fee={agentfeeinquote}> 
+                            </c-under-writer-screen-clone>
+                            
+        </template>
+        <template if:true={isLoadEditQuoteScreen}>
+            {agentFee}
+            <c-edit-underwriter-screen lwc:if={policyData} policy-type={policyData.Policy_Type_picklist__c}
+											oldpolicydata={editOldProcessData} editpolicydata={editNewProcessData} agent-fee={agentFee}
+                                            onnavigatequotescreen={navigateScreen} onnavigatepaymentscreen={navigateToPayment}></c-edit-underwriter-screen>
+        </template>
+        <template if:true={isLoadNorthboundEditQuoteScreen}>
+            <c-northbound-quote-screen policy-type={policyData.Policy_Type_picklist__c} 
+                                is-renewal-policy={isRenewalPolicy} onnavigatequotescreen={navigateScreen}
+                             editpolicydata={editNewProcessData} onnavigatepaymentscreen={navigatePaymentScreen}>
+                            </c-northbound-quote-screen>
+        </template>
+    </lightning-accordion-section>
+    <lightning-accordion-section name="C" label="Proceed to Pay">
+        <div class="card slds-p-around_small slds-m-bottom_large slds-m-top_medium">
+            <h2 class="sectionTitle">Let's tackle the Payment now</h2>
+
+            <div class="slds-grid slds-wrap slds-p-top_small slds-p-bottom_small" style="font-size: 20px;background: #c5ecff;padding: 10px;">
+                <b>Payable Amount: </b> &nbsp;&nbsp; <lightning-formatted-number value={paymentPrice} format-style="currency" currency-code="USD"></lightning-formatted-number>
+            </div>
+
+            <template if:true={isPaymentNeeded}>
+            <h4 class="slds-m-top_medium smallHeading">Select payment type</h4>
+            <div class="slds-grid slds-wrap slds-m-bottom_medium">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="" type="radio" name="paymentGroup"
+                                label="Card Payment" value="cardPayment" onchange={handleInputChange}>
+                            </lightning-input>
+                    </div>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="quoteValidate" type="radio" name="paymentGroup" 
+                                label="Cash Payment" value="cashPayment" onchange={handleInputChange}>
+                            </lightning-input>
+                    </div>
+                </div>
+            </div>
+            </template>
+            <template if:false={isPaymentNeeded}>
+            <p style="font-style: italic;font-size: 16px;font-weight: 400;padding:6px;"> No payment is needed as of now. You can proceed with the next step.</p>
+            </template>
+
+            <template if:true={booleanVar.showCardPayment}>
+                <div class="slds-grid slds-wrap">
+
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input label="Address" value={paymentsFields.paymentStreet} class="paymentValidation" name="address1" required pattern="^[A-Za-z0-9]+(\s[A-Za-z0-9]+)*$" maxlength="40"
+                            onchange={handlePaymentInputChange}>
+                        </lightning-input>
+                    </div>
+                    <!-- <div class="slds-col slds-p-around_small">
+                        <lightning-input label="Country" value="" class="paymentValidation" name="country" required pattern="^[A-Za-z]+(\s[A-Za-z]+)*$" maxlength="40"
+                            onchange={handlePaymentInputChange}>
+                        </lightning-input>
+                    </div>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input label="State" value="" class="paymentValidation" name="state" required pattern="^[A-Za-z]+(\s[A-Za-z]+)*$" maxlength="40"
+                            onchange={handlePaymentInputChange}></lightning-input>
+                    </div> -->
+
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-combobox class="paymentValidation" name="paymentCountrycmbx" label="Country" value={paymentsFields.paymentCountrycmbx}
+                            options={countryoptions} onchange={handlePaymentInputChange} required></lightning-combobox>
+                    </div>
+
+                    <template if:true={otherCountrypayment}>
+                        <div class="slds-col slds-p-around_small">
+                            <lightning-input class="paymentValidation" label="Country" pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" maxlength="40" 
+                                name="Country__c" onchange={handlePaymentInputChange} value={paymentsFields.paymentCountry} required></lightning-input>
+                        </div>
+                    </template>
+                    
+                    <template if:false={otherCountrypayment}>
+                        <div class="slds-col slds-p-around_small">
+                            <lightning-combobox class="paymentValidation" name="State__c" label="State" value={paymentsFields.paymentState}
+                                options={paymentStateOption} onchange={handlePaymentInputChange} required></lightning-combobox>
+                        </div>
+                    </template>
+
+                    <template if:true={otherCountrypayment}>
+                        <div class="slds-col slds-p-around_small">
+                            <lightning-input class="paymentValidation" label="State" pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" maxlength="40"
+                                name="State__c" onchange={handlePaymentInputChange} value={paymentsFields.paymentState} required></lightning-input>
+                        </div>
+                    </template>
+
+                    
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input label="City" class="paymentValidation" name="city" required pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" maxlength="40"
+                            onchange={handlePaymentInputChange} value={paymentsFields.paymentCity}></lightning-input>
+                    </div>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input label="Postal Code" class="paymentValidation" value={paymentsFields.paymentZip} name="zip" required inputmode="numeric" pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" maxlength="7"
+                            onchange={handlePaymentInputChange}></lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="validate paymentValidation" label="Card Holder Name" name="name" required pattern="^[A-Za-z]+(\s[A-Za-z]+)*$" maxlength="50"
+						  value={payeeName} onchange={handlePaymentInputChange} data-id="card-holder-name"></lightning-input>
+                    </div>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="validate paymentValidation" label="Card Number" value={formattedCreditCardNumber} name="cardNumber" pattern="[0-9\s]*" 
+							inputmode="numeric" message-when-pattern-mismatch="Only numbers can be entered" minlength="12" data-id="cardNumber" required
+							maxlength="19" onchange={handlePaymentInputChange}></lightning-input>
+                    </div>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-combobox class="validate paymentValidation" name="month" data-id="month"
+                        label="Expiration Month" placeholder="MM" options={MM} onchange={handlePaymentInputChange} required>
+                    </lightning-combobox>
+                    </div>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-combobox class="validate paymentValidation" name="year" label="Expiration Year" placeholder="YYYY" 
+							options={YYYY} onchange={handlePaymentInputChange} data-id="year" required>
+						</lightning-combobox>
+                    </div>
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="validate paymentValidation" label="Security Code" value="" name="code" type="text" minlength="3" maxlength="4"
+						    pattern="^(?=.*[1-9])\d+$" message-when-pattern-mismatch="Only numbers can be entered" required
+							onchange={handlePaymentInputChange}></lightning-input>
+                    </div>
+                </div>
+            </template>
+
+
+										<div class="slds-p-around_small slds-m-bottom_medium">
+                                            <lightning-button class="slds-float_left" label="Previous"
+												variant="brand-outline" name="" onclick={navigatePrevious}></lightning-button>
+                                                <template if:true={isPaymentNeeded}>
+                                                    <lightning-button class="slds-float_right" label="Make payment"
+												    variant="brand" name="" onclick={handlMakePayment}></lightning-button>
+                                                </template>
+                                                <template if:false={isPaymentNeeded}>
+                                                    <lightning-button class="slds-float_right" label="Update Policy"
+												    variant="brand" name="" onclick={updatePolicy}></lightning-button>                                                    
+                                                </template>
+
+											
+										</div>
+
+        </div>
+    </lightning-accordion-section>
+
+    <lightning-accordion-section name="D" label="Policy Quick Actions">
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_1-of-1 slds-align_absolute-center">
+                <lightning-icon icon-name="action:approval" alternative-text="Approved" variant="success" size="large" title="Approved"></lightning-icon>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-align_absolute-center" style="font-size:20px;text-align:center;">
+               {acknowledgementMessage}</br>
+                You can either print this policy document or navigate to policy record for a quick check by clicking on below provided action buttons.
+            </div>
+            <div class="slds-col slds-size_1-of-1  slds-grid slds-wrap" style="font-size: 18px;color: #0b6a9c;font-weight: bold;padding-top: 60px;padding-bottom: 60px;">
+                <div class="slds-col slds-size_3-of-8"></div>
+                <div class="slds-col slds-size_1-of-8 slds-grid slds-wrap" style="cursor:pointer;" onclick={generatePolicyPDF}>
+                    <div class="slds-col slds-size_1-of-1 slds-align_absolute-center"><lightning-icon icon-name="action:download" size="medium" alternative-text="Print"></lightning-icon></div>
+                    <div class="slds-col slds-size_1-of-1 slds-align_absolute-center">Print/Download</div>
+                </div>
+                <div class="slds-col slds-size_1-of-8 slds-grid slds-wrap" style="cursor:pointer;" onclick={navigateToPolicy}>
+                    <div class="slds-col slds-size_1-of-1 slds-align_absolute-center"><lightning-icon icon-name="action:info" size="medium" alternative-text="Navigate"></lightning-icon></div>
+                    <div class="slds-col slds-size_1-of-1 slds-align_absolute-center">View Policy</div>
+                </div>
+                <div class="slds-col slds-size_3-of-8"></div>
+            </div>
+        </div>
+    </lightning-accordion-section>
+
+    </lightning-accordion>
+
+    </div>
+
+</template>

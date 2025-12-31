@@ -1,0 +1,111 @@
+<template>
+    <div class="notranslate">
+    <div class="slds-size_12-of-12 slds-m-top_xx-large">
+        <div class="flows-progress slds-float_right">
+            <div class="progress-inner clearfix">
+                <div class={steps1} title="User Details">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_2-of-12">
+                            <template if:true={completedStep1}>
+                                <span class="completdSection"><i class="icon-white-checkmark"></i></span>
+                            </template>
+                            <template if:false={completedStep1}>
+                                <span class="nonCompletdSection">1</span>
+                            </template>
+
+                        </div>
+                        <div class="slds-col slds-size_10-of-12">
+                            <h4 class="screenName">{label.userdetail}</h4>
+                            <p class="screenDesc">{label.tellusabout}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class={steps2} title="Vehicle Details">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_2-of-12">
+                            <template if:true={completedStep2}>
+                                <span class="completdSection"><i class="icon-white-checkmark"></i></span>
+                            </template>
+                            <template if:false={completedStep2}>
+                                <span class="">2</span>
+                            </template>
+                        </div>
+                        <div class="slds-col slds-size_10-of-12">
+                            <h4 class="screenName">{label.vehicledetails}</h4>
+                            <p class="screenDesc">{label.vehicleneedscoverage}</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class={steps3} title="Term Option">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_2-of-12">
+                            <template if:true={completedStep3}>
+                                <span class="completdSection"><i class="icon-white-checkmark"></i></span>
+                            </template>
+                            <template if:false={completedStep3}>
+                                <span class="">3</span>
+                            </template>
+                        </div>
+                        <div class="slds-col slds-size_10-of-12">
+                            <h4 class="screenName">{label.termoption}</h4>
+                            <p class="screenDesc">{label.whendoyouneed}</p>
+                        </div>
+                    </div>
+
+                </div>
+                <template if:true={isShowTowedOption}>
+                    <div class={steps4} title="Towed details">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_2-of-12">
+                                <template if:true={completedStep4}>
+                                    <span class="completdSection"><i class="icon-white-checkmark"></i></span>
+                                </template>
+                                <template if:false={completedStep4}>
+                                    <span class="">4</span>
+                                </template>
+                            </div>
+                            <div class="slds-col slds-size_10-of-12">
+                                <h4 class="screenName">{label.toweddetails}</h4>
+                                <p class="screenDesc">{label.whatareyoutowing}</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </template>
+
+                <template if:true={isShowTerritory}>
+                    <div class={steps5} title="Territory">
+
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_2-of-12">
+                                <template if:true={completedStep5}>
+                                    <span class="completdSection"><i class="icon-white-checkmark"></i></span>
+                                </template>
+                                <template if:false={completedStep5}>
+                                    <template if:true={isShowTowedOption}>
+                                        <span class="">5</span>
+                                    </template>
+                                    <template if:false={isShowTowedOption}>
+                                        <span class="">4</span>
+                                    </template>
+                                    
+                                </template>
+                            </div>
+                            <div class="slds-col slds-size_10-of-12">
+                                <h4 class="screenName">{label.territory}</h4>
+                                <p class="screenDesc">{label.wheredoyouneed}</p>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </template>
+                <!-- <div class="progress-bar"></div>
+                <div class="progress-bar-current"></div> -->
+            </div>
+        </div>
+    </div>
+    </div>
+</template>

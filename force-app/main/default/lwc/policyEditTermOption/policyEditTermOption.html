@@ -1,0 +1,163 @@
+<template>
+        <div class="maindiv notranslate slds-m-top_xx-large">
+                
+                <div class="heading">
+                        <div class="slds-text slds-text-heading_medium slds-p-around_small blue screenHeading">
+                                {label.DoyouwanttochangetheTermorCoverageLimits}</div>
+                </div>
+
+                <lightning-layout multiple-rows="true">
+                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="3"
+                                large-device-size="3" class="slds-p-around_x-small">
+                                <lightning-input class="inputfield Validation" type="date"
+                                        name="Start_Date_for_Coverage__c" pattern="^(?![\s-])[\w\s-]+$"
+                                        label={label.StartDateforCoverage} min={mindate} onchange={handleChange}
+                                        value={startDatePolicy} disabled={disableDate} required>
+                                </lightning-input>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="3"
+                                large-device-size="3" class="slds-p-around_x-small">
+                                <lightning-input class="inputfield Validation" type="time" min={displayPstTime}
+                                        name="Start_Time__c" pattern="^(?![\s-])[\w\s-]+$" label={label.STARTTIME}
+                                        onchange={handleChange} value={startTimePolicy} disabled={disableDate} required>
+                                </lightning-input>
+                        </lightning-layout-item>
+                </lightning-layout>
+                <lightning-layout multiple-rows="true">
+                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="3"
+                                large-device-size="3" class="slds-p-around_x-small">
+
+                                <lightning-input class="radiotype slds-align_absolute-center slds-p-around_small"
+                                        type="checkbox" label={label.Annual} checked={isAnnual} name="Annual"
+                                        disabled={disableDate} pattern="^(?![\s-])[\w\s-]+$"
+                                        onchange={onGroup}></lightning-input>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="3"
+                                large-device-size="3" class="slds-p-around_x-small">
+                                <template if:false={isWatercraft}>
+                                        <lightning-input
+                                                class="radiotype slds-align_absolute-center slds-p-around_small"
+                                                pattern="^(?![\s-])[\w\s-]+$" checked={isSemiAnnual} type="checkbox"
+                                                disabled={disableDate} name="SemiAnnual" label={label.SemiAnnual}
+                                                onchange={onGroup}></lightning-input>
+                                </template>
+
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="3"
+                                large-device-size="3" class="slds-p-around_x-small">
+
+                                <lightning-input class="radiotype dailyChecked slds-align_absolute-center slds-p-around_small"
+                                        type="checkbox" label="Daily" checked={isDaily} name="Daily"
+                                        disabled={disableDate} pattern="^(?![\s-])[\w\s-]+$"
+                                        onchange={onGroup}></lightning-input>
+                        </lightning-layout-item>
+                </lightning-layout>
+                <lightning-layout multiple-rows="true">
+                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="3"
+                                large-device-size="3" class="slds-p-around_x-small">
+                                <lightning-input class="inputfield Validation" type="date" pattern="^(?![\s-])[\w\s-]+$"
+                                        name="End_Date_for_Coverage__c" min={endMinDate} onchange={handleChange}
+                                        disabled={isDisabledDate} label={label.EndDateforCoverage} value={endDatePolicy}
+                                        required>
+                                </lightning-input>
+
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="3"
+                                large-device-size="3" class="slds-p-around_x-small">
+                                <lightning-input class="inputfield" type="time" name="End_Time__c"
+                                        pattern="^(?![\s-])[\w\s-]+$" onchange={handleChange} disabled="true"
+                                        value={endTimePolicy} label={label.EndTime}>
+                                </lightning-input>
+                        </lightning-layout-item>
+                </lightning-layout>
+
+                <template if:false={isWatercraft}>
+                        <lightning-layout multiple-rows="true">
+                                <template if:false={isNorthbound}>
+
+                                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="3"
+                                                large-device-size="3" class="slds-p-around_x-small">
+                                                <lightning-combobox name="Territory__c" class="inputfield Validation"
+                                                        label={label.TerritoryCoverage} value={territoryCoverageData}
+                                                        placeholder={label.TerritoryCoverage} options={TerritoryOption}
+                                                        onchange={handleChange} required></lightning-combobox>
+                                        </lightning-layout-item>
+
+                                        <template if:false={isMotorcyclePolicy}>
+                                                <lightning-layout-item size="12" small-device-size="12"
+                                                        medium-device-size="3" large-device-size="3"
+                                                        class="slds-p-around_x-small">
+                                                        <lightning-combobox name="Medical__c"
+                                                                class="inputfield Validation Medicalpicklist" label={label.Medical}
+                                                                value={medicalData} placeholder={label.Medical}
+                                                                options={medicalOption} onchange={handleChange}
+                                                                required></lightning-combobox>
+                                                </lightning-layout-item>
+                                        </template>
+
+
+                                </template>
+
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="3"
+                                        large-device-size="3" class="slds-p-around_x-small">
+                                        <lightning-combobox name="Liability__c" class="inputfield Validation LiabilityPicklist"
+                                                label={label.Liability} value={liabilityData} placeholder={label.Liability}
+                                                options={liabilityOption} onchange={handleChange} required>
+                                        </lightning-combobox>
+                                </lightning-layout-item>
+                        </lightning-layout>
+                </template>
+                <template if:true={isWatercraft}>
+                        <lightning-layout multiple-rows="true">
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                        large-device-size="6" class="slds-p-around_x-small">
+                                        <lightning-combobox class="SpeedLimit Validation"
+                                                name="Is_the_Maximum_Speed_more_than_50_mph__c"
+                                                label={label.IstheMaximumSpeedmorethan50mph}
+                                                value={setMaximumSpeedValue} placeholder="" options={yesNoOptions}
+                                                onchange={handleChange} required>
+                                        </lightning-combobox>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                        large-device-size="6" class="slds-p-around_x-small">
+                                        <lightning-combobox class="AgeLimit Validation"
+                                                name="Any_Boat_Operator_Under_22__c"
+                                                label={label.Willanyoneoperatetheboatundertheageof22} placeholder=""
+                                                value={setUnderAgeDriver} options={yesNoOptions} onchange={handleChange}
+                                                required></lightning-combobox>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                        large-device-size="6" class="slds-p-around_x-small">
+                                        <lightning-combobox class="OwnerLiving Validation"
+                                                name="Is_the_owner_living_in_Mexico__c"
+                                                label={label.IstheownerlivinginMexico} value={setMaxcioLivilig}
+                                                placeholder="" options={yesNoOptions} onchange={handleChange}
+                                                required></lightning-combobox>
+                                </lightning-layout-item>
+                        </lightning-layout>
+
+                </template>
+
+
+
+                <div class="horizontalAlign">
+                        <div class="">
+                                <!-- <div class="loaderBtn"></div> -->
+                                <!-- <button class="buttonPrev btnHover" onclick={handlePrevClick}>Prev</button> -->
+                        </div>
+                        <div class="">
+                                <!-- <div class="loaderBtn"></div> -->
+                                <button class="buttonNext btnHover" onclick={handleNextClick}><span class="icon-next"><i
+                                                        class="icon-nexts"></i></span>{label.Next}</button>
+                        </div>
+
+                </div>
+
+        </div>
+</template>

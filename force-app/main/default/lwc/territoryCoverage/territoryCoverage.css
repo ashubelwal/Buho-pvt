@@ -1,0 +1,14 @@
+.maindiv {
+    background-color: white;
+}
+.heading{
+    font-weight: bold;
+}
+.mapimages{
+    width: 80%;
+    margin: auto;
+}
+.mapdetails{
+    width: 40%;
+    margin: auto;
+}

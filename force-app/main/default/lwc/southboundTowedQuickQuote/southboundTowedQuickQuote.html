@@ -1,0 +1,458 @@
+<template>
+    <div class="mainDiv notranslate">
+        <div class="heading">
+            <h2>{label.AdditionalQuickQuote}</h2>
+        </div>
+        <div class="quoteSectionInfo">
+            <lightning-layout multiple-rows="true">
+                <lightning-layout-item size="12">
+                    <p>{label.YouindicatedyourATVwasstreetlegal}.</p>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+        <div class="quoteSection">
+
+            <lightning-layout multiple-rows="true">
+                <template if:true={additionalQuickQuote}>
+                    <template if:false={isHighlightView}>
+                        <lightning-layout-item size="12" medium-device-size="12" large-device-size="4"
+                            small-device-size="12" class="slds-p-around_small">
+                            <div class="qualitasSection slds-p-around_small">
+                                <div class="quote-provider">
+                                    <img src={qualitasImg} alt="Qualitas" />
+                                </div>
+                                <div class="quotePrice">
+                                    <lightning-formatted-number value='99' format-style="currency" currency-code="USD">
+                                    </lightning-formatted-number>
+                                </div>
+                                <div class="quoteBody">
+                                    <div class="unit">
+                                        <h2 class="red">{label.Vehicle}</h2>
+
+                                        <div class="grid -spacing-sm">
+                                            <div class="grid_1-2">
+                                                <div class="datepicker">
+                                                    <lightning-input required="true" class="Validation"
+                                                        value='09-08-2000' name="Start_Date_for_Coverage" type="date"
+                                                        variant="label-hidden" onchange={handleChange} min={minDate}>
+                                                    </lightning-input>
+                                                </div>
+                                            </div>
+                                            <div class="grid_1-2">
+                                                <div class="datepicker">
+                                                    <lightning-input class="Validation" required="true"
+                                                        name="End_Date_for_Coverage" type="date" value='10-11-2001'
+                                                        variant="label-hidden" onchange={handleChange} min={endMinDate}
+                                                        max={endMaxDate}>
+                                                    </lightning-input>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="grid -spacing-sm">
+                                            <div class="grid_1-2">
+                                                <div class="datepicker">
+                                                    <lightning-input required="true" class="Validation"
+                                                        value='00:00:00:00' name="Start_Date_for_Coverage" type="time"
+                                                        timezone="pst" variant="label-hidden" onchange={handleChange}
+                                                        min={minDate}>
+                                                    </lightning-input>
+                                                </div>
+                                            </div>
+                                            <div class="grid_1-2">
+                                                <div class="datepicker">
+                                                    <lightning-input required="true" class="Validation"
+                                                        value='00:30:00:00' name="Start_Date_for_Coverage" type="time"
+                                                        timezone="pst" variant="label-hidden" onchange={handleChange}
+                                                        min={minDate}>
+                                                    </lightning-input>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="adjustable-fields">
+                                            <div class="adjustable-field">
+                                                <span class="field-label">
+                                                    <lightning-icon icon-name="utility:info" alternative-text="Warning!"
+                                                        variant="warning" title="warning variant xx-small"
+                                                        size="xx-small" class="slds-p-right--x-small"></lightning-icon>
+                                                    {label.Days}
+                                                </span>
+                                                <span class="field-item">
+                                                    <lightning-input variant="label-hidden" type="number"
+                                                        class="full-width-field" disabled="true" value='80'>
+                                                    </lightning-input>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="adjustable-fields">
+                                            <div class="adjustable-field">
+                                                <span class="field-label">
+                                                    <lightning-icon icon-name="utility:info" alternative-text="Warning!"
+                                                        variant="warning" title="warning variant xx-small"
+                                                        size="xx-small" class="slds-p-right--x-small"></lightning-icon>
+                                                    {label.Daysintow}
+                                                </span>
+                                                <span class="field-item">
+                                                    <lightning-input variant="label-hidden" type="number"
+                                                        class="full-width-field" disabled="true" value='20'>
+                                                    </lightning-input>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="adjustable-fields">
+                                            <div class="adjustable-field">
+                                                <span class="field-label">
+                                                    <lightning-icon icon-name="utility:info" alternative-text="Warning!"
+                                                        variant="warning" title="warning variant xx-small"
+                                                        size="xx-small" class="slds-p-right--x-small"></lightning-icon>
+                                                    {label.VehicleValue}
+                                                </span>
+                                                <span class="field-item">
+                                                    <lightning-input variant="label-hidden" type="number"
+                                                        class="full-width-field" disabled="true" value='2000'>
+                                                    </lightning-input>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="adjustable-fields">
+                                            <div class="adjustable-field">
+                                                <span class="field-label">
+                                                    <lightning-icon icon-name="utility:info" alternative-text="Warning!"
+                                                        variant="warning" title="warning variant xx-small"
+                                                        size="xx-small" class="slds-p-right--x-small"></lightning-icon>
+                                                    {label.CombinedLiability}
+                                                </span>
+                                                <span class="field-item">
+                                                    <div class="slds-float_right">
+                                                        <button class="field-minus" name="qualitasLiability"
+                                                            data-type="low" onclick={updateLiability}></button>
+                                                        <lightning-formatted-number value='30000'
+                                                            format-style="currency" currency-code="USD">
+                                                        </lightning-formatted-number>
+                                                        <button class="field-plus" name="qualitasLiability"
+                                                            data-type="high" onclick={updateLiability}></button>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="checkbox-field">
+                                            <lightning-input type="checkbox" name="qualitasLiablityOnly"
+                                                label="Liability Only" checked={qualitasLiablityOnly}
+                                                onchange={updateLibilityValue}></lightning-input>
+                                        </div>
+                                    </div>
+                                    <div class="quote-button slds-align_absolute-center">
+                                        <button class="button -secondary -wider" name="qualitasQuote"
+                                            data-id="qualitasQuote" onclick={handleNextClick}
+                                            disabled={qualitasLiablityOnl}>{label.Purchase}</button>
+                                    </div>
+                                    <div class="quote-terms slds-align_absolute-center">
+                                        <a href={automobileQualitasTermCondition} class="simple-link"
+                                            target="_blank">{label.Fullterms}
+                                             <lightning-icon icon-name="utility:new_window" alternative-text="new tab"
+                                            variant="success"
+                                            size="xx-small" class="slds-p-right--x-small"></lightning-icon></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" medium-device-size="12" large-device-size="4"
+                            small-device-size="12" class="slds-p-around_small">
+                            <div class="chubbSection slds-p-around_small">
+                                <div class="quote-provider">
+                                    <img src={chubbImg} alt="Chubb" />
+                                    <div class="recommended-label">{label.Recommended}</div>
+                                </div>
+                                <div class="quotePrice">
+                                    <lightning-formatted-number value='99' format-style="currency" currency-code="USD">
+                                    </lightning-formatted-number>
+                                </div>
+                                <div class="quoteBody">
+                                    <div class="unit">
+                                        <h2 class="red">{label.Vehicle}</h2>
+                                        <div class="grid -spacing-sm">
+                                            <div class="grid_1-2">
+                                                <div class="datepicker">
+                                                    <lightning-input required="true" class="Validation"
+                                                        value='09-08-2000' name="Start_Date_for_Coverage" type="date"
+                                                        variant="label-hidden" onchange={handleChange} min={minDate}>
+                                                    </lightning-input>
+                                                </div>
+                                            </div>
+                                            <div class="grid_1-2">
+                                                <div class="datepicker">
+                                                    <lightning-input class="Validation" required="true"
+                                                        name="End_Date_for_Coverage" type="date" value='10-11-2001'
+                                                        variant="label-hidden" onchange={handleChange} min={endMinDate}
+                                                        max={endMaxDate}>
+                                                    </lightning-input>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="grid -spacing-sm">
+                                            <div class="grid_1-2">
+                                                <div class="datepicker">
+                                                    <lightning-input required="true" class="Validation"
+                                                        value='00:00:00:00' name="Start_Date_for_Coverage" type="time"
+                                                        timezone="pst" variant="label-hidden" onchange={handleChange}
+                                                        min={minDate}>
+                                                    </lightning-input>
+                                                </div>
+                                            </div>
+                                            <div class="grid_1-2">
+                                                <div class="datepicker">
+                                                    <lightning-input required="true" class="Validation"
+                                                        value='00:30:00:00' name="Start_Date_for_Coverage" type="time"
+                                                        timezone="pst" variant="label-hidden" onchange={handleChange}
+                                                        min={minDate}>
+                                                    </lightning-input>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="adjustable-fields">
+                                            <div class="adjustable-field">
+                                                <span class="field-label">
+                                                    <lightning-icon icon-name="utility:info" alternative-text="Warning!"
+                                                        variant="inverse" title="warning variant xx-small"
+                                                        size="xx-small" class="slds-p-right--x-small"></lightning-icon>
+                                                    {label.Days}
+                                                </span>
+                                                <span class="field-item">
+                                                    <lightning-input variant="label-hidden" type="number"
+                                                        class="full-width-field" disabled="true" value='80'>
+                                                    </lightning-input>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="adjustable-fields">
+                                            <div class="adjustable-field">
+                                                <span class="field-label">
+                                                    <lightning-icon icon-name="utility:info" alternative-text="Warning!"
+                                                        variant="inverse" title="warning variant xx-small"
+                                                        size="xx-small" class="slds-p-right--x-small"></lightning-icon>
+                                                    {label.Daysintow}
+                                                </span>
+                                                <span class="field-item">
+                                                    <lightning-input variant="label-hidden" type="number"
+                                                        class="full-width-field" disabled="true" value='20'>
+                                                    </lightning-input>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="adjustable-fields">
+                                            <div class="adjustable-field">
+                                                <span class="field-label">
+                                                    <lightning-icon icon-name="utility:info" alternative-text="Warning!"
+                                                        variant="inverse" title="warning variant xx-small"
+                                                        size="xx-small" class="slds-p-right--x-small"></lightning-icon>
+                                                    {label.VehicleValue}
+                                                </span>
+                                                <span class="field-item">
+                                                    <lightning-input variant="label-hidden" type="number"
+                                                        class="full-width-field" disabled="true" value='2000'>
+                                                    </lightning-input>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="adjustable-fields">
+                                            <div class="adjustable-field">
+                                                <span class="field-label">
+                                                    <lightning-icon icon-name="utility:info" alternative-text="Warning!"
+                                                        variant="inverse" title="warning variant xx-small"
+                                                        size="xx-small" class="slds-p-right--x-small"></lightning-icon>
+                                                    {label.CombinedLiability}
+                                                </span>
+                                                <span class="field-item">
+                                                    <div class="slds-float_right">
+                                                        <button class="field-minus" name="qualitasLiability"
+                                                            data-type="low" onclick={updateLiability}></button>
+                                                        <lightning-formatted-number class="full-width-field"
+                                                            value='30000' format-style="currency" currency-code="USD">
+                                                        </lightning-formatted-number>
+                                                        <button class="field-plus" name="qualitasLiability"
+                                                            data-type="high" onclick={updateLiability}></button>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="checkbox-field">
+                                            <lightning-input type="checkbox" name="qualitasLiablityOnly"
+                                                label={label.LiabilityOnly} checked={qualitasLiablityOnly}
+                                                onchange={updateLibilityValue}></lightning-input>
+                                        </div>
+                                    </div>
+                                    <div class="quote-button slds-align_absolute-center">
+                                        <button class="button -ternary -wider" name="qualitasQuote"
+                                            data-id="qualitasQuote" onclick={handleNextClick}
+                                            disabled={qualitasLiablityOnl}>{label.Purchase}</button>
+                                    </div>
+                                    <div class="quote-terms slds-align_absolute-center">
+                                        <a href={automobileQualitasTermCondition} class="simple-link"
+                                            target="_blank">{label.Fullterms}
+                                             
+                                            <lightning-icon icon-name="utility:new_window" alternative-text="new tab"
+                                            variant="inverse"
+                                            size="xx-small" class="slds-p-right--x-small"></lightning-icon>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" medium-device-size="12" large-device-size="4"
+                            small-device-size="12" class="slds-p-around_small">
+                            <div class="MapfreSection slds-p-around_small">
+                                <div class="quote-provider">
+                                    <img src={mapfreImg} alt="Mapfre" />
+                                </div>
+                                <div class="quotePrice">
+                                    <lightning-formatted-number value='99' format-style="currency" currency-code="USD">
+                                    </lightning-formatted-number>
+                                </div>
+                                <div class="quoteBody">
+                                    <div class="unit">
+                                        <h2 class="red">{label.Vehicle}</h2>
+                                        <div class="grid -spacing-sm">
+                                            <div class="grid_1-2">
+                                                <div class="datepicker">
+                                                    <lightning-input required="true" class="Validation"
+                                                        value='09-08-2000' name="Start_Date_for_Coverage" type="date"
+                                                        variant="label-hidden" onchange={handleChange} min={minDate}>
+                                                    </lightning-input>
+                                                </div>
+                                            </div>
+                                            <div class="grid_1-2">
+                                                <div class="datepicker">
+                                                    <lightning-input class="Validation" required="true"
+                                                        name="End_Date_for_Coverage" type="date" value='10-11-2001'
+                                                        variant="label-hidden" onchange={handleChange} min={endMinDate}
+                                                        max={endMaxDate}>
+                                                    </lightning-input>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="grid -spacing-sm">
+                                            <div class="grid_1-2">
+                                                <div class="datepicker">
+                                                    <lightning-input required="true" class="Validation"
+                                                        value='00:00:00:00' name="Start_Date_for_Coverage" type="time"
+                                                        timezone="pst" variant="label-hidden" onchange={handleChange}
+                                                        min={minDate}>
+                                                    </lightning-input>
+                                                </div>
+                                            </div>
+                                            <div class="grid_1-2">
+                                                <div class="datepicker">
+                                                    <lightning-input required="true" class="Validation"
+                                                        value='00:30:00:00' name="Start_Date_for_Coverage" type="time"
+                                                        timezone="pst" variant="label-hidden" onchange={handleChange}
+                                                        min={minDate}>
+                                                    </lightning-input>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="adjustable-fields">
+                                            <div class="adjustable-field">
+                                                <span class="field-label">
+                                                    <lightning-icon icon-name="utility:info" alternative-text="Warning!"
+                                                        variant="warning" title="warning variant xx-small"
+                                                        size="xx-small" class="slds-p-right--x-small"></lightning-icon>
+                                                    {label.Days}
+                                                </span>
+                                                <span class="field-item">
+                                                    <lightning-input variant="label-hidden" type="number"
+                                                        class="full-width-field" disabled="true" value='80'>
+                                                    </lightning-input>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="adjustable-fields">
+                                            <div class="adjustable-field">
+                                                <span class="field-label">
+                                                    <lightning-icon icon-name="utility:info" alternative-text="Warning!"
+                                                        variant="warning" title="warning variant xx-small"
+                                                        size="xx-small" class="slds-p-right--x-small"></lightning-icon>
+                                                    {label.Daysintow}
+                                                </span>
+                                                <span class="field-item">
+                                                    <lightning-input variant="label-hidden" type="number"
+                                                        class="full-width-field" disabled="true" value='20'>
+                                                    </lightning-input>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="adjustable-fields">
+                                            <div class="adjustable-field">
+                                                <span class="field-label">
+                                                    <lightning-icon icon-name="utility:info" alternative-text="Warning!"
+                                                        variant="warning" title="warning variant xx-small"
+                                                        size="xx-small" class="slds-p-right--x-small"></lightning-icon>
+                                                    {label.VehicleValue}
+                                                </span>
+                                                <span class="field-item">
+                                                    <lightning-input variant="label-hidden" type="number"
+                                                        class="full-width-field" disabled="true" value='2000'>
+                                                    </lightning-input>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="adjustable-fields">
+                                            <div class="adjustable-field">
+                                                <span class="field-label">
+                                                    <lightning-icon icon-name="utility:info" alternative-text="Warning!"
+                                                        variant="warning" title="warning variant xx-small"
+                                                        size="xx-small" class="slds-p-right--x-small"></lightning-icon>
+                                                    {label.CombinedLiability}
+                                                </span>
+                                                <span class="field-item">
+                                                    <div class="slds-float_right">
+                                                        <button class="field-minus" name="qualitasLiability"
+                                                            data-type="low" onclick={updateLiability}></button>
+                                                        <lightning-formatted-number value='30000'
+                                                            format-style="currency" currency-code="USD">
+                                                        </lightning-formatted-number>
+                                                        <button class="field-plus" name="qualitasLiability"
+                                                            data-type="high" onclick={updateLiability}></button>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="checkbox-field">
+                                            <lightning-input type="checkbox" name="qualitasLiablityOnly"
+                                                label={label.LiabilityOnly} checked={qualitasLiablityOnly}
+                                                onchange={updateLibilityValue}></lightning-input>
+                                        </div>
+                                    </div>
+                                    <div class="quote-button slds-align_absolute-center">
+                                        <button class="button -secondary -wider" name="qualitasQuote"
+                                            data-id="qualitasQuote" onclick={handleNextClick}
+                                            disabled={qualitasLiablityOnl}>{label.Purchase}</button>
+                                    </div>
+                                    <div class="quote-terms slds-align_absolute-center">
+                                        <a href={automobileQualitasTermCondition} class="simple-link"
+                                            target="_blank">{label.Fullterms}
+                                             <lightning-icon icon-name="utility:new_window" alternative-text="new tab"
+                                            variant="success"
+                                            size="xx-small" class="slds-p-right--x-small"></lightning-icon></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </lightning-layout-item>
+                    </template>
+                </template>
+            </lightning-layout>
+        </div>
+        <div class="slds-grid slds-m-top_xx-large slds-p-around_x-small">
+			<div class="slds-is-relative">
+				<div class="loaderBtn"></div>
+				<button class="buttonPrev slds-m-right_small" onclick={handlePrevClick}>{label.Prev}</button>
+			</div>
+			<div class="slds-is-relative">
+				<div class="loaderBtn"></div>
+				<button class="buttonNext slds-m-left_small" onclick={handleNextClick}>{label.Next}</button>
+			</div>
+		</div>
+    </div>
+</template>

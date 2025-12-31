@@ -1,0 +1,158 @@
+<template>
+    <div class="towed-units-wrapper">
+        <!-- Page Title -->
+        <div class="towed-header">
+            <h3 class="section-title">Towed Units Management</h3>
+            <p class="section-subtitle">Add information about any items you'll be towing</p>
+        </div>
+
+        <!-- Existing Customer Towed Unit Selection -->
+        <template if:true={currentUserType}>
+            <template if:true={existingtowedUnits}>
+                <div class="towed-existing-select">
+                    <div class="form-group">
+                        <label>Select a Previously Added Towed Unit</label>
+                        <select 
+                            name="existingTow" 
+                            class="form-select"
+                            onchange={changetowedOption}>
+                            <option value="">Select a Tow From Account</option>
+                            <template for:each={existingtowedUnits} for:item="option">
+                                <option key={option.value} value={option.value}>{option.label}</option>
+                            </template>
+                        </select>
+                    </div>
+                </div>
+            </template>
+        </template>
+
+        <!-- Towed Units Table -->
+        <template if:true={isTowAdded}>
+            <div class="towed-units-table">
+                <div class="table-responsive">
+                    <table class="buho-table">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Value</th>
+                                <th>Days</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={towedUnits} for:item="unit" for:index="index">
+                                <tr key={unit.uid}>
+                                    <td data-label="Type">{unit.Towed_Unit_Type__c}</td>
+                                    <td data-label="Value">${unit.Towed_Unit_Value__c}</td>
+                                    <td data-label="Days">{unit.Days_in_Tow__c} days</td>
+                                    <td data-label="Actions">
+                                        <div class="action-buttons">
+                                            <button 
+                                                type="button"
+                                                class="btn-icon btn-edit" 
+                                                data-index={index} 
+                                                onclick={handleEdit}
+                                                title="Edit">
+                                                <img src={iconEdit} alt="Edit" class="btn-icon-img">
+                                            </button>
+                                            <button 
+                                                type="button"
+                                                class="btn-icon btn-delete" 
+                                                data-index={index} 
+                                                onclick={handleDelete}
+                                                title="Delete">
+                                                <img src={iconDelete} alt="Delete" class="btn-icon-img">
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </template>
+
+        <!-- Add/Edit Form -->
+        <div class="towed-form-section">
+            <template if:true={showAddOrEditForm}>
+                <div class="towed-form-grid">
+                    <!-- Towed Unit Type -->
+                    <div class="form-group">
+                        <label for="towedType">Towed Unit Type <span class="required">*</span></label>
+                        <select 
+                            id="towedType"
+                            name="Towed_Unit_Type__c" 
+                            class="form-select"
+                            onchange={handleChange}
+                            disabled={isEditing}
+                            required>
+                            <option value="">Select Type</option>
+                            <template for:each={getAvailableTypes} for:item="option">
+                                <option key={option.value} value={option.value}>{option.label}</option>
+                            </template>
+                        </select>
+                    </div>
+
+                    <!-- Towed Unit Value -->
+                    <div class="form-group">
+                        <label for="towedValue">Towed Unit Value <span class="required">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input 
+                                type="number" 
+                                id="towedValue"
+                                name="Towed_Unit_Value__c"
+                                class="form-control" 
+                                placeholder="5,000"
+                                value={formValue}
+                                onchange={handleChange}
+                                min="1"
+                                required>
+                        </div>
+                    </div>
+
+                    <!-- Days in Tow -->
+                    <div class="form-group">
+                        <label for="daysInTow">Days in Tow <span class="required">*</span></label>
+                        <input 
+                            type="number" 
+                            id="daysInTow"
+                            name="Days_in_Tow__c"
+                            class="form-control" 
+                            placeholder="7"
+                            value={formDays}
+                            onchange={handleChange}
+                            min="1"
+                            required>
+                        <small class="form-text text-muted">All towed units must have the same number of days</small>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="form-actions">
+                    <button 
+                        type="button"
+                        class="btn-dark" 
+                        onclick={handleSaveOrAdd}
+                        disabled={isFormCompleteStatus}>
+                        {saveOrAddButtonLabel}
+                    </button>
+                    <template if:true={isEditing}>
+                        <button type="button" class="btn-light" onclick={cancelEdit}>
+                            Cancel
+                        </button>
+                    </template>
+                </div>
+            </template>
+
+            <!-- Message when all types are added -->
+            <template if:false={showAddOrEditForm}>
+                <div class="info-message">
+                    <img src={iconInfo} alt="Info" class="info-icon">
+                    <p>You have already added all available tow types. Edit or delete existing entries to modify.</p>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

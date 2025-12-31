@@ -1,0 +1,510 @@
+<template>
+    <div class="maindiv notranslate">
+        <div class="slds-text-heading_large slds-p-around_large screenHeading">{label.Getyourquickquote}</div>
+        <div class="slds-text-align_center slds-m-bottom_small slds-p-around--medium">
+            <template if:true={isHighlight}>
+                <button class="button -secondary" id="show-quote-normal" onclick={CompareHandle}>{label.QuoteDetail}</button>
+            </template>
+            <template if:false={isHighlight}>
+                <button class="button -secondary" id="show-quote-highlights" onclick={CompareHandle}>{label.Compare}</button>
+            </template>
+        </div>
+        <!-- <div class="compareSection slds-text-align_center">
+            <lightning-button class="button slds-align_absolute-center slds-p-around_medium" label="COMPARE"
+                title="COMPARE" onclick={CompareHandle}>
+            </lightning-button>
+        </div> -->
+        <div class="chubDetail">
+
+            <template if:true={quickQuoteDetail}>
+                <div class="quoteBox slds-p-around_medium">
+                    <div class="quote-provider">
+                        <img src={chubb}>
+                        <!-- <div class="recommended-label">Recommended</div> -->
+                    </div>
+                    <div class="quote-pricing">
+                        <lightning-formatted-number class="slds-align_absolute-center"
+                            value={quickQuoteDetail.rateRecord.Quote_Value__c} format-style="currency"
+                            currency-code="USD">
+                        </lightning-formatted-number>
+                    </div>
+
+                    <div class="quote-body">
+                        <template if:false={isHighlight}>
+                            <div class="unit">
+                                <h6 class="red">{label.Watercraft}</h6>
+
+                                <lightning-layout multiple-rows="true" class="slds-grid_vertical slds-m-bottom_small">
+                                    <lightning-layout-item class="slds-col slds-m-bottom_x-small">
+                                        <div class="grid -spacing-sm">
+                                            <div class="grid_1-2">
+                                                <div class="datepicker">
+                                                    <lightning-input type="date" name="Start_Date__c" label=""
+                                                        value={quoteDetails.Start_Date_for_Coverage__c} disabled="true"
+                                                        class="Validation" pattern="^(?![\S-])[\W -]+$">
+                                                    </lightning-input>
+                                                </div>
+                                            </div>
+                                            <div class="grid_1-2">
+                                                <div class="datepicker">
+                                                    <lightning-input type="date" name="End_Date__c" disabled="true"
+                                                        label="" class="Validation"
+                                                        value={quoteDetails.End_Date_for_Coverage__c}
+                                                        pattern="^(?![\S-])[\W -]+$">
+                                                    </lightning-input>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </lightning-layout-item>
+
+                                    <template if:false={showTimeField}>
+                                        <lightning-layout-item class="slds-col">
+                                            <div class="grid -spacing-sm">
+                                                <div class="grid_1-2">
+                                                    <div class="datepicker">
+                                                        <lightning-input type="time" name="Start_Time__c"
+                                                            disabled="true" label="" value={setStartTime}
+                                                            pattern="^(?![\S-])[\W -]+$">
+                                                        </lightning-input>
+                                                    </div>
+                                                </div>
+                                                <div class="grid_1-2">
+                                                    <div class="datepicker">
+                                                        <lightning-input type="time" name="End_time__c" disabled="true"
+                                                            label="" value={setEndTime} pattern="^(?![\S-])[\W -]+$">
+                                                        </lightning-input>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </lightning-layout-item>
+                                    </template>
+
+
+                                    <lightning-layout-item class="slds-col">
+                                        <div class="grid -spacing-sm">
+                                            <div class="grid_1-1">
+                                                <div class="datepicker">
+                                                    <div>
+                                                        <span class="field-label">
+                                                            {label.Days}
+                                                            <i class="icon-info"
+                                                                title="daystooltips"></i>
+                                                        </span>
+                                                    </div>
+                                                    <lightning-input type="number"
+                                                        class="half-width-field" disabled="true"
+                                                        label={label.Days} variant="label-hidden"
+                                                        value={quickQuoteDetail.rateRecord.Day__c}>
+                                                    </lightning-input>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+
+
+                                <div class="slds-grid full-width slds-grid_vertical slds-m-bottom_x-small">
+                                    <div class="slds-col slds-m-bottom_x-small">
+                                        <div class="adjustable-field">
+                                            <span class="field-label">
+                                                {label.TotalThirdPartyLiability}
+                                                <i class="icon-info"
+                                                title={label.Thecombinationofmax}></i>
+                                            </span>
+                                            <span class="field-item slds-form-element">
+                                                <button class="field-minus" name="partyLiability" data-type="low"
+                                                    onclick={lowLiability}></button>
+                                                    
+                                                        <!-- <lightning-input variant="label-hidden" type="currency"
+                                                            class="half-width-field slds-m-horizontal_x-small" disabled="true"
+                                                            value={thirdPartyBodilyInjuriy}></lightning-input> -->
+                                                        <div class="inputTextshowOnly">
+                                                            <input type="text" value={totalThirdPartyLiability} disabled>
+                                                        </div>
+                                                   
+                                                <button class="field-plus" name="partyLiability" data-type="high"
+                                                    onclick={highLiability}></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                               
+                                </div>
+
+                                <div class="slds-grid full-width slds-grid_vertical slds-m-bottom_x-small">
+                                    <div class="slds-col slds-m-bottom_x-small">
+                                        <div class="adjustable-field">
+                                            <span class="field-label">
+                                               {label.ThirdPartyBodilyInjury} 
+                                               <i class="icon-info"
+                                               title={label.Theamountofliabilitycoverage}></i>
+                                           
+                                            </span>
+                                            <span class="field-item slds-form-element">
+                                                <!-- <lightning-input variant="label-hidden" type="currency"
+                                                    class="half-width-field slds-m-horizontal_x-small" disabled="true"
+                                                    value={thirdPartyBodilyInjuriy}></lightning-input> -->
+                                                <div class="inputTextshowOnly">
+                                                    <input type="text" value={thirdPartyBodilyInjuriy} disabled>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col">
+                                        <div class="adjustable-field">
+                                            <span class="field-label">
+                                                {label.ThirdPartyPropertyDamage}
+                                                <i class="icon-info"
+                                                    title={label.Theamountofdamageto}></i>
+                                                
+                                            </span>
+                                            <span class="field-item slds-form-element">
+                                                <div class="inputTextshowOnly">
+                                                    <!-- <lightning-input variant="label-hidden" type="currency"
+                                                    class="half-width-field" disabled="true"
+                                                    value={valuePropertyDamageLiability}></lightning-input> -->
+                                                    <input type="text" value={valuePropertyDamageLiability} disabled>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="slds-grid full-width slds-grid_vertical slds-m-bottom_x-small">
+                                    <div class="checkbox-field ">
+                                        <lightning-input class="slds-col" type="checkbox"
+                                            label={label.LiabilityOnly} name="liability" checked="true" disabled="true">
+                                        </lightning-input>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </template>
+                        <template if:true={isHighlight}>
+                            <div class="quote-highlight">
+                                <template if:true={coverageDecuctible}>
+                                    <div class="highlight-title">
+                                        {label.Deductibles}
+                                        <template if:true={coverageDecuctible}>
+                                            <i class="icon-checkmark"></i>
+                                        </template>
+                                        <template if:false={coverageDecuctible}>
+                                            <i class="icon-cross"></i>
+                                        </template>
+                                    </div>
+                                </template>
+
+
+                                <div class="highlight-list-desc">
+                                    <template if:true={coverageMap.Chubb.Collision_Deductible__c}>
+                                        <div class="highlight-title" style="padding-left: 15px">
+                                            {label.CollisionDeductible}
+                                            <template if:true={coverageMap.Chubb.Collision_Deductible__c}>
+                                                <div class="slds-text-align_right">
+                                                    {coverageMap.Collision_Deductible__c}
+                                                </div>
+                                            </template>
+                                            <template if:false={coverageMap.Chubb.Collision_Deductible__c}>
+                                                <span style="position: absolute;right: 0;">{label.NA}</span>
+                                            </template>
+
+                                        </div>
+                                    </template>
+
+
+
+                                    <template if:true={coverageMap.Chubb.Deductible_Total_Theft__c}>
+                                        <div class="highlight-title" style="padding-left: 15px">
+                                            {label.CollisionDeductible}
+                                            <template if:true={coverageMap.Chubb.Deductible_Total_Theft__c}>
+                                                <div class="slds-text-align_right">
+                                                    {coverageMap.Chubb.Deductible_Total_Theft__c}
+                                                </div>
+                                            </template>
+                                            <template if:false={coverageMap.Chubb.Deductible_Total_Theft__c}>
+                                                <span style="position: absolute;right: 0;">{label.NA}</span>
+                                            </template>
+
+                                        </div>
+                                    </template>
+
+                                    <template if:true={uninsuredMotoristDeductibleWaiver}>
+                                        <div class="highlight-title" style="padding-left: 15px">
+                                            {label.CollisionDeductible}
+                                            <template if:true={uninsuredMotoristDeductibleWaiver}>
+                                                <i class="icon-checkmark"></i>
+                                            </template>
+                                            <template if:false={uninsuredMotoristDeductibleWaiver}>
+                                                <i class="icon-cross"></i>
+                                            </template>
+
+                                        </div>
+                                    </template>
+
+
+                                </div>
+                            </div>
+                            <template if:true={coverageMap.Chubb.Labor_Rates__c}>
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        {label.LaborRates}
+                                        <template if:true={coverageMap.Chubb.Labor_Rates__c}>
+                                            <div class="slds-text-align_right">
+                                                {coverageMap.Chubb.Labor_Rates__c}
+                                            </div>
+                                        </template>
+                                        <template if:true={coverageMap.Chubb.Labor_Rates__c}>
+                                            <span style="position: absolute;right: 0;">{label.NA}</span>
+                                        </template>
+
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template if:true={GlassBreakage}>
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        {label.GlassBreakage}
+                                        <template if:true={GlassBreakage}>
+                                            <i class="icon-checkmark"></i>
+                                        </template>
+                                        <template if:false={GlassBreakage}>
+                                            <i class="icon-cross"></i>
+                                        </template>
+
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template if:true={roadsideAssistance}>
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        {label.Roadsideassistance}
+                                        <template if:true={roadsideAssistance}>
+                                            <i class="icon-checkmark"></i>
+                                        </template>
+                                        <template if:false={roadsideAssistance}>
+                                            <i class="icon-cross"></i>
+                                        </template>
+
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template if:true={chubbRentalCar}>
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        {label.RentalCar}
+                                        <template if:true={chubbRentalCar}>
+                                            <i class="icon-checkmark"></i>
+                                        </template>
+                                        <template if:false={chubbRentalCar}>
+                                            <i class="icon-cross"></i>
+                                        </template>
+
+                                    </div>
+                                </div>
+                            </template>
+
+
+
+                            <div class="quote-highlight">
+                                <div class="highlight-title">
+                                    {label.LegalDefenseandBail}
+                                    <template if:true={chubbLegalDefenseandBail}>
+                                        <i class="icon-checkmark"></i>
+                                    </template>
+                                    <template if:false={chubbLegalDefenseandBail}>
+                                        <i class="icon-cross"></i>
+                                    </template>
+
+                                </div>
+                                <template if:true={coverageMap.Chubb.Legal_Defense_and_Bail_Details__c}>
+                                    <div class="slds-text-align_right">
+                                        {coverageMap.Chubb.Legal_Defense_and_Bail_Details__c}
+                                    </div>
+                                </template>
+
+                            </div>
+
+                            <template if:true={chubbVandalism}>
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        {label.Vandalism}
+                                        <template if:true={chubbVandalism}>
+                                            <i class="icon-checkmark"></i>
+                                        </template>
+                                        <template if:false={chubbVandalism}>
+                                            <i class="icon-cross"></i>
+                                        </template>
+
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template if:true={chubbPartialTheft}>
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        {label.PartialTheft}
+                                        <template if:true={chubbPartialTheft}>
+                                            <i class="icon-checkmark"></i>
+                                        </template>
+                                        <template if:false={chubbPartialTheft}>
+                                            <i class="icon-cross"></i>
+                                        </template>
+
+                                    </div>
+                                </div>
+                            </template>
+                            <template if:true={chubbPlaneTicketsHome}>
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        {label.PlaneTicketsHome}
+                                        <template if:true={chubbPlaneTicketsHome}>
+                                            <i class="icon-checkmark"></i>
+                                        </template>
+                                        <template if:false={chubbPlaneTicketsHome}>
+                                            <i class="icon-cross"></i>
+                                        </template>
+
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template if:true={coverageMap.Chubb.Bonus_Coverage__c}>
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        {label.LaborRates}
+                                        <template if:true={coverageMap.Chubb.Bonus_Coverage__c}>
+                                            <div class="slds-text-align_right">
+                                                {coverageMap.Chubb.Bonus_Coverage__c}
+                                            </div>
+                                        </template>
+                                        <template if:true={coverageMap.Chubb.Bonus_Coverage__c}>
+                                            <span style="position: absolute;right: 0;">{label.NA}</span>
+                                        </template>
+
+                                    </div>
+                                </div>
+                            </template>
+
+
+                        </template>
+                        <!-- <lightning-layout multiple-rows="true" class="slds-m-top--large"> -->
+                        <div class="quote-button slds-m-top--xx-large slds-text-align--center">
+                            <button class="button -terniry -wider" title={label.Purchase} onclick={handleNextClick}>
+                                {label.Purchase}
+                            </button>
+                        </div>
+
+                        <div class="quote-terms slds-m-top--x-large slds-text-align--center">
+                            <a href="https://mexinsurance.my.salesforce.com/sfc/p/#15000000NeKA/a/6R000000IrcE/mEmg96axI_3AaIPiVsb.IsCsUNtO.s_eWT2hURLRUuo"
+                                class="simple-link" target="_blank">{label.Fullterms} &nbsp; <i class="icon-new-tab"></i></a>
+                        </div>
+                        <!-- <lightning-button class="button slds-p-around_small slds-align_absolute-center"
+                                label="PURCHASE" title="PURCHASE" onclick={handleNextClick}></lightning-button>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12"
+                                large-device-size="12"
+                                class="slds-p-around_x-small slds-m-top_x-small slds-align_absolute-center">
+                                <a href="https://mexinsurance--ws.my.salesforce.com/sfc/p/2i0000008c5z/a/2i0000004sD6/wW13sCWkkFWeCXhBwsvAYva9ybFEWPQlUlaCB5Bo.c0"
+                                    class="simple-link" target="_blank">Full terms</a>
+                                
+                            </lightning-layout-item>
+
+                        </lightning-layout> -->
+
+
+
+                        <!-- <div class="slds-grid slds-gutters">
+                <div class="slds-col slds-size_6-of-12 lgc-bg">
+                </div>
+                <div class="slds-grid slds-gutters slds-col slds-size_6-of-12">
+                    <div class="slds-col slds-size_2-of-12">
+                        <lightning-button-icon icon-name="utility:add"></lightning-button-icon>
+                    </div>
+                    <div class="slds-col slds-size_8-of-12">
+                        <lightning-input type="text" label="" placeholder="Liability**"></lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_2-of-12">
+                        <lightning-button-icon icon-name="utility:dash"></lightning-button-icon>
+                    </div>
+                </div>
+            </div> -->
+
+
+
+                    </div>
+
+
+                </div>
+            </template>
+
+
+
+
+        </div>
+        <!-- <div class="slds-align_absolute-center slds-m-top_medium">
+            <lightning-button class="button  slds-p-around_medium" variant="base" label="Save quote" title="Save quote"
+                onclick={SaveQuoteHandle}>
+            </lightning-button>
+        </div> -->
+
+        <div class="slds-m-top_large slds-align_absolute-center horizontalAlign">
+            <div>
+                <button class="buttonPrev btnHover slds-m-right_small" title={label.Prev}
+                    onclick={handlePrevClick}>{label.Prev}</button>
+            </div>
+            <div>
+                <button class="buttonNext btnHover" title={label.SaveQuote} onclick={SaveQuoteHandle}>{label.Save}</button>
+            </div>
+        </div>
+
+
+        <!-- <div class="slds-p-around_xx-large">
+           <div style="float: right;">
+                <lightning-button class="button slds-m-left_small" label="Next" title="Next" onclick={handleNextClick}>
+                </lightning-button>
+            </div> 
+            <div style="float: right;">
+                <lightning-button class="button slds-m-right_small" label="Prev" title="Prev" onclick={handlePrevClick}>
+                </lightning-button>
+            </div>
+        </div> -->
+        <template if:true={isSaveQuote}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{label.SelectQuoteAndDownload}
+                        </h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+
+
+
+                        <lightning-input type="checkbox" name="Chubb" label={label.Chubb} checked="true"
+                            disabled="true"></lightning-input>
+
+
+
+                        <div class="horizontalAlign slds-align_absolute-center slds-m-top_large">
+                            <div class="">
+                                <button class="button btnHover slds-m-right_small" onclick={downloadQuote}>{label.DownloadPDF}
+                                    </button>
+                            </div>
+                            <div class="">
+                                <button class="button btnHover" onclick={sendEmailQuoteDetail}>{label.EmailPDF}</button>
+                            </div>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button  slds-button_neutral" onclick={cancleEdit}>{label.Cancel}</button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+
+
+        </template>
+    </div>
+</template>

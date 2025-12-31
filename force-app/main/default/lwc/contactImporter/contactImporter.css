@@ -1,0 +1,10 @@
+.slds-theme_success {
+    background-color: rgb(75, 202, 129);
+    color: white;
+    padding: 0.75rem;
+    border-radius: 0.25rem;
+}
+
+.slds-card {
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
+}

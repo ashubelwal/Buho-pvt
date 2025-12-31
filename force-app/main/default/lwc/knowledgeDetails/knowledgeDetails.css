@@ -1,0 +1,16 @@
+.article-body img,
+.article-body iframe {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 10px 0;
+}
+
+.article-body {
+    line-height: 1.6;
+}
+
+.custom-card {
+    max-width: 900px;
+    margin: auto;
+}

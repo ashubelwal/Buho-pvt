@@ -1,0 +1,47 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="days" type="List"/>
+    <aura:attribute name="months" type="List"/>
+    <aura:attribute name="years" type="List"/>
+    <aura:attribute name="day" type="String"/>
+    <aura:attribute name="month" type="String"/>
+    <aura:attribute name="year" type="String"/>
+    <aura:attribute name="message" type="String"/>
+    <aura:attribute name="custDate" type="Date"/>
+    <aura:attribute name="sobj" type="sobject"/>
+    <aura:attribute name="required" type="Boolean"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:method name="validateFields" action="{!c.vaildateField}" access="PUBLIC" />
+    <aura:attribute name="fieldLevelHelp" type="String"/>
+    <aura:attribute name="label" type="String"/> 
+    <aura:attribute name="onDateChange" type="Aura.Action"/>
+    <aura:method name="updateDateOnChange" action="{!c.updateDateOnChangeAction}" access="PUBLIC" />
+    
+    <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-size_12-of-12">
+            <aura:if isTrue="{!v.label}">
+                <label class="slds-form-element__label" >{!v.label}</label>
+            </aura:if>
+            <aura:if isTrue="{!v.fieldLevelHelp}">
+                <lightning:helptext  content="{!v.fieldLevelHelp}"/>
+            </aura:if>
+        </div>
+        <div class="slds-col slds-size_4-of-12 slds-p-right_small">
+            <lightning:combobox name="months" value="{!v.month}" placeholder="MM" 
+                options="{! v.months }" onchange="{! c.handleChange }" variant="label-hidden"
+                required="{!v.required}" aura:id="validateField"/>
+        </div>
+        <div class="slds-col slds-size_4-of-12">
+            <lightning:combobox name="days" value="{!v.day}" placeholder="DD" 
+                options="{! v.days }" onchange="{! c.handleChange }" variant="label-hidden"
+                required="{!v.required}" aura:id="validateField"/>
+        </div>
+        <div class="slds-col slds-size_4-of-12 slds-p-left_small">
+            <lightning:combobox name="years" value="{!v.year}" placeholder="YYYY" 
+                options="{! v.years }" onchange="{! c.handleChange }" variant="label-hidden"
+                required="{!v.required}" aura:id="validateField" />
+        </div>
+        <div class="slds-col slds-size_12-of-12 slds-has-error" aura:id="errorBody">
+            <div class="slds-form-element__help">{!v.message}</div>
+        </div>
+    </div>
+</aura:component>

@@ -1,0 +1,10 @@
+.THIS .flow-progress .step {
+        z-index: 2 !important;
+}
+.THIS .flow-progress .progress-bar{
+    z-index: 1 !important;
+}
+
+.THIS .flow-progress .progress-bar-current{
+    z-index: 1 !important;
+}

@@ -1,0 +1,173 @@
+<aura:component controller="QuickQuotationCtrl" implements="forceCommunity:availableForAllPageTypes" access="global">
+    <aura:attribute name="title" type="String" access="public"/>
+    <aura:attribute name="registeredVehicleHeader" type="String" default="Owner of the Registered Vehicle"/>
+    <aura:attribute name="backButtonVisibility" type="Boolean" default="false" access="public"/>
+    <aura:attribute name="policyType" type="String" access="public"/>
+    <aura:attribute name="isOwner" type="boolean" default="true" access="public"/>
+    <aura:attribute name="drivers" type="List" access="public"/>
+    <aura:attribute name="driverTypeOptions" type="list" access="public"/>
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    <aura:attribute name="onNextClick" type="Aura.Action"/>
+    <aura:attribute name="quoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" access="public"/>
+    <aura:attribute name="driverRecord" type="Driver__c" default="{ 'sobjectType': 'Driver__c'}" access="public"/>
+    <aura:attribute name="vehicleRecord" type="Vehicle__c" default="{ 'sobjectType': 'Vehicle__c'}" />
+    <aura:attribute name="leadRecord" type="Lead" default="{ 'sobjectType': 'Lead'}" access="public"/>
+    <aura:attribute name="watercraftRecord" type="Watercraft__c" default="{ 'sobjectType': 'Watercraft__c'}" access="public"/>
+    <aura:attribute name="countryOption" type="List"/>
+    <aura:attribute name="isCommunityUser" type="Boolean" access="public" default="false"/>
+    <aura:attribute name="goInitChildComponent" type="Boolean"/>
+    <aura:attribute name="isEditDriver" type="boolean" default="false"/>
+    <aura:attribute name="isEditDriverOwner" type="boolean"/>
+    <aura:attribute name="editPolicy" type="boolean" default="false"/>
+    <aura:attribute name="renewPolicy" type="Boolean" default="false" />
+    <aura:attribute name="iscloneConditionPass" type="boolean" default="false" />
+
+    <aura:attribute name="driverForEdit" type="Driver__c" default="{ 'sobjectType': 'Driver__c'}" access="public"/>
+    <aura:attribute name="loginUserDrivers" type="List"/>
+    <aura:attribute name="loginUserDriverOption" type="List"/>
+    <aura:attribute name="isMoreDriver" type="boolean" default="false"/>
+    <aura:attribute name="isDriverScreenOpen" type="boolean" default="false"/>
+    <aura:attribute name="Primary_insured" type="boolean" default="false"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <aura:if isTrue="{!v.editPolicy}">
+        <c:Policy_Edit_Steps step="step3" completedStep="3"/>
+        <aura:set attribute="else">
+            <c:Insurance_Flow_Steps step="step3" completedStep="2" isOwner="{!v.vehicleRecord.Is_the_vehicle_registered_to_a_business__c}"/>        
+        </aura:set>
+	</aura:if>
+    <lightning:layoutItem padding="around-small" size="12" class="slds-align-center slds-m-top_xx-large">
+        <div class="page-title">
+            <button class="button -plain -back-button" name="step_10" onclick="{! v.onBackClick }">
+                <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/>
+                Back
+            </button>
+            <h1>{!v.registeredVehicleHeader}</h1>
+        </div>
+    </lightning:layoutItem>
+
+    <lightning:layoutItem size="12">
+        <aura:if isTrue="{!v.isCommunityUser}">
+            <lightning:combobox name="progress" placeholder="Select a driver from your account" options="{!v.loginUserDriverOption}" onchange="{!c.handleChange}"/>
+        </aura:if>
+
+        <table class="listing-table" width="100%">
+            <tr>
+                <th width="200">Driver Name</th>
+                <th>DOB</th>
+                <th>State</th>
+                <th>Country</th>
+                <th>License #</th>
+                <th>&nbsp;</th>
+            </tr>
+            <aura:iteration items="{!v.drivers}" var="driver" indexVar="driverRecordIndex">
+                <tr>
+                    <td>{!driver.First_Name__c} &nbsp; {!driver.Last_Name__c}</td>
+                    <td>{!driver.Dob__c}</td>
+                    <td>{!driver.License_state__c}</td>
+                    <td>{!driver.License_Country__c}</td>
+                    <td>{!driver.license_number__c}</td>
+                    <td>
+                        <a class="simple-link" href="javascript:void(0)" name="{!driverRecordIndex}"
+                           onclick="{!c.editDriver}">Edit</a>
+                        &nbsp;
+                        <a class="simple-link" href="javascript:void(0)" name="{!driverRecordIndex}"
+                           onclick="{!c.deleteDriver}">Remove</a>
+                    </td>
+                </tr>
+            </aura:iteration>
+            <!-- If no drivers are added -->
+            <aura:if isTrue="{!or( empty( v.drivers ))}">
+                <tr>
+                    <td colspan="5">
+                        <div class="align-center">No drivers added</div>
+                    </td>
+                </tr>
+            </aura:if>
+            <!-- End if no drivers are added -->
+        </table>
+    </lightning:layoutItem>
+
+    <lightning:layoutItem size="12" class="slds-align_absolute-center slds-m-top_xx-large">
+        
+        <aura:if isTrue="{!or(not(empty( v.drivers )), v.isCommunityUser)}">
+            <ul class="slds-accordion">
+                <li class="slds-accordion__list-item">
+                    <section class="slds-accordion__section slds-is-open">
+                        <div class="slds-accordion__summary">
+                            <h2 class="slds-accordion__summary-heading">
+                                <aura:if isTrue="{!v.isDriverScreenOpen}" >
+                                    <lightning:button iconName="utility:chevrondown" label="Or Add a New Driver" variant="base" onclick="{!c.openDriverDetail}"/>
+                                    <aura:set attribute="else">
+                                        <lightning:button iconName="utility:chevronright" label="Or Add a New Driver" variant="base" onclick="{!c.openDriverDetail}" />
+                                    </aura:set>
+                                </aura:if>
+                            </h2>
+                        </div>
+                        <aura:if isTrue="{!v.isDriverScreenOpen}" >
+                            <div class="slds-accordion__content" id="referenceId-45">
+                                <aura:if isTrue="{!v.goInitChildComponent}">
+                                    <c:DriverRegistration aura:id="driverDetail" driverObject="{!v.driverRecord}" 
+                                    iscloneConditionPass="{!v.iscloneConditionPass}"                      
+                                    isOwner="{!v.isOwner}" policyType="{!v.policyType}"
+                                    isCommunityUser="{!v.isCommunityUser}" drivers="{!v.drivers}"/>
+                                </aura:if>
+                            </div>
+                        </aura:if>
+                    </section>
+                </li>
+            </ul>
+
+            <aura:set attribute="else">
+                <aura:if isTrue="{!v.goInitChildComponent}">
+                    <c:DriverRegistration aura:id="driverDetail" driverObject="{!v.driverRecord}" 
+                    isOwner="{!v.isOwner}" Primary_insured="{!v.Primary_insured}" 
+                    policyType="{!v.policyType}"
+                    iscloneConditionPass="{!v.iscloneConditionPass}"                      
+                    isCommunityUser="{!v.isCommunityUser}" drivers="{!v.drivers}"/>
+                </aura:if>
+            </aura:set>
+        </aura:if>
+    </lightning:layoutItem>
+
+    <lightning:layoutItem padding="around-small" size="12" class="slds-align_absolute-center slds-m-top_large">
+        <aura:if isTrue="{!or(not(empty( v.drivers )), v.isCommunityUser)}">
+            <aura:if isTrue="{!v.isDriverScreenOpen}" >
+                <button class="button -secondary -wider" name="step_10" onclick="{!c.cancelNewDriver }">Cancel</button>
+                <button class="button -secondary -wider -margin-left" name="step_10" onclick="{! c.addDriver }">Add</button>
+                <aura:set attribute="else">
+                    <button class="button -secondary -wider" name="step_10" onclick="{! c.onNextClick }">Next</button>
+                </aura:set>
+            </aura:if>
+            <aura:set attribute="else">
+                <button class="button -secondary -wider" name="step_10" onclick="{! c.addDriver }">Add</button>
+              <!--  <button class="button -secondary -wider -margin-left" name="step_10" onclick="{! c.onNextClick }">Next</button>  -->
+            </aura:set>
+        </aura:if>
+    </lightning:layoutItem>
+
+    <aura:if isTrue="{!v.isEditDriver}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                 aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Edit Driver</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <c:DriverRegistration aura:id="driverDetail" driverObject="{!v.driverForEdit}" isOwner="{!v.isEditDriverOwner}"
+                                          driverForEdit="{!v.driverForEdit}"
+                                          policyType="{!v.policyType}"
+                                          iscloneConditionPass="{!v.iscloneConditionPass}" 
+                                          Primary_insured="{!v.Primary_insured}" 
+                                          isCommunityUser="{!v.isCommunityUser}" drivers="{!v.drivers}"/>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.cancelEdit}">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick="{!c.updateDriver}">Save</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+</aura:component>

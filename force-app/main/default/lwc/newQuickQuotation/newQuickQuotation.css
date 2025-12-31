@@ -1,0 +1,227 @@
+.maindiv {
+    margin: auto;
+    max-width: 1280px;
+}
+.icon-checkmark{
+   /* float: right; */
+}
+.quickQuote{
+    width: 100%;
+    display: flex;
+}
+.quoteSection{
+    width: 780px;
+    margin: auto;
+}
+[class*='grid_'] {
+     float: none !important;
+    position: relative;
+}
+
+.boxStyle {
+    /* border: 1px solid #2221; */
+    border-radius: 2px !important;
+    padding: 4%;
+    min-height: 370px;
+    box-shadow: rgba(149, 157, 165, 0.2) 1px 1px 6px 0px;
+    background-color: #fff;
+}
+.towedSection {
+    position: relative;
+    left: 19%;
+    /* top: 45px; */
+    z-index: 99;
+}
+
+
+/* .boxStyle:hover {
+    box-shadow: 1px 2px 9px 0px #0000002b;
+    transform: translateY(-1px);
+    transition: .3s ease-in;
+} */
+
+.horizontalAlign {
+    position: relative;
+}
+.radiotype {
+    display: flex;
+    height: 20px;
+    width: 20px;
+}
+.titleQuotation{
+    display: flex;
+    margin: auto;
+    width: 780px;
+}
+.titleQuotation h4{
+    color: #003a70 !important;
+    font-size: 24px;
+    
+}
+.navigationButton{
+    position: relative;
+    cursor: pointer;
+    background: #003a70;
+    border: 2px solid #003a70;
+    color: #fff;
+    font-weight: 600;
+    height: 33px;
+    min-width: 120px;
+    user-select: none;
+    outline: none;
+    border-radius: 2px;
+    transition: all ease-in 0.4s;
+}
+
+.insuranceType {
+    width: 100%;
+    transition: .3s all;
+}
+
+.insuranceType .optionDivs{
+    border: 1px solid #b9b9b9f2;
+    width: 100%;
+    border-radius: 2px !important;
+    padding: 1%;
+}
+
+.uppderDiv{
+    display: flex;
+    width: 100%;
+}
+.insuranceType label strong{
+    height: 24px;
+    margin-top: 6px;
+
+}
+.insuranceType input[type=radio] {
+    display: none;
+    height: 0px;
+    width: 0px;
+}
+
+
+.insuranceTypeSelected label{
+    color: #fff !important;
+    /* border: 1px solid #003a70 !important; */
+}
+.insuranceTypeSelected{
+    border: 1px solid #003a70 !important;
+}
+
+
+.insuranceType .optionDivs:hover {
+    background: #ffffff;
+    border: 1px solid #b9b9b973;
+    transform: translateY(-1px);
+    transition: .3s ease-in;
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
+}
+
+.insuranceTypeSelected {
+    box-shadow: 2px 4px 20px 0px #00000040;
+    background: #003a70;
+    color: #fff !important;
+    transition: .3s ease-in;
+    position: relative;
+}
+.checkedIcon{
+    background: #fff;
+    position: absolute;
+    padding: 5px 7px 1px 5px;
+    border-radius: 50%;
+    top: 6%;
+    right: 2%;
+}
+.checkedsection{
+    width: 15%;
+}
+.vehicleIconSection{
+    width: 15%;
+}
+.VehicleLabel{
+    width: 70%;
+}
+
+/* Changin css */
+.insuranceTypeSelected:before {
+    /* content: "";
+    position: absolute;
+    background: #32808130;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+
+    text-align: center; */
+
+    content: "";
+    position: absolute;
+    background: #003a70;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    text-align: center;
+    z-index: -1;
+    border-radius: 2px;
+}
+
+.vehicleIcon{
+    position: relative;
+}
+/* .optionsChoice label{
+    width: 100%;
+    display: flex;
+} */
+
+/* 
+.buttonNext,.buttonPrev{
+    position: relative;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    background: none;
+    border: none;
+    border: 2px solid #8883A5;
+    color: #8883A5;
+    font-weight: 600;
+    height: 40px;
+    width: 100px;
+    user-select: none;
+    outline: none;
+    border-radius: 25px;
+    user-select: none;
+    outline: none;
+    transition: all ease-in 0.4s;
+}
+
+.buttonNext:hover,.buttonPrev:hover {
+    background: #8883A5;
+    color: white;
+}
+.upper, .lower {
+    height: 154px;
+    width: 2px;
+    background: gray;
+    position: relative;
+    left: 48%;
+}
+
+@media only screen and (max-width: 720px) {
+    .upper {
+        height: 2px;
+        width: 100px;
+        background: gray;
+        position: absolute;
+        top: 41.6%;
+        left: 18%;
+    }
+    .lower {
+        height: 2px;
+        width: 100px;
+        background: gray;
+        position: absolute;
+        top: 41.6%;
+        left: 58%;
+    }
+  } */

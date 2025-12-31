@@ -1,0 +1,81 @@
+<template>
+
+    <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-p-around_small">
+            <lightning-combobox name="Lienholder_Country__cmbx" class="Validation" label="Country"
+                value={lienholderData.Lienholder_Country__cmbx} placeholder="Country" options={countryoptions} onchange={handleChange}
+                required></lightning-combobox>
+        </div>
+
+        <template if:true={otherCountry}>
+            <div class="slds-col slds-p-around_small">
+                <lightning-input class="Validation" label="Country"
+                    pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" maxlength="40"
+                    value={lienholderData.Lienholder_Country__c} name="Lienholder_Country__c" onchange={handleChange}
+                    required>
+                </lightning-input>
+            </div>
+        </template>
+        <!-- <template if:true={otherCountry}>
+            <div class="slds-col slds-p-around_small">
+                <lightning-input class="Validation" name="Lienholder_Country__c" label="Country" value={lienholderData.Lienholder_Country__c}
+                    pattern="^([a-zA-Z]+\s)*[a-zA-Z]+$" placeholder="Country" onchange={handleChange}></lightning-input>
+            </div>
+        </template> -->
+
+        <div class="slds-col slds-p-around_small">
+            <template if:true={otherCountry}>
+                <lightning-input name="Lienholder_name__c" class="Validation" label="Name" value={lienholderData.Lienholder_name__c}
+                    placeholder="Name" onchange={handleChange} max-length="100" required>
+                </lightning-input>
+            </template>
+
+            <template if:false={otherCountry}>
+                <template if:false={addNewLienHolder}>
+                    <c-lookup isrequired=true validation="Validation" filter-value={lienholderData.Lienholder_Country__cmbx}
+                        filter-api="Country__c" objecttype="Lienholder__c" searchagainst="Name__c"
+                        placeholder="SelectLienholder" label="Name" value={lienholderData.Lienholder_name__c} selectedname={lienholderData.Lienholder_name__c}
+                        selectedid={lienholderData.Lienholder_name__c} onselection={handleSearch}></c-lookup>
+                </template>
+                <template if:true={addNewLienHolder}>
+                    <lightning-input name="Lienholder_name__c" class="Validation" label="Name" value={lienholderData.Lienholder_name__c}
+                        placeholder="Name" onchange={handleChange} max-length="100" required>
+                    </lightning-input>
+                </template>
+            </template>
+        </div>
+
+        <div class="slds-col slds-p-around_small">
+            <lightning-input class="Validation" name="Lienholder_Postal_Code__c" label="Postal Code" value={lienholderData.Lienholder_Postal_Code__c}
+                type="text" max-length="9" placeholder="Postal Code"
+                pattern="^*([AaBbCcEeGgHhJjKkLlMmNnPpRrSsTtVvXxYy]\d[a-zA-Z])*-**(\d[a-zA-Z]\d)*$|^*(\d{5})*$|^*(\d{5})*-**(\d{4})*$"
+                onchange={handleChange} required>
+            </lightning-input>
+        </div>
+
+        <div class="slds-col slds-p-around_small">
+            <lightning-input class="Validation" name="Lienholder_State__c" label="State" value={lienholderData.Lienholder_State__c}
+                pattern="^([a-zA-Z]+\s)*[a-zA-Z]+$" placeholder="State" onchange={handleChange} required></lightning-input>
+        </div>
+
+        <div class="slds-col slds-p-around_small">
+            <lightning-input class="Validation" name="Lienholder_City__c" label="City" value={lienholderData.Lienholder_City__c}
+                pattern="^([a-zA-Z]+\s)*[a-zA-Z]+$" placeholder="City" onchange={handleChange} required>
+            </lightning-input>
+        </div>
+
+        <div class="slds-col slds-p-around_small">
+            <lightning-input class="Validation" name="Lienholder_Street__c" label="Address" value={lienholderData.Lienholder_Street__c} placeholder="Address"
+                onchange={handleChange} pattern="^\S+(?: \S+)*$" required>
+            </lightning-input>
+        </div>
+
+        <div class="slds-col slds-p-around_small">
+            <lightning-input name="Lienholder_Phone__c" label="Phone" value={lienholderData.Lienholder_Phone__c} type="text"
+                max-length="17" pattern="^\(\d{3}\)\s\d{3}-\d{4,7}$" class="Validation" placeholder="Phone"
+                onchange={handleChange} required>
+            </lightning-input>
+        </div>
+
+    </div>
+</template>

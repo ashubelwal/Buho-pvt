@@ -1,0 +1,84 @@
+<aura:component controller="WatercraftFlowController" implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="title" type="String" access="public"/>
+    <aura:attribute name="backButtonVisibility" type="Boolean" default="false" access="public" />
+    <aura:attribute name="policyType" type="String" access="public"/>
+    <aura:attribute name="underwriter" type="String" access="public"/>
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    <aura:attribute name="onNextClick" type="Aura.Action"/>
+    <aura:attribute name="quoteIds" type="List" access="public" />
+    <aura:attribute name="usDestinations" type="List" access="public" />
+    <aura:attribute name="tripPurposes" type="List" access="public" />
+    <aura:attribute name="aboutusOption" type="List" access="public" />
+    <aura:attribute name="rateRecordList" type="List" access="public" />
+    <aura:attribute name="communityUser" type="Boolean" access="public"/>
+    <aura:attribute name="quoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" />
+
+    <aura:attribute name="policyMapList" type="list"  />
+    
+	<aura:attribute name="policyRecord" type="Policy__c" default="{ 'sobjectType': 'Policy__c'}"/>
+    <aura:attribute name="contactRecord" type="Contact" default="{ 'sobjectType': 'Contact'}"/>
+    <aura:attribute name="legalTermRecord" type="Legal_Term__c" default="{ 'sobjectType': 'Legal_Term__c'}"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <c:Insurance_Flow_Steps step="step4" completedStep="4"/>
+    
+    <lightning:layoutItem padding="around-small" size="12" class="align-center slds-m-top_xx-large">
+        <div class="page-title">
+            <button class="button -plain -back-button" name="step_13" onclick="{! v.onBackClick }">
+                <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/> Back
+            </button>
+            <h1>Online Insurance Final Details</h1>                        
+            <img class="slds-m-bottom_large" src="{!$Resource.mexinsurance_assets + '/images/icon-finish.svg'}" alt="Final Details"/>
+        </div>
+    </lightning:layoutItem>
+    
+    
+    <div class="slds-size_12-of-12">
+        <div class="form-container">
+            <lightning:combobox name="What_is_your_trip_destination_in_US__c" variant="label-hidden" placeholder="What is your trip destination?" options="{!v.usDestinations}" value="{!v.policyRecord.What_is_your_trip_destination_in_US__c}" onchange="{!c.updatePolicyField}"  />
+            <lightning:combobox name="What_is_the_purpose_of_trip__c" variant="label-hidden" placeholder="What is the trip purpose?"  options="{!v.tripPurposes}" value="{!v.policyRecord.What_is_the_purpose_of_trip__c}" onchange="{!c.updatePolicyField}" />
+            <lightning:combobox name="How_did_you_hear_about_us__c" variant="label-hidden"  placeholder="How did you hear about us?" options="{!v.aboutusOption}" value="{!v.contObject.How_did_you_hear_about_us__c}" onchange="{!c.updateContactField}" />
+            
+            <aura:if isTrue="{!v.aboutusValue == 'Other'}" >
+                <lightning:textarea name="How_did_you_hear_about_us_Other__c" placeholder="How did you hear about us?" variant="label-hidden" value="{!v.contactRecord.How_did_you_hear_about_us_Other__c}" onchange="{!c.updateContactField}" />
+            </aura:if>
+            <h3 class="red slds-m-top_large slds-m-bottom_medium">Yes, I want to receive the following:</h3>
+            <div class="radio-group">
+                <lightning:input type="checkbox" name="Newsletter__c" label="Newsletter" checked="{!v.contactRecord.Newsletter__c == 'Yes'}" onchange="{!c.updateContactField}" />
+                <lightning:input type="checkbox" name="Announcements__c" label="Announcements" checked="{!v.contactRecord.Announcements__c == 'Yes'}" onchange="{!c.updateContactField}" />
+                <lightning:input type="checkbox" name="Travel_Alerts__c" label="Travel Alerts" checked="{!v.contactRecord.Travel_Alerts__c == 'Yes'}" onchange="{!c.updateContactField}" />
+            </div>
+            
+            <h3 class="red slds-m-top_large slds-m-bottom_medium">I read and agree with the following:</h3>
+            
+            <lightning:input aura:Id="validateField" type="checkbox" name="Terms_of_Purchase_Confirmed__c" label="Terms of purchase" required="true" checked="{!v.policyRecord.Terms_of_Purchase_Confirmed__c}" onchange="{!c.updatePolicyField}" />
+            
+            <!--lightning:textarea value=""/-->
+            <div class="slds-textarea" style="overflow-y: scroll;height: 200px;">
+                <aura:if isTrue="{! v.legalTermRecord.Terms_of_Purchase_and_Use__c != '' }">
+                    <p>{! v.legalTermRecord.Terms_of_Purchase_and_Use__c }</p>
+                </aura:if>
+            </div>
+            
+            <lightning:input aura:Id="validateField" type="checkbox" class="slds-m-top_large" name="Terms_of_Cancellation_Confirmed__c" required="true" label="Terms of cancellation" checked="{!v.policyObject.Terms_of_Cancellation_Confirmed__c}" onchange="{!c.updatePolicyField}" />
+            
+            <!--lightning:textarea value="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem."/-->
+            <div class="slds-textarea" style="overflow-y: scroll;height: 200px;">
+                <aura:if isTrue="{! v.legalTermRecord.Terms_of_Cancellation__c != '' }">
+                    <p>{! v.legalTermRecord.Terms_of_Cancellation__c }</p>
+                </aura:if>
+                <aura:if isTrue="{! v.legalTermRecord.Daily_Policy_Cancellation__c != '' }">
+                    <p>{! v.legalTermRecord.Daily_Policy_Cancellation__c }</p>
+                </aura:if>
+                <aura:if isTrue="{! v.legalTermRecord.Semi_Annual_and_Annual_Policy_Cancellati__c != '' }">
+                    <p>{! v.legalTermRecord.Semi_Annual_and_Annual_Policy_Cancellati__c }</p>
+                </aura:if>
+            </div>  
+        </div>
+    </div> 
+    
+    <lightning:layoutItem padding="around-small" size="12" class="slds-align_absolute-center slds-m-top_large">
+        <button class="button -secondary -wider" name="step_13" onclick="{! c.onNextClick }">Next</button>
+    </lightning:layoutItem>
+</aura:component>

@@ -1,0 +1,98 @@
+@import 'c/nc_globalStyle';
+
+.custom-container {
+	color: black;
+}
+
+.wrapper {
+	padding: 10px;
+	background-color: #F4F8F9;
+	border-radius: 4px;
+}
+
+
+.loading {
+	position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #ffffff59;
+    height: 100%;
+    width: 100%;
+    cursor: progress;
+    z-index: 99;
+    border: 1px solid #eee;
+    border-radius: 4px;
+}
+
+.navigationBtn {
+	margin-bottom: 10px;
+	border: 1px solid #eee;
+	border-radius: 0.25rem;
+	padding: 20px;
+	background-color: #ffffff;
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.10);
+}
+
+.overview {
+	margin-bottom: 10px;
+	border: 1px solid #eee;
+	border-radius: 0.25rem;	
+	background-color: #ffffff;
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.10);	
+}
+
+.overview-loading {
+	background: rgb(255, 255, 255);
+    border: 1px solid rgb(238, 238, 238);
+    border-radius: 4px;
+    margin-top: -26%;
+    height: 100px;
+    position: relative;
+    z-index: 99999999999;
+}
+
+.data-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    padding: 0 15px;
+}
+
+.overview-title {
+	padding: 4px 10px;
+	border-bottom: 1px solid #eee;
+}
+
+.overview-title h2 {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.edit-btn {
+	margin: 0 0 0 7px;
+    position: relative;
+    top: -5px;
+}
+
+.data-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.30rem 0;
+    border-bottom: 1px solid #f3f2f2;
+}
+
+.field-name { 
+    color: #514f4d;
+    margin-right: 1rem;
+    font-size: 14px;
+}
+
+.field-value {
+    color: #080707;
+    text-align: right;
+    word-break: break-word;
+    font-size: 14px;
+}

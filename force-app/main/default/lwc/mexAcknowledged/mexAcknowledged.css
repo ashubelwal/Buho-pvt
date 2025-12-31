@@ -1,0 +1,26 @@
+.dummy{
+	color : black;
+}
+
+.imgStyle{
+	position: fixed;top: 20px;width: 30%;
+}
+.headerStyle{
+	color:#fff;font-weight:bolder;width:100%;text-align:center;font-size: 80px;
+}
+.noteStyle{
+	color:#fff;font-weight:500;width:100%;text-align:center;font-size: medium;margin-bottom: 7%;
+}
+
+@media (max-width:480px) {
+	.imgStyle{
+		position: fixed;top: 30px;width: 70%;
+	}
+	.headerStyle{
+		color:#fff;font-weight:bolder;width:100%;text-align:center;font-size: 50px;
+	}
+	.noteStyle{
+		color:#fff;font-weight:500;width:100%;text-align:center;padding: 0px 45px 0px 45px;font-size: 18px;margin-bottom: 50%;
+	}
+
+}

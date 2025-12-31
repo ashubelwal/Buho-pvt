@@ -1,0 +1,134 @@
+<template>
+    <div class="term-option-wrapper">
+        <!-- Page Title -->
+        <div class="step-header">
+            <h1>Select your <span class="highlight">Dates for Coverage.</span></h1>
+            <p class="step-subtitle">Sharing these details helps us ensure you get the right coverage</p>
+        </div>
+
+        <!-- Display error message if present -->
+        <template if:true={errorMessage}>
+            <div class="error-message visible">
+                {errorMessage}
+            </div>
+        </template>
+
+        <template if:true={flags.isLoaded}>
+            <form class="wizard-form">
+                <!-- Term Type Selection -->
+                <div class="form-group">
+                    <label>Select Term Type</label>
+                    <div class="term-type-selector">
+                        <template for:each={termOptionsWithClass} for:item="option">
+                            <button 
+                                key={option.value}
+                                type="button" 
+                                class={option.className}
+                                data-term={option.value}
+                                onclick={handleTermClick}>
+                                {option.label}
+                            </button>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Start Date and End Date Row -->
+                <template if:true={flags.isDateLoaded}>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="startDate">Start Date</label>
+                                <div class="input-with-icon">
+                                    <i class="bi bi-calendar3"></i>
+                                    <input 
+                                        type="text" 
+                                        id="startDate"
+                                        name="Start_Date_for_Coverage__c"
+                                        class="form-control flatpickr-input startDate" 
+                                        placeholder="MM/DD/YYYY"
+                                        data-input
+                                        onchange={handleInputChange}
+                                        disabled={flags.disableDateRange}
+                                        readonly
+                                        required>
+                                </div>
+                                <template if:false={isDailyTerm}>
+                                    <small class="form-text">Coverage begins at 12:01 AM on this date</small>
+                                </template>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="endDate">End Date</label>
+                                <div class="input-with-icon">
+                                    <i class="bi bi-calendar3"></i>
+                                    <input 
+                                        type="text" 
+                                        id="endDate"
+                                        name="End_Date_for_Coverage__c"
+                                        class="form-control flatpickr-input endDate" 
+                                        placeholder="MM/DD/YYYY"
+                                        value={formattedEndDate}
+                                        disabled={isEndDateDisabled}
+                                        readonly
+                                        required>
+                                </div>
+                                <template if:false={isDailyTerm}>
+                                    <small class="form-text">Coverage ends at 11:59 Pm on this date</small>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Start Time and End Time Row -->
+                <template if:true={showTimeSelection}>
+                    <div class="row g-4 time-selection">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="startTime">Start Time</label>
+                                <div class="input-with-icon">
+                                    <i class="bi bi-clock"></i>
+                                    <input 
+                                        type="time" 
+                                        id="startTime"
+                                        name="Start_Time__c"
+                                        class="form-control timepicker" 
+                                        value={inputValues.Start_Time__c}
+                                        onchange={handleInputChange}
+                                        placeholder="00:00 Am">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="endTime">End Time</label>
+                                <div class="input-with-icon">
+                                    <i class="bi bi-clock"></i>
+                                    <input 
+                                        type="time" 
+                                        id="endTime"
+                                        name="End_Time__c"
+                                        class="form-control timepicker endTime" 
+                                        value={inputValues.End_Time__c}
+                                        onchange={handleInputChange}
+                                        placeholder="00:00 Am">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Continue Button -->
+                <button type="button" class="btn btn-primary btn-continue" onclick={handleContinue}>
+                    Continue to Coverage Selection
+                </button>
+
+                <!-- Info Text -->
+                <p class="step-info-text">
+                    Rating in Mexico is based on vehicle value, term and other variables, not the driving record or individuals operating. The longer the term, the more the discount on premium. Annual and Semi-Annual term policies offer the best value
+                </p>
+            </form>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,71 @@
+<aura:component controller="QuickQuotationCtrl" implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="title" type="String" access="public"/>
+    <aura:attribute name="backButtonVisibility" type="Boolean" default="true" access="public" />
+    <aura:attribute name="policyType" type="String" access="public"/>
+    <aura:attribute name="timeZones" type="list" access="private"/>
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    <aura:attribute name="onNextClick" type="Aura.Action"/>
+    <aura:attribute name="quoteRecord" type="Object"/>
+    <aura:attribute name="leadRecord" type="Object"/>
+    <aura:attribute name="vehicleRecord" type="Object"/>
+    <aura:attribute name="stateOptions" type="List" />
+    <aura:attribute name="countryOption" type="List" />
+    <aura:attribute name="showStatePick" type="Boolean" default="false" access="public" />
+    <aura:attribute name="disableCountry" type="Boolean" default="false" />
+    <aura:attribute name="policyCountry" type="String" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    
+    <lightning:layoutItem padding="around-small" size="12" class="align-center slds-m-top_xx-large">
+        <div class="page-title">
+            <aura:if isTrue="{!v.backButtonVisibility}">
+                <button class="button -plain -back-button" name="step_3" onclick="{!v.onBackClick }">
+                    <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/> Back
+                </button>
+            </aura:if>
+            <h1>{!v.title}</h1>
+            <img class="slds-m-bottom_large" src="{!$Resource.mexinsurance_assets + '/images/icon-calendar.svg'}" alt="Terms"/>
+        </div>                    
+    </lightning:layoutItem>
+    
+    <div class="slds-size_12-of-12">
+        <div class="form-container">
+            <lightning:input aura:id="validateField" type="text" name="Lienholder_name__c"  label="" placeholder="Lienholder Name" value="{!v.vehicleRecord.Lienholder_name__c}" onchange="{!c.updateValue}" required="true" variant= "label-hidden" />
+            <lightning:input aura:id="validateField" type="tel" 
+                name="Lienholder_Phone__c"  label="" 
+                placeholder="Lienholder Phone" 
+                pattern="^\(\d{3}\)\s\d{3}-\d{4}$"
+                messageWhenPatternMismatch="Not a valid phone number"
+                value="{!v.vehicleRecord.Lienholder_Phone__c}" onchange="{!c.updateValue}"/>
+            <lightning:input aura:id="validateField" type="tel" 
+                name="Lienholder_Fax__c" 
+                placeholder="Lienholder Fax" 
+                pattern="^\(\d{3}\)\s\d{3}-\d{4}$"
+                messageWhenPatternMismatch="Not a valid phone number"
+                value="{!v.vehicleRecord.Lienholder_Fax__c}" 
+                onchange="{!c.updateValue}"/>
+            <lightning:input type="text" name="Lienholder_Street__c"  label="" placeholder="Lienholder Street Address" value="{!v.vehicleRecord.Lienholder_Street__c}" onchange="{!c.updateValue}"/>
+            <lightning:input type="text" name="Lienholder_Street_2__c"  label="" placeholder="Lienholder Street Address 2" value="{!v.vehicleRecord.Lienholder_Street_2__c}" onchange="{!c.updateValue}"/>
+            
+            <lightning:combobox name="Lienholder_Country__c" label="Lienholder Country" placeholder="Lienholder Country" value="{!v.policyCountry}" options="{! v.countryOption }" onchange="{!c.onCountryChange}" />
+            <aura:if isTrue="{! and(v.policyCountry == 'Other' )}">
+                <lightning:input type="text" aura:Id="validateField" name="Lienholder_Country__c" placeholder="Lienholder Country" value="{!v.vehicleRecord.Lienholder_Country__c}" maxlength="20" onchange="{!c.updateValue}"/>
+            </aura:if>
+            <aura:if isTrue="{!v.showStatePick}">
+                <lightning:combobox name="Lienholder_State__c" label="Lienholder State" placeholder="Lienholder State" value="{!v.vehicleRecord.Lienholder_State__c}" options="{! v.stateOptions }" onchange="{!c.updateValue}"/>
+                <aura:set attribute="else">
+                    <lightning:input type="text" aura:Id="validateField" name="Lienholder_State__c" placeholder="Lienholder State" value="{!v.vehicleRecord.Lienholder_State__c}" maxlength="20" onchange="{!c.updateValue}"/>
+                </aura:set>
+            </aura:if>
+            <lightning:input type="text" name="Lienholder_City__c"  label="" placeholder="Lienholder City" value="{!v.vehicleRecord.Lienholder_City__c}" onchange="{!c.updateValue}"/>
+            <lightning:input type="text" name="Lienholder_Postal_Code__c"  label="" placeholder="Lienholder Postal Code" value="{!v.vehicleRecord.Lienholder_Postal_Code__c}"  onchange="{!c.updateValue}"/>
+            <!--lightning:input type="text" name="Lienholder_State__c"  label="" placeholder="Lienholder State" value="{!v.vehicleRecord.Lienholder_State__c}" maxlength="3" onchange="{!c.updateValue}"/>
+            <lightning:input type="text" name="Lienholder_Country__c"  label="" placeholder="Lienholder Country" value="{!v.vehicleRecord.Lienholder_Country__c}" maxlength="2" onchange="{!c.updateValue}"/-->
+        </div>
+    </div>               
+    
+    <lightning:layoutItem size="12" class="slds-m-top_large align-center">                    
+        <button class="button -secondary -wider" onclick="{!c.onNextClick }">Next</button>
+    </lightning:layoutItem>
+</aura:component>

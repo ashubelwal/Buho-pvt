@@ -1,0 +1,57 @@
+<template>
+	<div class="maindiv slds-m-top_xx-large notranslate">
+
+		<lightning-layout multiple-rows="true">
+			<lightning-layout-item size='12' class="">
+				<div class="blue slds-text-heading_large screenHeading">{label.userdetails}</div>
+			</lightning-layout-item>
+			<lightning-layout-item size='12' class="">
+				<div class="slds-text dimBlue slds-m-bottom_xx-large">
+					{label.enteryourname}<br />
+					{label.knowyouremail}</div>
+			</lightning-layout-item>
+
+		</lightning-layout>
+		<lightning-layout multiplerows="true" class="slds-wrap">
+			<lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+				class="slds-p-around_x-small">
+				<lightning-input class="Validation" type="text" label={label.firstname} name="FirstName"
+					pattern="^([a-zA-Z]+\s)*[a-zA-Z]+$" value={leaddata.FirstName} max-length="35" required
+					onchange={handleChange}></lightning-input>
+			</lightning-layout-item>
+			<lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+				class="slds-p-around_x-small">
+				<lightning-input class="Validation" type="text" max-length="35" label={label.lastname} name="LastName"
+					pattern="^([a-zA-Z]+\s)*[a-zA-Z]+$" value={leaddata.LastName} required
+					onchange={handleChange}></lightning-input>
+			</lightning-layout-item>
+			<lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+				class="slds-p-around_x-small">
+				<lightning-input class="Validation" type="email" label={label.email} name="Email" required
+					value={leaddata.Email} pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+					onchange={handleChange} message-when-pattern-mismatch="Invalid Email Address"></lightning-input>
+			</lightning-layout-item>
+			<lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+				class="slds-p-around_x-small">
+				<lightning-input class="Validation phone" type="text" label={label.phone} name="Phone" value={leaddata.Phone}
+					onchange={handleChange} pattern="\(\d{3}\) \d{3}-\d{4,7}" max-length="17"
+					message-when-pattern-mismatch={label.notavalid}>
+				</lightning-input>
+			</lightning-layout-item>
+		</lightning-layout>
+
+		<div class="horizontalAlign slds-p-around_x-small">
+			<div class="">
+				<!-- <button class="buttonPrev btnHover" onclick={handlePrevClick}><span class="icon-prev"><i
+							class="icon-prevs"></i></span>Prev</button> -->
+			</div>
+			<div class="">
+				<button class="buttonNext btnHover" onclick={handleNextClick}><span class="icon-next"><i
+					class="icon-nexts"></i></span>{label.next}</button>
+			</div>
+		</div>
+
+
+	</div>
+	
+</template>

@@ -1,0 +1,16 @@
+.grid-item {
+    display: block;
+    padding: 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    font-size: 1.25rem;
+    /* Letras en blanco */
+    background-color: rgb(30, 129, 176);
+    /* Fondo azul */
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.grid-item:hover {
+    box-shadow: 0 4px 10px rgb(231, 243, 255);
+}

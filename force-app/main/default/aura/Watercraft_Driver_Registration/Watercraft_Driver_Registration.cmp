@@ -1,0 +1,68 @@
+<aura:component controller="WatercraftFlowController" implements="forceCommunity:availableForAllPageTypes" access="global">
+    <aura:attribute name="title" type="String" access="public"/>
+    <aura:attribute name="registeredVehicleHeader" type="String" default="Owner of the Watercraft"/>
+    <aura:attribute name="backButtonVisibility" type="Boolean" default="false" access="public"/>
+    <aura:attribute name="policyType" type="String" access="public"/>
+    <aura:attribute name="isOwner" type="boolean" default="true" access="public"/>
+    <aura:attribute name="drivers" type="List" access="public"/>
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    <aura:attribute name="onNextClick" type="Aura.Action"/>
+    <aura:attribute name="quoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" access="public"/>
+    <aura:attribute name="driverRecord" type="Driver__c" default="{ 'sobjectType': 'Driver__c'}" access="public"/>
+    <aura:attribute name="leadRecord" type="Lead" default="{ 'sobjectType': 'Lead'}" access="public"/>
+    <aura:attribute name="watercraftRecord" type="Watercraft__c" default="{ 'sobjectType': 'Watercraft__c'}" access="public" />
+    <aura:attribute name="countryOption" type="List"/>
+    <aura:attribute name="isCommunityUser" type="Boolean" access="public"/>
+    <aura:attribute name="goInitChildComponent" type="Boolean"/>
+    <aura:attribute name="Primary_insured" type="boolean" default="false"/>
+    
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <c:Insurance_Flow_Steps step="step3" completedStep="2" isOwner="{!v.isOwner}"/>
+    <lightning:layoutItem padding="around-small" size="12" class="slds-align-center slds-m-top_xx-large">
+        <div class="page-title">
+            <button class="button -plain -back-button" name="step_10" onclick="{! v.onBackClick }">
+                <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/>
+                Back
+            </button>
+            <h1>{!v.registeredVehicleHeader}</h1>
+        </div>
+    </lightning:layoutItem>
+
+    <lightning:layoutItem size="12">
+        <table class="listing-table" width="100%">
+            <tr>
+                <th width="80">Captain/Owner Name</th>
+                <th>License #</th>
+            </tr>
+            <aura:iteration items="{!v.drivers}" var="driver">
+                <tr>
+                    <td>{!driver.First_Name__c} &nbsp; {!driver.Last_Name__c}</td>
+                    <td>{!driver.license_number__c}</td>
+                </tr>
+            </aura:iteration>
+            <!-- If no drivers are added -->
+            <aura:if isTrue="{!v.drivers.size == 0 }">
+                <tr>
+                    <td colspan="5">
+                        <div class="align-center">No drivers added</div>
+                    </td>
+                </tr>
+            </aura:if>
+            <!-- End if no drivers are added -->
+        </table>
+    </lightning:layoutItem>
+
+    <lightning:layoutItem size="12" class="slds-align_absolute-center slds-m-top_xx-large">
+        <aura:if isTrue="{!v.goInitChildComponent}">
+            <c:DriverRegistration driverObject="{!v.driverRecord}" isOwner="{!v.isOwner}" policyType="{!v.policyType}" Primary_insured="{!v.Primary_insured}"/>
+        </aura:if>
+    </lightning:layoutItem>
+
+    <lightning:layoutItem padding="around-small" size="12" class="slds-align_absolute-center slds-m-top_large">
+        <button class="button -plain" name="step_10" onclick="{! c.addDriver }">Add Another Driver</button>
+        <button class="button -secondary -wider -margin-left" name="step_10" onclick="{! c.onNextClick }">Next</button>
+    </lightning:layoutItem>
+
+</aura:component>

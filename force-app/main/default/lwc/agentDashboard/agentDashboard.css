@@ -1,0 +1,70 @@
+.slds-form-element .slds-form-element__label {
+	display: none !important;
+}
+
+.policyList {
+	padding: 0px 0px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd5;
+    border-radius: 4px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 5px;
+}
+
+.searchListTitle {
+	font-weight: 700;	
+}
+
+.actionBtn {
+    background: #00a1e00a !important;
+    color: #0176d3 !important;
+    border-radius: 30px !important;
+    text-transform: uppercase;
+    padding: 3px 11px !important;
+    line-height: unset !important;
+    font-size: 10px !important;
+    cursor: pointer;
+}
+
+.activePolicy {
+	background-color: #e4ffe4;    
+    color: green;
+	padding: 3px 11px;
+    border-radius: 30px;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 10px;
+}
+.text-center {
+    text-align: center !important;
+}
+
+.text-left {
+    text-align: left !important;
+}
+.expiredPolicy {
+	background-color: #ff538a2e;
+	color: #ff538a;
+    padding: 3px 11px;
+    border-radius: 30px;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 10px;
+}
+
+.policyItem {
+	margin-bottom: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.spinner {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    width: 100%;
+    height: 100%;
+    background: #33333317;
+    z-index: 999;
+}

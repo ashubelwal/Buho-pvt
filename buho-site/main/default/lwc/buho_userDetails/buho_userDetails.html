@@ -1,0 +1,277 @@
+<template>
+    <!-- Email Check Screen (Initial Screen with Lady Image) -->
+    <template if:false={showDetailedForm}>
+        <div class="email-check-container">
+            <!-- Right Section - Image -->
+            
+            <div class="form-section">
+                <div class="form-header">
+                    <img src={logoUrl} alt="BÚHO Logo" class="logo">
+                </div>
+
+                <div class="form-content">
+                    <h1>
+                        Welcome back! Your MexInsurance<sup>®</sup> <br/>
+                        <span class="highlight">Quote is taking flight</span> &nbsp;
+                        <span class="highlight">almost ready!</span>
+                    </h1>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="Email"
+                            value={inputValues.Email}
+                            placeholder="Enter Your Email Address"
+                            oninput={handleInputChange}
+                            required
+                        />
+                        <template if:true={showActiveCustomerMessage}>
+                            <p class="info-message success">
+                                Active Customer (email found, account active)
+                            </p>
+                        </template>
+                    </div>
+
+                    <button class="btn-continue btn-continue-full" onclick={handleEmailContinue}>
+                        Continue
+                    </button>
+                </div>
+
+                <div class="form-footer">
+                    <a href="#">Customer Support</a>
+                    <a href="#">Terms Of Service</a>
+                </div>
+            </div>
+            <!-- Right Section - Carousel -->
+            <div class="image-section">
+                <c-buho_carousel
+                    slides-data={emailScreenSlides}
+                    auto-advance-interval="5000">
+                </c-buho_carousel>
+            </div>
+
+            
+        </div>
+    </template>
+
+    <!-- Detailed Form (After Email Verification with Man With Tab Image) -->
+    <template if:true={showDetailedForm}>
+        <div class="email-check-container">
+            <!-- Left Section - Carousel -->
+            <div class="image-section">
+                <c-buho_carousel
+                    slides-data={detailedFormSlides}
+                    auto-advance-interval="5000">
+                </c-buho_carousel>
+            </div>
+
+            <!-- Right Section - Detailed Form -->
+            <div class="form-section">
+                <div class="form-header">
+                    <img src={logoUrl} alt="BÚHO Logo" class="logo">
+                    
+                    <!-- Progress Bar Component -->
+                    <c-buho_progress-bar
+                        current-step="1"
+                        total-steps={totalSteps}
+                        onback={handleBackToEmail}>
+                    </c-buho_progress-bar>
+                </div>
+
+                <div class="form-content">
+                    <h1>
+                        Join thousands <br/>
+                        <span class="highlight">protected by BuHo</span>
+                    </h1>
+
+                    <!-- First Name -->
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input
+                            type="text"
+                            id="firstName"
+                            name="FirstName"
+                            value={inputValues.FirstName}
+                            placeholder="Enter Your First Name"
+                            oninput={handleInputChange}
+                            pattern="^[A-Za-zÀ-ÿ\s]+$"
+                            required
+                        />
+                    </div>
+
+                    <!-- Last Name -->
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input
+                            type="text"
+                            id="lastName"
+                            name="LastName"
+                            value={inputValues.LastName}
+                            placeholder="Enter Your Last Name"
+                            oninput={handleInputChange}
+                            pattern="^[A-Za-zÀ-ÿ\s]+$"
+                            required
+                        />
+                    </div>
+
+                    <!-- Email Address -->
+                    <div class="form-group">
+                        <label for="email-detail">Email Address</label>
+                        <input
+                            type="email"
+                            id="email-detail"
+                            name="Email"
+                            value={inputValues.Email}
+                            placeholder="Enter Your Email Address"
+                            oninput={handleInputChange}
+                            required
+                            readonly
+                        />
+                    </div>
+
+                    <!-- Phone Number with Country Code -->
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <div class="phone-input-wrapper">
+                            <select
+                                name="countryCode"
+                                class="country-code-select"
+                                onchange={handleInputChange}>
+                                <template for:each={countryCodes} for:item="code">
+                                    <option key={code.value} value={code.value} selected={code.selected}>
+                                        {code.label}
+                                    </option>
+                                </template>
+                            </select>
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="Phone"
+                                class="phone-input"
+                                value={inputValues.Phone}
+                                placeholder="(123) 456-7890"
+                                oninput={handleInputChange}
+                                maxlength="14"
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    <button class="btn-continue btn-continue-full" onclick={handleContinue}>
+                        Continue
+                    </button>
+                </div>
+
+                <div class="form-footer">
+                    <a href="#">Customer Support</a>
+                    <a href="#">Terms Of Service</a>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Inactive User Modal -->
+    <template if:true={showInactiveUserModal}>
+        <div class="modal-overlay-full">
+            <div class="modal-content-large">
+                <div class="modal-icon-large">
+                    <img src={owlIconUrl} alt="BÚHO Icon">
+                </div>
+                <h1>We found your account but <span class="highlight">it's currently inactive</span></h1>
+                <div class="modal-actions-large">
+                    <button class="btn-dark" onclick={handleLoginFromInactiveModal}>
+                        Activate Account & Login
+                    </button>
+                    <button class="btn-pink" onclick={handleStartNewQuoteFromInactiveModal}>
+                        Start New Quote
+                    </button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Active User Modal -->
+    <template if:true={showActiveUserModal}>
+        <div class="modal-overlay-full">
+            <div class="modal-content-large">
+                <div class="modal-icon-large">
+                    <img src={owlIconUrl} alt="BÚHO Icon">
+                </div>
+                <h1>We found your account <span class="highlight">Welcome back!</span></h1>
+                
+                <!-- Reusable Login Form Component -->
+                <c-buho_login-form
+                    username={loginUsername}
+                    password={loginPassword}
+                    error-message={loginError}
+                    is-loading={isLoggingIn}
+                    show-forgot-password={hideForgotPassword}
+                    submit-button-label="Login to Your Account"
+                    loading-button-label="Logging in..."
+                    onusernamechange={handleLoginUsernameChange}
+                    onpasswordchange={handleLoginPasswordChange}
+                    onsubmit={handleLoginFromActiveModal}>
+                </c-buho_login-form>
+            </div>
+        </div>
+    </template>
+
+    <!-- Welcome Modal (New User) -->
+    <template if:true={showWelcomeModal}>
+        <div class="modal-overlay-full">
+            <div class="modal-content-large">
+                <div class="modal-icon-large">
+                    <img src={owlIconUrl} alt="BÚHO Icon">
+                </div>
+                <h1>Welcome! <span class="highlight">Let's create your profile</span></h1>
+                <div class="modal-actions-large">
+                    <button class="btn-dark" onclick={handleContinueFromWelcome}>
+                        Continue
+                    </button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Previous Inquiry Modal -->
+    <template if:true={showPreviousInquiryModal}>
+        <div class="modal-overlay-full">
+            <div class="modal-content-large">
+                <div class="modal-icon-large">
+                    <img src={owlIconUrl} alt="BÚHO Icon">
+                </div>
+                <h1>We found your previous <span class="highlight">inquiry from {inquiryDate}</span></h1>
+                <div class="modal-actions-large">
+                    <button class="btn-dark" onclick={handleResumePreviousQuote}>
+                        Resume Previous Quote
+                    </button>
+                    <button class="btn-pink" onclick={handleStartNewQuoteFromInquiry}>
+                        Start New Quote
+                    </button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Contact Portal Access Modal -->
+    <template if:true={flag.customerWithPortalAccess}>
+        <div class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-icon">
+                    <img src={owlIconUrl} alt="BÚHO Icon">
+                </div>
+                <h2>Already a Member</h2>
+                <p class="modal-description">
+                    Click on the "Continue with Create Account" button to receive the Welcome email, then proceed to login
+                </p>
+                <div class="modal-actions">
+                    <button class="btn-primary" onclick={handleConfirmPortalAccess}>
+                        Continue With Create Account
+                    </button>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>

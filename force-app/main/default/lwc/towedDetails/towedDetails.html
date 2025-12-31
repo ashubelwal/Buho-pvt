@@ -1,0 +1,99 @@
+<template>
+    <div class="notranslate">        
+        <div class="pageTitle slds-m-bottom_medium">
+            <h2 class="slds-text-heading_medium">
+                {pageHeading}              
+            </h2>
+        </div>
+
+        <template if:true={communityUser}>
+            <template if:true={isStep1}>
+                <lightning-combobox name="progress" disabled={disableEditTowed} placeholder={label.selectatowed}
+                    value={selectedTowedId} options={loginUserTowedOption}
+                    onchange={changeTowedOption}></lightning-combobox>
+            </template>
+
+
+            <!-- <lightning-accordion allow-multiple-sections-open="true" onsectiontoggle={handleSectionToggle} active-section-name={activeAccordinSection}>
+				<lightning-accordion-section name="A" class="slds-align_absolute-center" label="ADD A DIFFERENT VEHICLE">
+
+				</lightning-accordion-section>
+			</lightning-accordion> -->
+        </template>
+        <div class="datatable">
+            <table class="listing-table">
+                <tr>
+                    <th>{label.type}</th>
+                    <th>{label.value}</th>
+                    <th>{label.daysintow}</th>
+                    <th>Action</th>                    
+                    <th></th>                    
+                </tr>
+                <template for:each={towedUnitList} for:item="towedUnitItem" for:index="index">
+                    <tr key={towedUnitItem.index}>
+                        <td>{towedUnitItem.Towed_Unit_Type__c}</td>
+                        <td>{towedUnitItem.Towed_Unit_Value__c}</td>
+                        <td>{towedUnitItem.Days_in_Tow__c}</td>
+                        <td>
+                            <div name={towedUnitItem.index} data-index={index} onclick={editTowedUnit} style="float: left;margin-right: 10px;">
+                                <template if:true={towedUnitItem.updateFields}>
+                                    <span title={label.EditUnit} style="cursor:pointer;">
+                                        <lightning-icon icon-name="utility:edit" variant="error" size="xx-small" class="wobble animated infinite">
+                                        </lightning-icon>
+                                    </span>
+                                </template>
+                                <template if:false={towedUnitItem.updateFields}>
+                                    <lightning-button-icon 
+                                        disabled={disableEditTowed} icon-name="utility:edit" variant="bare"
+                                         alternative-text="edit"
+                                        title={label.EditUnit}></lightning-button-icon>
+                                        
+                                </template>
+                            </div>
+                            <div>
+                                <lightning-button-icon name={towedUnitItem.index} data-index={index}
+                                    disabled={disableEditTowed} icon-name="utility:close" variant="bare"
+                                    onclick={deleteTowedUnit} alternative-text="close"
+                                    title={label.DeleteUnit}></lightning-button-icon>
+                            </div>
+                        </td>
+                    </tr>
+
+                </template>
+            </table>
+
+            <div class="underline">
+                <hr />
+            </div>
+        </div>
+
+        <template if:true={isStep1}>
+            <div class="slds-align_absolute-center slds-m-top_medium">
+                <lightning-accordion allow-multiple-sections-open="true" onsectiontoggle={handleSectionToggle}>
+                    <lightning-accordion-section name="A" label={label.ADDADIFF}
+                        active-section-name={activeAccordinSection}></lightning-accordion-section>
+                </lightning-accordion>
+            </div>
+        </template>
+
+        <template if:true={newSectionOpen}>
+            <c-add-towed-unit-form ontowedaddvalue={handleAddTowed} edit-towed-data={editTowedData}
+                days-in-tow-value={daysInTowValue} is-edit={isEdit} step={isStep1} towed-unit-list={towedUnitList}>
+            </c-add-towed-unit-form>
+        </template>
+
+
+        <template if:false={newSectionOpen}>
+            <div class="horizontalAlign slds-p-around--x-small">
+                <div class="">
+                    <button class="buttonPrev" onclick={handlePrevClick}><span class="icon-prev"><i
+                                class="icon-prevs"></i></span>{label.prev}</button>
+                </div>
+                <div class="">
+                    <button class="buttonNext" onclick={handleNextClick}><span class="icon-next"><i
+                                class="icon-nexts"></i></span>{label.next}</button>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

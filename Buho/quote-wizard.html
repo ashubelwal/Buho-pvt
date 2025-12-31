@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BÚHO - Insurance Quote</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Flatpickr for Date/Time Picker -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="wizard-header">
+        <div class="container-fluid px-4">
+            <div class="d-flex justify-content-between align-items-center py-3">
+                <a href="index.html" class="header-logo">
+                    <img src="assets/Logo.svg" alt="BÚHO" class="logo-icon">
+                </a>
+                <button class="btn btn-contact">Contact Us</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="wizard-main">
+        <div class="wizard-container">
+            <!-- Progress Header -->
+            <div class="wizard-progress-header">
+                <a href="#" class="back-btn" id="backBtn">
+                    <i class="bi bi-arrow-left"></i> Back
+                </a>
+                <span class="step-counter">Step <span id="currentStep">1</span> of <span id="totalSteps">4</span></span>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="wizard-progress-bar">
+                <div class="progress-segment active" data-step="1"></div>
+                <div class="progress-segment" data-step="2"></div>
+                <div class="progress-segment" data-step="3"></div>
+                <div class="progress-segment" data-step="4"></div>
+            </div>
+
+            <!-- Wizard Steps Container -->
+            <div class="wizard-steps">
+                
+                <!-- Step 1: User Details -->
+                <div class="wizard-step active" id="step1">
+                    <div class="user-details-card">
+                        <div class="card-header-section">
+                            <h2 class="card-title">User Details</h2>
+                        </div>
+                        <div class="card-body-section">
+                            <form class="wizard-form" id="userDetailsForm">
+                                <!-- Email -->
+                                <div class="form-group">
+                                    <label for="userEmail"><span class="required">*</span>Email</label>
+                                    <input type="email" class="form-control" id="userEmail" placeholder="Enter your email" required>
+                                    <small class="form-text">We will send the policy document to this email.</small>
+                                </div>
+
+                                <!-- Name Row -->
+                                <div class="row g-4">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="firstName"><span class="required">*</span>First Name</label>
+                                            <input type="text" class="form-control" id="firstName" placeholder="Enter first name" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="lastName"><span class="required">*</span>Last Name</label>
+                                            <input type="text" class="form-control" id="lastName" placeholder="Enter last name" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Phone Row -->
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="countryCode">Country Code</label>
+                                            <select class="form-select" id="countryCode">
+                                                <option value="+1">+1 (USA)</option>
+                                                <option value="+52">+52 (Mexico)</option>
+                                                <option value="+44">+44 (UK)</option>
+                                                <option value="+1-ca">+1 (Canada)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label for="phone"><span class="required">*</span>Phone</label>
+                                            <input type="tel" class="form-control" id="phone" placeholder="(123) 456-7890" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-footer-section">
+                            <button type="button" class="btn btn-outline-secondary btn-back" onclick="prevStep()">Back</button>
+                            <button type="button" class="btn btn-primary btn-continue" onclick="nextStep()">Continue</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Vehicle Information -->
+                <div class="wizard-step" id="step2">
+                    <div class="step-header">
+                        <h1>Tell Us About <span class="highlight">Your Vehicle ?</span></h1>
+                        <p class="step-subtitle">Sharing these details helps us ensure you get the right coverage</p>
+                    </div>
+
+                    <form class="wizard-form" id="vehicleForm">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="vehicleType">Vehicle Type</label>
+                                    <select class="form-select" id="vehicleType" required>
+                                        <option value="">Select Vehicle Type</option>
+                                        <option value="suv">SUV/Crossover</option>
+                                        <option value="sedan">Sedan</option>
+                                        <option value="truck">Truck</option>
+                                        <option value="van">Van</option>
+                                        <option value="motorcycle">Motorcycle</option>
+                                        <option value="rv">RV/Motorhome</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="vehicleYear">Vehicle Year</label>
+                                    <select class="form-select" id="vehicleYear" required>
+                                        <option value="">Select Year</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="vehicleMake">Vehicle Make</label>
+                                    <select class="form-select" id="vehicleMake" required>
+                                        <option value="">Select Make</option>
+                                        <option value="acura">Acura</option>
+                                        <option value="audi">Audi</option>
+                                        <option value="bmw">BMW</option>
+                                        <option value="chevrolet">Chevrolet</option>
+                                        <option value="ford">Ford</option>
+                                        <option value="honda">Honda</option>
+                                        <option value="hyundai">Hyundai</option>
+                                        <option value="jeep">Jeep</option>
+                                        <option value="kia">Kia</option>
+                                        <option value="mazda">Mazda</option>
+                                        <option value="mercedes">Mercedes-Benz</option>
+                                        <option value="nissan">Nissan</option>
+                                        <option value="subaru">Subaru</option>
+                                        <option value="tesla">Tesla</option>
+                                        <option value="toyota">Toyota</option>
+                                        <option value="volkswagen">Volkswagen</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="vehicleModel">Vehicle Model</label>
+                                    <select class="form-select" id="vehicleModel" required>
+                                        <option value="">Select Model</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="vehicleValue">Vehicle Value</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="text" class="form-control" id="vehicleValue" placeholder="42,500" required>
+                                    </div>
+                                    <small class="form-text text-muted">Your stated value below will serve as a limit for payout. Company will pay Actual Cash Value based on Kelly Blue and Nada Guides</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Coverage Terms Options -->
+                        <div class="coverage-terms-section">
+                            <h3 class="section-title">Coverage Terms Option</h3>
+                            
+                            <div class="checkbox-options">
+                                <div class="custom-checkbox">
+                                    <input type="checkbox" id="hybridElectric" name="hybridElectric">
+                                    <label for="hybridElectric">
+                                        <span class="checkbox-title">The vehicle is Hybrid or Fully Electric</span>
+                                        <span class="checkbox-hint">Surcharge may apply. Some carriers charge extra for hybrid vehicles due to higher repair costs.</span>
+                                    </label>
+                                </div>
+
+                                <div class="custom-checkbox">
+                                    <input type="checkbox" id="driversUnder21" name="driversUnder21">
+                                    <label for="driversUnder21">
+                                        <span class="checkbox-title">Drivers under 21?</span>
+                                    </label>
+                                </div>
+
+                                <div class="custom-checkbox">
+                                    <input type="checkbox" id="businessSignage" name="businessSignage">
+                                    <label for="businessSignage">
+                                        <span class="checkbox-title">Business signage on the vehicle</span>
+                                        <span class="checkbox-hint">Requires commercial coverage add-on</span>
+                                    </label>
+                                </div>
+
+                                <div class="custom-checkbox">
+                                    <input type="checkbox" id="salvageTitle" name="salvageTitle">
+                                    <label for="salvageTitle">
+                                        <span class="checkbox-title">Vehicle with a Salvage title?</span>
+                                        <span class="checkbox-hint">Check this box if vehicle has been rebuilt and DMV-approved for use."</span>
+                                    </label>
+                                </div>
+
+                                <div class="custom-checkbox">
+                                    <input type="checkbox" id="rentalVehicle" name="rentalVehicle">
+                                    <label for="rentalVehicle">
+                                        <span class="checkbox-title">Is this vehicle a rental?</span>
+                                        <span class="checkbox-hint">Check this box if rented from a car rental company</span>
+                                    </label>
+                                </div>
+
+                                <div class="custom-checkbox">
+                                    <input type="checkbox" id="towingAnything" name="towingAnything">
+                                    <label for="towingAnything">
+                                        <span class="checkbox-title">Are you towing anything?</span>
+                                        <span class="checkbox-hint">Check this box if you will tow a boat, trailer, or other items during your coverage.</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary btn-continue" onclick="nextStep()">
+                            Continue To Coverage
+                        </button>
+
+                        <p class="step-info-text">
+                            Accurate completion of your application is required under our Terms of Use. Providing false information may jeopardize your coverage in the event of a claim.
+                        </p>
+                    </form>
+                </div>
+
+                <!-- Step 3: Coverage Dates -->
+                <div class="wizard-step" id="step3">
+                    <div class="step-header">
+                        <h1>Select your <span class="highlight">Dates for Coverage.</span></h1>
+                        <p class="step-subtitle">Sharing these details helps us ensure you get the right coverage</p>
+                    </div>
+
+                    <form class="wizard-form" id="datesForm">
+                        <!-- Term Type Selection -->
+                        <div class="form-group">
+                            <label>Select Term Type</label>
+                            <div class="term-type-selector">
+                                <button type="button" class="term-btn active" data-term="daily">Daily</button>
+                                <button type="button" class="term-btn" data-term="semi-annual">Semi Annual</button>
+                                <button type="button" class="term-btn" data-term="annual">Annual</button>
+                            </div>
+                        </div>
+
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="startDate">Start Date</label>
+                                    <div class="input-with-icon">
+                                        <i class="bi bi-calendar3"></i>
+                                        <input type="text" class="form-control datepicker" id="startDate" placeholder="MM/DD/YYYY" required>
+                                    </div>
+                                    <small class="form-text">Coverage begins at 12:01 AM on this date</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="endDate">End Date</label>
+                                    <div class="input-with-icon">
+                                        <i class="bi bi-calendar3"></i>
+                                        <input type="text" class="form-control datepicker" id="endDate" placeholder="MM/DD/YYYY" required>
+                                    </div>
+                                    <small class="form-text">Coverage ends at 11:59 Pm on this date</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Time Selection (shown for daily) -->
+                        <div class="row g-4 time-selection" id="timeSelection">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="startTime">Start Time</label>
+                                    <div class="input-with-icon">
+                                        <i class="bi bi-clock"></i>
+                                        <input type="text" class="form-control timepicker" id="startTime" placeholder="00:00 Am">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="endTime">End Time</label>
+                                    <div class="input-with-icon">
+                                        <i class="bi bi-clock"></i>
+                                        <input type="text" class="form-control timepicker" id="endTime" placeholder="00:00 Am">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary btn-continue" onclick="nextStep()">
+                            Continue to Coverage Selection
+                        </button>
+
+                        <p class="step-info-text">
+                            Rating in Mexico is based on vehicle value, term and other variables, not the driving record or individuals operating. The longer the term, the more the discount on premium. Annual and Semi-Annual term policies offer the best value
+                        </p>
+                    </form>
+                </div>
+
+                <!-- Step 4: Territory Selection -->
+                <div class="wizard-step" id="step4">
+                    <div class="step-header">
+                        <h1>Select <span class="highlight">Territory</span></h1>
+                        <p class="step-subtitle">Choose the territory you want ?</p>
+                    </div>
+
+                    <form class="wizard-form" id="territoryForm">
+                        <div class="territory-cards">
+                            <div class="territory-card" data-territory="baja-sonora">
+                                <h4 class="territory-title">Baja/Sonora</h4>
+                                <div class="territory-map">
+                                    <img src="assets/baja_sonora.png" alt="Baja/Sonora">
+                                </div>
+                            </div>
+
+                            <div class="territory-card selected" data-territory="baja-extended">
+                                <h4 class="territory-title">Baja/Sonora Baja, Sonora, Chihuahua, Coahuila, Nuevo Leon, Tamaulipas</h4>
+                                <div class="territory-map">
+                                    <img src="assets/extended_territory.png" alt="Extended Territory">
+                                </div>
+                            </div>
+
+                            <div class="territory-card" data-territory="entire-mexico">
+                                <h4 class="territory-title">Entire Mexico</h4>
+                                <div class="territory-map">
+                                    <img src="assets/entire_mexico.png" alt="Entire Mexico">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary btn-continue" onclick="nextStep()">
+                            Continue
+                        </button>
+
+                        <p class="step-info-text">
+                            Coverage options and pricing vary by territory. Select all areas you plan to visit during your trip.
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Flatpickr for Date/Time Picker -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- Custom Script -->
+    <script src="js/quote-wizard.js"></script>
+</body>
+</html>
+

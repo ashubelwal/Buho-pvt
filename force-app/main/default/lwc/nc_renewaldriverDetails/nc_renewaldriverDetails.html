@@ -1,0 +1,178 @@
+<template>
+    <div class="test">
+        <!-- 
+        <div class="pageTitle slds-m-bottom_medium">
+            <h2 class="slds-text-heading_medium"> Company owned vehicle </h2>
+        </div>
+        <div class="slds-grid slds-wrap slds-gutters">
+            <div class="slds-size_1-of-1 slds-medium-size_12-of-12 slds-large-size_12-of-12 slds-p-around_small">
+                <lightning-input type="checkbox" label="Is the vehicle registered to a business?"
+                    checked={flag.Is_the_vehicle_registered_to_a_business__c} onchange={handleChange}
+                    name="Is_the_vehicle_registered_to_a_business__c" disabled={flag.isCompanyDisabled}>
+                </lightning-input>
+            </div>
+            <template if:true={flag.isCompanyStatus}>
+                <div class="slds-size_1-of-1 slds-medium-size_12-of-12 slds-large-size_12-of-12 slds-p-around_small">
+                    <c-nc_company-information onadd={handleCompanyInfoUpdate} payload={payload}>
+                    </c-nc_company-information>
+                </div>
+            </template>
+        </div> -->
+
+        <div class="pageTitle slds-m-bottom_medium">
+            <h2 class="slds-text-heading_medium"> Human Operators and/or Owners</h2>
+            <!-- {flag.isOwner} -->
+        </div>
+
+        <div if:true={currentUserType} class="slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12 ">
+            <lightning-combobox name="progress" placeholder={label.Selectadriverfromyouraccount}
+                value={selectedDriverId} options={loginUserDriverOption} onchange={changeDriverOption}>
+            </lightning-combobox>
+        </div>
+
+        <div class="slds-grid slds-wrap slds-gutters">
+            <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                <lightning-input label="First Name" value={driver.First_Name__c} onchange={handleChange}
+                    name="First_Name__c" required></lightning-input>
+            </div>
+            <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                <lightning-input label="Last Name" value={driver.Last_Name__c} onchange={handleChange}
+                    name="Last_Name__c" required></lightning-input>
+            </div>
+
+        </div>
+        <div class="slds-grid slds-wrap slds-gutters">
+            <template if:true={minDateAllowed}>
+                <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                    <lightning-input type="date" label="Date of Birth" value={driver.Dob__c} max={minDateAllowed}
+                        onchange={handleChange} name="Dob__c" required></lightning-input>
+                </div>
+            </template>
+            <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                <c-nc_combobox input-label="License Country" name="License_Country__c" options={countryOptions}
+                    onselect={handleOptionClick} onreset={handleChildComboboxReset} onaddnew={handleAddValue}
+                    search-value={driver.License_Country__c} inputrequired="true"></c-nc_combobox>
+                <!-- <lightning-combobox label="License Country" value={driver.License_Country__c} options={countryOptions}
+                    onchange={handleChange} name="License_Country__c"></lightning-combobox> -->
+            </div>
+            <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                <c-nc_combobox input-label="License State" name="License_state__c" options={stateOptions}
+                    onselect={handleOptionClick} inputrequired="true" onaddnew={handleAddValue}
+                    search-value={driver.License_state__c} inputdisabled={flag.isStateDisabled}></c-nc_combobox>
+                <!-- <lightning-combobox label="License State" value={driver.License_state__c} options={stateOptions}
+                    onchange={handleChange} name="License_state__c" disabled = {flag.isStateDisabled} ></lightning-combobox> -->
+            </div>
+            <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                <lightning-input label="License Number" value={driver.license_number__c} onchange={handleChange}
+                    name="license_number__c" required></lightning-input>
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap slds-gutters">
+            <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                <lightning-input type="checkbox" label="Registered Owner?" checked={driver.Driver_Type__c}
+                    onchange={handleChange} name="Driver_Type__c"></lightning-input>
+            </div>
+        </div>
+
+        <template if:true={driver.Driver_Type__c}>
+            <div class="grid">
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <div
+                        class="slds-size_1-of-1 slds-medium-size_12-of-12 slds-large-size_12-of-12 slds-p-around_small">
+                        <c-address-recommendations onsendaddress={handleCompanyAddress}>
+                        </c-address-recommendations>
+                    </div>
+
+                    <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                        <lightning-combobox label="Country" value={driver.Country__c} options={countryOptions}
+                            onchange={handleChange} name="Country__c" required></lightning-combobox>
+                    </div>
+
+                    <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                        <lightning-input label="Country" value={driver.Country_Text__c} onchange={handleChange}
+                            name="Country_Text__c" required></lightning-input>
+                    </div>
+
+                    <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                        <lightning-input label="State/Province" value={driver.State_Province__c} onchange={handleChange}
+                            name="State_Province__c" required></lightning-input>
+                    </div>
+
+                    <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                        <lightning-input label="Postal Code" value={driver.Postal_Code__c} onchange={handleChange}
+                            name="Postal_Code__c" required></lightning-input>
+                    </div>
+
+
+                    <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                        <lightning-input label="City" value={driver.City__c} onchange={handleChange} name="City__c"
+                            required></lightning-input>
+                    </div>
+
+                    <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                        <lightning-input label="Address" value={driver.Address__c} onchange={handleChange}
+                            name="Address__c" required></lightning-input>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <div class="slds-p-vertical_small">
+            <lightning-button label="Add Driver" onclick={addDriver}></lightning-button>
+        </div>
+        <!-- Custom Table to Show Added Drivers -->
+        <template if:true={drivers.length}>
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>License Country</th>
+                        <th>License State</th>
+                        <th>License Number</th>
+                        <th>DOB</th>
+                        <th>Type</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={drivers} for:item="drv" for:index="index">
+                        <tr key={drv.diff}>
+                            <td>{drv.First_Name__c} {drv.Last_Name__c}</td>
+                            <td>{drv.License_Country__c}</td>
+                            <td>{drv.License_state__c}</td>
+                            <td>{drv.license_number__c}</td>
+                            <td>{drv.Dob__c}</td>
+                            <td>
+                                <template if:true={drv.Driver_Type__c}>Owner</template>
+                                <template if:false={drv.Driver_Type__c}>Driver</template>
+
+                            </td>
+                            <td>
+
+                                <lightning-button-icon icon-name="utility:edit" variant="bare" onclick={editDriver}
+                                    data-index={index}>
+                                </lightning-button-icon>
+                                <lightning-button-icon icon-name="utility:delete" onclick={deleteDriver} variant="bare"
+                                    data-index={index} class="slds-m-left_x-small"></lightning-button-icon>
+
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </template>
+
+        <div class="button-container">
+            <div class="button-wrapper">
+                <button class="nav-button prev" onclick={handlePrevClick}>
+                    <span class="icon-prev"><i class="icon-prevs"></i></span> Prev
+                </button>
+            </div>
+            <div class="button-wrapper">
+                <button class="nav-button next" onclick={handleNextClick}>
+                    Continue <span class="icon-next"><i class="icon-nexts"></i></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</template>

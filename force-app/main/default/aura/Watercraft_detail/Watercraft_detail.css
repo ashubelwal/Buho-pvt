@@ -1,0 +1,44 @@
+.THIS .newSectionLine {
+    border-top: 1px solid #328081;
+    margin: 10px 0;
+}
+
+.THIS .inlineBlock .slds-form-element__control .slds-checkbox .slds-checkbox__label {
+    display: inline;
+    padding: 0 5px;
+}
+
+.THIS .numberWithourSeparator .slds-form-element__control .slds-input {
+    opacity: 1 !important;
+}
+
+.THIS .birthdateInput > lightning-datepicker > .slds-dropdown-trigger {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.THIS .birthdateInput > lightning-datepicker > .slds-dropdown-trigger .slds-form-element__control {
+     padding-right: 5px;
+    width: 100%;
+}
+
+.THIS .emailInput .slds-form-element__control {
+    /* padding-right: 5px; */
+}
+
+.THIS .birthdateInput > lightning-datepicker > .slds-dropdown-trigger > lightning-helptext > .slds-form-element__icon .slds-button > lightning-primitive-icon > .slds-button__icon, .THIS .emailInput > lightning-helptext > .slds-form-element__icon .slds-button > lightning-primitive-icon > .slds-button__icon {
+    fill: #328081;
+}
+
+.THIS .form-container {
+    margin: 0 auto;
+    max-width: 772px;
+}
+.THIS label.slds-form-element__label {
+    display: inline;
+    margin-right: 3px;
+}
+.THIS lightning-helptext {
+    position: absolute;
+    top: -15%;
+}

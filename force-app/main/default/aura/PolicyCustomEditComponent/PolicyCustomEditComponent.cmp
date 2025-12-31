@@ -1,0 +1,53 @@
+<aura:component controller="PoilcyEditController" implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes,lightning:actionOverride,force:lightningQuickActionWithoutHeader,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName">
+    
+    <aura:attribute name="sobjecttype" type="String" default="{!v.sObjectName}"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="terminatePolicyPop" type="Boolean" default="false" />
+   <!-- <aura:handler name="init" value="{!this}" action="{!c.init}" /><br/> -->
+    <lightning:navigation aura:id="navService"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="true" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="tooltip" type="boolean" default="false" />
+    <aura:attribute name="terminateButtonHelpText" type="String" />
+
+	<lightning:button label="Edit" aura:id="editButtonId" onclick="{!c.init}"/>  
+
+    <lightning:button aura:id="terminateButtonId" label="Terminate" onclick="{!c.goToterminate}" />
+    <lightning:helptext iconName="utility:info" aura:id="terminateButtonHelpTextId" content="Click here to terminate your policy."/>
+    <lightning:button aura:id="previewPdf" label="Display Policy" onclick="{!c.gotoPdfPage}" />
+    <lightning:button aura:id="renwPolicy" label="Renew Policy" onclick="{!c.gottoReNewPolicy}" />
+
+    <aura:if isTrue="{!v.terminatePolicyPop}">
+            <!-- Modal/Popup Box starts here-->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- Modal/Popup Box Header Starts here-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModal }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Terminate Policy</h2>
+                    </header>
+                    <!--Modal/Popup Box Body Starts here-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <div class="slds-size_12-of-12">
+                            <div class="form-container">
+                                <p>Are you sure you want to terminate the policy ?</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Modal/Popup Box Footer Starts here-->
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral" label="Cancel" title="Cancel"
+                                          onclick="{! c.closeModal }"/>
+                        <lightning:button variant="brand" label="Terminate" title="Terminate"
+                                          onclick="{!c.terminate}"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+
+</aura:component>

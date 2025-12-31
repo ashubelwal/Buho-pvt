@@ -1,0 +1,50 @@
+.tableWrapper{
+	padding: 15px;
+	background-color: #ffffff;
+	border-radius: 3px;
+}
+
+.tg {
+	border-collapse: collapse;
+	border-spacing: 0;
+	border-color: #ccc;
+  }
+  
+  .tg td {	
+	padding: 10px 5px;
+	border-style: solid;
+	border-width: 0px;	
+	border-color: #ccc;
+	color: #333;
+	background-color: #fff;
+  }
+  
+  .tg th {	
+	padding: 10px 5px;
+	border-style: solid;
+	border-width: 0px;
+	overflow: hidden;	
+	border-color: #ccc;
+	color: #333;
+	background-color: #f0f0f0;
+  }
+  
+  .line {
+	float: left;
+    width: 200px;
+    height: 30px;
+    margin-top: 5px;
+    border-radius: 4px;
+    background-image: linear-gradient(90deg, #F4F4F4 0px, rgba(229, 229, 229, 0.8) 40px, #F4F4F4 80px);
+    background-size: 599px;
+    animation: shine-lines-c-recordList_recordList 2s infinite ease-out;
+  }
+  
+  @keyframes shine-lines {
+	0% {
+	  background-position: -100px;
+	}
+	40%, 100% {
+	  background-position: 140px;
+	}
+  }

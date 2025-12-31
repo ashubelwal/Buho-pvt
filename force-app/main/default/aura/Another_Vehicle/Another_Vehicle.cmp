@@ -1,0 +1,45 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >   
+    <aura:attribute name="title" type="String" access="public"/>
+    <aura:attribute name="backButtonVisibility" type="Boolean" default="false" access="public" />
+    <aura:attribute name="policyType" type="String" access="public"/>
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    <aura:attribute name="onNextClick" type="Aura.Action"/>
+    <aura:attribute name="anotherVehicle" type="String" access="public" />
+
+    <aura:attribute name="quoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" access="public"/>
+    <aura:attribute name="leadRecord" type="Lead" default="{ 'sobjectType': 'Lead'}" access="public"/>
+    
+    <lightning:layoutItem padding="around-small" size="12" class="align-center slds-m-top_xx-large">
+        <div class="page-title">
+            <button class="button -plain -back-button" name="step_11" onclick="{! v.onBackClick }">
+                <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/> Back
+            </button>
+            <h1>{!v.title}</h1>                        
+            <img class="slds-m-bottom_large" src="{!$Resource.mexinsurance_assets + '/images/icon-car.svg'}" alt="Another Vehicle"/>
+        </div>
+    </lightning:layoutItem>
+    
+    <lightning:layoutItem padding="around-small" size="12">
+        <lightning:layout multipleRows="true">
+            <lightning:layoutItem size="6" class="align-center slds-p-around_xx-small">
+                <label class="label-large slds-m-top_small slds-m-bottom_small">Yes</label>
+                <label class="radiocontainer">
+                    <ui:inputRadio aura:id="r2" name="newVehicle" class="radio_box slds-m-top_x-small" text="Yes" change="{!c.onGroup}" value="{!v.anotherVehicle == 'Yes'}"/>
+                    <span class="radiobtn"></span>
+                </label>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="6" class="align-center slds-p-around_xx-small">
+                <label class="label-large slds-m-top_small slds-m-bottom_small">NOT NOW</label>
+                <label class="radiocontainer">
+                    <ui:inputRadio aura:id="r3" name="newVehicle" class="radio_box slds-m-top_x-small" text="No" change="{!c.onGroup}" value="{!v.anotherVehicle == 'No'}"/>
+                    <span class="radiobtn"></span>
+                </label>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </lightning:layoutItem>
+    
+    
+    <lightning:layoutItem padding="around-small" size="12" class="slds-align_absolute-center slds-m-top_large">
+        <button class="button -secondary -wider -margin-left" name="step_11" onclick="{! v.onNextClick }">Next</button>
+    </lightning:layoutItem>
+</aura:component>

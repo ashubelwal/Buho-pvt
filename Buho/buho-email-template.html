@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>BÚHO Insurance Email Template</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background-color: #F5F5F5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+        
+        img {
+            border: 0;
+            display: block;
+            outline: none;
+            text-decoration: none;
+            -ms-interpolation-mode: bicubic;
+        }
+        
+        /* Brand Colors */
+        :root {
+            --primary-blue: #13203D;
+            --accent-pink: #E53C7B;
+            --light-blue: #89DBEF;
+            --white: #ffffff;
+            --gray-text: #6B7280;
+        }
+        
+        /* Container */
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        
+        /* Header */
+        .email-header {
+            background: linear-gradient(135deg, #D946A6 0%, #8B2F65 100%);
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .logo {
+            margin-bottom: 20px;
+        }
+        
+        .logo img {
+            width: 140px;
+            height: auto;
+            margin: 0 auto;
+        }
+        
+        .header-title {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.3;
+        }
+        
+        /* Content Section */
+        .email-content {
+            padding: 40px 30px;
+            background-color: #ffffff;
+        }
+        
+        .greeting {
+            color: #1F2937;
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0 0 20px 0;
+        }
+        
+        .message-text {
+            color: #6B7280;
+            font-size: 15px;
+            line-height: 1.6;
+            margin: 0 0 20px 0;
+        }
+        
+        /* Info Card */
+        .info-card {
+            background: linear-gradient(180deg, #E8ECF4 0%, #FDF2F5 100%);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 30px 0;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            color: #6B7280;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .info-value {
+            color: #1F2937;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        /* Button */
+        .button-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .btn-primary {
+            display: inline-block;
+            padding: 16px 40px;
+            background-color: #13203D;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #1a2d52;
+            box-shadow: 0 4px 12px rgba(19, 32, 61, 0.3);
+        }
+        
+        .btn-secondary {
+            display: inline-block;
+            padding: 14px 32px;
+            background-color: #E53C7B;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #D12D6A;
+        }
+        
+        /* Highlight Box */
+        .highlight-box {
+            background-color: #FEF2F8;
+            border-left: 4px solid #E53C7B;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .highlight-text {
+            color: #1F2937;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        /* Features Section */
+        .features-section {
+            margin: 30px 0;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+        
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            background-color: #89DBEF;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            flex-shrink: 0;
+            color: #13203D;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        
+        .feature-text {
+            color: #6B7280;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        /* Footer */
+        .email-footer {
+            background-color: #13203D;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .footer-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 13px;
+            line-height: 1.6;
+            margin: 0 0 15px 0;
+        }
+        
+        .footer-links {
+            margin: 20px 0;
+        }
+        
+        .footer-link {
+            color: #89DBEF;
+            text-decoration: none;
+            font-size: 13px;
+            margin: 0 10px;
+            font-weight: 500;
+        }
+        
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+        
+        .social-links {
+            margin: 20px 0;
+        }
+        
+        .social-link {
+            display: inline-block;
+            margin: 0 8px;
+            color: #ffffff;
+            font-size: 20px;
+        }
+        
+        .copyright {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            margin-top: 20px;
+        }
+        
+        /* Responsive */
+        @media only screen and (max-width: 600px) {
+            .email-content {
+                padding: 30px 20px !important;
+            }
+            
+            .email-header {
+                padding: 30px 20px !important;
+            }
+            
+            .header-title {
+                font-size: 22px !important;
+            }
+            
+            .greeting {
+                font-size: 18px !important;
+            }
+            
+            .message-text {
+                font-size: 14px !important;
+            }
+            
+            .info-card {
+                padding: 20px !important;
+            }
+            
+            .btn-primary,
+            .btn-secondary {
+                display: block !important;
+                width: 100% !important;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #F5F5F5;">
+    <!-- Main Table Wrapper -->
+    <table role="presentation" style="width: 100%; background-color: #F5F5F5;" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="padding: 20px 0;">
+                <!-- Email Container -->
+                <table role="presentation" class="email-container" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);" cellpadding="0" cellspacing="0">
+                    
+                    <!-- Header Section -->
+                    <tr>
+                        <td class="email-header" style="background: linear-gradient(135deg, #D946A6 0%, #8B2F65 100%); padding: 40px 30px; text-align: center;">
+                            <div class="logo" style="margin-bottom: 20px;">
+                                <!-- Replace with actual logo URL in production -->
+                                <img src="https://via.placeholder.com/140x50/13203D/FFFFFF?text=BUHO" alt="BÚHO Insurance" style="width: 140px; height: auto; margin: 0 auto;">
+                            </div>
+                            <h1 class="header-title" style="color: #ffffff; font-size: 28px; font-weight: 700; margin: 0; line-height: 1.3;">
+                                Your Quote is Ready!
+                            </h1>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content Section -->
+                    <tr>
+                        <td class="email-content" style="padding: 40px 30px; background-color: #ffffff;">
+                            
+                            <!-- Greeting -->
+                            <h2 class="greeting" style="color: #1F2937; font-size: 20px; font-weight: 600; margin: 0 0 20px 0;">
+                                Hello John,
+                            </h2>
+                            
+                            <!-- Message -->
+                            <p class="message-text" style="color: #6B7280; font-size: 15px; line-height: 1.6; margin: 0 0 20px 0;">
+                                Thank you for choosing BÚHO for your Mexico insurance needs. We're excited to provide you with comprehensive coverage for your journey!
+                            </p>
+                            
+                            <p class="message-text" style="color: #6B7280; font-size: 15px; line-height: 1.6; margin: 0 0 20px 0;">
+                                Your personalized insurance quote is ready. Here are your coverage details:
+                            </p>
+                            
+                            <!-- Info Card -->
+                            <div class="info-card" style="background: linear-gradient(180deg, #E8ECF4 0%, #FDF2F5 100%); border-radius: 12px; padding: 24px; margin: 30px 0;">
+                                <table role="presentation" style="width: 100%;" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td class="info-row" style="padding: 10px 0; border-bottom: 1px solid rgba(0, 0, 0, 0.08);">
+                                            <table role="presentation" style="width: 100%;" cellpadding="0" cellspacing="0">
+                                                <tr>
+                                                    <td class="info-label" style="color: #6B7280; font-size: 14px; font-weight: 500;">Policy Type:</td>
+                                                    <td class="info-value" style="color: #1F2937; font-size: 14px; font-weight: 600; text-align: right;">Comprehensive Coverage</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="info-row" style="padding: 10px 0; border-bottom: 1px solid rgba(0, 0, 0, 0.08);">
+                                            <table role="presentation" style="width: 100%;" cellpadding="0" cellspacing="0">
+                                                <tr>
+                                                    <td class="info-label" style="color: #6B7280; font-size: 14px; font-weight: 500;">Coverage Period:</td>
+                                                    <td class="info-value" style="color: #1F2937; font-size: 14px; font-weight: 600; text-align: right;">12 Months</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="info-row" style="padding: 10px 0; border-bottom: 1px solid rgba(0, 0, 0, 0.08);">
+                                            <table role="presentation" style="width: 100%;" cellpadding="0" cellspacing="0">
+                                                <tr>
+                                                    <td class="info-label" style="color: #6B7280; font-size: 14px; font-weight: 500;">Territory:</td>
+                                                    <td class="info-value" style="color: #1F2937; font-size: 14px; font-weight: 600; text-align: right;">Entire Mexico</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="info-row" style="padding: 10px 0;">
+                                            <table role="presentation" style="width: 100%;" cellpadding="0" cellspacing="0">
+                                                <tr>
+                                                    <td class="info-label" style="color: #6B7280; font-size: 14px; font-weight: 500;">Premium:</td>
+                                                    <td class="info-value" style="color: #E53C7B; font-size: 18px; font-weight: 700; text-align: right;">$349.00</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            
+                            <!-- CTA Button -->
+                            <div class="button-container" style="text-align: center; margin: 30px 0;">
+                                <a href="#" class="btn-primary" style="display: inline-block; padding: 16px 40px; background-color: #13203D; color: #ffffff; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px;">
+                                    View Full Quote
+                                </a>
+                            </div>
+                            
+                            <!-- Features Section -->
+                            <div class="features-section" style="margin: 30px 0;">
+                                <table role="presentation" style="width: 100%;" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td class="feature-item" style="padding-bottom: 16px;">
+                                            <table role="presentation" cellpadding="0" cellspacing="0">
+                                                <tr>
+                                                    <td style="width: 36px; vertical-align: top;">
+                                                        <div class="feature-icon" style="width: 24px; height: 24px; background-color: #89DBEF; border-radius: 50%; text-align: center; line-height: 24px; color: #13203D; font-weight: 700; font-size: 14px;">✓</div>
+                                                    </td>
+                                                    <td class="feature-text" style="color: #6B7280; font-size: 14px; line-height: 1.5;">
+                                                        <strong style="color: #1F2937;">24/7 Emergency Assistance</strong> - We're here whenever you need us
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="feature-item" style="padding-bottom: 16px;">
+                                            <table role="presentation" cellpadding="0" cellspacing="0">
+                                                <tr>
+                                                    <td style="width: 36px; vertical-align: top;">
+                                                        <div class="feature-icon" style="width: 24px; height: 24px; background-color: #89DBEF; border-radius: 50%; text-align: center; line-height: 24px; color: #13203D; font-weight: 700; font-size: 14px;">✓</div>
+                                                    </td>
+                                                    <td class="feature-text" style="color: #6B7280; font-size: 14px; line-height: 1.5;">
+                                                        <strong style="color: #1F2937;">Fast Claims Processing</strong> - Quick and hassle-free claims
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="feature-item" style="padding-bottom: 16px;">
+                                            <table role="presentation" cellpadding="0" cellspacing="0">
+                                                <tr>
+                                                    <td style="width: 36px; vertical-align: top;">
+                                                        <div class="feature-icon" style="width: 24px; height: 24px; background-color: #89DBEF; border-radius: 50%; text-align: center; line-height: 24px; color: #13203D; font-weight: 700; font-size: 14px;">✓</div>
+                                                    </td>
+                                                    <td class="feature-text" style="color: #6B7280; font-size: 14px; line-height: 1.5;">
+                                                        <strong style="color: #1F2937;">Bilingual Support</strong> - English and Spanish speaking team
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            
+                            <!-- Highlight Box -->
+                            <div class="highlight-box" style="background-color: #FEF2F8; border-left: 4px solid #E53C7B; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                                <p class="highlight-text" style="color: #1F2937; font-size: 14px; line-height: 1.6; margin: 0;">
+                                    <strong>✨ Special Offer:</strong> Complete your purchase within 48 hours and receive a <strong style="color: #E53C7B;">15% discount</strong> on your premium!
+                                </p>
+                            </div>
+                            
+                            <!-- Additional Message -->
+                            <p class="message-text" style="color: #6B7280; font-size: 15px; line-height: 1.6; margin: 20px 0 10px 0;">
+                                Have questions? Our team is ready to help you.
+                            </p>
+                            
+                            <!-- Secondary CTA -->
+                            <div class="button-container" style="text-align: center; margin: 20px 0;">
+                                <a href="#" class="btn-secondary" style="display: inline-block; padding: 14px 32px; background-color: #E53C7B; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 600; border-radius: 8px;">
+                                    Contact Support
+                                </a>
+                            </div>
+                            
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer Section -->
+                    <tr>
+                        <td class="email-footer" style="background-color: #13203D; padding: 30px; text-align: center;">
+                            <p class="footer-text" style="color: rgba(255, 255, 255, 0.8); font-size: 13px; line-height: 1.6; margin: 0 0 15px 0;">
+                                BÚHO Insurance Brokerage<br>
+                                Smart protection for your Mexican adventures
+                            </p>
+                            
+                            <div class="footer-links" style="margin: 20px 0;">
+                                <a href="#" class="footer-link" style="color: #89DBEF; text-decoration: none; font-size: 13px; margin: 0 10px; font-weight: 500;">Privacy Policy</a>
+                                <span style="color: rgba(255, 255, 255, 0.4);">|</span>
+                                <a href="#" class="footer-link" style="color: #89DBEF; text-decoration: none; font-size: 13px; margin: 0 10px; font-weight: 500;">Terms of Service</a>
+                                <span style="color: rgba(255, 255, 255, 0.4);">|</span>
+                                <a href="#" class="footer-link" style="color: #89DBEF; text-decoration: none; font-size: 13px; margin: 0 10px; font-weight: 500;">Contact Us</a>
+                            </div>
+                            
+                            <p class="footer-text" style="color: rgba(255, 255, 255, 0.8); font-size: 13px; line-height: 1.6; margin: 15px 0;">
+                                📧 support@buhoinsurance.com | 📞 1-800-BUHO-INS
+                            </p>
+                            
+                            <p class="copyright" style="color: rgba(255, 255, 255, 0.6); font-size: 12px; margin-top: 20px;">
+                                © 2024 BÚHO Insurance Brokerage. All rights reserved.<br>
+                                You are receiving this email because you requested a quote from our website.
+                            </p>
+                            
+                            <p style="color: rgba(255, 255, 255, 0.5); font-size: 11px; margin-top: 15px;">
+                                <a href="#" style="color: #89DBEF; text-decoration: underline;">Unsubscribe</a> from marketing emails
+                            </p>
+                        </td>
+                    </tr>
+                    
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
+

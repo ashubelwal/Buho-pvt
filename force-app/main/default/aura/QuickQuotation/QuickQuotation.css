@@ -1,0 +1,36 @@
+.THIS {
+}
+
+.THIS .question{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.THIS .uiInputRadio{
+    display: inline-grid;
+}
+
+.THIS .radio_box{
+    justify-self: center;
+}
+
+.THIS .txt_right{
+    text-align: right;
+}
+
+.THIS .custom_Box{
+    width:50% !important;
+}
+
+.THIS .combox_width{
+    width: 28%;
+}
+
+.THIS .vehicleOption{
+    width: 23%;
+}
+
+.THIS .custom_card{
+    border: var(--lwc-borderWidthThin,1px) solid var(--lwc-cardColorBorder,rgb(221, 219, 218));
+    border-radius: var(--lwc-borderRadiusMedium,0.25rem);
+}

@@ -1,0 +1,205 @@
+<template>
+    <div class="slds-grid slds-wrap">
+        <template if:true={error}>
+            <c-error-panel errors={error}></c-error-panel>
+        </template>
+        <template if:false={error}>
+            <div class="slds-col slds-size_9-of-12"><h4 style="font-size: 20px;text-transform: capitalize;"><b>All {pageName}</b> </h4></div>
+            <div class="slds-col slds-size_3-of-12">
+                <lightning-input variant="label-hidden" type="search" placeholder="    Type your query" onchange={handleSearch}></lightning-input>
+            </div>            
+            <!-- <div class="slds-col slds-var-p-bottom_x-large slds-size_1-of-1">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_1-of-2">
+                        <div class="slds-grid slds-wrap">
+                            <div
+                                if:true={showListViewLabel}
+                                class="slds-col slds-size_1-of-1"
+                            >
+                                <h4 if:true={objectInfo.data}>
+                                    {objectInfo.data.labelPlural}
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <template if:true={iscustomTableData}>
+                <div class="slds-col slds-size_1-of-1"> 
+                    <lightning-datatable
+                        class="custom-table"
+                        key-field="Id"
+                        data={customTableData}
+                        columns={columns}
+                        onrowaction={handleRowAction}
+                        hide-checkbox-column
+                        sorted-by={sortBy}
+                        sorted-direction={sortDirection}
+                        onsort={doSorting}                        
+                    >
+                    </lightning-datatable>
+                </div>
+            </template>
+            <template if:false={iscustomTableData}>
+                <table class="tg">
+                    <tr>
+                      <th class="">  
+                          <div class="line"></div>
+                      </th>
+                      <th class="">
+                        <div class="line"></div>
+                      </th>
+                      <th class="">
+                        <div class="line"></div>
+                      </th>
+                      <th class="">
+                        <div class="line"></div>
+                      </th>
+                      <th class="">
+                        <div class="line"></div>
+                      </th>
+                      <th class="">
+                        <div class="line"></div>
+                      </th>
+                      <th class="">
+                        <div class="line"></div>
+                      </th>
+                      <th class="">
+                        <div class="line"></div>
+                      </th>
+                    </tr>
+                    <tr>
+                      <td class="">
+                        <div class="line"></div>
+                      </td>
+                      <td class="">
+                        <div class="line"></div>
+                      </td>
+                      <td class="">
+                        <div class="line"></div>
+                      </td>
+                      <td class="">
+                        <div class="line"></div>
+                      </td>
+                      <td class="">
+                        <div class="line"></div>
+                      </td>
+                      <td class="">
+                        <div class="line"></div>
+                      </td>
+                      <td class="">
+                        <div class="line"></div>
+                      </td>
+                      <td class="">
+                        <div class="line"></div>
+                      </td>
+                    </tr>
+                    <tr>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                        <td class="">
+                          <div class="line"></div>
+                        </td>
+                      </tr>
+                </table>
+            </template>
+        </template>
+    </div>
+</template>

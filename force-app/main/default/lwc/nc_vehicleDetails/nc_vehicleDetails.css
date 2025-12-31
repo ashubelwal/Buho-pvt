@@ -1,0 +1,43 @@
+input,
+.vehicleDetails .slds-input_faux,
+.slds-combobox_container {
+	--slds-c-input-color-border: red !important;
+	--lwc-colorBorderInput: green;
+	--slds-g-color-border-base-4: #eee;
+}
+
+.vehicleDetails .slds-checkbox_faux {
+    border: 1px solid #cccccc !important;
+}
+
+.inputSpinner {
+    position: absolute;
+    bottom: 27px;
+    right: 27px;
+}
+
+.grid-container {
+    display: flex;
+    flex-wrap: wrap; /* Allows wrapping to the next line if needed */
+    gap: .5rem; /* Adds space between each option */
+}
+
+.pageTitle h2 {
+	border-bottom: 1px solid #eee;
+    padding: 10px 0;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    border: 1px solid #eee;
+    padding: 7px;
+    border-radius: 4px;
+}
+
+input[type="radio"]:checked + label {
+    background-color: #0070d2; /* Salesforce blue */
+    color: white;
+    border-color: #0070d2;
+}

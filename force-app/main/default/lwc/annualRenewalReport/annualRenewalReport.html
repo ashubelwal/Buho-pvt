@@ -1,0 +1,70 @@
+<!-- <template>
+    <lightning-card title="Annual Renewal Report (Partial)" icon-name="standard:report">
+        <template if:true={data}>
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_fixed-layout">
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Target Renewal</th>
+                        <th>Renewed</th>
+                        <th>Renewed %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={data} for:item="row">
+                        <tr key={row.month}>
+                            <td>{row.monthName}</td>
+                            <td>{row.targetRenewal}</td>
+                            <td>{row.renewed}</td>
+                            <td>{row.renewedPctFormatted}</td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </template>
+        <template if:true={error}>
+            <div class="slds-text-color_error slds-p-around_medium">{error}</div>
+        </template>
+    </lightning-card>
+</template> -->
+<template>
+    <lightning-card title="Annual Renewal Report (Partial)" icon-name="standard:report">
+        <template if:true={data}>
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_fixed-layout">
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Target Renewal</th>
+                        <th>Renewed</th>
+                        <th>Renewed %</th>
+                        <th>Ineligible</th>
+                        <th>Ineligible %</th>
+                        <th>Pending</th>
+                        <th>Pending %</th>
+                        <th>Lost</th>
+                        <th>Lost %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={data} for:item="row">
+                        <tr key={row.rowKey} class={row.rowClass}>
+                            <td>{row.displayMonthName}</td>
+                            <td>{row.targetRenewal}</td>
+                            <td>{row.renewed}</td>
+                            <td>{row.renewedPctFormatted}</td>
+                            <td>{row.ineligible}</td>
+                            <td>{row.ineligiblePctFormatted}</td>
+                            <td>{row.pending}</td>
+                            <td>{row.pendingPctFormatted}</td>
+                            <td>{row.lost}</td>
+                            <td>{row.lostPctFormatted}</td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </template>
+        <template if:true={error}>
+            <div class="slds-text-color_error slds-p-around_medium">{error}</div>
+        </template>
+    </lightning-card>
+</template>

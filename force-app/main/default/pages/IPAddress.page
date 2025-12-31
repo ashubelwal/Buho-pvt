@@ -1,0 +1,2 @@
+<apex:page showHeader="false" sidebar="false" controller="IPAddressController" action="{!getUserIPAddress}"
+           contentType="application/x-JavaScript; charset=utf-8" >{!ip}</apex:page>

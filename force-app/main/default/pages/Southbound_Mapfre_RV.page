@@ -1,0 +1,639 @@
+<apex:page controller="Declaration_Page_Insurance_Controller" applyBodyTag="false" renderAs="pdf">
+    <head>
+        <style>
+            @page {
+            margin-top: 1.5in;
+            margin-bottom: 1.1in;
+            @bottom-left 
+                { 
+                content: element(footer);
+                }
+            @top-left {
+            content: element(header);
+            }
+            @top-center {
+            content: element(header1);
+            }
+            }
+            #pageNum:before{
+            content: "Page " counter(page) " of " counter(pages);
+            }
+            td.td1{
+                text-align:center;
+                }
+            div.footer{
+                font-size: 12.5px;
+                position: running(footer);
+                display:block;}
+                div.header {
+                position: running(header);
+                border: 1px solid red;
+            }
+            div.header1 {
+                position: absolute;
+                font-size: normal;
+                left: 0;
+                top: 60px;
+                width: 95%;
+            }
+            h4.h_1
+            {
+                color:red;
+                text-align:left;
+                display:inline;
+            }
+            div.d3 {
+                TEXT-ALIGN: CENTER;
+                border: 1px solid red;
+            }
+            div.d4 {
+                border: 1px solid red;
+                font-size:small;
+            }
+            th{
+                text-align:center;
+            }
+            th.th1{
+                text-align:center;
+                font-weight:normal;
+            }
+            mark{
+                background-color:yellow;
+                }
+            td.td2{background-color:#A9A9A9;border: 1px solid;}
+            .row {
+              display: flex; /* equal height of the children */
+              position: relative;
+              margin:auto;
+            }
+            
+            .col {
+              flex: 1; /* additionally, equal width */
+              
+              padding: 1em;
+              border: none;
+            }
+        </style>
+    </head>
+    <div class="header">
+        <div class="header" style="font-size: large;
+                                   position: static;
+                                   height: 22px;
+                                   width: 47%;
+                                   background-color: red;">
+            <span style="color:white; font-weight:bold;margin-left: 10px;">TOURIST MEXICO INSURANCE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col">
+                <img src="{!$Resource.Maxfre_Logo}" width="45%"/>
+            </div>
+            
+            <div class="col header1" style="left:50% !important; top: 0 !important;">
+                <b><apex:outputText value="ISSUE DATE:" /></b>&nbsp;
+                <apex:outputText value="{!formattedIssuanceDate}"></apex:outputText> &nbsp;
+                <apex:outputText value="{!formattedIssuanceTime}"></apex:outputText> &nbsp;
+                <!-- <apex:outputText value="{0,time,HH:mm a}">
+                    <apex:param value="{!policy.Issued_At__c}"/>
+                </apex:outputText><br/> -->
+                <br/>
+                <b><apex:outputText value="POLICY NO:"/></b>&nbsp;{!policy.Name}
+            </div>
+        </div>
+        
+    </div>
+    <h4 class="h_1">
+        IN CASE OF AN ACCIDENT 
+    </h4>  
+    <div class="d3">
+        <apex:outputText value="ALL CLAIMS MUST BE REPORTED IN MEXICO BEFORE RETURNING TO U.S.A." /><BR/>
+        <apex:outputText value="CALL IN MEXICO: " /><B><apex:outputText value="55-5950-2108, 01-800-026-6358, 01-800-026-6551" /></B>
+        
+    </div>
+    <br/>
+     
+    <h4 class="h_1">
+        GENERAL INFORMATION 
+    </h4>
+    <div class="d4">
+        <table align="center" style="width: 100%;">
+            <tr><th class="th1" colspan="5">DAY-MONTH-YEAR</th>
+            </tr>
+            <tr>
+                <td>VALID FROM THE&nbsp;&nbsp;
+                </td>
+                <td>
+                    <apex:outputText value="{0,date,MMM dd, yyyy}">
+                        <apex:param value="{!policy.Start_Date__c}" /> 
+                    </apex:outputText>
+                </td>
+                <td>HRS OF:&nbsp;&nbsp;
+                </td>
+                <td>
+                    <!--{!policy.Start_Time__c}-->{!FormattedStartTime}&nbsp;&nbsp;
+                </td>
+                <td>TOTAL DAYS&nbsp;&nbsp;</td>
+            </tr>
+            
+            <tr>
+                <td>TO THE&nbsp;&nbsp;
+                </td>
+                <td>
+                    <apex:outputText value="{0,date,MMM dd, yyyy}">
+                        <apex:param value="{!policy.End_Date__c}" /> 
+                    </apex:outputText> &nbsp;&nbsp;
+                </td>
+                <td>HRS OF:&nbsp;&nbsp;
+                </td>
+                <td><!--{!policy.End_Time__c}-->{!FormattedEndTime}&nbsp;&nbsp;
+                </td>
+                <td class="td1">{!policy.Term_days__c}&nbsp;&nbsp;</td>
+                
+            </tr>
+            
+        </table>
+    </div>
+    <br/>
+    <h4 class="h_1">
+        INSURED 
+    </h4>
+    <div class="d4">
+        <table ALIGN="CENTER" style="width: 100%;" >
+            <tr>
+                <td>INSURED:</td>
+                <td>
+                    <apex:outputText rendered="{!policy.Vehicle_Policy__r.Is_vehicle_owned_by_a_company_or_rented__c}">
+                        {!policy.Vehicle_Policy__r.Company_Name__c}
+                    </apex:outputText>
+                    <apex:outputText rendered="{!!policy.Vehicle_Policy__r.Is_vehicle_owned_by_a_company_or_rented__c}">
+                        <apex:outputText rendered="{!!ISBLANK(policy.Vehicle_Policy__r.Vehicle_Owner_Name__c)}">
+                            {!policy.Vehicle_Policy__r.Vehicle_Owner_Name__c}
+                        </apex:outputText>
+                        <apex:outputText rendered="{!ISBLANK(policy.Vehicle_Policy__r.Vehicle_Owner_Name__c)}">
+                            <apex:outputText rendered="{!!ISBLANK(driver.First_Name__c)}">
+                                {!driver.First_Name__c} &nbsp; {!driver.Last_Name__c}
+                            </apex:outputText>
+                            <apex:outputText rendered="{!ISBLANK(driver.First_Name__c)}">
+                                {!policy.Contact__r.Name}
+                            </apex:outputText>
+                        </apex:outputText>
+                    </apex:outputText>
+                </td>
+                <td>CITIZENSHIP:</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>ADDRESS</td>
+                <td><div>
+                    <apex:outputText rendered="{!policy.Vehicle_Policy__r.Is_vehicle_owned_by_a_company_or_rented__c}">
+                              {!policy.Vehicle_Policy__r.Company_Address__c}
+                        </apex:outputText>
+                        <apex:outputText rendered="{!!policy.Vehicle_Policy__r.Is_vehicle_owned_by_a_company_or_rented__c}">
+                            <apex:outputText rendered="{!!ISBLANK(policy.Vehicle_Policy__r.Vehicle_Owner_Address__c)}">
+                                {!policy.Vehicle_Policy__r.Vehicle_Owner_Address__c},&nbsp;{!policy.Vehicle_Policy__r.Vehicle_Owner_City__c}, &nbsp;{!policy.Vehicle_Policy__r.Vehicle_Owner_State__c}, &nbsp;{!policy.Vehicle_Policy__r.Vehicle_Owner_Country__c}
+                            </apex:outputText>
+                            <apex:outputText rendered="{!ISBLANK(policy.Vehicle_Policy__r.Vehicle_Owner_Address__c)}">
+                                <apex:outputText rendered="{!!ISBLANK(driver.Address__c)}">
+                                    {!driver.Address__c}, &nbsp; {!driver.Address_Line_2__c} &nbsp; {!driver.City__c}, &nbsp; {!driver.State_Province__c}, &nbsp; {!driver.Country__c}
+                                </apex:outputText>
+                                <apex:outputText rendered="{!ISBLANK(driver.Address__c)}">
+                                    {!policy.Contact__r.Street__c}, &nbsp; {!policy.Contact__r.City__c}, &nbsp;{!policy.Contact__r.State__c}, &nbsp;{!policy.Contact__r.Country__c}
+                                </apex:outputText>
+                            </apex:outputText>
+                        </apex:outputText>
+                    </div>
+                </td>
+                <td>OCCUPATION:</td>
+                <td></td>
+            </tr>
+             <tr>
+                <td>USA INSURANCE COMPANY</td>
+                <td></td>
+                
+                <td>TELEPHONE:</td>
+                <td>
+                    <apex:outputText rendered="{!policy.Vehicle_Policy__r.Is_vehicle_owned_by_a_company_or_rented__c}">
+                              {!policy.Vehicle_Policy__r.Company_Phone__c}
+                        </apex:outputText>
+                        <apex:outputText rendered="{!!policy.Vehicle_Policy__r.Is_vehicle_owned_by_a_company_or_rented__c}">
+                            <apex:outputText rendered="{!!ISBLANK(policy.Vehicle_Policy__r.Vehicle_Owner_Phone__c)}">
+                                {!policy.Vehicle_Policy__r.Vehicle_Owner_Phone__c}
+                            </apex:outputText>
+                            <apex:outputText rendered="{!ISBLANK(policy.Vehicle_Policy__r.Vehicle_Owner_Phone__c)}">
+                                <apex:outputText rendered="{!!ISBLANK(driver.Phone__c)}">
+                                    {!driver.Phone__c}
+                                </apex:outputText>
+                                <apex:outputText rendered="{!ISBLANK(driver.Phone__c)}">
+                                    {!policy.Contact__r.Phone}
+                                </apex:outputText>
+                            </apex:outputText>
+                        </apex:outputText>
+                </td>
+            </tr>
+            <tr><td>LIENHOLDER:</td><td>{!policy.Vehicle_Policy__r.Lienholder_name__c}</td></tr>
+        </table>
+    </div>
+    <br/>
+    <h4 class="h_1">
+        Drivers 
+    </h4>
+    <div class="d4">
+        <table ALIGN="CENTER" style="width: 100%;" >
+            <tr>
+                <td><b>Name</b></td>
+                <td><b>DOB</b></td>
+                <td><b>License</b></td>
+            </tr>
+            <apex:repeat value="{!drivers}" var="driver" >
+                <tr>
+                    <td> {!driver.First_Name__c} &nbsp; {!driver.Last_Name__c} </td>
+                    <td>
+                        <apex:outputText value="{0,date,MMM dd, yyyy}">
+                            <apex:param value="{!driver.Dob__c}"/>
+                            </apex:outputText>
+                    </td>
+                    <td>
+                        {!driver.LN_With_Country__c}
+                    </td>
+                </tr>
+            </apex:repeat>
+        </table>
+    </div>
+    <br/>
+    
+    <h4 class="h_1">
+        ECONOMIC CONCEPTS 
+    </h4>
+    <div class="d4">
+        <table align="CENTER" style="width: 100%;"  cellspacing="6px" cellpadding="2px">
+            <tr>
+                <td>METHOD OF PAYMENT: Online &nbsp; {!trans.Id__c}</td>
+               <!--- <td>STATE TAX: </td> -->
+            </tr>
+            <tr>
+                <td>CURRENCY: U.S.A. DOLLARS</td>
+                <td>TAX:  &nbsp;
+                    <apex:outputText value="$" rendered="{!NOT(ISNULL(policy.I_V_A_Mex_Tax__c))}" >
+                    <apex:outputText value="{0,number, ###,##0.00}">
+                        <apex:param value="{!policy.I_V_A_Mex_Tax__c}" />
+                    </apex:outputText>
+                    </apex:outputText>
+                </td>
+            </tr>
+            <tr>
+                <td>NET PREMIUM: &nbsp;
+                    <apex:outputText value="$" rendered="{!NOT(ISNULL(policy.Net_Premium__c))}" />
+                    <apex:outputText value="{0,number, ###,##0.00}">
+                        <apex:param value="{!ROUND(policy.Net_Premium__c, 2)}" />
+                    </apex:outputText>
+                </td>
+                <td>TOTAL: &nbsp;
+                    <apex:outputText value="$" rendered="{!NOT(ISNULL(policy.Total_Premium_Amount__c))}" />
+                    <apex:outputText value="{0,number, ###,##0.00}">
+                        <apex:param value="{!ROUND(policy.Net_Premium__c + policy.I_V_A_Mex_Tax__c + policy.Broker_Policy_Fee__c, 2)}" />
+                    </apex:outputText>
+                </td>
+            </tr>
+            <tr>
+                <td>POLICY FEE: &nbsp;
+                    <apex:outputText value="$" rendered="{!NOT(ISNULL(policy.Broker_Policy_Fee__c))}" />
+                    <apex:outputText value="{0,number, ###,##0.00}">
+                        <apex:param value="{!ROUND(policy.Broker_Policy_Fee__c, 2)}" />
+                    </apex:outputText>
+                </td>
+            </tr>
+            
+        </table>
+    </div><br/>
+    <div>
+        <p style="font-size:12px;">
+        MAPFRE MÉXICO, S.A., HEREINAFTER REFERED TO AS "THE COMPANY", HEREBY INSURES THE INDIVIDUAL OR COMPANY, HEREINAFTER 
+        REFERED AS “THE INSURED”, IN ACCORDANCE WITH THE GENERAL AND SPECIAL CONDITIONS OF THIS POLICY.
+    </p>
+    <p style="font-size:14px; font-weight:normal;">
+        IN ACCORDANCE WITH THE PROVISIONS OF ARTICLE 202 OF THE INSURANCE AND SECURITIES INSTITUTIONS ACT, THE CONTRACTUAL 
+        DOCUMENTATION AND TECHNICAL NOTE THAT COMPRISE THIS PRODUCT WERE DULY REGISTERED WITH THE NATIONAL INSURANCE AND SECURITIES
+        COMMISSION AS OF 14 OF SEPTEMBER 2017, WITH THE NUMBER: CNSF-S0041-0377-2017 / CONDUSEF-002294-02.
+    </p>
+    <p style="font-size:12px">
+             IN TESTIMONY OF WHICH MAPFRE MÉXICO, S.A. SIGN THIS FORM IN MEXICO CITY. THIS POLICY IS NOT PROOF 
+        OF PAYMENT; REQUIRE YOUR RECEIPT WHEN PAYING THE PREMIUM.
+    </p>
+    </div>
+    <div class="footer" >
+        Av. Revolución #507, Col. San Pedro de los Pinos, Del. Benito Juarez, Ciudad de México,<br/> 
+        CP 03800 Tel.: 52-30-70-00 R.F.C. MTE440316E54
+        <div style="position: absolute; display:inline; left: 600px; top:0px">
+            <img src="{!$Resource.SignOnPolicyPage}" width="70" height="50"/>
+        </div>
+        <div style="border: 1px solid red; ">
+                <span id="pageNum"/>
+        </div>
+        
+    </div>
+    <br/>
+    <br/>
+     <p style="color:red; text-align:left; ">
+         <B >
+            VEHICLE INFORMATION 
+         </B>
+    </p>
+        <div  class="d4">
+            <table align="CENTER" cellspacing="8px" cellpadding="10px" style="width: 100%;">
+                <tr>
+                    <td class="td2">ITEM</td>
+                    <td class="td2">YEAR</td>
+                    <td class="td2">MAKE</td>
+                    <td class="td2">MODEL</td>
+                    <td class="td2">PLATE</td>
+                    <td class="td2">VIN</td>
+                </tr>
+                
+                <tr>
+                    <td style="border: 1px solid">VEHICLE</td>
+                    <td>{!policy.Vehicle_Policy__r.Year__c}</td>
+                    <td style="text-transform:uppercase;">{!policy.Vehicle_Policy__r.Make__c}</td>
+                    <td style="text-transform:uppercase;">{!policy.Vehicle_Policy__r.Model__c}</td>
+                    <td>{!policy.Vehicle_Policy__r.Registered_Plate__c}</td>
+                    <td style="text-transform:uppercase;">{!policy.Vehicle_Policy__r.Vin__c}</td>
+                </tr>
+                
+                <apex:repeat value="{!towedUnitsList}" var="unit" >
+                    <tr>
+                        <td style="border: 1px solid">{!unit.Towed_Unit_Type__c}</td>
+                        <td>{!unit.Year__c  }</td>
+                        <td style="text-transform: uppercase;">{!unit.Make__c}</td>
+                        <td style="text-transform: uppercase;">{!unit.Model__c}</td>
+                        <td>{!unit.Plate__c}</td>
+                        <td style="text-transform:uppercase;">{!unit.VIN_Number__c}</td>
+                    </tr>
+                </apex:repeat>
+                
+               
+            </table>
+        </div>
+    <br/>
+        <h4 class="h_1">
+            RISK
+        </h4>
+        <div  style="font-size:small;" class="d4">
+            <table align="center" cellpadding="-15px" width="100%">
+                <tr>
+                    <th>COVERAGES</th>
+                    <th colspan="2">SUM INSURED</th>
+                    <th>DEDUCTIBLE</th>
+                </tr>
+                <tr>
+                    <td>PHYSICAL DAMAGE</td>
+                    <td class="td1" colspan="2">
+                        <apex:outputText value="$" rendered="{!policy.Package__c != 'Liability'}" />
+                        <apex:outputText rendered="{!policy.Package__c != 'Liability'}" value="{0,number, ###,##0.00}">
+                            <apex:param value="{!totalInsuredValue}"/>
+                        </apex:outputText>
+                        <apex:outputText rendered="{!policy.Package__c == 'Liability'}">
+                            $0
+                        </apex:outputText>
+                    </td>
+                    <td class="td1">
+                        <apex:outputText value="$" rendered="{!AND(NOT(ISNULL(policy.Vehicle_deductible_collision__c)), policy.Vehicle_deductible_collision__c != 'undefined')}"/>
+                        <apex:outputText rendered="{!AND(NOT(ISNULL(policy.Vehicle_deductible_collision__c)), policy.Vehicle_deductible_collision__c != 'undefined')}">
+                            <apex:outputText value="{0,number, ###,##0.00}">
+                                <apex:param value="{!ROUND(VALUE(policy.Vehicle_deductible_collision__c), 2)}" />
+                            </apex:outputText>
+                        </apex:outputText>
+                        <apex:outputText rendered="{!policy.Vehicle_deductible_collision__c == 'undefined'}">N/A</apex:outputText>
+                    </td>
+                </tr>
+                <apex:repeat value="{!towedUnitsList}" var="unit" >
+                    <tr>
+                        <td class="td1">
+                            {!unit.Towed_Unit_Type__c}
+                        </td>
+                        <td class="td1" colspan="2">
+                            <apex:outputText value="{0, Number, ###,##0.00}">
+                                <apex:param value="{!unit.Towed_Unit_Value__c}"/>
+                            </apex:outputText>
+                        </td>
+                        <td class="td1"></td>
+                    </tr>
+                </apex:repeat>
+                
+                <tr>
+                    <td>TOTAL THEFT</td>
+                    <td class="td1" colspan="2">
+                        <apex:outputText value="$" rendered="{!policy.Package__c != 'Liability'}" />
+                        <apex:outputText rendered="{!policy.Package__c != 'Liability'}" value="{0,number, ###,##0.00}">
+                            <apex:param value="{!totalInsuredValue}"/>
+                        </apex:outputText>
+                        <apex:outputText rendered="{!policy.Package__c == 'Liability'}">
+                            $0
+                        </apex:outputText>
+                        
+                    </td>
+                    <td class="td1">
+                        <apex:outputText value="$" rendered="{!AND(NOT(ISNULL(policy.Vehicle_deductible_comprehensive__c)), policy.Vehicle_deductible_comprehensive__c != 'undefined')}"/>
+                        <apex:outputText rendered="{!AND(NOT(ISNULL(policy.Vehicle_deductible_comprehensive__c)), policy.Vehicle_deductible_comprehensive__c != 'undefined')}">
+                            <apex:outputText value="{0,number, ###,##0.00}">
+                                <apex:param value="{!ROUND(VALUE(policy.Vehicle_deductible_comprehensive__c), 2)}" />
+                            </apex:outputText>
+                        </apex:outputText>
+                        <apex:outputText rendered="{!policy.Vehicle_deductible_comprehensive__c == 'undefined'}">N/A</apex:outputText>
+                    </td>
+                </tr>
+                
+                <apex:repeat value="{!towedUnitsList}" var="unit" >
+                    <tr>
+                        <td class="td1">{!unit.Towed_Unit_Type__c}</td>
+                        <td class="td1" colspan="2">
+                            <apex:outputText value="{0, Number, ###,##0.00}">
+                                <apex:param value="{!unit.Towed_Unit_Value__c}"/>
+                            </apex:outputText>
+                        </td>
+                        <td class="td1"></td>
+                    </tr>
+                </apex:repeat>
+                
+                <tr>
+                    <td>BODILY INJURY LIABILITY</td>
+                    <td class="td1"></td>
+                    <td class="td1"></td>
+                    <td class="td1">N/A</td>
+                </tr>
+                <tr>
+                    <td>PROPERTY DAMAGE LIABILITY</td>
+                    <td class="td1" colspan="2"></td>
+                    <td class="td1">N/A</td>
+                </tr>
+                <tr>
+                    <td>MEDICAL EXPENSES TO OCCUPANTS</td>
+                    <td class="td1">
+                        $ {!medicalExpensePerPerson} U.S.D<br/> PER PERSON</td>
+                    <td class="td1">
+                        $ {!medicalExpensePerAccident} U.S.D<br/> PER ACCIDENT</td>
+                    <td class="td1">N/A</td>
+                </tr>
+                <tr>
+                    <td>LEGAL AID</td>
+                    <td class="td1" colspan="2"></td>
+                    <td class="td1">INCLUDED</td>
+                </tr>
+                <tr>
+                    <td>TRAVEL ASSISTANCE</td>
+                    <td class="td1" colspan="2"></td>
+                    <td class="td1">LIMITED</td>
+                </tr>
+                <tr>
+                    <td>COMBINED SINGLE LIMIT &lt;CSL&gt;</td>
+                    <td class="td1" colspan="2">
+                        <apex:outputText value="$" rendered="{!NOT(ISNULL(policy.Liability_picklist__c))}" />
+                        {!policy.Liability_picklist__c}
+                    </td>
+                    <td class="td1"></td>
+                </tr>
+                <tr>
+                    <td>PARTIAL THEFT</td>
+                    <td class="td1" colspan="2"></td>
+                    <td class="td1">
+                        <apex:outputText rendered="{!NOT(ISBLANK(cvrgDetail.Partial_Theft__c))}">
+                            {!cvrgDetail.Partial_Theft__c}
+                        </apex:outputText>
+                        <apex:outputText rendered="{!ISBLANK(cvrgDetail.Partial_Theft__c)}">
+                            N/A
+                        </apex:outputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td>PLANE TICKETS</td>
+                    <td class="td1" colspan="2"></td>
+                    <td class="td1">
+                        <apex:outputText rendered="{!NOT(ISBLANK(cvrgDetail.Plane_Tickets_Home__c))}">
+                            {!cvrgDetail.Plane_Tickets_Home__c}
+                        </apex:outputText>
+                        <apex:outputText rendered="{!ISBLANK(cvrgDetail.Plane_Tickets_Home__c)}">
+                            N/A
+                        </apex:outputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td>RENTAL CAR</td>
+                    <td class="td1" colspan="2"></td>
+                    <td class="td1">
+                        <apex:outputText rendered="{!NOT(ISBLANK(cvrgDetail.Rental_Car__c))}">
+                            {!cvrgDetail.Rental_Car__c}
+                        </apex:outputText>
+                        <apex:outputText rendered="{!ISBLANK(cvrgDetail.Rental_Car__c)}">
+                            N/A
+                        </apex:outputText>
+                    </td>
+                </tr>
+            </table>
+            <br/>
+            <br/>
+        </div>
+    <br/>
+    <br/>
+    <h4 class="h_1">
+            ADITIONAL INFORMATION
+        </h4>
+        <div  class="d4">
+            <p style="font-size:13px; text-align:initial;  padding: 10px;">
+                THIS POLICY IS PROTECTED AT COMMERCIAL VALUE, SO YOUR 
+                INDEMNIFICATION WILL BE MADE ACCORDING TO THE COMMERCIAL VALUE THAT THE VEHICLE HAS AT THE TIME OF THE CLAIM.
+                <br/>
+                <br/>
+                DEAR CUSTOMER: WE INVITE YOU TO KNOW THE SCOPE OF YOUR COVERAGE, THE EXCLUSIONS APPLIED AND IF THE PRODUCT HAS
+                RESTRICTIONS, BY CONSULTING THE GENERAL CONDITIONS OF THE CONTRACTED PRODUCT, WICH SHALL BE SENT TO YOU IN A 
+                PERIOD NO GREATER THAN 30 CALENDAR DAYS FROM THE DATE OF CONTRACT EXECUTION, BY THE MEANS CHOSEN BY THE CONTRACTING 
+                PARTY AND/OR THE INSURED; NOTWITHSTANDING THE FORECOMING, THE GENERAL CONDITIONS MAY BE CONSULTED AT THE FOLLOWING LINK:
+                http://www.mapfre.com.mx/seguros/automovil/Documents/CG-Turistas.pdf  
+                <br/>
+                <br/>
+                PURSUANT TO THE PROVISIONS OF ARTICLE 25 OF THE INSURANCE CONTRACT ACT, IF THE CONTENT OF THE POLICY OR ITS AMENDMENTS
+                DO NOT MATCH THE OFFER, THE INSURED MAY REQUEST THE CORRESPONDING RECTIFICATION WITHIN THIRTY DAYS FOLLOWING THE DAY ON
+                WHICH THE POLICY IS RECEIVED. ONCE THIS PERIOD HAS ELAPSED, THE STIPULATIONS OF THE POLICY OR ITS AMENDMENTS SHALL BE
+                CONSIDERED ACCEPTED.
+                <br/>
+                <br/>
+                MAPFRE HEREBY INFORMS THE CONTRACTING PARTY, INSURED AND BENEFICIARIES OF THE FOLLOWING INFORMATION:
+                1.  CONTACT INFORMATION OF THE SPECIALIZED CUSTOMER SERVICE UNIT.
+                MAPFRE MAKES AVAILABLE THE SPECIALIZED CUSTOMER SERVICE UNIT, OPEN MONDAY TO THURSDAY FROM 8:00 TO 17:00 HOURS AND FRIDAY 
+                FROM 8:00 TO 14:00 HOURS, AT TELEPHONE NUMBER 5230 7090 OR (01 800)
+                717 1819, LOCATED AT AVENIDA REVOLUCIÓN 507, COLONIA SAN PEDRO DE LOS PINOS, DELEGACIÓN BENITO JUÁREZ, CIUDAD DE MÉXICO, 
+                CÓDIGO POSTAL 03800, EMAIL <a href="UNE@MAPFRE.COM.MX.">UNE@MAPFRE.COM.MX.</a>
+                <br/>
+                <br/>
+                2.  CONTACT INFORMATION OF THE NATIONAL COMMISSION FOR THE PROTECTION AND DEFENSE OF FINANCIAL SERVICE USERS (CONDUSEF).
+                OFFERING SERVICES AT THEIR LOCATION AT AVENIDA INSURGENTES SUR #762, COLONIA DEL VALLE, CIUDAD DE MÉXICO, CÓDIGO POSTAL 03100,
+                WITH TELEPHONE NUMBER (55) 5340 0999 AND (01 800) 999 80 80, EMAIL ASESORIA@CONDUSEF.GOB.MX, WEBPAGE
+                <a href="HTTP://WWW.CONDUSEF.GOB.MX/">HTTP://WWW.CONDUSEF.GOB.MX/</a>,OR AT ANY OF ITS STATEWIDE OFFICES.
+            </p>
+            <br/><br/><br/><br/>
+        </div>
+    <br/>
+        <h4 class="h_1">
+            COMMENTS
+        </h4>
+        <div  STYLE="position: static;
+                     left: 28px;
+                     width: 95%;
+                     height:70px;
+                     border: 1px solid red;">
+            
+        </div>
+    <br/>
+        <h4 class="h_1">
+            PRIVACY NOTICE
+        </h4>
+        <div  STYLE="position: static;
+                     left: 28px;
+                     width: 95%;
+                     height:70px;
+                     border: 1px solid red;">
+            <p style="font-size:12px;  padding: 5px;">
+                MAPFRE MÉXICO, S.A., HEREBY INFORMS YOU THAT THE PERSONAL INFORMATION COLLECTED SHALL BE USED FOR PURPOSES RELATED TO THE 
+            LEGAL RELATIONSHIP EXECUTED HEREIN. CONSULT THE FULL NOTICE AT: <a href="www.mapfre.com.mx">www.mapfre.com.mx</a>    
+            </p>
+        </div>
+    <br/>
+    <br/>
+    
+    <div class="d4">
+        
+        <div style="text-align: center; margin-bottom: 20px;">
+            <apex:outputPanel rendered="{!NOT(ISBLANK(agencyData.Partner_Name__c))}">
+                <span >AGENCY:</span> {!agencyData.Partner_Name__c} |
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!NOT(ISBLANK(agencyData.Website__c))}">
+                <span>Website: {!agencyData.Website__c}</span> |
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!NOT(ISBLANK(agencyData.Phone))}">
+                <span>Phone: {!agencyData.Phone}</span> |
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!NOT(ISBLANK(agencyData.Agent_Id__c))}">
+                <span >AGENT ID:</span> {!agencyData.Agent_Id__c} 
+            </apex:outputPanel>
+        </div>
+        
+        <!-- Centered Logo and Name -->
+        <div style="text-align: center;">
+            <apex:outputPanel rendered="{!NOT(ISBLANK(agencyData.Logo_URL__c))}">
+                <img src="{!agencyData.Logo_URL__c}" width="30%" height="8%" />
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!ISBLANK(agencyData.Logo_URL__c)}">
+                <h2>{!agencyData.FirstName} {!agencyData.LastName}</h2> 
+            </apex:outputPanel>
+        </div>
+        
+    </div>
+    <br/>
+    <!--h4 class="h_1">
+        ELITE’S POLICY ENDORSEMENT
+    </h4>
+    <div  STYLE="position: static;
+                    left: 28px;
+                    width: 95%;
+                    height:70px;
+                    border: 1px solid red;"> 
+        
+    </div-->
+</apex:page>

@@ -1,0 +1,128 @@
+<template>
+	    <c-custom-toast auto-close-time="8000"></c-custom-toast>
+
+	<div class="wrapper">                                   		
+		<div class="slds-m-top_large card">
+			<h2 class="slds-m-bottom_large slds-text-heading_large"> Signup to work with MEXINSURANCE </h2>
+			<!-- <h3 class="slds-text-heading_medium slds-m-bottom_xx-small"> Add Agency details </h3> -->
+
+			<div class="slds-grid slds-wrap slds-gutters slds-m-bottom_small">
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+					<lightning-input type="text" label="First Name" data-id="firstName" placeholder="Type here"  required></lightning-input>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+					<lightning-input type="text" label="Last Name" data-id="lastName" placeholder="Type here"  required></lightning-input>
+				</div>
+			</div>
+
+			<div class="slds-grid slds-wrap slds-gutters slds-m-bottom_small">
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+					<lightning-input type="text" label="Title" data-id="title" placeholder="Type here"   required></lightning-input>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+					<lightning-input type="email" label="Email" data-id="email" placeholder="Type here" required></lightning-input>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+					<lightning-input type="text" label="Phone" data-id="phone" onchange={handlePhoneNumberChange} placeholder="Type here" required pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" ></lightning-input>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+					<lightning-input type="url" label="Website" data-id="website" placeholder="https://mexinsurance.com" required pattern="^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$" ></lightning-input>
+				</div>
+			</div>
+
+			<div class="slds-grid slds-wrap slds-gutters slds-m-bottom_small">
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+					<lightning-input type="text" label="Company" data-id="company" placeholder="Type here"  required></lightning-input>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+					<lightning-input type="number" label="Expected Monthly Volume" data-id="expectedMonthlyVolume" placeholder="Type here "  required>
+					</lightning-input>					
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_3-of-12">					
+					<h2 class="header slds-m-vertical_x-small">Product(s) of interest <lightning-helptext content="Not sure? You can update letter."></lightning-helptext></h2>
+					<div style="display: inline-flex;">
+						<lightning-input type="checkbox" label="Automobile" onchange={handleCheckboxChange} data-ptype="Automobile" checked={checkbox1}></lightning-input>
+						<lightning-input type="checkbox" label="RV" onchange={handleCheckboxChange} data-ptype="RV" checked={checkbox2}></lightning-input>
+						<lightning-input type="checkbox" label="Motercycle" onchange={handleCheckboxChange} data-ptype="Motercycle" checked={checkbox3}></lightning-input>
+
+						<!-- <lightning-checkbox-group name=""
+							class="checkBoxGroup"
+                            label="Product(s) of interest"
+                            options={options}
+                            value={value}
+							variant="label-stacked"
+							data-id="productOfInterest"
+                            required></lightning-checkbox-group> -->
+					</div>					
+					<!-- <lightning-input type="text" label="Product(s) of interest" placeholder="Type here" required>
+					</lightning-input> -->
+				</div>				
+			</div>
+
+			<div class="slds-grid slds-wrap slds-gutters">				
+				<div class="slds-col slds-size_12-of-12 slds-medium-size_8-of-12 slds-large-size_8-of-12">					
+					<lightning-textarea name="" label="Comments" data-id="comments"  placeholder="Type here"></lightning-textarea>
+				</div>
+			</div>
+
+			<!-- <h3 class="slds-text-heading_medium slds-m-top_large slds-m-bottom_xx-small"> Add Agent(s) details </h3>
+			<div class="slds-grid slds-wrap slds-gutters">
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+					<lightning-input type="text" label="First Name" placeholder="Type here" required></lightning-input>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+					<lightning-input type="text" label="Last Name" placeholder="Type here" required></lightning-input>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+					<lightning-input type="text" label="Email" placeholder="Type here" required></lightning-input>
+				</div>
+
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+					<lightning-input type="text" label="Phone" placeholder="Type here" required></lightning-input>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+					<lightning-input type="text" label="Title" placeholder="Type here" required></lightning-input>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+					<lightning-input type="text" label="Company" placeholder="Type here" required></lightning-input>
+				</div>
+
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+					<lightning-input type="text" label="Current Provider" placeholder="Type here" required>
+					</lightning-input>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+					<lightning-input type="text" label="Why looking to switch?" placeholder="Type here" required>
+					</lightning-input>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+					<lightning-input type="text" label="Product(s) of interest" placeholder="Type here" required>
+					</lightning-input>
+				</div>
+
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+					<lightning-input type="text" label="Comments" placeholder="Type here" required></lightning-input>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+					<lightning-input type="text" label="Expected Monthly Volume" placeholder="Type here" required>
+					</lightning-input>
+				</div>
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+					<lightning-input type="text" label="Website" placeholder="Type here" required></lightning-input>
+				</div>
+			</div> -->
+
+			<div class="slds-m-top_small">
+				<!-- <lightning-input type="checkbox" label="I agree to the Mexinsurance Agreement" class="slds-m-bottom_small" required></lightning-input> -->
+				<p class="slds-m-bottom_small"> By proceeding, you agree to the Terms and Conditions and Privacy Policy </p>
+				<lightning-button label="Save" title="Save" onclick={handleAddAgency} disabled={saveBtnDisabled}>
+				</lightning-button>
+				<template if:true={datasaved}>
+                  <p style="color: rgb(51, 148, 51);">
+					Details are submitted succesfully.
+				  </p>
+				</template>
+			</div>
+		</div>
+	</div>
+</template>

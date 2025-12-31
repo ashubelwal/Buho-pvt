@@ -1,0 +1,18 @@
+.custom-container{
+	color : black;
+}
+
+.stars {
+    display: flex;
+    gap: 20px;
+    cursor: pointer;
+}
+
+.stars .star-icon {
+    fill: #f7c04a !important;
+    cursor: pointer;
+}
+
+.feedbackText {
+	max-height: 120px;
+}

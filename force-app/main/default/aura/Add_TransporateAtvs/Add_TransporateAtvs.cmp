@@ -1,0 +1,158 @@
+<aura:component controller="QuickQuotationCtrl" implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="title" type="String" access="public"/>
+    <aura:attribute name="registeredVehicleHeader" type="String" default="Owner of the Registered Vehicle"/>
+    <aura:attribute name="backButtonVisibility" type="Boolean" default="false" access="public" />
+    <aura:attribute name="policyType" type="String" access="public"/>
+    <aura:attribute name="transporates" type="List" access="public" />
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    <aura:attribute name="onNextClick" type="Aura.Action"/>
+    <aura:attribute name="quoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" access="public"/>
+    <aura:attribute name="towedunitRecord" type="Towed_Unit__c" default="{ 'sobjectType': 'Towed_Unit__c'}" access="public" />
+    <aura:attribute name="leadRecord" type="Lead" default="{ 'sobjectType': 'Lead'}" access="public"/>
+    <aura:attribute name="Towed_Unit_Types" type="list" access="public"/>
+    <aura:attribute name="Street_Legals" type="list" access="public"/>
+    <aura:attribute name="isEdit" type="boolean" default="false"/>
+    <aura:attribute name="isTransScreenOpen" type="boolean" default="false"/>
+    <aura:attribute name="isCommunityUser" type="Boolean" access="public"/>
+    <aura:attribute name="loginUserTransOption" type="list" access="public"/>
+    <aura:attribute name="loginUserTransporates" type="list" access="public"/>
+    <aura:attribute name="vehicleRecord" type="Vehicle__c" default="{ 'sobjectType': 'Vehicle__c'}"  />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:attribute name="fieldShowForBoat" type="Boolean" default="false" access="public" />
+    
+    <aura:attribute name="iscloneConditionPass" type="boolean" default="false" />
+    <aura:attribute name="editPolicy" type="Boolean" default="false" />
+    <aura:attribute name="renewPolicy" type="Boolean" default="false" />
+    
+    <aura:if isTrue="{!v.editPolicy}">
+        <c:Policy_Edit_Steps step="step4" policyType="{!v.policyType}" completedStep="4"/>
+        <!--aura:set attribute="else">
+            <c:Insurance_Flow_Steps step="step3" completedStep="2" isOwner="{!v.isOwner}"/>
+        </aura:set -->
+    </aura:if>
+
+    <lightning:layoutItem padding="around-small" size="12" class="slds-align-center slds-m-top_xx-large">                    
+        <div class="page-title">
+            <button class="button -plain -back-button" name="step_3" onclick="{!v.onBackClick }">
+                <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/> Back
+            </button>
+            <h1>{!v.registeredVehicleHeader}</h1>                        
+        </div>
+    </lightning:layoutItem>
+    
+    <lightning:layoutItem size="12">
+        <aura:if isTrue="{!v.isCommunityUser }">
+            <lightning:combobox name="progress" placeholder="Select a Towed Unit from your account" options="{!v.loginUserTransOption}" onchange="{!c.handleChange}"/>
+        </aura:if>
+        <table class="listing-table" width="100%">
+            <tr>
+                <th width="200">Unit Name</th>
+                <th>Registration #/License Plate</th>
+                <th></th>
+                <th></th>
+            </tr>
+            <aura:iteration items="{!v.transporates}" var="trans">
+                <tr>
+                    <td>{!trans.Model__c} &nbsp; {!trans.Make__c} &nbsp; {!trans.Year__c}</td>
+                    <td>{!trans.Plate__c}</td>
+                    <td style="width: 0px;"> 
+                        <lightning:buttonIcon name="{!trans.Id}" iconName="utility:edit" variant="bare" onclick="{! c.editTowedUnit }" alternativeText="edit" title="Edit Unit" />
+                    </td>
+                    <td style="width: 0px;">
+                        <lightning:buttonIcon name="{!trans.Id}" iconName="utility:close" variant="bare" onclick="{! c.deleteTowedUnit }" alternativeText="close" title="Delete Unit" />
+                    </td>
+                </tr>        
+            </aura:iteration>
+            <!-- If no transporates are added -->
+            <aura:if isTrue="{!or(empty( v.transporates ))}" >
+                <tr>
+                    <td colspan="2">
+                        <div class="align-center">No Towed Unit added</div>
+                    </td>
+                </tr>
+            </aura:if>
+            <!-- End if no transporates are added -->
+        </table>                        
+    </lightning:layoutItem>                
+    
+    <aura:if isTrue="{!!v.isEdit}" >
+        <lightning:layoutItem size="12" class="slds-align_absolute-center slds-m-top_xx-large" >
+            <aura:if isTrue="{!or(not(empty( v.transporates )), v.isCommunityUser)}">
+                <ul class="slds-accordion">
+                    <li class="slds-accordion__list-item">
+                        <section class="slds-accordion__section slds-is-open">
+                            <div class="slds-accordion__summary">
+                                <h2 class="slds-accordion__summary-heading">
+                                    <aura:if isTrue="{!v.isTransScreenOpen}" >
+                                        <lightning:button iconName="utility:chevrondown" label="Or Add a New Towed Unit" variant="base" onclick="{!c.openTransUnitDetail}"/>
+                                        <aura:set attribute="else">
+                                            <lightning:button iconName="utility:chevronright" label="Or Add a New Towed Unit" variant="base" onclick="{!c.openTransUnitDetail}" />
+                                        </aura:set>
+                                    </aura:if>
+                                </h2>
+                            </div>
+                            <aura:if isTrue="{!v.isTransScreenOpen}" >
+                                <div class="slds-accordion__content" id="referenceId-45">
+                                    <c:addTransporteAtv iscloneConditionPass="{!v.iscloneConditionPass}" aura:id="transporateDetail" towedunitRecord="{!v.towedunitRecord}" Towed_Unit_Types="{!v.Towed_Unit_Types}" Street_Legals="{!v.Street_Legals}"/>
+                                </div>
+                            </aura:if>
+                        </section>
+                    </li>
+                </ul>
+
+                <aura:set attribute="else">
+                    <c:addTransporteAtv iscloneConditionPass="{!v.iscloneConditionPass}" aura:id="transporateDetail"  towedunitRecord="{!v.towedunitRecord}" Towed_Unit_Types="{!v.Towed_Unit_Types}" Street_Legals="{!v.Street_Legals}"/>
+                </aura:set>
+            </aura:if>
+        </lightning:layoutItem>
+        
+        <lightning:layoutItem padding="around-small" size="12" class="slds-align_absolute-center slds-m-top_large">
+            <aura:if isTrue="{!or(not(empty( v.transporates )), v.isCommunityUser)}">
+                <aura:if isTrue="{!v.isTransScreenOpen}" >
+                    <button class="button -secondary -wider" name="step_10" onclick="{!c.cancelNewUnit }">Cancel</button>
+                    <button class="button -secondary -wider -margin-left" name="step_10" onclick="{! c.addOther }">Add</button>
+                    <aura:set attribute="else">
+                        <button class="button -secondary -wider -margin-left" name="step_10" onclick="{! c.onNextClick }">Next</button>
+                    </aura:set>
+                </aura:if>
+                <aura:set attribute="else">
+                    <button class="button -secondary -wider" name="step_10" onclick="{! c.addOther }">Add</button>
+                    <button class="button -secondary -wider -margin-left" name="step_10" onclick="{! c.onNextClick }">Next</button>
+                </aura:set>
+            </aura:if>
+        </lightning:layoutItem>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.isEdit}" >
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{! c.cancelEdit }">
+                        <lightning:icon iconName="utility:close" alternativeText="close" size="x-small" />
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Edit Towed Unit</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <c:addTransporteAtv iscloneConditionPass="{!v.iscloneConditionPass}" aura:id="transporateDetail" towedunitRecord="{!v.towedunitRecord}" Towed_Unit_Types="{!v.Towed_Unit_Types}" Street_Legals="{!v.Street_Legals}" fieldShowForBoat="true"/>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{! c.cancelEdit }">Cancel</button>
+                    <button class="slds-button slds-button_brand" name="step_10" onclick="{! c.updateUnit }">Save</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+        
+        <aura:html tag="style">
+            .slds-modal__content{
+            overflow: initial;
+            } 
+            
+            .slds-icon-text-default {
+            fill: white;
+            }
+        </aura:html>
+    </aura:if>
+</aura:component>

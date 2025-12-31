@@ -1,0 +1,37 @@
+<aura:component
+                controller="SiteUserController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="Email" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <div class="ActivateUserCArd">
+        <div class="slds-grid slds-grid_vertical">
+            <div class="slds-col">
+                <img class="slds-align_absolute-center" width="250" src="https://www.mexinsurance.com/wp-content/uploads/2023/12/cropped-cropped-Logo-1-768x117-1.webp"/>
+            </div>
+            <div class="slds-col slds-m-bottom_x-small slds-text-heading_large">
+                <h1 class="slds-align_absolute-center">Activate Your Account</h1>
+            </div>
+            
+        </div>
+        
+        <lightning:card class=" slds-p-around_small">
+            
+            <div class="slds-grid slds-grid_vertical">
+                
+                <div class="slds-col slds-m-bottom_medium">
+                    <div class="slds-text-body_small slds-align_absolute-center">To Activate your account, enter your email.</div>
+                </div>
+                
+                <div class="slds-col slds-m-bottom_x-small">
+                    <lightning:input aura:id="validateField" type="Email" name="Email" label="Email" value="{!v.Email}" onchange="{!c.updateValue}" required="true" />
+                </div>
+                <div class="slds-col">
+                    <lightning:button class="slds-align_absolute-center SendBtn" variant="brand" label="Activate Account" onclick="{! c.onNextClick }" />
+                </div>
+            </div>
+            
+        </lightning:card>
+        
+    </div>
+</aura:component>

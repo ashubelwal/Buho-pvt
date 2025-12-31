@@ -1,0 +1,39 @@
+<aura:component controller="QuickQuotationCtrl" implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="title" type="String" access="public"/>
+    <aura:attribute name="backButtonVisibility" type="Boolean" default="true" access="public" />
+    <aura:attribute name="policyType" type="String" access="public"/>
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    <aura:attribute name="onNextClick" type="Aura.Action"/>
+    <aura:attribute name="quoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" access="public"/>
+    <aura:attribute name="leadRecord" type="Lead" default="{ 'sobjectType': 'Lead'}" access="public"/>
+    <aura:attribute name="vehicleRecord" type="Vehicle__c" default="{ 'sobjectType': 'Vehicle__c'}" access="public"/>
+    
+    <lightning:layoutItem padding="around-small" size="12" class="align-center slds-m-top_xx-large">
+        <div class="page-title">
+            <button class="button -plain -back-button" name="step_9" onclick="{! v.onBackClick }">
+                <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/> Back
+            </button>
+            <h1>{!v.title}</h1>
+            <img class="slds-m-bottom_large" src="{!$Resource.mexinsurance_assets + '/images/icon-company.svg'}" alt="Company"/>
+        </div>                    
+    </lightning:layoutItem>
+    
+    <div class="slds-size_12-of-12">
+        <div class="form-container">  
+            <lightning:input type="text" name="Company_Name__c" placeholder="Company Name" value="{!v.vehicleRecord.Company_Name__c}" onchange="{!c.updateValue}" />
+            <lightning:input type="text" name="Company_Address__c" placeholder="Address" value="{!v.vehicleRecord.Company_Address__c}" onchange="{!c.updateValue}" />
+            <lightning:input type="text"
+                             name="Company_Phone__c" 
+                             pattern="^\(\d{3}\)\s\d{3}-\d{4}$"
+                             messageWhenPatternMismatch="Not a valid phone number" 
+                             placeholder="Phone"
+                             value="{!v.vehicleRecord.Company_Phone__c}"
+                             onchange="{!c.updateValue}" />
+            <lightning:input type="text" name="Tax_ID__c" placeholder="Tax ID" value="{!v.vehicleRecord.Tax_ID__c}" onchange="{!c.updateValue}" />
+        </div>
+    </div>
+    
+    <lightning:layoutItem padding="around-small" size="12" class="slds-align_absolute-center slds-m-top_large">
+        <button class="button -secondary -wider" name="step_9" onclick="{! c.onNextClick }">Next</button>
+    </lightning:layoutItem>
+</aura:component>

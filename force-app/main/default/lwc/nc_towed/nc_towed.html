@@ -1,0 +1,111 @@
+<template>
+    <div class="">
+        <div class="pageTitle slds-m-bottom_small">
+            <h2 class="slds-text-heading_medium"> Towed Units Management </h2>
+        </div>
+        <template if:true={currentUserType}>
+            <template if:true={existingtowedUnits}>
+            <div class="slds-grid slds-wrap slds-gutters">
+                <div class="slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12 slds-p-around_small">
+                    <lightning-combobox name="progress" placeholder="Select a Tow From Account" value={selectedTowedId}
+                        options={existingtowedUnits} onchange={changetowedOption}></lightning-combobox>
+                </div>
+            </div>
+        </template>
+        </template>
+
+        <template if:true={isTowAdded}>
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Towed Unit Type"> Type</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Towed Unit Value"> Value</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Days in Tow">Days</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Actions">Actions</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={towedUnits} for:item="unit" for:index="index">
+                        <tr key={unit.Towed_Unit_Type__c}>
+                            <td>
+                                <div class="slds-truncate">{unit.Towed_Unit_Type__c}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{unit.Towed_Unit_Value__c}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{unit.Days_in_Tow__c}</div>
+                            </td>
+                            <td>
+                                <lightning-icon icon-name="action:edit" data-index={index} size="xx-small"
+                                    class="slds-m-right_x-small actionIcon" onclick={handleEdit} alternative-text="Edit"
+                                    title="Edit"></lightning-icon>
+                                <lightning-icon icon-name="action:delete" data-index={index} size="xx-small"
+                                    class="actionIcon" onclick={handleDelete} alternative-text="Delete" title="Delete">
+                                </lightning-icon>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </template>
+
+        <div class="slds-m-top_medium">
+            <!-- Show form if adding or editing -->
+
+            <template if:true={showAddOrEditForm}>
+                <div class="slds-grid slds-wrap slds-gutters">
+
+                    <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                        <lightning-combobox name="Towed_Unit_Type__c" label="Towed Unit Type" value={formType} required
+                            options={getAvailableTypes} onchange={handleChange} disabled={isEditing}>
+                        </lightning-combobox>
+                    </div>
+
+                    <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                        <!-- <lightning-combobox name="Towed_Unit_Value__c" label="Towed Unit Value" value={formValue} required
+                            options={towedUnitValues} onchange={handleChange}></lightning-combobox> -->
+
+                        <lightning-input name="Towed_Unit_Value__c" min="1" type="number" label="Tow Value"
+                            value={formValue} onchange={handleChange} required
+                            message-when-range-underflow="Enter a valid value"></lightning-input>
+                    </div>
+
+                    <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                        <lightning-input name="Days_in_Tow__c" min="1" type="number" label="Days in Tow"
+                            value={formDays} onchange={handleChange} required message-when-range-underflow="Enter a valid days"></lightning-input>
+                    </div>
+
+                    <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                        <div class="slds-m-top_large slds-float_right">
+                            <button class="slds-button slds-button_brand" onclick={handleSaveOrAdd}
+                                disabled={isFormCompleteStatus}>
+                                {saveOrAddButtonLabel} <!-- Dynamic button label -->
+                            </button>
+                            <template if:true={isEditing}>
+                                <button class="slds-button slds-button_neutral" onclick={cancelEdit}>
+                                    Cancel
+                                </button>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Show message if all types are added and not editing -->
+            <template if:false={showAddOrEditForm}>
+                <p class="slds-text-body_regular slds-m-top_medium">
+                    You have already added all tow types. Edit or delete existing entries to modify.
+                </p>
+            </template>
+        </div>
+    </div>
+</template>

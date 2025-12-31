@@ -1,0 +1,109 @@
+.mainDIv{
+	max-width: 68%;
+    margin: auto;
+}
+.mainDIv h2, .mainDIv h4, .mainDIv h6{
+    margin-bottom: 5px !important;
+    font-weight: 500 !important;
+}
+.rateDescriptionSection h6{
+    margin-bottom: 10px !important;
+}
+.mainDIv h6{
+    color: #888;
+}
+.mainDIv h2{
+    color: #455;
+    font-size: 18px !important;
+}
+.policyName {
+    cursor: pointer;
+}
+.buttonNext,.buttonterminate{
+    position: relative;
+    cursor: pointer;
+    background: #003a70;
+    border: 2px solid #003a70;
+    color: #fff;
+    font-weight: 600;
+    height: 33px;
+    min-width: 80px;
+    border-radius: 20px;
+    user-select: none;
+    outline: none;
+}
+.buttonterminate{
+	background: #003a70 !important;
+	border: 2px solid #003a70 !important;
+}
+[class*='grid_'] {
+    float: none !important;
+    position: relative;
+}
+/* .buttonterminate:hover{
+	background: #fff !important;
+	border: 2px solid #003a70 !important;
+    color: #fff;
+} */
+textarea {
+    height: 120px !important;
+    width: 100%;
+    padding: 10px;
+}
+.policyBanner{
+    background-color: #003a70;
+    color: #fff;
+    border-radius: 4px;
+    padding: 3%;
+}
+.policyBanner h2{
+    color: #fff;
+    font-size: 24px !important;
+}
+.leftFloat{
+   display: flex;
+   justify-content: end;
+}
+.loading {
+    background-color: transparent;
+    border: 4px solid #ABA8AF;
+    border-top-color: #003a70;
+    user-select: none;
+    font-size: 0;
+    outline: none;
+    height: 33px;
+    width: 33px;
+    border-radius: 50%;
+    animation: rotate 0.4s linear infinite;
+}
+.refundSection{
+    border-bottom:  1px solid #ddd;
+}
+.refundCalculation{
+    font-size: 20px ;
+    font-weight: 600;
+}
+.alginCenter{
+    text-align: center;
+}
+.alginRight{
+    text-align: right;
+}
+.noteQuote{
+    display: flex;
+}
+.summary-refund {
+    font-size: 19px;
+    color: #444;
+}
+.divSection{
+    border: 1px solid #ddd;
+    padding: 2% 3%;
+    border-radius: 4px;
+}
+.balckColor h6{
+    color: #222;
+}
+.resonForTerminate {
+    width: 50%;
+}

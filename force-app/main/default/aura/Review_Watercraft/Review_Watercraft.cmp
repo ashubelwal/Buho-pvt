@@ -1,0 +1,97 @@
+<aura:component controller="WatercraftFlowController" implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="title" type="String" access="public"/>
+    <aura:attribute name="backButtonVisibility" type="Boolean" default="false" access="public" />
+    <aura:attribute name="policyType" type="String" access="public"/>
+    <aura:attribute name="vesselTypes" type="list" access="private"/>
+    <aura:attribute name="vesselLengths" type="list" access="private"/>
+    <aura:attribute name="stateOptions" type="List" />
+    <aura:attribute name="countryOption" type="List" />
+    <aura:attribute name="showStatePick" type="Boolean" default="false" access="public" />
+    <aura:attribute name="disableCountry" type="Boolean" default="false" />
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    <aura:attribute name="onNextClick" type="Aura.Action"/>
+    <aura:attribute name="quoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" />
+    <aura:attribute name="leadRecord" type="Lead" default="{ 'sobjectType': 'Lead'}"  />
+    <aura:attribute name="watercraftRecord" type="Watercraft__c" default="{ 'sobjectType': 'Watercraft__c'}"  />
+    <aura:attribute name="renewPolicy" type="Boolean" default="false" />
+    <aura:attribute name="policyCountry" type="String" access="public"/>
+    <aura:attribute name="editPolicy" type="Boolean" default="false" />
+    
+    <aura:attribute name="communityUser" type="Boolean" access="public" default="false" />
+    
+    <aura:attribute name="iscloneConditionPass" type="Boolean" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <c:Insurance_Flow_Steps step="step2" completedStep="2"/>
+    <lightning:layoutItem padding="around-small" size="12" class="align-center slds-m-top_xx-large">                    
+        <div class="page-title">
+            <button class="button -plain -back-button" name="step_6" onclick="{! v.onBackClick }">
+                <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/> Back
+            </button>
+            <h1>{!v.title}</h1>
+            <img width="92" height="61" class="slds-m-bottom_large" src="{!$Resource.mexinsurance_assets + '/images/boat@2x.png'}" alt="Watercraft"/>
+        </div>
+    </lightning:layoutItem>
+    
+    <div class="slds-size_12-of-12">
+        <div class="form-container"> 
+            <lightning:input aura:id="validateField" type="text" name="Year__c" 
+                                placeholder="Year" value="{!v.watercraftRecord.Year__c}" 
+                                onchange="{!c.updateValue}" required="true" variant="label-hidden" 
+                                pattern="^(19|20)\d{2}$" maxlength="4"  messageWhenPatternMismatch ="Enter a valid year"
+                            
+            />
+            <lightning:input aura:id="validateField" type="text" name="Make__c" 
+                                placeholder="Make" value="{!v.watercraftRecord.Make__c}" 
+                                onchange="{!c.updateValue}" required="true" variant="label-hidden" 
+                             
+            />
+            <lightning:input aura:id="validateField" type="text" name="Model__c" 
+                                placeholder="Model" value="{!v.watercraftRecord.Model__c}" 
+                                onchange="{!c.updateValue}" required="true" variant="label-hidden" 
+                            
+            />
+            <lightning:input aura:id="validateField" type="number" name="Value__c" 
+                                formatter="currency" step="0.01" placeholder="Value" 
+                                value="{!v.watercraftRecord.Value__c}" onchange="{!c.updateValue}" 
+                                required="true" variant="label-hidden" 
+                             disabled = "{!v.editPolicy}"
+            />
+            <lightning:combobox aura:id="validateField" name="Type_of_Vessel__c" 
+                                placeholder="Watercraft Type" value="{!v.watercraftRecord.Type_of_Vessel__c}" 
+                                options="{! v.vesselTypes }" onchange="{!c.updateValue}" required="true" 
+                                variant="label-hidden" disabled="true" 
+            />
+            <aura:if isTrue="{!v.watercraftRecord.Type_of_Vessel__c != 'Personal Watercraft (Jet Ski)'}">
+                <lightning:combobox aura:id="validateField" name="Vessel_Length__c" placeholder="Vessel Length" 
+                                    value="{!v.watercraftRecord.Vessel_Length__c}" options="{! v.vesselLengths }" 
+                                    onchange="{!c.updateValue}" required="true" variant="label-hidden" disabled="true" 
+                />
+            </aura:if>
+            <lightning:input aura:id="validateField" type="text" name="VIN_Number__c" 
+                                placeholder="VIN Number" value="{!v.watercraftRecord.VIN_Number__c}" 
+                                onchange="{!c.updateValue}" required="true" variant="label-hidden" pattern="[A-Z0-9]+" 
+                                messageWhenPatternMismatch ="Whitespace are not allowed"
+            />
+            <lightning:input aura:id="validateField" type="text" name="Beam__c" 
+                                placeholder="Beam (Width)" value="{!v.watercraftRecord.Beam__c}" 
+                                onchange="{!c.updateValue}" variant="label-hidden" 
+            />
+            <lightning:input aura:id="validateField" type="text" name="Flag__c" class="flagInput" 
+                                placeholder="Flag" value="{!v.watercraftRecord.Flag__c}" 
+                                onchange="{!c.updateValue}" variant="label-hidden" 
+                                fieldLevelHelp="International law requires that every ship be registered in a country, called its flag state. A ship is subject to the law of its flag state"
+            />
+            <lightning:input aura:id="validateField" type="text" name="Engine_Type__c" 
+                                placeholder="Engine Type (Inboard, Outboard)" 
+                                value="{!v.watercraftRecord.Engine_Type__c}" 
+                                onchange="{!c.updateValue}" required="true" 
+                                variant="label-hidden" 
+            />
+        </div>
+    </div>                
+    
+    <lightning:layoutItem size="12" class="slds-align_absolute-center slds-m-top_xx-large">
+        <button class="button -secondary -wider" name="step_6" onclick="{! c.onNextClick }">Next</button>
+    </lightning:layoutItem>
+</aura:component>

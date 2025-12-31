@@ -1,0 +1,31 @@
+<template>
+    <div class="carousel-container">
+        <!-- Carousel Slides -->
+        <template for:each={slides} for:item="slide" for:index="index">
+            <div key={slide.id} class={slide.slideClass} data-slide={index}>
+                <div class="image-wrapper">
+                    <img src={slide.image} alt={slide.alt}>
+                </div>
+                <div class="image-text">
+                    <h2>{slide.text}</h2>
+                </div>
+            </div>
+        </template>
+
+        <!-- Carousel Controls -->
+        <div class="carousel-controls">
+            <span class="carousel-counter">
+                <span class="current-slide">{currentSlideDisplay}</span> of <span class="total-slides">{totalSlides}</span>
+            </span>
+            <div class="carousel-buttons">
+                <button class="carousel-btn prev" onclick={handlePrev} type="button" aria-label="Previous slide">
+                    <i class="bi bi-chevron-left"></i>
+                </button>
+                <button class="carousel-btn next" onclick={handleNext} type="button" aria-label="Next slide">
+                    <i class="bi bi-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</template>
+

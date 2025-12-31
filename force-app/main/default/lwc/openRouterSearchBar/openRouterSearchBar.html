@@ -1,0 +1,34 @@
+<template>
+    <lightning-card title="AI Assistant" icon-name="utility:chat">
+        <div class="slds-p-around_medium">
+            <!-- Input del usuario -->
+            <lightning-input type="text" label="Ask our AI Assistant" value={query} onchange={handleInputChange}
+                placeholder="Type your question here..."></lightning-input>
+
+            <!-- Botón de búsqueda -->
+            <div class="slds-m-top_medium">
+                <lightning-button variant="brand" label="Search" onclick={handleSearch} icon-name="utility:search"
+                    disabled={isLoading}>
+                </lightning-button>
+            </div>
+
+            <!-- Spinner de carga -->
+            <template if:true={isLoading}>
+                <div class="slds-m-top_medium slds-text-align_center">
+                    <lightning-spinner alternative-text="Loading..." size="small"></lightning-spinner>
+                </div>
+            </template>
+
+            <!-- Historial de mensajes con scroll interno -->
+            <template if:true={messages.length}>
+                <div class="chat-history">
+                    <template for:each={messages} for:item="msg">
+                        <div key={msg.id} class={msg.cssClass}>
+                            <p><strong>{msg.role}:</strong> {msg.content}</p>
+                        </div>
+                    </template>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

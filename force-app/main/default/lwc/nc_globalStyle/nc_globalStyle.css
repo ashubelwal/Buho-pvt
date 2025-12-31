@@ -1,0 +1,19 @@
+.i-helptext {
+	color: #777777;
+}
+
+.pageTitle h2 {
+	border-bottom: 1px solid #eee;
+    padding: 10px 0;
+}
+
+.childCmp {
+	position: relative;
+	margin-bottom: 10px;
+	border: 1px solid #eee;
+	border-radius: 0.25rem;
+	padding: 0 15px;
+	background-color: #ffffff;
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.10);
+	min-height: 300px;
+}

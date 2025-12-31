@@ -1,0 +1,1125 @@
+<apex:page applyBodyTag="false" renderAs="pdf" title="Quote PDF" showHeader="false" controller="Mex_ShowSelectedQuotePdf">
+    
+    <head >
+        
+        <style> 
+           
+           body {
+            background-color: #bacffc; /* Light gray background color */
+            }
+            
+            @page{
+            size: 8.5in 10.5in;
+            margin: 0px;
+            }
+            
+            .textAlign{
+            text-align: center !important;
+            //border:2px solid #000;
+            }
+            .datepicker{
+            border: 1px solid #000;
+            background-color: #fff !important;
+            padding: 4px;
+            }
+            
+            .borderClass{
+            border-radius:4px !important;
+            border: 1px solid #999 !important;
+            }
+            table tr {
+                border-bottom: 1px solid #a6a6a6;
+            }
+        </style>
+    </head>
+    <body>
+        <div style="margin: 0px; padding: 0px; ">
+             <table >
+            <tr>
+             <td width="33%" style="width: 33%; " class="quoteBox">
+                    <apex:outputPanel style="padding-bottom:0px; margin:0px;" rendered="{!AND(ratetableReacord.Qualitas == true, ratetableReacord.qualitasQuote.showQualitas == true)}">
+                        
+                        <table width="100%" style="width: 100%; height: 100%; background-color: #bacffc;; padding-left :4px; padding-right: 0px;">
+                            <tr>
+                                <td colspan="4" width="100%" style="width: 100%;">
+                                    <img src="{!$Resource.QualitasLogoPdf}" width="30%" />
+                                </td>
+                                
+                            </tr>
+                            <tr>
+                                <td colspan="4" width="100%" style="width: 100%; text-align: center; font-size:28px; font-weight:600;" class="textAlign">
+                                    <apex:outputText value="${0, number, ###,##0.00 USD}">
+                                        <apex:param value="{!ratetableReacord.qualitasQuote.rateValue}" />
+                                    </apex:outputText>
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" width="100%" style="width: 100%; text-align: center; color: #B3261E; font-size:20px; font-weight:600;" class="textAlign">
+                                    Vehicle : {!quoteDetail.Vehicle_Type__c}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" width="50%" style="width: 50%; background-color: #fff !important; padding: 4px;" class="borderClass">
+                                    <apex:outputText value="{0,date,dd-MMM, yyyy}" >
+                                        <apex:param value="{!quoteDetail.Start_Date_for_Coverage__c}" /> 
+                                    </apex:outputText>
+                                </td>
+                                <td colspan="2" width="50%" class="datepicker borderClass"
+                                    style="width: 50%; background-color:  !important; padding: 4px;" >
+                                    <apex:outputText value="{0,date,dd-MMM, yyyy}">
+                                        <apex:param value="{!quoteDetail.End_Date_for_Coverage__c}" /> 
+                                    </apex:outputText>
+                                </td>
+                            </tr>
+                            <!--<tr>
+                                <td colspan="2" width="50%" style="width: 50%; background-color:  !important; padding: 4px;" class="datepicker borderClass">
+                                    {!startTime}
+                                </td>
+                                <td colspan="2" width="50%" style="width: 50%; background-color:  !important; padding: 4px;" class="datepicker borderClass">
+                                    {!endTime}
+                                </td>
+                            </tr> -->
+                            <tr>
+                                <td colspan="2" width="50%" style="width: 50%; ">
+                                    Days
+                                </td>
+                                <td colspan="2" width="50%" style="width: 50%; background-color:  !important; text-align: center;" class="textAlign datepicker borderClass">
+                                    {!ratetableReacord.qualitasQuote.days}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" width="50%" style="width: 50%;">
+                                    Combine Liablity
+                                </td>
+                                <td colspan="2" width="50%" style="width: 50%; background-color:  !important; text-align: center;" class="textAlign datepicker borderClass">
+                                    {!ratetableReacord.qualitasLiability}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" width="50%" style="width: 50%;">
+                                    Medical
+                                </td>
+                                <td colspan="2" width="50%" style="width: 50%; background-color:  !important; text-align: center;" class="textAlign datepicker borderClass">
+                                    {!ratetableReacord.qualitasMedical}
+                                </td>
+                            </tr>
+                            <tr style="margin-bottom:4px;">
+                                <td colspan="2" width="50%" style="width: 50%;">
+                                    Liablity Only
+                                </td>
+                                <td colspan="2" width="50%" style="width: 50%; text-align: right; padding:4px;">
+                                    <apex:outputPanel rendered="{!quoteDetail.Coverage__c == 'Liability'}">
+                                        <img src="{!$Resource.icon_checkmark_blue}" />
+                                    </apex:outputPanel>  
+                                    <apex:outputPanel rendered="{!quoteDetail.Coverage__c != 'Liability'}">
+                                        <img src="{!$Resource.icon_cross}" />
+                                    </apex:outputPanel>  
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <th colspan="4" width="100%" style="width: 50%;">Deductibles </th>
+                                <th colspan="2" width="50%" style="width: 50%; text-align: right; padding:0px;">
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                      
+                                        <apex:outputPanel rendered="{! AND(listValue.UnderWriter__c == 'Qualitas', showQualitasDeductible)}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Qualitas', !showQualitasDeductible)}">
+                                            N/A   
+                                        </apex:outputPanel>   
+                                        
+                                    </apex:repeat>
+                                    
+                                </th>
+                            </tr>
+                            
+                            <tr>
+                                <td colspan="2" width="50%" style="width: 50%;">
+                                    <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability',  True)}">Collision Deductible
+                                    </apex:outputPanel>
+                                    </td>
+                                <td colspan="2" width="50%" style="width: 50%; text-align: right; padding:4px;">
+                                    <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                <apex:outputPanel rendered="{!AND((ratetableReacord.qualitasQuote.collision_deductible == '0'), quoteDetail.Vehicle_Type__c == 'RV')}">
+                                    N/A
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!OR((ratetableReacord.qualitasQuote.collision_deductible != '0'), quoteDetail.Vehicle_Type__c != 'RV')}">
+                                    ${!ratetableReacord.qualitasQuote.collision_deductible} USD
+                                </apex:outputPanel>
+                            </apex:outputPanel>
+                            </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" width="50%" style="width: 50%;">
+                                    <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Total Theft Deductible
+                                </apex:outputPanel>
+                                </td>
+                                <td colspan="2" width="50%" style="width: 50%; text-align: right; padding:4px;">
+                                    <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                    <apex:outputPanel rendered="{!AND((ratetableReacord.qualitasQuote.theft_Total == '0'), quoteDetail.Vehicle_Type__c == 'RV')}">
+                                        N/A
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!OR((ratetableReacord.qualitasQuote.theft_Total != '0'), quoteDetail.Vehicle_Type__c != 'RV')}">
+                                        ${!ratetableReacord.qualitasQuote.theft_Total} USD
+                                    </apex:outputPanel>
+                                </apex:outputPanel>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 100%;">Uninsured/Underinsured Motorist Deductible Wavier</td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">
+                                    
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Qualitas', listValue.Uninsured_Motorist_Deductible_Waiver__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Qualitas', listValue.Uninsured_Motorist_Deductible_Waiver__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td colspan="4" width="100%" style="width: 100%;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Labor Rates</apex:outputPanel></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" width="100%" style="width: 100%; text-align: right; padding-right:6px;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                    
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Qualitas', listValue.Labor_Rates__c == '')}">
+                                            N/A
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Qualitas', listValue.Labor_Rates__c != 'undefined')}">
+                                            {!listValue.Labor_Rates__c}
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </apex:outputPanel>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 75%;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Glass Breakage</apex:outputPanel></td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:6px;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                    
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Qualitas', listValue.Glass_Breakage__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Qualitas', listValue.Glass_Breakage__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </apex:outputPanel>
+                                </td>
+                                
+                            </tr>
+                        
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 75%;">Roadside Assistance (Lockout, Fuel, Flat Tire, Jump Start)</td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">
+                                    
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Qualitas', listValue.Roadside_Assistance__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Qualitas', listValue.Roadside_Assistance__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 75%;">Towing</td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Qualitas', listValue.Towing__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Qualitas', listValue.Towing__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 75%;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Rental Car</apex:outputPanel></td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Qualitas', listValue.Rental_Car__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Qualitas', listValue.Rental_Car__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </apex:outputPanel>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 75%;">
+                                    Legal Defense And Bail <br/>
+                                    <apex:repeat value="{!coverageMap}" var="listValueDeatils">
+                                         <apex:outputPanel rendered="{!AND(listValueDeatils.Underwriter__c == 'Qualitas', listValueDeatils.Legal_Defense_and_Bail_Details__c != '')}">
+                                            {!listValueDeatils.Legal_Defense_and_Bail_Details__c}
+                                         </apex:outputPanel>  
+                                    </apex:repeat>
+                                
+                                </td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                       
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Qualitas', listValue.Legal_Defense_and_Bail__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Qualitas', listValue.Legal_Defense_and_Bail__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </td>
+                            </tr>
+                           
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 75%;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Vandalism</apex:outputPanel></td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Qualitas', listValue.Vandalism__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Qualitas', listValue.Vandalism__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>
+                                    </apex:repeat>
+                                </apex:outputPanel>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 75%;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Partial Theft</apex:outputPanel></td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Qualitas', listValue.Partial_Theft__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Qualitas', listValue.Partial_Theft__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </apex:outputPanel>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 75%;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Plane Tickets Home</apex:outputPanel></td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Qualitas', listValue.Plane_Tickets_Home__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Qualitas', listValue.Plane_Tickets_Home__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </apex:outputPanel>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                                <td colspan="4" width="100%" style="width: 100%;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Bonus Coverage</apex:outputPanel></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" width="100%" style="width: 100%; text-align: right; padding:4px;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                <apex:repeat value="{!coverageMap}" var="listValue">
+                                    
+                                    <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Qualitas', listValue.Bonus_Coverage__c == '')}">
+                                        N/A
+                                    </apex:outputPanel>  
+                                    <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Qualitas', listValue.Bonus_Coverage__c != 'undefined')}">
+                                        {!listValue.Bonus_Coverage__c}
+                                    </apex:outputPanel>   
+                                </apex:repeat>
+                            </apex:outputPanel>
+                            </td>
+                            </tr>
+                        
+                        </table>
+                        
+                    </apex:outputPanel>
+                </td> 
+              <td width="33%" class="quoteBox" style="width: 33% ">
+                    
+                    <apex:outputPanel style="padding:0px; margin:0px;" rendered="{!AND(ratetableReacord.chubb == true, ratetableReacord.chubbQuote.showChubb == true)}">
+                        
+                        <table width="100%" style="width: 100%; height: 100%; background-color: #bacffc; padding-left :4px; padding-right: 4px;">
+                            
+                            <tr style="">
+                                <td colspan="4" width="100%" style="width: 100%;">
+                                    <img src="{!$Resource.chubb_png_logo}" width="40%" height="30%"/>
+                                </td>
+                            </tr>
+                            
+                            
+                            <tr>
+                                <td colspan="4" width="100%" style="width: 100%; text-align: center; font-size:28px; font-weight:600;" class="textAlign">
+                                    <apex:outputText value="${0, number, ###,##0.00 USD}">
+                                        <apex:param value="{!ratetableReacord.chubbQuote.rateValue}" />
+                                    </apex:outputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" width="100%" style="width: 100%; text-align: center; color: #B3261E; font-size:20px; font-weight:600;" class="textAlign">
+                                    Vehicle : {!quoteDetail.Vehicle_Type__c}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" width="50%" style="width: 50%; background-color: #fff  !important; padding: 4px;" class="borderClass">
+                                    <apex:outputText value="{0,date,dd-MMM, yyyy}">
+                                        <apex:param value="{!quoteDetail.Start_Date_for_Coverage__c}" /> 
+                                    </apex:outputText>
+                                </td>
+                                <td colspan="2" width="50%" style="width: 50%; background-color: #fff !important; padding: 4px;" class="borderClass">
+                                    <apex:outputText value="{0,date,dd-MMM, yyyy}">
+                                        <apex:param value="{!quoteDetail.End_Date_for_Coverage__c}" /> 
+                                    </apex:outputText>
+                                </td>
+                            </tr>
+                           <!-- <tr>
+                                <td colspan="2" width="50%" style="width: 50%; background-color: #fff !important; padding: 4px;" class="borderClass">
+                                    {!startTime}
+                                </td>
+                                <td colspan="2" width="50%" style="width: 50%; background-color: #fff !important; padding: 4px;" class="borderClass">
+                                    {!endTime}
+                                </td>
+                            </tr>-->
+                            <tr>
+                                <td colspan="2" width="50%" style="width: 50%; " class="">
+                                    Days
+                                </td>
+                                <td colspan="2" width="50%" style="width: 50%; background-color: #fff !important; text-align: center;" class="textAlign datepicker borderClass">
+                                    {!ratetableReacord.chubbQuote.days}
+                                </td>
+                            </tr> 
+                             <tr>
+                                <td colspan="2" width="50%" style="width: 50%;">
+                                    <apex:outputPanel rendered="{!quoteDetail.Policy_Type_picklist__c == 'Watercraft'}">
+                                       Total Third Party Liability
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!quoteDetail.Policy_Type_picklist__c != 'Watercraft'}">
+                                        Combine Liablity
+                                    </apex:outputPanel>
+                                    
+                                </td>
+                                <td colspan="2" width="50%" style="width: 50%; background-color: #fff !important; text-align: center;" class="textAlign datepicker borderClass">
+                                    {!ratetableReacord.chubbLiability}
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td colspan="2" width="50%" style="width: 50%;">
+                                    <apex:outputPanel rendered="{!quoteDetail.Policy_Type_picklist__c == 'Watercraft'}">
+                                       Total Third Party Bodily Injury
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!quoteDetail.Policy_Type_picklist__c != 'Watercraft'}">
+                                        Medical
+                                    </apex:outputPanel>
+                                    
+                                </td>
+                                <td colspan="2" width="50%" style="width: 50%; background-color: #fff !important; text-align: center;" class="textAlign datepicker borderClass">
+                                   <apex:outputPanel rendered="{!quoteDetail.Policy_Type_picklist__c == 'Watercraft'}">
+                                      {!quoteDetail.Third_Party_Bodily_Injury__c}
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!quoteDetail.Policy_Type_picklist__c != 'Watercraft'}">
+                                        {!ratetableReacord.chubbMedical}
+                                    </apex:outputPanel>
+                                    
+                                </td>
+                            </tr>
+                          
+                                <tr>
+                                    <td colspan="2" width="50%" style="width: 50%;">
+                                        <apex:outputPanel rendered="{!quoteDetail.Policy_Type_picklist__c == 'Watercraft'}">
+                                            Total Third Party Property Injury
+                                        </apex:outputPanel>
+                                        
+                                    </td>
+                                    
+                                    
+                                    <td colspan="2" width="50%" >
+                                        <apex:outputPanel rendered="{!quoteDetail.Policy_Type_picklist__c == 'Watercraft'}">
+                                            <p style="width: 96%; background-color: #fff !important; text-align: center;"  class="textAlign datepicker">
+                                                {!quoteDetail.Property_Damage_Liability__c}
+                                            </p>
+                                            
+                                        </apex:outputPanel>
+                                    </td>
+
+                                   
+                                </tr>
+                            
+                            <tr style="">
+                                <td colspan="2" width="50%" style="width: 50%; margin-bottom:4px; margin-top:10px;">
+                                    Liablity Only
+                                </td>
+                                <td colspan="2" width="50%" style="width: 50%; text-align: right; padding:4px;">
+                                    <apex:outputPanel rendered="{!quoteDetail.Coverage__c == 'Liability'}">
+                                        <img src="{!$Resource.icon_checkmark_blue}" />
+                                    </apex:outputPanel>  
+                                    <apex:outputPanel rendered="{!quoteDetail.Coverage__c != 'Liability'}">
+                                        <img src="{!$Resource.icon_cross}" />
+                                    </apex:outputPanel>  
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <th colspan="2" width="50%" style="width: 50%;">Deductibles </th>
+                                <th colspan="2" width="50%" style="width: 50%; text-align: right; padding:4px;">
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                       
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Chubb', showChubbDeductible)}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Chubb', !showChubbDeductible)}">
+                                            N/A
+                                            
+                                        </apex:outputPanel>   
+                                        
+                                    </apex:repeat>
+                                    
+                                </th>
+                            </tr>
+                            
+                            <tr>
+                                <td colspan="2" width="50%" style="width: 50%;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Collision Deductible</apex:outputPanel></td>
+                                <td colspan="2" width="50%" style="width: 50%; text-align: right; padding:4px;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                    <apex:outputPanel rendered="{!AND((ratetableReacord.chubbQuote.collision_deductible == '0'), quoteDetail.Vehicle_Type__c == 'RV')}">
+                                        N/A
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!OR((ratetableReacord.chubbQuote.collision_deductible != '0'), quoteDetail.Vehicle_Type__c != 'RV')}">
+                                        ${!ratetableReacord.chubbQuote.collision_deductible} USD
+                                    </apex:outputPanel>
+                                </apex:outputPanel>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" width="50%" style="width: 50%;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Total Theft Deductible</apex:outputPanel></td>
+                                <td colspan="2" width="50%" style="width: 50%; text-align: right; padding:4px;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                    <apex:outputPanel rendered="{!AND((ratetableReacord.chubbQuote.theft_Total == '0'), quoteDetail.Vehicle_Type__c == 'RV')}">
+                                        N/A
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!OR((ratetableReacord.chubbQuote.theft_Total != '0'), quoteDetail.Vehicle_Type__c != 'RV')}">
+                                    ${!ratetableReacord.chubbQuote.theft_Total} USD
+                                    </apex:outputPanel>
+                                </apex:outputPanel>
+                                </td>
+                            </tr>
+                       
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 100%; ">Uninsured/Underinsured Motorist Deductible Wavier</td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">
+                                    
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Chubb', listValue.Uninsured_Motorist_Deductible_Waiver__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Chubb', listValue.Uninsured_Motorist_Deductible_Waiver__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </td>
+                            </tr>
+                           
+                            <tr>
+                                <td colspan="4" width="100%" style="width: 100%;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Labor Rates</apex:outputPanel></td>
+                                
+                            </tr>
+                            <tr>
+                                <td colspan="4" width="100%" style="width: 100%; text-align: right; padding:4px;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                    <apex:repeat var="listValue" value="{!coverageMap}" >
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Chubb',listValue.Labor_Rates__c == '')}">
+                                            N/A
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Chubb',listValue.Labor_Rates__c != 'undefined')}">
+                                            {!listValue.Labor_Rates__c}
+                                        </apex:outputPanel>
+                                    </apex:repeat>
+                                </apex:outputPanel>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 75%;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Glass Breakage</apex:outputPanel></td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                    
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Chubb', listValue.Glass_Breakage__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Chubb', listValue.Glass_Breakage__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </apex:outputPanel>
+                                </td>
+                                
+                            </tr>
+                        
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 75%;">Roadside Assistance (Lockout, Fuel, Flat Tire, Jump Start)</td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">
+                                    
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Chubb', listValue.Roadside_Assistance__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Chubb', listValue.Roadside_Assistance__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 75%;">Towing</td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Chubb', listValue.Towing__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Chubb', listValue.Towing__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 75%;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Rental Car</apex:outputPanel></td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Chubb', listValue.Rental_Car__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Chubb', listValue.Rental_Car__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </apex:outputPanel>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 75%;">
+                                    Legal Defense And Bail <br/>
+                                    <apex:repeat value="{!coverageMap}" var="listValueDeatils">
+                                         <apex:outputPanel rendered="{!AND(listValueDeatils.Underwriter__c == 'Qualitas', listValueDeatils.Legal_Defense_and_Bail_Details__c != '')}">
+                                            {!listValueDeatils.Legal_Defense_and_Bail_Details__c}
+                                         </apex:outputPanel>  
+                                    </apex:repeat>
+                                </td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Chubb', listValue.Legal_Defense_and_Bail__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Chubb', listValue.Legal_Defense_and_Bail__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 75%;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Vandalism</apex:outputPanel></td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Chubb', listValue.Vandalism__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Chubb', listValue.Vandalism__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </apex:outputPanel>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 75%;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Partial Theft</apex:outputPanel></td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Chubb', listValue.Partial_Theft__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Chubb', listValue.Partial_Theft__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </apex:outputPanel>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 75%;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Plane Tickets Home</apex:outputPanel></td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Chubb', listValue.Plane_Tickets_Home__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Chubb', listValue.Plane_Tickets_Home__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </apex:outputPanel>
+                                </td>
+                            </tr>
+                            <tr>
+                            <td colspan="4" width="100%" style="width: 100%;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Bonus Coverage</apex:outputPanel></td>
+                            
+                            </tr>
+                            <tr>
+                                <td colspan="4" width="100%" style="width: 100%; text-align: right; padding:4px;"><apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                <apex:repeat value="{!coverageMap}" var="listValue">
+                                    
+                                    <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Chubb', listValue.Bonus_Coverage__c == '')}">
+                                      N/A
+                                    </apex:outputPanel>  
+                                    <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Chubb', listValue.Bonus_Coverage__c != 'undefined')}">
+                                        {!listValue.Bonus_Coverage__c}
+                                    </apex:outputPanel>   
+                                </apex:repeat>
+                            </apex:outputPanel>
+                            </td>
+                            </tr>
+                        
+                        </table>
+                          
+                    </apex:outputPanel>
+                </td>
+             <td width="33%" style="width: 33%; padding-top: 20px;" class="quoteBox">
+                    
+                    <apex:outputPanel style="" rendered="{!AND(ratetableReacord.Mapfre == true, ratetableReacord.mapfreQuote.showMapfre == true)}">
+                        <table width="100%" style="width: 100%;">
+                            
+                            <tr style="">
+                                <td colspan="4" width="100%" style="width: 100%; margin ">
+                                    <img src="{!$Resource.Maxfre_Logo}" width="40%" height="30%" /> 
+                                </td>
+                                 
+                            </tr>
+                            <tr>
+                                <td colspan="4" width="100%" style="width: 100%; text-align: center; font-size:28px; font-weight:600; padding-top: 20px;" class="textAlign">
+                                    <apex:outputText value="${0, number, ###,##0.00 USD}">
+                                        <apex:param value="{!ratetableReacord.mapfreQuote.rateValue}" />
+                                    </apex:outputText>                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" width="100%" style="width: 100%; text-align: center; color: #B3261E; font-size:20px; font-weight:600;" class="textAlign">
+                                    Vehicle : {!quoteDetail.Vehicle_Type__c}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" width="50%" style="width: 50%; background-color: #fff !important; padding: 4px;" class="borderClass">
+                                    <apex:outputText value="{0,date,dd-MMM, yyyy}">
+                                        <apex:param value="{!quoteDetail.Start_Date_for_Coverage__c}" /> 
+                                    </apex:outputText>
+                                    
+                                </td>
+                                <td colspan="2" width="50%" style="width: 50%; background-color: #fff !important; padding: 4px;" class="borderClass">
+                                    <apex:outputText value="{0,date,dd-MMM, yyyy}">
+                                        <apex:param value="{!quoteDetail.End_Date_for_Coverage__c}" /> 
+                                    </apex:outputText>
+                                </td>
+                            </tr>
+                            
+                           <!--- <tr>
+                                <td colspan="2" width="50%" style="width: 50%; background-color: #fff !important; padding: 4px;" class="borderClass">
+                                    {!startTime}
+                                </td>
+                                <td colspan="2" width="50%" style="width: 50%; background-color: #fff !important; padding: 4px;" class="borderClass">
+                                    {!endTime}
+                                </td>
+                            </tr> -->
+                            <tr>
+                                <td colspan="2" width="50%" style="width: 50%;">
+                                    Days
+                                </td>
+                                <td colspan="2" width="50%" style="width: 50%; background-color: #fff !important; text-align: center;" class="textAlign datepicker borderClass">
+                                    {!ratetableReacord.mapfreQuote.days}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" width="50%" style="width: 50%;">
+                                    Combine Liablity
+                                </td>
+                                <td colspan="2" width="50%" style="width: 50%; background-color:  !important; text-align: center;" class="textAlign datepicker borderClass">
+                                   {!ratetableReacord.mapfreLiability}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" width="50%" style="width: 50%;">
+                                    Medical
+                                </td>
+                                <td colspan="2" width="50%" style="width: 50%; background-color:  !important; text-align: center;" class="textAlign datepicker borderClass">
+                                    {!ratetableReacord.mapfreMedical}
+                                </td>
+                            </tr>
+                            <tr style="margin-bottom:4px">
+                                <td colspan="2" width="50%" style="width: 50%;">
+                                    Liability Only
+                                </td>
+                                <td colspan="2" width="50%" style="width: 50%; text-align: right; padding:4px;">
+                                    <apex:outputPanel rendered="{!quoteDetail.Coverage__c == 'Liability'}">
+                                        <img src="{!$Resource.icon_checkmark_blue}" />
+                                    </apex:outputPanel>  
+                                    <apex:outputPanel rendered="{!quoteDetail.Coverage__c != 'Liability'}">
+                                        <img src="{!$Resource.icon_cross}" />
+                                    </apex:outputPanel>  
+                                </td>
+                            </tr>
+                            
+                            <tr style="margin-bottom:4px">
+                                
+                                
+                                <td colspan="2" width="50%" style="width: 50%;">
+                                    <apex:outputPanel rendered="{!quoteDetail.Policy_Type_picklist__c == 'Automobile'}">
+                                        Full Coverage  
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!quoteDetail.Policy_Type_picklist__c != 'Automobile'}">
+                                        Liability + Theft
+                                    </apex:outputPanel>
+                                </td>
+                                <td colspan="2" width="50%" style="width: 50%; text-align: right; padding:4px;">
+                                    <apex:outputPanel rendered="{!quoteDetail.Policy_Type_picklist__c == 'Automobile'}">
+                                        <apex:outputPanel rendered="{!quoteDetail.Coverage__c == 'Complete'}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!quoteDetail.Coverage__c != 'Complete'}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>  
+                                        
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!quoteDetail.Policy_Type_picklist__c != 'Automobile'}">
+                                        <apex:outputPanel rendered="{!quoteDetail.Coverage__c == 'LiabilityTheft'}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!quoteDetail.Coverage__c != 'LiabilityTheft'}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>  
+                                        
+                                    </apex:outputPanel>
+                                </td>
+                            </tr>
+                            
+                            <tr style="margin-bottom:4px">
+                                
+                                
+                                <td colspan="2" width="50%" style="width: 50%;">
+                                    <apex:outputPanel rendered="{!quoteDetail.Policy_Type_picklist__c == 'Automobile'}">
+                                        Max Coverage
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!quoteDetail.Policy_Type_picklist__c != 'Automobile'}">
+                                        Complete Coverage 
+                                    </apex:outputPanel>
+                                </td>
+                                <td colspan="2" width="50%" style="width: 50%; text-align: right; padding:4px;">
+                                    <apex:outputPanel rendered="{!quoteDetail.Policy_Type_picklist__c == 'Automobile'}">
+                                        <apex:outputPanel rendered="{!quoteDetail.Coverage__c == 'Max'}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!quoteDetail.Coverage__c != 'Max'}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>  
+                                        
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!quoteDetail.Policy_Type_picklist__c != 'Automobile'}">
+                                        <apex:outputPanel rendered="{!quoteDetail.Coverage__c == 'Complete'}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!quoteDetail.Coverage__c != 'Complete'}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>  
+                                        
+                                    </apex:outputPanel>
+                                </td>
+                            </tr>
+                            
+                            
+                            <tr>
+                                <th colspan="2" width="50%" style="width: 50%;">Deductibles </th>
+                                <th colspan="2" width="50%" style="width: 50%; text-align: right; padding:4px;">
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                       
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Mapfre', showMapfreDeductible)}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{! AND(listValue.UnderWriter__c == 'Mapfre', !showMapfreDeductible)}">
+                                            N/A
+                                            
+                                        </apex:outputPanel>   
+                                        
+                                    </apex:repeat>
+                                    
+                                </th>
+                            </tr>
+                            
+                            <tr>
+                                <td colspan="2" width="50%" style="width: 50%;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Collision Deductible</apex:outputPanel></td>
+                                <td colspan="2" width="50%" style="width: 50%; text-align: right; padding:4px;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                    <apex:outputPanel rendered="{!AND((ratetableReacord.mapfreQuote.collision_deductible == '0'), quoteDetail.Vehicle_Type__c == 'RV')}">
+                                        N/A
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!OR((ratetableReacord.mapfreQuote.collision_deductible != '0'), quoteDetail.Vehicle_Type__c != 'RV')}">
+                                        ${!ratetableReacord.mapfreQuote.collision_deductible} USD
+                                    </apex:outputPanel>
+                                </apex:outputPanel>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" width="50%" style="width: 50%;"><apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Total Theft Deductible</apex:outputPanel></td>
+                                <td colspan="2" width="50%" style="width: 50%; text-align: right; padding:4px;">      <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                    <apex:outputPanel rendered="{!AND((ratetableReacord.mapfreQuote.theft_Total == '0'), quoteDetail.Vehicle_Type__c == 'RV')}">
+                                        N/A
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!OR((ratetableReacord.mapfreQuote.theft_Total != '0'), quoteDetail.Vehicle_Type__c != 'RV')}">
+                                        ${!ratetableReacord.mapfreQuote.theft_Total} USD
+                                    </apex:outputPanel>
+                                </apex:outputPanel>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 100%;">Uninsured/Underinsured Motorist Deductible Wavier</td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">
+                                    
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Mapfre', listValue.Uninsured_Motorist_Deductible_Waiver__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Mapfre', listValue.Uninsured_Motorist_Deductible_Waiver__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td colspan="4" width="100%" style="width: 50%;">
+                                    <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Labor Rates
+                                    </apex:outputPanel>
+                                    </td>
+                                
+                            </tr>
+                            <tr>
+                                <td colspan="4" width="100%" style="width: 50%; text-align: right; padding:4px;">
+                                    <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Mapfre', listValue.Labor_Rates__c == '')}">
+                                            N/A
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Mapfre', listValue.Labor_Rates__c != 'undefined')}">
+                                            {!listValue.Labor_Rates__c}
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </apex:outputPanel>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 75%;">
+                                    <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Glass Breakage
+                                    </apex:outputPanel>
+                                    </td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">
+                                    <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Mapfre', listValue.Glass_Breakage__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Mapfre', listValue.Glass_Breakage__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </apex:outputPanel>
+                                </td>
+                                
+                            </tr>
+                        
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 75%;">Roadside Assistance (Lockout, Fuel, Flat Tire, Jump Start)</td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">
+                                    
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Mapfre', listValue.Roadside_Assistance__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Mapfre', listValue.Roadside_Assistance__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 75%;">Towing</td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Mapfre', listValue.Towing__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Mapfre', listValue.Towing__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 75%;">
+                                    <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Rental Car
+                                    </apex:outputPanel>
+                                    </td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">
+                                    <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Mapfre', listValue.Rental_Car__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Mapfre', listValue.Rental_Car__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </apex:outputPanel>
+                                </td>
+                            </tr>
+                        
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 75%;">
+                                    Legal Defense And Bail <br/>
+                                    <apex:repeat value="{!coverageMap}" var="listValueDeatils">
+                                         <apex:outputPanel rendered="{!AND(listValueDeatils.Underwriter__c == 'Qualitas', listValueDeatils.Legal_Defense_and_Bail_Details__c != '')}">
+                                            {!listValueDeatils.Legal_Defense_and_Bail_Details__c}
+                                         </apex:outputPanel>  
+                                    </apex:repeat>
+                                </td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Mapfre', listValue.Legal_Defense_and_Bail__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Mapfre', listValue.Legal_Defense_and_Bail__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 75%;">
+                                    <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Vandalism
+                                    </apex:outputPanel>
+                                    </td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">
+                                    <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Mapfre', listValue.Vandalism__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Mapfre', listValue.Vandalism__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </apex:outputPanel>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 75%;">
+                                    <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Partial Theft
+                                    </apex:outputPanel>
+                                    </td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">
+                                    <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Mapfre', listValue.Partial_Theft__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Mapfre', listValue.Partial_Theft__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </apex:outputPanel>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" width="75%" style="width: 75%;">
+                                    <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Plane Tickets Home
+                                    </apex:outputPanel>
+                                    </td>
+                                <td colspan="1" width="25%" style="width: 25%; text-align: right; padding:4px;">
+                                    <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                    <apex:repeat value="{!coverageMap}" var="listValue">
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Mapfre', listValue.Plane_Tickets_Home__c == 'Yes')}">
+                                            <img src="{!$Resource.icon_checkmark_blue}" />
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Mapfre', listValue.Plane_Tickets_Home__c != 'Yes')}">
+                                            <img src="{!$Resource.icon_cross}" />
+                                        </apex:outputPanel>   
+                                    </apex:repeat>
+                                </apex:outputPanel>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" width="100%" style="width: 100%;">
+                                    <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">Bonus Coverage
+                                    </apex:outputPanel>
+                                    </td>
+                            </tr>
+                            
+                            <tr>
+                                <td colspan="4" width="100%" style="width: 100%; text-align: right; padding:4px;">
+                                    <apex:outputPanel rendered="{!!AND(quoteDetail.Coverage__c == 'Liability', True)}">
+                                 <apex:repeat value="{!coverageMap}" var="listValue">
+                                    <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Mapfre', listValue.Bonus_Coverage__c == '')}">
+                                        N/A
+                                    </apex:outputPanel>  
+                                    <apex:outputPanel rendered="{!AND(listValue.Underwriter__c == 'Mapfre', listValue.Bonus_Coverage__c != 'undefined')}">
+                                        {!listValue.Bonus_Coverage__c}
+                                    </apex:outputPanel>   
+                                </apex:repeat>
+                            </apex:outputPanel>
+                            </td>
+                            </tr>
+                        
+                        </table>
+                    </apex:outputPanel>
+                </td>
+            </tr>
+        </table> 
+        </div>
+
+       
+    </body> 
+    
+</apex:page>

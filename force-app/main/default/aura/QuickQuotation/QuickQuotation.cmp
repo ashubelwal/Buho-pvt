@@ -1,0 +1,130 @@
+<aura:component controller="QuickQuotationCtrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable" access="global" >
+    
+    <aura:attribute name="spinner" type="Boolean" default="true"/>
+    <aura:attribute name="screenName" type="String" default="lineInsurance"/>
+    <aura:attribute name="insuranceItem" type="String" default="VEHICLE"/>
+    <aura:attribute name="insuranceType" type="String" default="VEHICLE"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <lightning:navigation aura:id="navService"/>
+    <ltng:require styles="{!$Resource.mexinsurance_assets + '/style.css'}" afterScriptsLoaded="{!c.doInit}" />
+
+    <aura:if isTrue="{!v.spinner}">
+        <lightning:spinner alternativeText="Loading" variant="brand" />
+    </aura:if>
+
+    <header class="page-header">
+        <div class="wrap">
+            <img src="{!$Resource.mexinsurance_assets + '/images/logo-mexinsurance.png'}"/>
+        </div>
+    </header>
+
+    <div class="wrap -size-md">
+        <lightning:layout multipleRows="true">   
+            <aura:if isTrue="{!v.screenName == 'lineInsurance'}">               
+                <lightning:layoutItem padding="around-small" size="12" class="slds-align_absolute-center slds-m-top_xx-large">
+                    <h1>Hey! What would you like to insure today?</h1>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small" size="4" class="slds-m-top_large txt_right">
+                    <div class="align-center">
+                        <div class="selection-icon">
+                            <img width="92" src="{!$Resource.mexinsurance_assets + '/images/tyre@2x.png'}" alt="Vehicle"/>
+                        </div>
+                        <label class="label-large slds-m-top_small slds-m-bottom_small">VEHICLE</label>
+                        <label class="radiocontainer">
+                            <ui:inputRadio aura:id="r0" name="others" class="radio_box slds-m-top_x-small" text="VEHICLE" change="{!c.onGroup}" value="{!v.insuranceItem == 'VEHICLE'}"/>
+                            <span class="radiobtn"></span>
+                        </label>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small" size="4" class="slds-m-top_large">
+                    <div class="align-center">
+                        <div class="selection-icon">
+                            <img width="92" src="{!$Resource.mexinsurance_assets + '/images/house@2x.png'}" alt="House"/>
+                        </div>
+                        <label class="label-large slds-m-top_small slds-m-bottom_small">HOUSE</label>
+                        <label class="radiocontainer">
+                            <ui:inputRadio aura:id="r1" name="others" class="radio_box slds-m-top_x-small" text="HOUSE" change="{!c.onGroup}" value="{!v.insuranceItem == 'HOUSE'}"/>
+                            <span class="radiobtn"></span>
+                        </label>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small" size="4" class="slds-m-top_large">
+                    <div class="align-center">
+                        <div class="selection-icon">
+                            <img width="92" src="{!$Resource.mexinsurance_assets + '/images/boat@2x.png'}" alt="WATERCRAFT"/>
+                        </div>
+                        <label class="label-large slds-m-top_small slds-m-bottom_small">WATERCRAFT</label>
+                        <label class="radiocontainer">
+                            <ui:inputRadio aura:id="" name="others" class="radio_box slds-m-top_x-small" text="WATERCRAFT" change="{!c.onGroup}" value="{!v.insuranceItem == 'WATERCRAFT'}"/>
+                            <span class="radiobtn"></span>
+                        </label>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12" class="slds-m-top_large align-center">
+                    <button class="button -secondary -wider" name="step_1" onclick="{! c.handleNextClick }">Next</button>
+                </lightning:layoutItem>
+            </aura:if>
+            
+            <aura:if isTrue="{!v.screenName == 'needInsurance'}">
+                <lightning:layoutItem padding="around-small" size="12" class="align-center slds-m-top_xx-large">
+                    <h1>Where do you need insurance?</h1>
+                </lightning:layoutItem>
+                
+                <div class="slds-size_12-of-12">
+                    <div class="insurance-selection-box clearfix">
+                        <div class="map">
+                            <img width="309" src="{!$Resource.mexinsurance_assets + '/images/map-mexico@2x.png'}" alt="Mexico Map"/>
+                        </div>
+                        <div class="selectors">
+                            <h3 class="red">Mexico - for non-Mexican registered vehicles</h3>
+                            <div class="radio-group">
+                                <label class="radiocontainer">
+                                    <ui:inputRadio aura:id="r2" name="mexico_radio" class="radio_box slds-m-top_x-small" text="Car/Truck/Auto" change="{!c.onGroup2}" value="{!v.insuranceType == 'Car/Truck/Auto'}"/>
+                                    <span class="radiobtn"></span> 
+                                    <img class="product-icon" src="{!$Resource.mexinsurance_assets + '/images/icon-vehicle.svg'}" alt="Car/Truck/Auto"/> Car/Truck/Auto
+                                </label>
+                                <label class="radiocontainer">
+                                    <ui:inputRadio aura:id="r2" name="mexico_radio" class="radio_box slds-m-top_x-small" text="RV" change="{!c.onGroup2}" value="{!v.insuranceType == 'RV'}"/>                                    
+                                    <span class="radiobtn"></span> 
+                                    <img class="product-icon" src="{!$Resource.mexinsurance_assets + '/images/icon-rv.svg'}" alt="RV"/> RV
+                                </label>
+                                <!-- <label class="radiocontainer">
+                                    <ui:inputRadio aura:id="r2" name="mexico_radio" class="radio_box slds-m-top_x-small" text="DRIVER LICENSE" change="{!c.onGroup2}" value="{!v.insuranceType == 'DRIVER LICENSE'}"/>                                    
+                                    <span class="radiobtn"></span>
+                                    <img class="product-icon" src="{!$Resource.mexinsurance_assets + '/images/icon-driver-license.svg'}" alt="DRIVER LICENSE"/>
+                                    Drivers License
+                                </label> -->
+                                <label class="radiocontainer">
+                                    <ui:inputRadio aura:id="r2" name="mexico_radio" class="radio_box slds-m-top_x-small" text="Motorcycle" change="{!c.onGroup2}" value="{!v.insuranceType == 'Motorcycle'}"/>                                    
+                                    <span class="radiobtn"></span> 
+                                    <img class="product-icon" src="{!$Resource.mexinsurance_assets + '/images/icon-motorcycle.svg'}" alt="Motorcycle/ Street Legal ATV"/>
+                                    Motorcycle/ Street Legal ATV
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="insurance-selection-box clearfix">
+                        <div class="map">
+                            <img width="309" src="{!$Resource.mexinsurance_assets + '/images/map-us-canada@2x.png'}" alt="US/Canada Map"/>
+                        </div>
+                        <div class="selectors">
+                            <h3 class="red">US / Canada - for Mexican registered vehicles</h3>
+                            <div class="radio-group">
+                                <label class="radiocontainer">
+                                    <ui:inputRadio aura:id="r3" name="others" class="radio_box slds-m-top_x-small" text="Northbound" change="{!c.onGroup2}" value="{!v.insuranceType == 'Northbound'}"/>
+                                    <span class="radiobtn"></span> 
+                                    <img class="product-icon" src="{!$Resource.mexinsurance_assets + '/images/icon-vehicle.svg'}" alt="Northbound"/> Northbound
+                                </label>            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <lightning:layoutItem size="12" class="align-center slds-m-top_large">
+                    <button class="button -secondary -wider" name="step_2" onclick="{! c.handleNextClick }">Next</button>
+                </lightning:layoutItem>
+            </aura:if>
+        </lightning:layout>
+    </div><!-- end wrap -->
+</aura:component>

@@ -1,0 +1,12 @@
+.THIS .form-container {
+    margin: 0 auto;
+    max-width: 620px;
+}
+.THIS label.slds-form-element__label.slds-no-flex {
+    display: inline;
+    margin-right: 3px;
+}
+.THIS lightning-helptext {
+    position: absolute;
+    top: -5%;
+}

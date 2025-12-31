@@ -1,0 +1,49 @@
+<aura:component controller="QuickQuotationCtrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="towedunitRecord" type="Towed_Unit__c" />
+    <aura:attribute name="Towed_Unit_Types" type="list" access="public"/>
+    <aura:attribute name="Street_Legals" type="list" access="public"/>
+    <aura:attribute name="daysInTwo" type="String" default="" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="render" value="{!this}" action="{!c.onRender}"/>
+    <aura:method name="validateFields" action="{!c.validateInputFields}" access="PUBLIC" />
+    <aura:attribute name="iscloneConditionPass" type="Boolean" default="false" />
+
+    <aura:attribute name="vesselTypes" type="list" access="private"/>
+    <aura:attribute name="vesselLengths" type="list" access="private"/>
+    <aura:attribute name="fieldShowForBoat" type="Boolean" />
+<aura:attribute name="quoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" />
+    <div class="slds-size_12-of-12">
+        <div class="form-container">
+            <lightning:input aura:id="validateField" pattern="^(19|20)\d{2}$" maxlength="4"  messageWhenPatternMismatch ="Enter a valid year" required="true" variant = "label-hidden" name="Year__c" placeholder="Year" value="{!v.towedunitRecord.Year__c}" onchange="{!c.updateValue}" />
+            <lightning:input aura:id="validateField" required="true" variant = "label-hidden" type="text" name="Make__c" placeholder="Make" value="{!v.towedunitRecord.Make__c}" onchange="{!c.updateValue}" />
+            <lightning:input aura:id="validateField" required="true" variant = "label-hidden" type="text" name="Model__c" placeholder="Model" value="{!v.towedunitRecord.Model__c}" onchange="{!c.updateValue}" />
+            <lightning:input aura:id="validateField" pattern="[A-Z0-9]+" messageWhenPatternMismatch="Whitespace &#38; Special Characters (@, $, %, etc...) aren't allowed" required="true" variant = "label-hidden" type="text" name="VIN_Number__c" placeholder="VIN Number" value="{!v.towedunitRecord.VIN_Number__c}" onchange="{!c.updateValue}" />
+            <lightning:input aura:id="validateField" required="true" variant = "label-hidden" type="text" name="Plate__c" placeholder="License Plate" value="{!v.towedunitRecord.Plate__c}" onchange="{!c.updateValue}" />
+            <lightning:input aura:id="validateField"  required="true" variant = "label-hidden" type="number" name="Towed_Unit_Value__c" formatter="currency" step="0.01" placeholder="Towed Unit Value" value="{!v.towedunitRecord.Towed_Unit_Value__c}" onchange="{!c.updateValue}" />
+            <!-- <lightning:input type="text" name="Towing_Terms__c" placeholder="Towing Terms" value="{!v.towedunitRecord.Towing_Terms__c}" onchange="{!c.updateValue}" / -->
+            <lightning:input fieldLevelHelp="{!v.daysInTwo}" pattern="(\d{1,3})" aura:id="validateField" required="true" type="number" name="Days_in_Tow__c" label="Days in Tow" placeholder="Days in Tow" value="{!v.towedunitRecord.Days_in_Tow__c}" onchange="{!c.updateValue}" />
+            
+            <lightning:combobox aura:id="validateField" required="true" label="Type of Towed Unit" name="Towed_Unit_Type__c" placeholder="Towed Unit Type" value="{!v.towedunitRecord.Towed_Unit_Type__c}" options="{!v.Towed_Unit_Types }"  onchange="{!c.updateValue}"/>
+             
+            <aura:if isTrue="{!v.towedunitRecord.Towed_Unit_Type__c == 'Boat'}">
+                <lightning:combobox aura:id="validateField" name="Type_of_Vessel__c" 
+                                    placeholder="Type of Vessel" value="{!v.towedunitRecord.Type_of_Vessel__c}" 
+                                    options="{! v.vesselTypes }" onchange="{!c.updateValue}" 
+                                    required="true" variant="label-hidden"
+                                    />
+               
+                <aura:if isTrue="{!v.towedunitRecord.Type_of_Vessel__c != 'Personal Watercraft (Jet Ski)'}">
+                    <lightning:combobox aura:id="validateField" name="Vessel_Length__c" 
+                                        placeholder="Vessel Length"
+                                        value="{!v.towedunitRecord.Vessel_Length__c}" 
+                                         
+                                        options="{! v.vesselLengths }" onchange="{!c.updateValue}" 
+                                        required="true" variant="label-hidden" 
+                                        />
+                </aura:if>
+            </aura:if>
+            
+            <lightning:combobox name="Street_Legal__c" label="Does this towed unit have a motor, is it drive-able, and does it also have a Foreign ( non-Mexican ) registration?" placeholder="" value="{!v.towedunitRecord.Street_Legal__c}" options="{!v.Street_Legals }" onchange="{!c.updateValue}"/>
+        </div>
+    </div> 
+</aura:component>

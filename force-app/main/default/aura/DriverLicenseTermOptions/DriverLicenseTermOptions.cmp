@@ -1,0 +1,65 @@
+<aura:component controller="DriverLicenseTermOptionsController"
+                implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global">
+    <aura:attribute name="title" type="String" access="public"/>
+    <aura:attribute name="backButtonVisibility" type="Boolean" default="true" access="public"/>
+    <aura:attribute name="policyType" type="String" access="public"/>
+    <aura:attribute name="timeZones" type="list" access="private"/>
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    <aura:attribute name="onNextClick" type="Aura.Action"/>
+    <aura:attribute name="quoteRecord" type="Quote__c" access="global"/>
+    <aura:attribute name="minStartDate" type="String"/>
+    <aura:attribute name="minTime" type="String" />
+    <aura:attribute name="endMinDate" type="String" />
+
+    <aura:attribute name="annual" type="Boolean" default="true"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+
+    <lightning:layoutItem padding="around-small" size="12" class="align-center slds-m-top_xx-large">
+        <div class="page-title">
+            <aura:if isTrue="{!v.backButtonVisibility}">
+                <button class="button -plain -back-button" name="step_3" onclick="{!v.onBackClick }">
+                    <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/>
+                    Back
+                </button>
+            </aura:if>
+            <h1>{!v.title}</h1>
+            <img class="slds-m-bottom_large" src="{!$Resource.mexinsurance_assets + '/images/icon-calendar.svg'}"
+                 alt="Terms"/>
+        </div>
+    </lightning:layoutItem>
+
+    <div class="slds-size_12-of-12">
+        <div class="form-container">
+            <lightning:input aura:id="validateField" name="Start_Date_for_Coverage__c" type="date"
+                             label="Start Date for Coverage" placeholder="" required="true"
+                             value="{!v.quoteRecord.Start_Date_for_Coverage__c}" onchange="{!c.updateValue}"
+                             min="{!v.minStartDate}"/>
+            <lightning:input aura:id="validateField" type="time" name="Start_Time__c" label="START TIME" placeholder=""
+                             value="{!v.quoteRecord.Start_Time__c}" onchange="{!c.updateValue}" required="true" min="{!v.minTime}" timeZone="PST"/>
+            <lightning:layoutItem size="12" class="align-center">
+                <label class="label-large slds-m-top_small slds-m-bottom_small">Annual</label>
+                <label class="radiocontainer">
+                    <lightning:input type="checkbox" name="Annual" variant="label-hidden" checked="{!v.annual}"
+                                     disabled="true" label="Annual"/>
+                </label>
+            </lightning:layoutItem>
+            <lightning:input name="End_Date_for_Coverage__c" type="date"
+                             label="End Date for Coverage" placeholder=""
+                             value="{!v.quoteRecord.End_Date_for_Coverage__c}" onchange="{!c.updateValue}"
+                             disabled="true"/>
+            <lightning:input type="time" name="End_Time__c" label="End Time" placeholder=""
+                             value="{!v.quoteRecord.End_Time__c}" disabled="true"/>
+
+            <!--lightning:combobox aura:id="validateField" name="Time_Zone__c" label="Time Zone" placeholder=""
+                                value="{!v.quoteRecord.Time_Zone__c}" options="{! v.timeZones }"
+                                onchange="{!c.updateValue}" required="true"/ -->
+        </div>
+    </div>
+
+    <lightning:layoutItem size="12" class="slds-m-top_large align-center">
+        <button class="button -secondary -wider" onclick="{!c.onNextClick }">Next</button>
+    </lightning:layoutItem>
+</aura:component>

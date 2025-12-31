@@ -1,0 +1,51 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="title" type="String" access="public"/>
+    <aura:attribute name="policyType" type="String" access="public"/>
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    <aura:attribute name="onNextClick" type="Aura.Action"/>
+    
+    <lightning:layoutItem padding="around-small" size="12" class="slds-align_absolute-center slds-m-top_xx-large">
+        <h1>{!v.title}</h1>
+    </lightning:layoutItem>
+    <lightning:layoutItem padding="around-small" size="4" class="slds-m-top_large txt_right">
+        <div class="align-center">
+            <div class="selection-icon">
+                <img width="92" src="{!$Resource.mexinsurance_assets + '/images/tyre@2x.png'}" alt="Vehicle"/>
+            </div>
+            <label class="label-large slds-m-top_small slds-m-bottom_small">VEHICLE</label>
+            <label class="radiocontainer">
+                <ui:inputRadio aura:id="r0" name="others" class="radio_box slds-m-top_x-small" change="{!c.onGroup}" value="true"/>
+                <span class="radiobtn"></span>
+            </label>
+        </div>
+    </lightning:layoutItem>
+    <lightning:layoutItem padding="around-small" size="4" class="slds-m-top_large">
+        <div class="align-center">
+            <div class="selection-icon">
+                <img width="92" src="{!$Resource.mexinsurance_assets + '/images/house@2x.png'}" alt="House"/>
+            </div>
+            <label class="label-large slds-m-top_small slds-m-bottom_small">HOUSE</label>
+            <label class="radiocontainer">
+                <ui:inputRadio aura:id="r1" name="others" class="radio_box slds-m-top_x-small" change="{!c.onGroup}"/>
+                <span class="radiobtn"></span>
+            </label>
+        </div>
+    </lightning:layoutItem>
+    <lightning:layoutItem padding="around-small" size="4" class="slds-m-top_large">
+        <div class="align-center">
+            <div class="selection-icon">
+                <img width="92" src="{!$Resource.mexinsurance_assets + '/images/boat@2x.png'}" alt="House"/>
+            </div>
+            <label class="label-large slds-m-top_small slds-m-bottom_small">WATERCRAFT</label>
+            <label class="radiocontainer">
+                <ui:inputRadio aura:id="" name="others" class="radio_box slds-m-top_x-small" change="{!c.onGroup}"/>
+                <span class="radiobtn"></span>
+            </label>
+        </div>
+    </lightning:layoutItem>
+    
+    <lightning:layoutItem size="12" class="slds-m-top_large align-center">
+        <button class="button -secondary -wider" name="step_1" onclick="{! c.handleNextClick }">Next</button>
+    </lightning:layoutItem>
+    
+</aura:component>

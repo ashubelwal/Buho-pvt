@@ -1,0 +1,166 @@
+<template>
+        <lightning-spinner lwc:if={isSpinLoad} alternative-text="Loading" size="xx-small" variant="base">
+        </lightning-spinner>
+        <div class="mainDiv notranslate">
+                <div class="pageTitle slds-m-bottom_medium">
+                        <h2 class="slds-text-heading_medium">
+                                {label.Summary}
+                        </h2>
+                </div>
+                <lightning-layout multiple-rows="true">
+                        <lightning-layout-item size="12" large-device-size="6" medium-device-size="6"
+                                small-device-size="12" class="slds-align_absolute-center">
+                                <div class="summary-box">
+                                        <template if:true={policyRecord}>
+                                                <div class="summary-box-content">
+                                                        <h3 class="summary-title red">{label.OriginalPolicy}</h3>
+
+                                                        <ul class="summary-details-list">
+                                                                <li>{label.Premium}:
+                                                                        <span class="black"><lightning-formatted-number value={policyRecord.Net_Premium__c} format-style="currency" currency-code="USD"></lightning-formatted-number></span>
+                                                                </li>
+                                                                <li>{label.Surcharge}:
+                                                                        <span class="black"><lightning-formatted-number value={policyRecord.Surcharge__c} format-style="currency" currency-code="USD"></lightning-formatted-number></span>
+                                                                </li>
+                                                                <template if:true={showMedical}>
+                                                                        <li>{label.Medical}:
+                                                                                <span class="black">{policyRecord.Medical_picklist__c}</span>
+                                                                        </li>
+                                                                </template>
+                                                                <template if:true={showWatercraft}>
+                                                                        <li>{label.Medical}:
+                                                                                <span class="black">{policyRecord.Third_Party_Bodily_Injury__c}</span>
+                                                                        </li>
+                                                                </template>
+
+
+                                                                <li>{label.Liability}:
+                                                                        <span class="black">{policyRecord.Liability_picklist__c}</span>
+                                                                </li>
+                                                                <li>{label.BrokerCharge}:
+                                                                        <span class="black"><lightning-formatted-number value={policyRecord.Broker_Policy_Fee__c} format-style="currency" currency-code="USD" ></lightning-formatted-number></span>
+                                                                </li>
+                                                                <li>{label.MexicanIVATax}:
+                                                                        <span class="black"><lightning-formatted-number value={policyRecord.I_V_A_Mex_Tax__c} format-style="currency" currency-code="USD" ></lightning-formatted-number></span>
+                                                                </li>
+                                                        </ul>
+
+
+                                                </div>
+                                                <div class="summary-box-footer red-bg">
+
+                                                        <template if:true={showWatercraft}>
+                                                                <div class="summary-total">{label.TOTAL}
+                                                                        <span class="summary-amount"><lightning-formatted-number value={policyRecord.Total_Premium_Amount__c} format-style="currency" currency-code="USD"></lightning-formatted-number></span>
+                                                                </div>
+                                                        </template>
+                                                        <template if:false={showWatercraft}>
+                                                                <div class="summary-total">{label.TOTAL}
+                                                                        <span class="summary-amount"><lightning-formatted-number value={policyRecord.Total_Premium_Amount__c} format-style="currency" currency-code="USD"></lightning-formatted-number></span>
+                                                                </div>
+                                                        </template>
+
+                                                </div>
+                                        </template>
+                                </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="6" medium-device-size="6"
+                                small-device-size="12" class="slds-align_absolute-center">
+                                <div class="summary-box">
+                                        <template if:true={quickQuoteDetail}>
+                                                <div class="summary-box-content">
+                                                        <h3 class="summary-title green">{label.ModifiedPolicy}</h3>
+                                                        <ul class="summary-details-list">
+                                                                <li>{label.Premium}:
+                                                                        <span class="black"><lightning-formatted-number value={quickQuoteDetail.Net_Premium__c} format-style="currency" currency-code="USD"></lightning-formatted-number></span>
+                                                                </li>
+                                                                <li>{label.Surcharge}:
+                                                                        <span class="black"><lightning-formatted-number value={quickQuoteDetail.TotalSurcharges} format-style="currency" currency-code="USD"></lightning-formatted-number></span>
+                                                                </li>
+                                                                <template if:true={showMedical}>
+                                                                        <li>{label.Medical}:
+                                                                                <span class="black">{medicalValue}</span>
+                                                                        </li>
+                                                                </template>
+                                                                <template if:true={showWatercraft}>
+                                                                        <li>{label.Medical}:
+                                                                                <span class="black">{quickQuoteDetail.Medical_Payment__c}</span>
+                                                                        </li>
+                                                                </template>
+
+
+                                                                <li>{label.Liability}:
+                                                                        <span class="black">{editpolicydata.quoteData.Liability__c}</span>
+                                                                </li>
+                                                                <li>{label.BrokerCharge}:
+                                                                        <span class="black"><lightning-formatted-number value={quickQuoteDetail.Broker_Policy_Fee__c} format-style="currency" currency-code="USD" ></lightning-formatted-number></span>
+                                                                </li>
+                                                                <li>{label.MexicanIVATax}:
+                                                                        <span class="black"><lightning-formatted-number value={quickQuoteDetail.I_V_A_Mex_Tax__c} format-style="currency" currency-code="USD" ></lightning-formatted-number></span>
+                                                                </li>
+                                                        </ul>
+                                                </div>
+                                                <div class="summary-box-footer green-bg">
+
+                                                        <template if:true={showWatercraft}>
+                                                                <div class="summary-total">{label.TOTAL}
+                                                                        <span class="summary-amount"><lightning-formatted-number value={quickQuoteDetail.rateValue} format-style="currency" currency-code="USD"></lightning-formatted-number></span>
+                                                                </div>
+                                                        </template>
+                                                        <template if:false={showWatercraft}>
+                                                                <div class="summary-total">{label.TOTAL}
+                                                                        <span class="summary-amount"><lightning-formatted-number value={quickQuoteDetail.Total} format-style="currency" currency-code="USD"></lightning-formatted-number></span>
+                                                                </div>
+                                                        </template>
+
+                                                </div>
+                                        </template>
+                                </div>
+                        </lightning-layout-item>
+
+                </lightning-layout>
+                <lightning-layout>
+                        <lightning-layout-item size="12" large-device-size="12" small-device-size="12"
+                                medium-device-size="12">
+                                <div class="align-center">
+                                        <template if:true={isRefund}>
+                                                <h2 class="slds-m-bottom_xx-large slds-m-top_xx-large">
+                                                        {label.Refundamount}:
+                                                        <span class="green-txt"><lightning-formatted-number value={refundAmount} format-style="currency" currency-code="USD"></lightning-formatted-number></span>
+                                                </h2>
+                                        </template>
+                                        <template if:false={isRefund}>
+                                                <h2 class="slds-m-bottom_xx-large slds-m-top_xx-large">
+                                                        {label.AmountDueMessage}:
+                                                        <span class="red-txt"><lightning-formatted-number value={refundAmount} format-style="currency" currency-code="USD"></lightning-formatted-number></span>
+                                                </h2>
+                                        </template>
+
+
+                                </div>
+                                <div class="horizontalAlign">
+                                        <div class="">
+
+
+                                                <button class="buttonPrev btnHover -secondary -min-width" onclick={handlePrevClick} ><span class="icon-prev"><i
+                                                        class="icon-prevs"></i></span>{label.Prev}</button>
+
+                                                <!-- <div class="loaderBtn"></div> -->
+                                                <!-- <button class="buttonPrev btnHover" onclick={handlePrevClick}>Prev</button> -->
+                                        </div>
+                                        <div class="">
+                                                <!-- <div class="loaderBtn"></div> -->
+                                                <button class="buttonNext btnHover -secondary -min-width" id="show-quote-highlights" onclick={handleNext} ><span class="icon-next"><i
+                                                        class="icon-nexts"></i></span>{label.Confirm}</button>
+                                        </div>
+
+                                </div>
+                        </lightning-layout-item>
+                </lightning-layout>
+                <!-- <div class="slds-is-relative">
+                        <div class="loaderBtn"></div>
+                        <button class="buttonNext btnHover slds-m-left_small" onclick={handlePrevClick}>Next</button>
+                </div> -->
+        </div>
+
+</template>

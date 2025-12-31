@@ -1,0 +1,69 @@
+.maindiv {
+    background-color: white;
+    /* margin: auto; */
+    max-width: 100%;
+    margin-left: 2%;
+    padding: 12px;
+    border-radius: 2px;
+}
+.TermOptions span{
+    display: flex;
+}
+
+/* .inputfield{
+   
+    margin: auto;
+} */
+/* .inputfield .radiotype{
+    display: flex;
+    margin: auto;
+} */
+.radiotype, .radiolable{
+    cursor: pointer;
+}
+.horizontalAlign {
+    display: flex;
+    
+    justify-content: space-between;
+}
+.buttonNext,.buttonPrev{
+    position: relative;
+    cursor: pointer;
+    background: #003a70;
+    border: 2px solid #003a70;
+    color: #fff;
+    font-weight: 600;
+    height: 33px;
+    width: 120px;
+    border-radius: 2px;
+    user-select: none;
+    outline: none;
+}
+
+/* .buttonNext:hover,.buttonPrev:hover {
+    background: #8883A5;
+    color: white;
+} */
+
+.loading {
+    background-color: transparent;
+    border: 4px solid #ABA8AF;
+    border-top-color: #003a70;
+    user-select: none;
+    font-size: 0;
+    outline: none;
+    height: 33px;
+    width: 33px;
+    border-radius: 50%;
+    animation: rotate 0.4s linear infinite;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

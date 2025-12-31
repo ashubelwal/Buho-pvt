@@ -1,0 +1,63 @@
+<template>
+    <!-- Loading spinner -->
+    <div>
+		<c-custom-toast auto-close-time="8000"></c-custom-toast>
+	</div>
+    
+    <template if:true={isLoading}>
+        <div class="slds-align_absolute-center">
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </div>
+    </template>
+
+    <!-- Main form content when not loading -->
+    <template if:false={isLoading}>
+        <div class="slds-grid slds-wrap slds-gutters">
+
+            <!-- Client Information Section -->
+            <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                <lightning-input type="text" label="Name" value={clientData.Name} aria-disabled="true"
+                    disabled="true"></lightning-input>
+            </div>
+
+            <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                <template if:true={clientData.Email}>
+                    <lightning-input type="email" label="Email" value={clientData.Email} aria-disabled="true"
+                        disabled="true"></lightning-input>
+                </template>
+                <template if:false={clientData.Email}>
+                    <lightning-input type="email" label="Email" value={clientEmail} onchange={handleEmailChange}
+                        disabled="true"></lightning-input>
+                </template>
+            </div>
+
+            <!-- Agent Information Section -->
+            <template if:true={clientData.Agent__r}>
+                <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                    <lightning-input type="text" label="Agent" value={clientData.Agent__r.Name} aria-disabled="true"
+                        disabled="true"></lightning-input>
+                </div>
+            </template>
+
+            <template if:true={clientData.Agency__r}>
+                <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                    <lightning-input type="text" label="Agency" value={clientData.Agency__r.Name} aria-disabled="true"
+                        disabled="true"></lightning-input>
+                </div>
+            </template>
+
+        </div>
+
+        <!-- Logged in User Information Section -->
+        <div class="slds-grid slds-wrap slds-gutters">
+            <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                <lightning-input type="text" label="Logged in Contact" value={loggedInUserName}
+                    disabled="true"></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                <lightning-input type="text" label="Logged in Contact Email" value={loggedInUserEmail}
+                    disabled="true"></lightning-input>
+            </div>
+        </div>
+    </template>
+</template>

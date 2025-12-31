@@ -1,0 +1,18 @@
+<template>
+    <div class="wizard-progress-header">
+        <template if:false={hideBackButton}>
+            <a href="javascript:void(0)" class="back-btn" onclick={handleBack}>
+                <i class="bi bi-arrow-left"></i> Back
+            </a>
+        </template>
+        <span class="step-counter">Step {currentStep} of {totalSteps}</span>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="wizard-progress-bar">
+        <template for:each={progressSegments} for:item="segment">
+            <div key={segment.step} class={segment.className} data-step={segment.step}></div>
+        </template>
+    </div>
+</template>
+

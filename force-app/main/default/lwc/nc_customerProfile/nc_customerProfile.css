@@ -1,0 +1,120 @@
+:host {
+	display: block;
+	background-color: #f9f9fb;
+	padding: 1rem;
+	--sds-c-card-sizing-border: 0px;
+}
+
+/* Card base styling */
+.slds-box {
+	background-color: #ffffff;
+	border: 0px;
+	border-radius: 4px;
+	padding: 1.3rem;
+	margin-bottom: 1.5rem;
+	box-shadow: 0 0px 1px rgb(0 0 0 / 26%);
+}
+
+/* Avatar + Name */
+.profile-header {
+	text-align: center;
+	margin-bottom: 1.5rem;
+}
+
+.profile-header lightning-avatar {
+	margin-bottom: 0.5rem;
+}
+
+.profile-header h2 {
+	font-size: 1.4rem;
+	font-weight: 600;
+	margin: 0.25rem 0;
+	color: #333;
+}
+
+.profile-header p {
+	font-size: 0.9rem;
+	color: #888;
+}
+
+/* Section Titles */
+.section-title {
+	font-size: 1rem;
+	font-weight: 600;
+	margin-bottom: 1rem;
+	color: #222;
+}
+
+/* Personal & Address Info */
+.info-grid {
+	/* display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 1rem;
+  column-gap: 2rem; */
+}
+
+/* Edit button */
+lightning-button,
+lightning-button-icon {
+	--slds-c-button-radius-border: 50%;
+	--slds-c-button-brand-color-border: #fff0;
+}
+
+.slds-button_icon {
+	border-radius: 50%;
+	--slds-c-button-brand-color-border: #fff0;
+	background: #f0f2f5;
+	transition: background 0.3s;
+}
+
+.slds-button_icon:hover {
+	background: #e2e6eb;
+}
+
+/* Navigation Sidebar */
+.slds-nav-vertical {
+	background-color: #fff;
+	padding: 1rem;
+	border-radius: 4px;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.slds-nav-vertical__action {
+	font-size: 0.95rem;
+	color: #333;
+	padding: 0.75rem;
+	border-radius: 4px;
+	transition: background 0.2s;
+
+}
+
+.slds-nav-vertical__action:hover {
+	background-color: #f2f2ff;
+	text-decoration: none;
+	-webkit-box-shadow: inset 4px 0 0 #232564;
+	box-shadow: inset 4px 0 0 #232564;
+}
+
+.slds-is-active .slds-nav-vertical__action {
+	background-color: #f2f2ff;
+	font-weight: 600;
+	text-decoration: none;
+	-webkit-box-shadow: inset 4px 0 0 #232564;
+	box-shadow: inset 4px 0 0 #232564;
+}
+
+
+.tab-content {
+	opacity: 1;
+	transition: opacity 0.5s ease-in-out;
+}
+
+.fade-in {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.fade-out {
+	opacity: 0;
+	pointer-events: none;
+}

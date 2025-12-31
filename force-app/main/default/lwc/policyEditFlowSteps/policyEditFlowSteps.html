@@ -1,0 +1,138 @@
+<template>
+    <div class="notranslate">
+        <div class="slds-size_12-of-12 slds-m-top_xx-large">
+            <div class="flows-progress slds-float_right">
+                <div class="progress-inner clearfix">
+                    <div class={steps1}>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_2-of-12">
+                                <template if:true={completedStep1}>
+                                    <span class="completdSection"><i class="icon-white-checkmark"></i></span>
+                                </template>
+                                <template if:false={completedStep1}>
+                                    <span class="">1</span>
+                                </template>
+
+                            </div>
+                            <div class="slds-col slds-size_10-of-12">
+                                <h4 class="screenName">{label.TermOptions}</h4>
+                                <p class="screenDesc">{label.Whendoyouneedcoverage}</p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class={steps2}>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_2-of-12">
+                                <template if:true={completedStep2}>
+                                    <span class="completdSection"><i class="icon-white-checkmark"></i></span>
+                                </template>
+                                <template if:false={completedStep2}>
+                                    <span class="">2</span>
+                                </template>
+
+                            </div>
+                            <div class="slds-col slds-size_10-of-12">
+                                <h4 class="screenName">{label.FinalizeVehicle}</h4>
+                                <p class="screenDesc">{label.FinalizeVehicleDetails}</p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class={steps3}>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_2-of-12">
+                                <template if:true={completedStep3}>
+                                    <span class="completdSection"><i class="icon-white-checkmark"></i></span>
+                                </template>
+                                <template if:false={completedStep3}>
+                                    <span class="">3</span>
+                                </template>
+
+                            </div>
+                            <div class="slds-col slds-size_10-of-12">
+                                <h4 class="screenName">{label.DriverDetails}</h4>
+                                <p class="screenDesc">{label.Whoisthedriver}</p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div lwc:if={showTowDetails} class={steps4}>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_2-of-12">
+                                <template if:true={completedStep4}>
+                                    <span class="completdSection"><i class="icon-white-checkmark"></i></span>
+                                </template>
+                                <template if:false={completedStep4}>
+                                    <span class="">4</span>
+                                </template>
+
+                            </div>
+                            <div class="slds-col slds-size_10-of-12">
+                                <h4 class="screenName">{label.TowingDetail}</h4>
+                                <p class="screenDesc">{label.Whatareyoutowing}</p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class={steps5}>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_2-of-12">
+                                <template if:true={completedStep5}>
+                                    <span class="completdSection"><i class="icon-white-checkmark"></i></span>
+                                </template>
+                                <template if:false={completedStep5}>
+                                    <span class="">5</span>
+                                </template>
+
+                            </div>
+                            <div class="slds-col slds-size_10-of-12">
+                                <h4 class="screenName">{label.Confirmation}</h4>
+                                <p class="screenDesc">{label.Verifythedetails}</p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div lwc:if={showTowDetails} class={steps6}>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_2-of-12">
+                                <template if:true={completedStep6}>
+                                    <span class="completdSection"><i class="icon-white-checkmark"></i></span>
+                                </template>
+                                <template if:false={completedStep6}>
+                                    <span class="">6</span>
+                                </template>
+
+                            </div>
+                            <div class="slds-col slds-size_10-of-12">
+                                <h4 class="screenName">{label.FinalizeTowDetails}</h4>
+                                <p class="screenDesc">{label.FinalizeTowDetails}</p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class={steps7}>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_2-of-12">
+                                <template if:true={completedStep7}>
+                                    <span class="completdSection"><i class="icon-white-checkmark"></i></span>
+                                </template>
+                                <template if:false={completedStep7}>
+                                    <span class="">7</span>
+                                </template>
+
+                            </div>
+                            <div class="slds-col slds-size_10-of-12">
+                                <h4 class="screenName">{label.PaymentDetail}</h4>
+                                <p class="screenDesc">{label.Justonemoresteptogo}</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+            
+                </div>
+            </div>
+        </div>
+    </div>    
+</template>

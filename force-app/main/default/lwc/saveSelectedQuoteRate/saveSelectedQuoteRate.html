@@ -1,0 +1,15 @@
+<template>
+    <template lwc:if={isShowSpinner}>
+        <div class="backgroundInverse">
+            <lightning-spinner alternative-text="Loading..." variant="brand"></lightning-spinner>
+        </div>
+    </template>
+    <template lwc:elseif={isPolicyId}>
+        <div style="position: relative;">
+            <div class="center">
+                <p>Something went wrong.</p>
+                <p>We are facing some issues. Please contact with support.</p>
+            </div>
+        </div>
+    </template>
+</template>

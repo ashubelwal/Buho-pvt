@@ -1,0 +1,7 @@
+.THIS .cursor-pointer {
+    cursor: pointer;
+}
+
+.THIS .text-transform-unset label {
+    text-transform: unset;
+}

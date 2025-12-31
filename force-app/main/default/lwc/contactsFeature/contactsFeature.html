@@ -1,0 +1,125 @@
+<template>
+    <div class="mainDiv">
+        <template if:true={isLoading}>
+			<div class="spinner">
+				<lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+			</div>
+		</template>
+
+        <div class="accordionDiv">
+
+            <div class="card slds-p-around_small slds-m-bottom_large slds-m-top_medium">
+                <h2 class="sectionTitle">Contact Details</h2>
+                <div class="slds-grid slds-wrap">
+
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="quoteValidate" label="First Name" type="text"
+                            pattern="^[A-Za-z]+(\s[A-Za-z]+)*$" name="FirstName" required maxlength="40"
+                            onchange={handleInputChange}>
+                        </lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="quoteValidate" label="Last Name" type="text"
+                            pattern="^[A-Za-z]+(\s[A-Za-z]+)*$" name="LastName" required maxlength="40"
+                            onchange={handleInputChange}>
+                        </lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="quoteValidate" label="Phone" type="tel" inputmode="numeric" value={phoneValue}
+                            pattern="\(\d{3}\) \d{3}-\d{4,7}" maxlength="17" name="Phone" onchange={handleInputChange}
+                            ></lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="quoteValidate" label="Email" type="email" maxlength="40" name="Email"
+                            onchange={handleInputChange} >
+                        </lightning-input>
+                    </div>
+
+                    <template if:false={contactType}>
+                        <div class="slds-col slds-p-around_small">
+                            <lightning-combobox class="quoteValidate" label="Type of Services" options={servicesType}
+                                name="Type_of_Services__c" onchange={handleInputChange} required>
+                            </lightning-combobox>
+                        </div>
+                    </template>
+
+                    <template if:true={contactType}>
+                        <div class="slds-col slds-p-around_small">
+                            <lightning-combobox class="quoteValidate" label="Type of Domestic" options={domesticType}
+                                name="Type_of_Domestic__c" onchange={handleInputChange} required>
+                            </lightning-combobox>
+                        </div>
+                    </template>
+                </div>
+
+                <div class="slds-grid slds-wrap">
+
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="quoteValidate" label="Address1" type="text"
+                            pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" name="Street__c"
+                            required maxlength="40" onchange={handleInputChange}>
+                        </lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="quoteValidate" label="Address2" type="text"
+                            pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" name="Street_2__c"
+                            maxlength="40" onchange={handleInputChange} required={contactType}>
+                        </lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="quoteValidate" label="City" type="text"
+                            pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" name="City__c"
+                            required maxlength="40" onchange={handleInputChange}>
+                        </lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="quoteValidate" label="State" type="text"
+                            pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" name="State__c"
+                            required maxlength="40" onchange={handleInputChange}>
+                        </lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="quoteValidate" label="Zip" type="text"
+                            pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$"
+                            name="Postal_Code__c" required maxlength="40" onchange={handleInputChange}>
+                        </lightning-input>
+                    </div>
+                </div>
+
+                <div class="slds-grid slds-wrap">
+
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="quoteValidate" label="Driving License State" type="text"
+                            pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$"
+                            name="Driver_License_State__c"  maxlength="40" onchange={handleInputChange}>
+                        </lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-p-around_small">
+                        <lightning-input class="quoteValidate" label="License #" type="text"
+                            pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\\,-]+(?: [A-Za-z0-9*\\,-]+)*$" name="License__c"
+                             maxlength="40" onchange={handleInputChange}>
+                        </lightning-input>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-p-around_small">
+            <lightning-button class="slds-float_right" label="Submit" variant="brand" name="Submit"
+                onclick={handleSubmit}></lightning-button>
+        </div>
+    </div>
+
+    </div>
+</template>

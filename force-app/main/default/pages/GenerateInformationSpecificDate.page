@@ -1,0 +1,14 @@
+<!-- 
+    Name: GenerateInformationSpecificDate
+    Date: 
+    Description: 
+    Developed By: Abhishek Sahay(abhishek.sahay@cloudanalogy.com)
+    Modified By:
+    Modified Reason:
+    Modified Date:
+    Version: 1.0
+-->
+
+<apex:page controller="GenerateTextFileVFSpecificDate" sidebar="false" contentType="text" cache="false" >
+{!policyData}
+</apex:page>

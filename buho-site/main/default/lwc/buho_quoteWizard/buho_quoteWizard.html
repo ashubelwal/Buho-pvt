@@ -1,0 +1,84 @@
+<template>
+    <div class="wrapper">
+        <!-- Header -->
+        <header class="wizard-header">
+            <div class="container-fluid px-4">
+                <div class="d-flex justify-content-between align-items-center py-3">
+                    <a href="javascript:void(0)" class="header-logo">
+                        <img src={logoUrl} alt="BÚHO" class="logo-icon">
+                    </a>
+                    <button class="btn btn-contact">Contact Us</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="wizard-main">
+            <div class="wizard-container">
+                <!-- Progress Bar Component (Hidden on User Details Step) -->
+                <template if:false={isFirstStep}>
+                    <c-buho_progress-bar
+                        current-step={currentStep}
+                        total-steps={totalSteps}
+                        hide-back-button={isFirstStep}
+                        onback={handleNavigation}>
+                    </c-buho_progress-bar>
+                </template>
+
+                <!-- Toast Component -->
+                <c-buho_toast></c-buho_toast>
+
+                <!-- Dynamic Child Component -->
+                <div class="wizard-steps">
+                    <template if:true={componentConstructor}>
+                        <lwc:component 
+                            lwc:is={componentConstructor} 
+                            payload={payload}
+                            onflagupdate={handleFlagUpdate}
+                            onpayloadupdate={handlePayloadUpdate}
+                            onfullpayloadupdate={handlePayloadUpdateComplete}
+                            onchangescreen={handleNavigation}
+                            onloadingstatuschange={handleLoadingStatus}
+                            ontoastevent={handleToastEvent}
+                            onstepchange={handleStepChange}
+                            total-steps={totalSteps}
+                            path-prefix={currentSiteData.pathPrefix}
+                            base-url={currentSiteData.baseUrl}
+                            >
+                        </lwc:component>
+                    </template>
+                </div>
+
+                <!-- Navigation Buttons (for steps that need external buttons) -->
+                <!--template if:false={flag.hideNavigation}>
+                    <div class="step-navigation">
+                        <button class="btn btn-outline-secondary btn-back" 
+                                onclick={handleNavigation} 
+                                data-direction="previous" 
+                                disabled={isFirstStep}>
+                            Back
+                        </button>
+                        <button class="btn btn-primary btn-continue" 
+                                onclick={handleNavigation} 
+                                data-direction="next" 
+                                disabled={isLastStep}>
+                            <template if:false={childLoaded}>
+                                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                            </template>
+                            Continue
+                        </button>
+                    </div>
+                </template-->
+
+                <!-- Loading Spinner -->
+                <template if:false={childLoaded}>
+                    <div class="loading-overlay">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </main>
+    </div>
+</template>

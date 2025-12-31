@@ -1,0 +1,56 @@
+<template>
+    <template if:true={quickquote}>
+
+    </template>
+
+    <template if:true={territorycoverage}>
+        <div class="maindiv notranslate">
+            <div class="icon slds-p-around_small">
+                <lightning-icon class="slds-col slds-p-around_small slds-align_absolute-center slds-size_1-of-12"
+                    icon-name="standard:contact">
+                </lightning-icon>
+            </div>
+            <div class="heading">
+                <div class="slds-text slds-text-heading_medium slds-p-around_small slds-align_absolute-center">{label.whatterritorycoverage}</div>
+            </div>
+            
+            <div class="mapimages slds-grid slds-gutters">
+                <div class="slds-col slds-size-4_of_12">
+                    <img class="mapdetails slds-align_absolute-center" src={imagebaja} />
+                    <div class="slds-text slds-p-around_small slds-align_absolute-center">{label.bajasonora}</div>
+                    <lightning-input class="radiotype slds-align_absolute-center slds-p-around_small" type="radio" label=""
+                        name="category"></lightning-input>
+    
+                </div>
+                <div class="slds-col slds-size-4_of_12">
+                    <img class="mapdetails slds-align_absolute-center" src={imageparital} />
+                    <div class="slds-text slds-p-around_small slds-align_absolute-center">{label.PartialUSAdjacent}
+                        {label.bajasonorach}</div>
+                    <lightning-input class="radiotype slds-align_absolute-center slds-p-around_small" type="radio"
+                        name="category" label=""></lightning-input>
+                </div>
+                <div class="slds-col slds-size-4_of_12">
+                    <img class="mapdetails slds-align_absolute-center" src={imagemexico} />
+                    <div class="slds-text slds-p-around_small slds-align_absolute-center">{label.EntireMexico}</div>
+                    <lightning-input class="radiotype slds-align_absolute-center slds-p-around_small" type="radio"
+                        name="category" label=""></lightning-input>
+                </div>
+            </div>
+            <div class="slds-p-around_xx-large">
+                <div style="float: right;">
+                    <lightning-button class="button slds-m-left_small" label={label.Next} title={label.Next} onclick={NextClickHandle}>
+                    </lightning-button>
+                </div>
+                <div style="float: right;">
+                    <lightning-button class="button slds-m-right_small" label={label.Prev} title={label.Prev} onclick={PrevClickHandle}>
+                    </lightning-button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template if:true={towedoption}>
+        <c-towed-option></c-towed-option>
+    </template>
+    
+</template>

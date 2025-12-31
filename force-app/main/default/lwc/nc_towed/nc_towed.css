@@ -1,0 +1,9 @@
+.custom-container{
+	color : black;
+}
+
+.input {
+	--slds-c-input-color-border: #dfc9c9 !important;
+	--slds-c-input-color-border-focus: #f2f2f2 !important;
+	/* --slds-c-input-shadow: #eeeeee !important; */
+}

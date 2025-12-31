@@ -1,0 +1,164 @@
+<template>
+    <div class="maindiv notranslate slds-m-top_xx-large">
+        <!-- <div class="">
+            <div class="slds-text-heading_large blue slds-p-around_small screenHeading">Please fill in watercraft details below</div>
+        </div> -->
+        <!-- <div class="icon">
+            <lightning-icon class="slds-col slds-align_absolute-center slds-size_1-of-12" icon-name="custom:custom92">
+            </lightning-icon>
+        </div> -->
+        <div class="slds-m-bottom_medium slds-p-around_x-small">
+				<div class="blue slds-text-heading_large blue screenHeading">
+					{label.Vehicledetails}</div>
+				<div class="slds-text dimBlue">{label.pleasefillin}:</div>
+			</div>
+        <template if:true={communityUser}>
+            <lightning-combobox name="progress" placeholder={label.SelectaWatercraftfroyouraccount}
+                value={selectedWatercraftId} options={loginUserWatercraftOption}
+                onchange={changeWatercraftOption}></lightning-combobox>
+
+            <lightning-accordion allow-multiple-sections-open="true" onsectiontoggle={handleSectionToggle}
+                active-section-name={activeAccordinSection}>
+                <lightning-accordion-section name="A" class="slds-align_absolute-center"
+                    label={label.addadifferent}></lightning-accordion-section>
+            </lightning-accordion>
+        </template>
+        <template if:true={newSectionOpen}>
+            <div class="">
+                <lightning-layout multiplerows="true" class="slds-wrap">
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                        class="slds-p-around_x-small">
+                        <lightning-combobox class="VesselType Validation" name="Type_of_Vessel__c" label={label.typeofvessel}
+                            value={vesselType} placeholder={label.typeofvessel} options={vesselTypes} onchange={handleChange}
+                            required></lightning-combobox>
+                    </lightning-layout-item>
+    
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                        class="slds-p-around_x-small">
+                        <template if:true={isShowVesselLength}>
+                            <lightning-combobox class="VesselLength Validation" name="Vessel_Length__c"
+                                label={label.vessellength} value={vesselLength} placeholder={label.vessellength}
+                                options={vesselLengths} onchange={handleChange} required></lightning-combobox>
+                        </template>
+                    </lightning-layout-item>
+    
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                        class="slds-p-around_x-small">
+                        <lightning-combobox class="Year Validation" name="Year__c" label={label.year} value={vehicleYear}
+                            placeholder={label.year} options={yearOption} onchange={handleChange} required></lightning-combobox>
+    
+                    </lightning-layout-item>
+    
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                        class="slds-p-around_x-small">
+                        <lightning-input type="text" class="Make Validation" label={label.make} name="Make__c"
+                            pattern="^([a-zA-Z0-9]+\s)*[a-zA-Z0-9]+$" value={setMake} required placeholder={label.make}
+                            onchange={handleChange}></lightning-input>
+                    </lightning-layout-item>
+    
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                        class="slds-p-around_x-small">
+                        <lightning-input type="text" class="Model Validation" label={label.model} name="Model__c"
+                            pattern="^([a-zA-Z0-9]+\s)*[a-zA-Z0-9]+$" value={setModel} required placeholder={label.model}
+                            onchange={handleChange}></lightning-input>
+    
+                    </lightning-layout-item>
+    
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                        class="slds-p-around_x-small">
+                        <lightning-input type="text" class="VehicleValue Validation" label={label.vehiclevalue} name="Value__c"
+                            pattern="^([a-zA-Z0-9]+\s)*[a-zA-Z0-9]+$" value={setVehicleValue} required
+                            placeholder={label.vehiclevalue} onchange={handleChange}></lightning-input>
+                    </lightning-layout-item>
+    
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        class="slds-p-around_x-small">
+                        <p class="slds-m-around--none"><abbr class="slds-required" title="required">*</abbr>{label.captainsdob}</p>
+                        <div class="slds-grid slds-gutters slds-col slds-size-6_of_12 dateOfBirth">
+    
+                            <div class="slds-col slds-size-4_of_12">
+                                <lightning-combobox class="DOBMonth Validation" name="DOBMonth" label="" value={monthValue} placeholder="MM"
+                                    options={MM} onchange={handleChange} required></lightning-combobox>
+                            </div>
+                            <div class="slds-col slds-size-4_of_12">
+                                <lightning-combobox lwc:if={DD} class="DOBDay Validation" name="DOBDay" label="" value={dayValue} placeholder="DD"
+                                    options={DD} onchange={handleChange} required></lightning-combobox>
+                            </div>
+                            <div class="slds-col slds-size-4_of_12">
+                                <lightning-combobox lwc:if={YYYY} class="DOBYear Validation" name="DOBYear" label="" value={yearValue} placeholder="YYYY"
+                                    options={YYYY} onchange={handleChange} required></lightning-combobox>
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+    
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        class="slds-p-around_x-small">
+                        <lightning-combobox class="SpeedLimit Validation" name="Is_the_Maximum_Speed_more_than_50_mph__c"
+                            label={label.isthemaximum} value={setMaximumSpeedValue} placeholder=""
+                            options={yesNoOptions} onchange={handleChange} required>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+    
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        class="slds-p-around_x-small">
+                        <lightning-combobox class="AgeLimit Validation" name="Any_Boat_Operator_Under_22__c"
+                            label={label.willanyoneoperate} placeholder=""
+                            value={setUnderAgeDriver} options={yesNoOptions} onchange={handleChange}
+                            required></lightning-combobox>
+                    </lightning-layout-item>
+    
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        class="slds-p-around_x-small">
+                        <lightning-combobox class="OwnerLiving Validation" name="Is_the_owner_living_in_Mexico__c"
+                            label={label.istheowner} value={setMaxcioLivilig} placeholder=""
+                            options={yesNoOptions} onchange={handleChange} required></lightning-combobox>
+                    </lightning-layout-item>
+    
+                    <h6>{label.pleaseattest} {label.coverageisnot}</h6>
+    
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        class="slds-p-around_x-small">
+    
+                        <lightning-input class="CommercialVessel Validation slds-p-top_large" type="checkbox"
+                            label={label.thiscraftis} name="Commercial_Vessel" disabled="true"  checked="true" value="Yes"
+                            onchange={handleChange}></lightning-input>
+                    </lightning-layout-item>
+    
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        class="slds-p-around_x-small">
+                        <lightning-input class="NotToOld Validation slds-p-top_large" type="checkbox"
+                            label={label.thisvesselis} name="Older_Vessel" disabled="true"  checked="true" value="Yes"
+                            onchange={handleChange}> </lightning-input>
+                    </lightning-layout-item>
+    
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        class="slds-p-around_x-small">
+                        <lightning-input class="RaceEvents Validation slds-p-top_large" type="checkbox"
+                            label={label.thisvesselisnot} name="Racing" disabled="true" checked="true"
+                            value="Yes" onchange={handleChange}> </lightning-input>
+                    </lightning-layout-item>
+    
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="6"
+                        class="slds-p-around_x-small">
+                        <lightning-input class="ForHire Validation slds-p-top_large" type="checkbox"
+                            label={label.thisvesselisnotfor} name="Vessel_for_Hire" disabled="true"  checked="true" value="Yes"
+                            onchange={handleChange}> </lightning-input>
+                    </lightning-layout-item>
+    
+                </lightning-layout>
+            </div>
+
+        </template>
+        
+
+        <div class="horizontalAlign">
+            <button class="buttonPrev btnHover" onclick={handlePrevClick}><span class="icon-prev"><i
+                class="icon-prevs"></i></span>{label.prev}</button>
+            <button class="buttonNext btnHover" onclick={handleNextClick}><span class="icon-next"><i
+                class="icon-nexts"></i></span>{label.next}</button>
+        </div>
+
+
+
+    </div>
+</template>

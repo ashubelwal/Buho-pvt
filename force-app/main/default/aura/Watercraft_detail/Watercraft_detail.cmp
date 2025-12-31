@@ -1,0 +1,205 @@
+<aura:component controller="WatercraftFlowController" implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="title" type="String" access="public"/>
+    <aura:attribute name="backButtonVisibility" type="Boolean" default="false" access="public" />
+    <aura:attribute name="policyType" type="String" access="public"/>
+    <aura:attribute name="vesselTypes" type="list" access="private"/>
+    <aura:attribute name="vesselLengths" type="list" access="private"/>
+    <aura:attribute name="yesNoOptions" type="list" access="private"/>
+    
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    <aura:attribute name="onNextClick" type="Aura.Action"/>
+    <aura:attribute name="waterRecord" type="Object"/>
+    <aura:attribute name="quoteRecord" type="Object"/>
+    <aura:attribute name="leadRecord" type="Object"/>
+    
+    <aura:attribute name="minBirthDate" type="Date"/>
+    <aura:attribute name="maxBirthDate" type="Date"/>
+    
+    <aura:attribute name="minYear" type="Integer"/>
+    <aura:attribute name="maxYear" type="Integer"/>
+    <aura:attribute name="vehicleYears" type="list" />
+    
+    <aura:attribute name="Commercial_Vessel" type="Boolean" default="true" />
+    <aura:attribute name="Older_Vessel" type="Boolean" default="true" />
+    <aura:attribute name="Racing" type="Boolean" default="true" />
+    <aura:attribute name="Vessel_for_Hire" type="Boolean" default="true" />
+    <aura:attribute name="communityUser" type="boolean" default="false" />
+    <aura:attribute name="loginUserWaterCraftOptions" type="list" />
+    <aura:attribute name="loginUserWaterCrafts" type="list" />
+    <aura:attribute name="newSectionOpen" type="Boolean" default="false" />
+    
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <lightning:layoutItem padding="around-small" size="12" class="align-center slds-m-top_xx-large">
+        <div class="page-title">
+            <aura:if isTrue="{!v.backButtonVisibility}">
+                <button class="button -plain -back-button" name="step_3" onclick="{!v.onBackClick }">
+                    <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/> Back
+                </button>
+            </aura:if>
+            <h1>{!v.title}</h1>
+            <img width="92" height="61" class="slds-m-bottom_large" src="{!$Resource.mexinsurance_assets + '/images/boat@2x.png'}" alt="Watercraft"/>
+        </div>                    
+    </lightning:layoutItem>
+    
+    <div class="slds-size_12-of-12">
+        <div class="form-container">
+            <div class="c-container">
+                <lightning:layout multipleRows="true">
+                    <aura:if isTrue="{!v.communityUser}">
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" class="slds-p-around_x-small">
+                            <lightning:combobox name="progress" placeholder="Select a WaterCraft from your account" value="{!v.waterRecord.Id}" options="{!v.loginUserWaterCraftOptions}" onchange="{!c.handleChange}"/>
+                            
+                            <lightning:accordion allowMultipleSectionsOpen="true" onsectiontoggle="{! c.handleSectionToggle }" >
+                                <lightning:accordionSection name="A" class="slds-align_absolute-center" label="ADD A DIFFERENT WATERCRAFT"></lightning:accordionSection>
+                            </lightning:accordion>
+                        </lightning:layoutItem>
+                    </aura:if> 
+                    <aura:if isTrue="{!v.newSectionOpen}">
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                            <lightning:combobox aura:id="validateField" name="Type_of_Vessel__c" label="Type of Vessel" 
+                                                placeholder="Type of Vessel" value="{!v.quoteRecord.Type_of_Vessel__c}" 
+                                                options="{! v.vesselTypes }" onchange="{!c.updateValue}" 
+                                                required="true" 
+                                                />
+                        </lightning:layoutItem>
+                        <aura:if isTrue="{!v.quoteRecord.Type_of_Vessel__c != 'Personal Watercraft (Jet Ski)'}">
+                            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                                <lightning:combobox aura:id="validateField" name="Vessel_Length__c" 
+                                                    placeholder="Vessel Length" value="{!v.quoteRecord.Vessel_Length__c}" 
+                                                    options="{! v.vesselLengths }" onchange="{!c.updateValue}" 
+                                                    required="true" label="Vessel Length"
+                                                    />
+                            </lightning:layoutItem>
+                        </aura:if>
+
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                            <lightning:combobox name="Vehicle_Year__c" aura:id="validateField" 
+                                                required="true" label="Year" placeholder="Year" 
+                                                value="{!v.quoteRecord.Vehicle_Year__c}" 
+                                                options="{! v.vehicleYears }"  onchange="{!c.updateValue}"
+                                                />
+                        </lightning:layoutItem>
+
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                            <lightning:input aura:id="validateField" type="text" name="Vehicle_Make__c" 
+                                             placeholder="Make" value="{!v.quoteRecord.Vehicle_Make__c}" 
+                                             onchange="{!c.updateValue}" required="true" label="Make"
+                                             />
+                        </lightning:layoutItem>
+
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                            <lightning:input aura:id="validateField" type="text" name="Vehicle_Model__c" 
+                                             placeholder="Model" value="{!v.quoteRecord.Vehicle_Model__c}" 
+                                             onchange="{!c.updateValue}" required="true" label="Model"
+                                             />
+                        </lightning:layoutItem>
+
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                            <lightning:input aura:id="validateField" type="number" name="Vehicle_Value__c" 
+                                             formatter="currency" step="0.01" placeholder="Value" 
+                                             value="{!v.quoteRecord.Vehicle_Value__c}" onchange="{!c.updateValue}" 
+                                             required="true" label="Vehicle Value"
+                                             />
+                        </lightning:layoutItem>
+                        <!--lightning:input aura:id="validateField" type="date" name="Date_of_Birth__c" 
+                                    placeholder="Captain's Date of Birth" class="birthdateInput"
+                                    value="{!v.quoteRecord.Date_of_Birth__c}" 
+                                    onchange="{!c.updateValue}" required="true" variant="label-hidden" 
+                                    fieldLevelHelp="Enter the captain’s date of birth"
+                                    min="{!v.minBirthDate}" max="{!v.maxBirthDate}" 
+                /-->
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                            <c:customDate fieldLevelHelp="Enter the captain’s date of birth" 
+                                          label="Captain's Date of Birth" custDate="{!v.quoteRecord.Date_of_Birth__c}" 
+                                          required="true" aura:id="customValidateField" onDateChange="{!c.handleDateOfBirth}" />
+                        </lightning:layoutItem>
+
+                        <!--lightning:input type="checkbox" name="Is_the_Maximum_Speed_more_than_50_mph__c" 
+                                    label="Is the Maximum Speed more than 50 mph?" 
+                                    checked="{!v.quoteRecord.Is_the_Maximum_Speed_more_than_50_mph__c == 'Yes' }" 
+                                    onchange="{!c.updateValue}" 
+                />
+                <lightning:input type="checkbox" name="Any_Boat_Operator_Under_22__c" 
+                                    label="Will anyone operate the boat under the age of 22?" 
+                                    checked="{!v.quoteRecord.Any_Boat_Operator_Under_22__c == 'Yes' }" 
+                                    onchange="{!c.updateValue}" 
+                />
+                <lightning:input type="checkbox" name="Is_the_owner_living_in_Mexico__c" 
+                                    label="Is the owner living in Mexico?" 
+                                    checked="{!v.quoteRecord.Is_the_owner_living_in_Mexico__c == 'Yes' }" 
+                                    onchange="{!c.updateValue}" 
+                /-->
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                            <lightning:combobox name="Is_the_Maximum_Speed_more_than_50_mph__c" aura:id="validateField" required="true" 
+                                                label="Is the Maximum Speed more than 50 mph?" 
+                                                value="{!v.quoteRecord.Is_the_Maximum_Speed_more_than_50_mph__c}" 
+                                                options="{!v.yesNoOptions }"  onchange="{!c.updateValue}"/>
+                        </lightning:layoutItem>
+
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                            <lightning:combobox name="Any_Boat_Operator_Under_22__c" aura:id="validateField" required="true" 
+                                                label="Will anyone operate the boat under the age of 22?" 
+                                                value="{!v.quoteRecord.Any_Boat_Operator_Under_22__c}" 
+                                                options="{!v.yesNoOptions }"  onchange="{!c.updateValue}"/>
+                        </lightning:layoutItem>
+
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                            <lightning:combobox name="Is_the_owner_living_in_Mexico__c" aura:id="validateField" required="true" 
+                                                label="Is the owner living in Mexico?" 
+                                                value="{!v.quoteRecord.Is_the_owner_living_in_Mexico__c}" 
+                                                options="{!v.yesNoOptions }"  onchange="{!c.updateValue}"/>
+                        </lightning:layoutItem>
+
+                        <hr class="newSectionLine" />
+                        <div>
+                            Please attest to the following statements  by checking the box to proceed.  Coverage is not available for the risks below
+                        </div>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                            <lightning:input aura:id="validateField" class="inlineBlock" type="checkbox" required="true" 
+                                             name="Commercial_Vessel" 
+                                             label="This craft is not a commercial vessel" 
+                                             checked="{!v.Commercial_Vessel}" 
+                                             fieldLevelHelp="Commercial watercraft are not covered under this policy.  For special consideration please contact broker@mexinsurance.com" 
+                                             onchange="{!c.updateValue}"
+                                             />
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                            <lightning:input aura:id="validateField" class="inlineBlock" type="checkbox" required="true" 
+                                             name="Older_Vessel" 
+                                             label="This vessel is not over 40 year old" 
+                                             checked="{!v.Older_Vessel}" 
+                                             fieldLevelHelp="Unfortunately we can’t provide coverage on a vessel over 40 years old.  For special consideration please contact broker@mexinsurance.com" 
+                                             onchange="{!c.updateValue}"
+                                             />
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                            <lightning:input aura:id="validateField" class="inlineBlock" type="checkbox" required="true" 
+                                             name="Racing" 
+                                             label="This vessel is not competing or participating in race events" 
+                                             checked="{!v.Racing}" 
+                                             fieldLevelHelp="Unfortunately, this policy will not provide coverage for any watercraft participating in, or supporting race events.  Please contact broker@mexinsurance.com for special consideration." 
+                                             onchange="{!c.updateValue}"
+                                             />
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                            <lightning:input aura:id="validateField" class="inlineBlock" type="checkbox" required="true" 
+                                             name="Vessel_for_Hire" 
+                                             label="This vessel is not “for hire”" 
+                                             checked="{!v.Vessel_for_Hire }" 
+                                             fieldLevelHelp="This tourist watercraft policy is not intended for vessels-for-hire, including public transportation of cargo or passengers, or used for wholesale or retail delivery.  Please contact broker@mexinsurance.com for special consideration." 
+                                             onchange="{!c.updateValue}"
+                                             />
+                        </lightning:layoutItem>
+                    </aura:if>
+                </lightning:layout>
+            </div>
+            
+        </div>
+    </div>               
+    
+    <lightning:layoutItem size="12" class="slds-m-top_large align-center">                    
+        <button class="button -secondary -wider" onclick="{! c.onNextClick }">Next</button>
+    </lightning:layoutItem>
+</aura:component>

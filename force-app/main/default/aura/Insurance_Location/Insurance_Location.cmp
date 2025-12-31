@@ -1,0 +1,72 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="title" type="String" access="public"/>
+    <aura:attribute name="backButtonVisibility" type="Boolean" default="false" access="public" />
+    <aura:attribute name="policyType" type="String" access="public"/>
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    <aura:attribute name="onNextClick" type="Aura.Action"/>
+    
+    <lightning:layoutItem padding="around-small" size="12" class="page-title align-center slds-m-top_xx-large">
+        <div class="page-title">
+            <button class="button -plain -back-button" name="step_2" onclick="{! v.onBackClick }">
+                <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/> Back
+            </button>
+            <h1>{!v.title}</h1>
+        </div>
+    </lightning:layoutItem>
+    
+    <div class="slds-size_12-of-12">
+        <div class="insurance-selection-box clearfix">
+            <div class="map">
+                <img width="309" src="{!$Resource.mexinsurance_assets + '/images/map-mexico@2x.png'}" alt="Mexico Map"/>
+            </div>
+            <div class="selectors">
+                <h3 class="red">Mexico - for non-Mexican registered vehicles</h3>
+                <div class="radio-group">
+                    <label class="radiocontainer">
+                        <ui:inputRadio aura:id="r2" name="product_radio" class="radio_box slds-m-top_x-small" change="{!c.onGroup}" value="true"/>
+                        <span class="radiobtn"></span> 
+                        <img class="product-icon" src="{!$Resource.mexinsurance_assets + '/images/icon-vehicle.svg'}" alt="Car/Truck/Auto"/> Car/Truck/Auto
+                    </label>
+                    <label class="radiocontainer">
+                        <input type="radio" name="product_radio" id=""/>
+                        <span class="radiobtn"></span> 
+                        <img class="product-icon" src="{!$Resource.mexinsurance_assets + '/images/icon-rv.svg'}" alt="RV"/> RV
+                    </label>
+                    <label class="radiocontainer">
+                        <input type="radio" name="product_radio" id=""/>
+                        <span class="radiobtn"></span> 
+                        <img class="product-icon" src="{!$Resource.mexinsurance_assets + '/images/icon-driver-license.svg'}" alt="DRIVER LICENSE"/>
+                        DRIVER LICENSE
+                    </label>
+                    <label class="radiocontainer">
+                        <input type="radio" name="product_radio" id=""/>
+                        <span class="radiobtn"></span> 
+                        <img class="product-icon" src="{!$Resource.mexinsurance_assets + '/images/icon-motorcycle.svg'}" alt="Motorcycle/ Street Legal ATV"/>
+                        Motorcycle/ Street Legal ATV
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="insurance-selection-box clearfix">
+            <div class="map">
+                <img width="309" src="{!$Resource.mexinsurance_assets + '/images/map-us-canada@2x.png'}" alt="US/Canada Map"/>
+            </div>
+            <div class="selectors">
+                <h3 class="red">US / Canada - for Mexican registered vehicles</h3>
+                <div class="radio-group">
+                    <label class="radiocontainer">
+                        <ui:inputRadio aura:id="r3" name="product_radio" class="radio_box slds-m-top_x-small" change="{!c.onGroup}"/>
+                        <span class="radiobtn"></span> 
+                        <img class="product-icon" src="{!$Resource.mexinsurance_assets + '/images/icon-vehicle.svg'}" alt="Car/Truck/Auto"/> Northbound
+                    </label>            
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <lightning:layoutItem size="12" class="align-center slds-m-top_large">                    
+        <button class="button -secondary -wider" name="step_2" onclick="{! v.onNextClick }">Next</button>
+    </lightning:layoutItem>
+    
+</aura:component>

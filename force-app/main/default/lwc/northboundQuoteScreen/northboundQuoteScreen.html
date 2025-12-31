@@ -1,0 +1,825 @@
+<template>
+    
+    <div class="maindiv notranslate">
+        <div class="slds-text-heading_large blue screenHeading">{label.getyourquick}</div>
+        <div class="slds-text-align_center slds-m-bottom_small slds-p-around--medium">
+            <template if:true={isHighlight}>
+                <button class="button -secondary" id="show-quote-normal" onclick={CompareHandle}>{label.quotedetail}
+                    </button>
+            </template>
+            <template if:false={isHighlight}>
+                <button class="button -secondary" id="show-quote-highlights" onclick={CompareHandle}>{label.compare}</button>
+            </template>
+        </div>
+
+
+        <div class="chubDetail">
+
+            <template if:true={quickQuoteDetail}>
+                <div class="quoteBox slds-p-around_small">
+                    <div class="quote-provider">
+                        <img src={chubb}>
+                        <!-- <div class="recommended-label">Recommended</div> -->
+                    </div>
+                    <div class="quote-pricing">
+                        <lightning-formatted-number class="slds-align_absolute-center"
+                            value={quickQuoteDetail.rateValue} format-style="currency" currency-code="USD">
+                        </lightning-formatted-number>
+                    </div>
+
+                    <div class="quote-body">
+                        <template if:false={isHighlight}>
+                            <div class="unit">
+                                <h6 class="blue">{quoteDetails.Vehicle_sub_type__c}</h6>
+                                <lightning-layout multiple-rows="true" class="slds-grid_vertical slds-m-bottom_small">
+                                    <lightning-layout-item class="slds-col slds-m-bottom_x-small">
+                                        <div class="grid -spacing-sm">
+                                            <div class="grid_1-2">
+                                                <div class="datepicker">
+                                                    <lightning-input type="date" name="Start_Date__c" label=""
+                                                        value={quoteDetails.Start_Date_for_Coverage__c}
+                                                        class="Validation" pattern="^(?![\S-])[\W -]+$">
+                                                    </lightning-input>
+                                                </div>
+                                            </div>
+                                            <div class="grid_1-2">
+                                                <div class="datepicker">
+                                                    <lightning-input type="date" name="End_Date__c" label=""
+                                                        class="Validation" value={quoteDetails.End_Date_for_Coverage__c}
+                                                        pattern="^(?![\S-])[\W -]+$">
+                                                    </lightning-input>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </lightning-layout-item>
+
+                                    <template if:false={showTimeField}>
+                                        <lightning-layout-item class="slds-col">
+                                            <div class="grid -spacing-sm">
+                                                <div class="grid_1-2">
+                                                    <div class="datepicker">
+                                                        <lightning-input type="time" name="Start_Time__c" label=""
+                                                            disabled="true" value={setStartTime}
+                                                            pattern="^(?![\S-])[\W -]+$">
+                                                        </lightning-input>
+                                                    </div>
+                                                </div>
+                                                <div class="grid_1-2">
+                                                    <div class="datepicker">
+                                                        <lightning-input type="time" name="End_time__c" label=""
+                                                            value={setEndTime} disabled="true"
+                                                            pattern="^(?![\S-])[\W -]+$">
+                                                        </lightning-input>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </lightning-layout-item>
+                                    </template>
+
+                                </lightning-layout>
+                                <lightning-layout-item class="slds-col">
+                                    <div class="grid -spacing-sm">
+                                        <div class="grid_1-2">
+                                            <div class="datepicker">
+                                                <div>
+                                                    <span class="field-label">
+                                                        {label.Days}
+                                                        <i class="icon-info"
+                                                            title="daystooltips"></i>
+                                                    </span>
+                                                </div>
+                                                <lightning-input type="number"
+                                                    class="half-width-field" disabled="true"
+                                                    label={label.Days} variant="label-hidden"
+                                                    value={quickQuoteDetail.days}>
+                                                </lightning-input>
+                                            </div>
+                                        </div>
+                                        <div class="grid_1-2">
+                                            <div class="datepicker">
+                                                <div>
+                                                    <span class="field-label">
+                                                        {label.VehicleValue}
+                                                        <i class="icon-info"
+                                                            title={label.Yourestimateofvehiclevalue}></i>
+                                                    </span>
+                                                </div>
+                                                <lightning-input title="daystooltips"
+                                                    formatter="currency" type="number"
+                                                    class="half-width-field" variant="label-hidden"
+                                                    disabled="true" label={label.VehicleValue}
+                                                    value={quoteDetails.Value__c}>
+                                                </lightning-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+
+                                <!-- <div class="slds-grid full-width slds-grid_vertical slds-m-bottom_x-small">
+                                    <div class="slds-col slds-m-bottom_x-small">
+                                        <div class="adjustable-fields">
+                                            <div class="adjustable-field">
+                                                <span class="field-label">
+                                                    Days
+                                                </span>
+                                                <span class="field-item">
+                                                    <lightning-input variant="label-hidden" type="number"
+                                                        class="half-width-field" disabled="true"
+                                                        value={quickQuoteDetail.days}>
+                                                    </lightning-input>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col">
+                                        <div class="adjustable-field">
+                                            <span class="field-label">
+                                                <i class="icon-info"
+                                                    title="Your estimate of vehicle value will not be used as a rating factor on this policy because it is a Liability Only policy"></i>Vehicle
+                                                Value
+                                            </span>
+                                            <span class="field-item">
+                                                <lightning-input variant="label-hidden" type="number"
+                                                    class="half-width-field" disabled="true"
+                                                    value={quoteDetails.Value__c}>
+                                                </lightning-input>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div> -->
+
+                                <div class="slds-grid full-width slds-grid_vertical slds-m-bottom_small">
+                                    <div class="slds-col slds-m-bottom_x-small">
+                                        <div class="adjustable-field">
+                                            <span class="field-label">
+                                                {label.CombinedLiability}
+                                                <i class="icon-info"
+                                                    title={label.Thisamountgoestowardsdamages}></i>
+                                            </span>
+                                            <span class="field-item slds-form-element">
+                                                <button class="field-minus" name="partyLiability"
+                                                    data-type="low" onclick={updateLiability}></button>
+                                                <div class="inputText slds-m-horizontal_x-small">
+                                                    <lightning-input formatter="currency" type="number"
+                                                        variant="label-hidden" disabled="true"
+                                                        value={showLiability}>
+                                                    </lightning-input>
+
+                                                </div>
+
+                                                <button class="field-plus" name="partyLiability"
+                                                    data-type="high" onclick={updateLiability}></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="slds-col slds-m-bottom_x-small">
+                                        <div class="adjustable-field">
+                                            <span class="field-label">
+                                                <i class="icon-info"
+                                                    title="This amount goes toward damages to the other party (3rd party) that you are responsible for.  This includes property damage, medical expenses and death benefits combined.  All policies meet the legal requirements in all U.S. States"></i>
+                                                Combined Liability
+                                            </span>
+                                            <span class="field-item slds-form-element">
+                                                <button class="field-minus" name="partyLiability" data-type="low"
+                                                    onclick={updateLiability}></button>
+                                                <lightning-formatted-number format-style="currency" currency-code="USD"
+                                                    class="slds-m-horizontal_x-small" disabled="true"
+                                                    value={showLiability}>
+                                                </lightning-formatted-number>
+                                                <button class="field-plus" name="partyLiability" data-type="high"
+                                                    onclick={updateLiability}></button>
+                                            </span>
+                                        </div>
+                                    </div> -->
+                                    <div class="slds-col">
+                                        <!-- <aura:if isTrue="{!v.isMedicalPayment &amp;&amp; v.policyType != 'Motorcycle/Street Legal ATV'}"> -->
+                                       
+                                            <div class="adjustable-field">
+                                                <span class="field-label">
+
+                                                    {label.Medical}
+                                                    <i class="icon-info"
+                                                        title={label.Thisistheamountof}></i>
+                                                </span>
+                                                <span class="field-item slds-form-element">
+                                                    <div class="inputTextshowOnly">
+                                                        <input type="text" value='$5,000/$25,000' disabled />
+                                                    </div>
+                                                </span>
+                                            </div>
+                                    </div>
+                                    <!-- <div class="slds-col">
+                                        <div class="adjustable-field">
+                                            <span class="field-label">
+                                                <i class="icon-info"
+                                                    title="This is the amount of coverage for medical expenses as result of accident for you and your vehicle occupants. The first number is maximum per person, the second value is total limit per event."></i>
+                                                Medical
+                                            </span>
+                                            <span class="field-item slds-form-element">
+                                                <div class="inputText">
+                                                    <input type="text" value='$5,000/$25,000' disabled />
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div> -->
+                                </div>
+
+                                <div class="checkbox-field slds-p-top--xx-large">
+                                    <lightning-input class="slds-col slds-size_12-of-12" type="checkbox"
+                                        label={label.LiabilityOnly} name="liability" checked="true" disabled="true">
+                                    </lightning-input>
+                                </div>
+                            </div>
+                        </template>
+
+                        <template if:true={isHighlight}>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="4"
+                                    large-device-size="4" class="slds-p-around_small">
+                                    <div class="chubbDetails">
+                                        <div class="quoteBox slds-p-around_small">
+                                            <div class="quote-body">
+                                                <div class="quote-highlight slds-is-relative">
+                                                    <div class="highlight-title">
+                                                        {label.Deductibles}
+                                                        <template if:true={chubbDeductibles}>
+                                                            <i class="icon-checkmark"></i>
+                                                        </template>
+                                                        <template if:false={chubbDeductibles}>
+                                                            *<span style="position: absolute;right: 0;">{coverageMap.Deductibles__c}</span>
+                                                        </template>
+
+                                                    </div>
+                                                    <!-- <aura:if isTrue="{!v.mapfreLiablityOnly != 'Liability'}"> -->
+                                                    <!-- <aura:if isTrue="{!v.policyType == 'Northbound'}"> -->
+                                                    <template if:false={liablityType}>
+                                                        <template if:false={northBoundPolicy}>
+                                                            <div class="highlight-details-list">
+                                                                <div class="clearfix">
+                                                                    <div class="highlight-list-item" style="padding-left: 15px">
+                                                                        {label.thirdPartyLiability}
+
+                                                                        <span style="position: absolute;right: 0;">
+                                                                            <!-- <div class="highlight-list-desc"> -->
+                                                                                <template
+                                                                                    if:true={quickQuoteDetail.Deductible_Damage__c}>
+                                                                                    {quickQuoteDetail.Deductible_Damage__c}
+                                                                                </template>
+                                                                                <template
+                                                                                    if:false={quickQuoteDetail.Deductible_Damage__c}>
+                                                                                    {label.zero}
+                                                                                </template>
+
+
+                                                                            <!-- </div> -->
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </template>
+                                                    </template>
+
+                                                    <!-- </aura:if> -->
+                                                    <!-- </aura:if> -->
+
+
+                                                    <div class="highlight-list-desc">
+                                                        <template if:false={liablityType}>
+                                                            <div class="highlight-title" style="padding-left: 15px">
+                                                                {label.CollisionDeductible}
+                                                                <!-- <template if:true={rvPolicy}> -->
+                                                                <span style="position: absolute;right: 0;">
+                                                                    <template
+                                                                        if:true={quickQuoteDetail.collision_deductible}>
+                                                                        <lightning-formatted-number
+                                                                            value={quickQuoteDetail.collision_deductible}
+                                                                            format-style="currency" currency-code="USD">
+                                                                        </lightning-formatted-number>
+                                                                    </template>
+                                                                    <template
+                                                                        if:false={quickQuoteDetail.collision_deductible}>
+                                                                        {label.NA}
+                                                                    </template>
+
+                                                                </span>
+
+                                                            </div>
+
+                                                            <div class="highlight-title" style="padding-left: 15px;">
+                                                                {label.TotalTheftDeductible}
+                                                                <span style="position: absolute;right: 0;">
+                                                                    <template if:true={quickQuoteDetail.theft_Total}>
+
+                                                                        <lightning-formatted-number
+                                                                            value={quickQuoteDetail.theft_Total}
+                                                                            format-style="currency" currency-code="USD">
+                                                                        </lightning-formatted-number>
+                                                                    </template>
+                                                                    <template if:false={quickQuoteDetail.theft_Total}>
+                                                                        {label.NA}
+                                                                    </template>
+                                                                </span>
+                                                            </div>
+                                                        </template>
+                                                        <div class="highlight-title slds-m-top_small"
+                                                            style="padding-left: 15px">
+                                                            {label.UninsuredUnderinsuredMotoristDeductibleWaiver}
+
+                                                            <template if:true={chubbUninsuredMotoristDeductibleWavier}>
+                                                                <i class="icon-checkmark"></i>
+                                                            </template>
+                                                            <template if:false={chubbUninsuredMotoristDeductibleWavier}>
+                                                                <i class="icon-cross"></i>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <template if:false={liablityType}>
+                                                    <div class="quote-highlight">
+                                                        <div class="highlight-title">
+                                                            {label.LaborRates}
+
+                                                            <template if:false={coverageMap.Labor_Rates__c}>
+                                                                <span style="position: absolute;right: 0;">{label.NA}</span>
+                                                            </template>
+                                                            <template if:true={coverageMap.Labor_Rates__c}>
+                                                                <div class="slds-text-align_right">
+                                                                    {coverageMap.Labor_Rates__c}
+                                                                </div>
+                                                            </template>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="quote-highlight">
+                                                        <div class="highlight-title">
+                                                            {label.GlassBreakage}
+                                                            <template if:true={chubbGlassBreakage}>
+                                                                <i class="icon-checkmark"></i>
+                                                            </template>
+                                                            <template if:false={chubbGlassBreakage}>
+                                                                <i class="icon-cross"></i>
+                                                            </template>
+
+                                                        </div>
+                                                    </div>
+                                                </template>
+
+                                                <div class="quote-highlight">
+                                                    <div class="highlight-title">
+                                                        {label.Roadsideassistance}
+                                                        <template if:true={chubbRoadsideAssistance}>
+                                                            <span><i class="icon-checkmark"></i></span>
+                                                        </template>
+                                                        <template if:false={chubbRoadsideAssistance}>
+                                                            <span><i class="icon-cross"></i></span>
+                                                        </template>
+
+                                                    </div>
+
+                                                    <template if:true={coverageMap.Roadside_Details__c}>
+                                                        <div class="slds-text-align_right">
+                                                            {coverageMap.Roadside_Details__c}
+                                                        </div>
+
+                                                    </template>
+
+
+
+                                                </div>
+
+                                                <div class="quote-highlight">
+                                                    <div class="highlight-title">
+                                                        {label.Towing}
+                                                        <template if:true={isTowing}>
+                                                            <i class="icon-checkmark"></i>
+                                                        </template>
+                                                        <template if:false={isTowing}>
+                                                            <i class="icon-cross"></i>
+                                                        </template>
+
+                                                    </div>
+                                                    <template if:true={coverageMap.Towing_Details__c}>
+                                                        <div class="slds-text-align_right">
+                                                            {coverageMap.Towing_Details__c}
+                                                        </div>
+
+                                                    </template>
+
+                                                </div>
+
+                                                <template if:false={liablityType}>
+                                                    <div class="quote-highlight">
+                                                        <div class="highlight-title">
+                                                            {label.RentalCar}
+                                                            <template if:true={chubbRentalCar}>
+                                                                <i class="icon-checkmark"></i>
+                                                            </template>
+                                                            <template if:false={chubbRentalCar}>
+                                                                <i class="icon-cross"></i>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+                                                </template>
+
+
+                                                <div class="quote-highlight">
+                                                    <div class="highlight-title">
+                                                        {label.LegalDefenseandBail}
+                                                        <template if:true={chubbLegalDefenseandBail}>
+                                                            <i class="icon-checkmark"></i>
+                                                        </template>
+                                                        <template if:false={chubbLegalDefenseandBail}>
+                                                            <i class="icon-cross"></i>
+                                                        </template>
+
+                                                    </div>
+
+                                                    <template if:true={coverageMap.Legal_Defense_and_Bail_Details__c}>
+                                                        <div class="slds-text-align_right">
+                                                            {coverageMap.Legal_Defense_and_Bail_Details__c}
+                                                        </div>
+
+                                                    </template>
+
+
+
+                                                </div>
+                                                <template if:false={liabliablityType}>
+                                                    <div class="quote-highlight">
+                                                        <div class="highlight-title">
+                                                            {label.Vandalism}
+                                                            <template if:true={chubbVandalism}>
+                                                                <i class="icon-checkmark"></i>
+                                                            </template>
+                                                            <template if:false={chubbVandalism}>
+                                                                <i class="icon-cross"></i>
+                                                            </template>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="quote-highlight">
+                                                        <div class="highlight-title">
+                                                            {label.PartialTheft}
+                                                            <template if:true={chubbPartialTheft}>
+                                                                <i class="icon-checkmark"></i>
+                                                            </template>
+                                                            <template if:false={chubbPartialTheft}>
+                                                                <i class="icon-cross"></i>
+                                                            </template>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="quote-highlight">
+                                                        <div class="highlight-title">
+                                                            {label.PlaneTicketsHome}
+                                                            <template if:true={chubbPlaneTicketsHome}>
+                                                                <i class="icon-checkmark"></i>
+                                                            </template>
+                                                            <template if:false={chubbPlaneTicketsHome}>
+                                                                <i class="icon-cross"></i>
+                                                            </template>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="quote-highlight">
+                                                        <div class="highlight-title">
+                                                            {label.BonusCoverage}
+                                                            <template if:true={coverageMap.Bonus_Coverage__c}>
+                                                                <div class="slds-text-align_right">
+                                                                    {coverageMap.Bonus_Coverage__c}
+                                                                </div>
+                                                            </template>
+                                                            <template if:false={coverageMap.Bonus_Coverage__c}>
+                                                                <span style="position: absolute;right: 0;">{label.NA}</span>
+                                                            </template>
+
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+
+                        </template>
+                        <!-- <template if:true={isHighlight}>
+                            <div class="quote-highlight">
+                                <template if:true={coverageDecuctible}>
+                                    <div class="highlight-title">
+                                        Deductibles
+                                        <template if:true={coverageDecuctible}>
+                                            <i class="icon-checkmark"></i>
+                                        </template>
+                                        <template if:false={coverageDecuctible}>
+                                            <i class="icon-cross"></i>
+                                        </template>
+                                    </div>
+                                </template>
+
+
+                                <div class="highlight-list-desc">
+                                    <template if:true={coverageMap.Collision_Deductible__c}>
+                                        <div class="highlight-title" style="padding-left: 15px">
+                                            Collision Deductible
+                                            <template if:true={coverageMap.Collision_Deductible__c}>
+                                                <div class="slds-text-align_right">
+                                                    {coverageMap.Collision_Deductible__c}
+                                                </div>
+                                            </template>
+                                            <template if:false={coverageMap.Collision_Deductible__c}>
+                                                <span style="position: absolute;right: 0;">N/A</span>
+                                            </template>
+
+                                        </div>
+                                    </template>
+
+
+
+                                    <template if:true={coverageMap.Deductible_Total_Theft__c}>
+                                        <div class="highlight-title" style="padding-left: 15px">
+                                            Collision Deductible
+                                            <template if:true={coverageMap.Deductible_Total_Theft__c}>
+                                                <div class="slds-text-align_right">
+                                                    {coverageMap.Deductible_Total_Theft__c}
+                                                </div>
+                                            </template>
+                                            <template if:false={coverageMap.Deductible_Total_Theft__c}>
+                                                <span style="position: absolute;right: 0;">N/A</span>
+                                            </template>
+
+                                        </div>
+                                    </template>
+
+                                    <template if:true={uninsuredMotoristDeductibleWaiver}>
+                                        <div class="highlight-title" style="padding-left: 15px">
+                                            Collision Deductible
+                                            <template if:true={uninsuredMotoristDeductibleWaiver}>
+                                                <i class="icon-checkmark"></i>
+                                            </template>
+                                            <template if:false={uninsuredMotoristDeductibleWaiver}>
+                                                <i class="icon-cross"></i>
+                                            </template>
+
+                                        </div>
+                                    </template>
+
+
+                                </div>
+                            </div>
+                            <template if:true={coverageMap.Labor_Rates__c}>
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        Labor Rates
+                                        <template if:true={coverageMap.Labor_Rates__c}>
+                                            <div class="slds-text-align_right">
+                                                {coverageMap.Labor_Rates__c}
+                                            </div>
+                                        </template>
+                                        <template if:true={coverageMap.Labor_Rates__c}>
+                                            <span style="position: absolute;right: 0;">N/A</span>
+                                        </template>
+
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template if:true={GlassBreakage}>
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        Glass Breakage
+                                        <template if:true={GlassBreakage}>
+                                            <i class="icon-checkmark"></i>
+                                        </template>
+                                        <template if:false={GlassBreakage}>
+                                            <i class="icon-cross"></i>
+                                        </template>
+
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template if:true={roadsideAssistance}>
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        Roadside assistance
+                                        <template if:true={roadsideAssistance}>
+                                            <i class="icon-checkmark"></i>
+                                        </template>
+                                        <template if:false={roadsideAssistance}>
+                                            <i class="icon-cross"></i>
+                                        </template>
+
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template if:true={chubbRentalCar}>
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        Rental Car
+                                        <template if:true={chubbRentalCar}>
+                                            <i class="icon-checkmark"></i>
+                                        </template>
+                                        <template if:false={chubbRentalCar}>
+                                            <i class="icon-cross"></i>
+                                        </template>
+
+                                    </div>
+                                </div>
+                            </template>
+
+
+
+                            <div class="quote-highlight">
+                                <div class="highlight-title">
+                                    Legal Defense and Bail
+                                    <template if:true={chubbLegalDefenseandBail}>
+                                        <i class="icon-checkmark"></i>
+                                    </template>
+                                    <template if:false={chubbLegalDefenseandBail}>
+                                        <i class="icon-cross"></i>
+                                    </template>
+
+                                </div>
+                                <template if:true={coverageMap.Legal_Defense_and_Bail_Details__c}>
+                                    <div class="slds-text-align_right">
+                                        {coverageMap.Legal_Defense_and_Bail_Details__c}
+                                    </div>
+                                </template>
+
+                            </div>
+
+                            <template if:true={chubbVandalism}>
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        Vandalism
+                                        <template if:true={chubbVandalism}>
+                                            <i class="icon-checkmark"></i>
+                                        </template>
+                                        <template if:false={chubbVandalism}>
+                                            <i class="icon-cross"></i>
+                                        </template>
+
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template if:true={chubbPartialTheft}>
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        Partial Theft
+                                        <template if:true={chubbPartialTheft}>
+                                            <i class="icon-checkmark"></i>
+                                        </template>
+                                        <template if:false={chubbPartialTheft}>
+                                            <i class="icon-cross"></i>
+                                        </template>
+
+                                    </div>
+                                </div>
+                            </template>
+                            <template if:true={chubbPlaneTicketsHome}>
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        Plane Tickets Home
+                                        <template if:true={chubbPlaneTicketsHome}>
+                                            <i class="icon-checkmark"></i>
+                                        </template>
+                                        <template if:false={chubbPlaneTicketsHome}>
+                                            <i class="icon-cross"></i>
+                                        </template>
+
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template if:true={coverageMap.Bonus_Coverage__c}>
+                                <div class="quote-highlight">
+                                    <div class="highlight-title">
+                                        Labor Rates
+                                        <template if:true={coverageMap.Bonus_Coverage__c}>
+                                            <div class="slds-text-align_right">
+                                                {coverageMap.Bonus_Coverage__c}
+                                            </div>
+                                        </template>
+                                        <template if:true={coverageMap.Bonus_Coverage__c}>
+                                            <span style="position: absolute;right: 0;">N/A</span>
+                                        </template>
+
+                                    </div>
+                                </div>
+                            </template>
+
+
+                        </template> -->
+                        <!-- <lightning-layout multiple-rows="true" class="slds-m-top--large slds-align--absolute-center"> -->
+                        <div class="quote-button slds-m-top--xx-large slds-text-align--center">
+                            <button class="button -secondary -wider" title="PURCHASE" data-id="purchase" onclick={handleNextClick}>
+                                {label.Purchase}
+                            </button>
+                            <template if:true={AgreedChubbDisclaimer}>
+                                <p class="slds-m-top_xx-small">Agreed to <a onclick={ShowDiscaimerModals}>Chubb Disclaimer.</a></p>
+                            </template>
+                        </div>
+
+                        <div class="quote-terms slds-m-top--x-large slds-text-align--center">
+                            <a href="https://mexinsurance.my.salesforce.com/sfc/p/#15000000NeKA/a/6R000000IrfI/rC1c7II.er6R7E1yNljlKRGUFwDhl6WXQP5l1Knmz9A"
+                                class="simple-link" target="_blank">{label.Fullterms} &nbsp; <i class="icon-new-tab"></i>
+                            </a>
+
+                        </div>
+
+                        <!-- <lightning-layout-item size="12" small-device-size="12" medium-device-size="12"
+                                large-device-size="12"
+                                class="slds-p-around_x-small slds-m-top_x-small slds-align_absolute-center">
+                                
+                            </lightning-layout-item> -->
+
+                        <!-- </lightning-layout> -->
+                    </div>
+
+
+                </div>
+            </template>
+
+        </div>
+        <div class="slds-m-top_large slds-align_absolute-center horizontalAlign">
+            <div>
+                <button class="buttonPrev btnHover slds-m-right_small" title="Prev"
+                    onclick={handlePrevClick}><span class="icon-prev"><i
+                        class="icon-prevs"></i></span>{label.Prev}</button>
+            </div>
+            <div>
+                <button class="buttonNext btnHover" title="Save Quote" data-id="saveQuote" onclick={SaveQuoteHandle}><span class="icon-save"><i
+                    class="icon-saves"></i></span>{label.Save}</button>
+            </div>
+        </div>
+        <template if:true={isSaveQuote}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{label.SelectQuoteAndDownload}
+                        </h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <div class="slds-align--absolute-center">
+                            <lightning-input type="checkbox" name="Chubb" label="Chubb" checked="true"
+                                disabled="true"></lightning-input>
+                        </div>
+
+                        <div class="horizontalAlign  slds-m-top_large">
+                            <div class="">
+                                <button class="button slds-m-right_small" onclick={downloadQuote}>{label.DownloadPDF}
+                                    </button>
+                            </div>
+                            <div class="">
+                                <button class="button" onclick={sendEmailQuoteDetail}>{label.EmailPDF}</button>
+                            </div>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" onclick={cancleEdit}>{label.Cancel}</button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+
+
+        </template>
+
+        <template if:true={disclaimerModal}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 id="modal-heading-02" class="slds-modal__title slds-hyphenate">Disclaimer
+                        </h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                        <p>
+                            This Chubb insurance product is for Mexican vehicles traveling north to the United States and covers passenger vehicles registered in Mexico.  To proceed with this purchase, you must confirm that you have yet to cross into the United States 
+                            and that there are no pending insurance claims in the United States with the subject vehicle. </p> 
+                        <p>Este producto de seguro Chubb es para vehículos mexicanos que viajan hacia el norte a los Estados Unidos y cubre vehículos de pasajeros registrados en México. 
+                            Para proceder con esta compra, debe confirmar que aún no ha cruzado a los Estados Unidos y que no hay reclamaciones de seguro pendientes en los Estados Unidos con el vehículo en cuestión.
+                        </p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" onclick={CancelDescailmer}>Back</button>
+                        <template if:false={showingAgreeBtn}>
+                            <button class="slds-button slds-button_brand" onclick={AgreeDiscailmer}>Agree</button>
+                        </template>
+                        
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+
+
+        </template>
+    </div>
+</template>

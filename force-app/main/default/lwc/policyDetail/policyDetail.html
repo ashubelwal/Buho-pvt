@@ -1,0 +1,74 @@
+<template>
+	<div class="mainDiv notranslate">
+
+		<lightning-layout multiple-rows="true">
+			<lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+				<div class="completed-box align-center">
+					<div class="completed-box-inside">
+						<h1 class="green">
+							{label.complete}
+						</h1>
+
+						<h3>{label.policy}: <strong>{policyName.data}</strong></h3>
+						<p>{label.theinsurancepacket} : {policyName.email}</p>
+
+
+
+						<h3><b>{label.important}</b></h3>
+						<p>{label.youraccountisready} <mark>{label.checkyouremail}</mark></p>
+
+
+						<button class="button btnHover -primary -min-width slds-m-bottom_large" onclick={gotohome}>{label.MYMEXINSURANCE}&trade;</button>
+
+
+
+					</div>
+				</div>
+			</lightning-layout-item>
+		</lightning-layout>
+		<lightning-layout>
+			<lightning-layout-item>
+
+
+				<div class="grid -spacing-md">
+					<div class="grid_1-3 grid_1-sm">
+						<!-- <a href="" class="cta-box"> -->
+						<h4 class="green _transition">
+							<a href="https://www.mexinsurance.com/auto-insurance/" target="_blank">
+								<img src={roundCar} alt={label.autoinsurance} />
+                                {label.autoinsurance}
+                            </a>
+						</h4>
+						<p class="_transition"> {label.grabyourvehicle}</p>
+						<!-- </a> -->
+					</div>
+					<div class="grid_1-3 grid_1-sm">
+						<!-- <a href="" class="cta-box"> -->
+						<h4 class="green  _transition">
+							<a href="https://www.mexinsurance.com/homeowners-insurance/" target="_blank">
+								<img src={roundHouse} alt={label.homeinnsuranceformex} />
+                                {label.homeinnsuranceformex}
+                            </a>
+						</h4>
+						<p class="_transition">{label.confirmthedates}</p>
+						<!-- </a> -->
+					</div>
+					<div class="grid_1-3 grid_1-sm">
+						<!-- <a href="" class="cta-box"> -->
+						<h4 class="green  _transition">
+							<a href="https://www.mexinsurance.com/medical-health-care-in-mexico/" target="_blank">
+								<img src={roundSteering} alt={label.medicalinsurance} />
+                                {label.medicalinsurance}
+                            </a>
+						</h4>
+						<p class="transition">{label.downloadyour}</p>
+						<!-- </a> -->
+					</div>
+				</div>
+			</lightning-layout-item>
+		</lightning-layout>
+
+	</div>
+
+
+</template>

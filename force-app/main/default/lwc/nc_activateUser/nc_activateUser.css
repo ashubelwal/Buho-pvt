@@ -1,0 +1,78 @@
+.container {
+    max-width: 400px;
+    margin: auto;
+    padding: 1.5rem; 
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.loading {
+	position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #ffffff59;
+    height: 100%;
+    width: 100%;
+    cursor: progress;
+    z-index: 99;
+    border: 1px solid #eee;
+    border-radius: 4px;
+}
+
+.logo img {
+    max-width: 180px;
+    margin-bottom: 1rem;
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 1.2rem;
+    color: #333;
+}
+
+.email-input {
+    width: 100%;
+    padding: 0.6rem;
+    font-size: 1rem;
+    border: 1px solid #d8dde6;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+.submit-button {
+    width: 100%;
+    background-color: #003366;
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    background-color: #002244;
+}
+
+@media screen and (max-width: 480px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .title {
+        font-size: 1.3rem;
+    }
+
+    .submit-button {
+        font-size: 0.95rem;
+    }
+}

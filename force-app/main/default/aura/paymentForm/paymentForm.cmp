@@ -1,0 +1,137 @@
+<aura:component description="paymentForm" controller="PaymentFormController">
+
+    <lightning:navigation aura:id="navService"/>
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    
+    <aura:attribute name="policyType" type="String" access="public" />
+    <aura:attribute name="policyId" type="String" access="public" />
+    <aura:attribute name="quoteId" type="String" access="public" />
+    <aura:attribute name="quoteIds" type="List" access="public" />
+    <aura:attribute name="refundAmount" type="Decimal" access="public" />
+    <aura:attribute name="transactionDetails" type="Object" access="public" />
+    
+	<aura:attribute name="quoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" access="public" />
+    <aura:attribute name="screenName" type="String" />
+    
+    <aura:attribute name="paymentInfo" type="Object" access="private" />
+    <aura:attribute name="newCreditCard" type="Object" access="private" />
+    <aura:attribute name="addCardMode" type="Boolean" access="private" default="false" />
+    <aura:attribute name="editPolicy" type="Boolean" default="false" />
+    <aura:attribute name="isRefund" type="Boolean" default="false"/>
+    
+    <aura:attribute name="communityUser" type="Boolean" access="public" default="false" />
+    <aura:attribute name="drivers" type="List" />
+    
+    <aura:attribute name="selectedCardId" type="String" access="private" default="" />
+    <aura:attribute name="showSpinner" type="Boolean" access="private" />
+    <aura:attribute name="populateAddress" type="Boolean" access="private" />
+    <aura:attribute name="stateOptions" type="List" />
+    <aura:attribute name="countryOption" type="List" />
+    <aura:attribute name="showStatePick" type="Boolean" default="false" access="public" />
+    <aura:attribute name="disableCountry" type="Boolean" default="false" />
+    <aura:attribute name="policyCountry" type="String" />
+    <aura:attribute name="months" type="List"/>
+    <aura:attribute name="years" type="List"/>
+    <aura:attribute name="Final_total_Premium" type="Decimal" />
+    <aura:handler name="init" value="{!this}" action="{!c.handleInit}"/>
+
+    <aura:registerevent name="paymentIsSuccessful" type="c:paymentIsSuccessful"/>
+
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner alternativeText="Loading" size="small" />
+    </aura:if>
+
+    <div class="slds-size_12-of-12">
+        <div class="form-container -wider">
+            <aura:if isTrue="{!!v.isRefund}"> 
+                <aura:if isTrue="{!notequals(v.paymentInfo.creditCards.length, 0)}">
+                    <span class="slds-m-around_xx-small slds-m-bottom_small">Select an existing credit card or add a new one: </span>
+                </aura:if>
+                <div>
+                    <aura:iteration items="{!v.paymentInfo.creditCards}" var="item" indexVar="index">
+                        <div  data-id="{!index}" onclick="{!c.handleCardChange}">
+                            <div class="slds-float_left slds-p-around_large">
+                                <lightning:input type="radio" variant="label-hidden" checked="{!item.selected}" />
+                            </div>
+                            <div class="slds-box slds-m-bottom_small cursor-pointer">
+                                <p class="slds-p-horizontal_small">{!item.cardType} - {!item.cardNumber}</p>
+                                <p class="slds-p-horizontal_small">{!item.name}</p>
+                            </div>
+                            
+                        </div>
+                    </aura:iteration>
+                </div>
+                
+            </aura:if>
+            <aura:if isTrue="{!!v.isRefund }">
+                <aura:if isTrue="{!and(v.paymentInfo.creditCards, not(v.addCardMode))}">
+                    <!--<aura:if isTrue="{!v.paymentInfo.isSubscriptionAvailable}">
+                        <lightning:input class="slds-m-top_small slds-m-bottom_small text-transform-unset" type="checkbox" label="Subscribe to extend all annual the policies automatically in the next year" name="subscribe" checked="{!v.transactionDetails.subscribe}"/>
+                    </aura:if>-->
+                    <lightning:buttonIcon iconName="utility:add" onclick="{!c.handleAddCard}" class="slds-button"
+                                          alternativeText="Add a new credit card" title="Add a new credit card"/>
+                    <span class="slds-button slds-p-left_xx-small cursor-pointer" onclick="{!c.handleAddCard}">Add a new credit card</span>
+                </aura:if>
+            </aura:if>
+            <aura:if isTrue="{!or(v.addCardMode, v.isRefund) }">
+                <div class="grid -spacing-md slds-m-top_medium">
+                    <div class="grid_1-2 grid_1-sm">
+                        <h3 class="red slds-m-bottom_medium">Address Information</h3>
+                        <aura:if isTrue="{!!v.paymentInfo.isGuest}">
+                            <lightning:input class="slds-m-top_small" type="checkbox" label="Same as Primary Insured Address" name="populateAddress" checked="{!v.populateAddress}" onchange="{!c.handleSetAddress}" />
+                        </aura:if>
+                        <lightning:input type="text" name="Address" placeholder="Address1" value="{!v.newCreditCard.address1}" required="true" variant="label-hidden" class="slds-m-top_small" aura:id="fieldWithValidation"/>
+                        <lightning:input type="text" name="Address2" placeholder="Address (Line 2)" value="{!v.newCreditCard.address2}" variant="label-hidden" class="slds-m-top_small"/>
+                        <lightning:combobox name="country" label="Country" placeholder="Country" value="{!v.policyCountry}" options="{! v.countryOption }" onchange="{!c.onCountryChange}" variant="label-hidden"   required="true" aura:id="fieldWithValidation"/>
+                        <aura:if isTrue="{! and(v.policyCountry == 'Other' )}">
+                            <lightning:input type="text" name="country" placeholder="Country" value="{!v.newCreditCard.country}" required="true" variant="label-hidden" class="slds-m-top_small" aura:id="fieldWithValidation"/>
+                        </aura:if>
+                        <aura:if isTrue="{!v.showStatePick}">
+                            <lightning:combobox name="state" label="State" placeholder="State/Province" value="{!v.newCreditCard.state}" required="true" aura:id="fieldWithValidation" options="{! v.stateOptions }"  variant="label-hidden"/>
+                            <aura:set attribute="else">
+                                <lightning:input type="text" name="state" placeholder="State/Province" value="{!v.newCreditCard.state}" required="true" variant="label-hidden" class="slds-m-top_small" aura:id="fieldWithValidation"/>
+                            </aura:set>
+                        </aura:if>
+
+                        <lightning:input type="text" name="City" placeholder="City" value="{!v.newCreditCard.city}" required="true" variant="label-hidden" class="slds-m-top_small" aura:id="fieldWithValidation"/>
+                        <lightning:input type="text" name="Zip" placeholder="Postal Code" value="{!v.newCreditCard.zip}" required="true" variant="label-hidden" class="slds-m-top_small" aura:id="fieldWithValidation"/>
+                        
+                    </div>
+
+                    <div class="grid_1-2 grid_1-sm">
+                        <h3 class="red slds-m-bottom_medium">Card Details</h3>
+                        <lightning:input type="text" rename="Name" placeholder="Name on card" value="{!v.newCreditCard.name}" required="true" variant="label-hidden" class="slds-m-top_small" aura:id="fieldWithValidation"/>
+                        <lightning:input type="text" name="CardNu mber" maxlength="16" placeholder="Card Number" value="{!v.newCreditCard.cardNumber}" required="true" variant="label-hidden" class="slds-m-top_small" aura:id="fieldWithValidation"/>
+                        <div class="grid -spacing-md">
+                            <div class="grid_1-2 grid_1-md">
+                                <!--lightning:input type="text" name="Month" placeholder="Expiration Month" value="{!v.newCreditCard.month}" required="true" variant="label-hidden"  pattern="[0-9]{2}" messageWhenPatternMismatch="Please input month in MM format" aura:id="fieldWithValidation"/-->
+                                <lightning:combobox name="Month" label="Month" placeholder="Expiration Month" value="{!v.newCreditCard.month}"  options="{! v.months }" variant="label-hidden" required="true" aura:id="fieldWithValidation"/>
+                            </div>
+                            <div class="grid_1-2 grid_1-md">
+                                <!--lightning:input type="text" name="Year" placeholder="Expiration Year" value="{!v.newCreditCard.year}" required="true" variant="label-hidden" pattern="[0-9]{4}" messageWhenPatternMismatch="Please input year in YYYY format" aura:id="fieldWithValidation"/-->
+                                <lightning:combobox name="Year" label="Year" placeholder="Expiration Year" value="{!v.newCreditCard.year}"  options="{! v.years }" variant="label-hidden" required="true" aura:id="fieldWithValidation"/>
+                            </div>
+                        </div>
+                        <lightning:input type="text" name="Code" pattern="^[0-9]{3,4}$" placeholder="Security Code" value="{!v.newCreditCard.code}" required="true" variant="label-hidden" aura:id="fieldWithValidation"/>
+                        <aura:if isTrue="{!!v.isRefund }">
+                            <lightning:input class="slds-m-top_small" type="checkbox" label="Save the credit card" name="saveNewCard" checked="{!v.newCreditCard.saveNewCard}" />
+                            <!--<aura:if isTrue="{!v.paymentInfo.isSubscriptionAvailable}">
+                                <lightning:input class="slds-m-top_small text-transform-unset" type="checkbox" label="Subscribe to extend the policy automatically in the next year" name="subscribe" checked="{!v.transactionDetails.subscribe}"/>
+                            </aura:if>-->
+                        </aura:if>
+                        
+                    </div>
+
+                </div>
+            </aura:if>
+        </div>
+    </div>
+    <lightning:layoutItem padding="around-small" size="12" class="slds-align_absolute-center slds-m-top_large">
+        <aura:if isTrue="{!v.isRefund}">
+            <lightning:button onclick="{!c.handlePayment}" class="slds-button button -secondary -wider">Collect</lightning:button>
+            <aura:set attribute="else">
+                <lightning:button onclick="{!c.handlePayment}" class="slds-button button -secondary -wider">Make payment (<lightning:formattedNumber value="{!v.Final_total_Premium}" style="currency" currencyCode="USD"/>)</lightning:button>
+            </aura:set>
+        </aura:if> 
+    </lightning:layoutItem>
+</aura:component>

@@ -1,0 +1,169 @@
+<template>
+    <div class="quote-container">
+        
+       
+        <div class="quote">
+            <template for:each={quoteDetails} for:item="quote">
+                <div class="" key={quote.Id}>
+                    <h2 class="header slds-align_absolute-center">{quote.Name}</h2>
+                    <lightning-button class="" variant="brand" label="View quote" name="viewquote" onclick={handleViewQuote}></lightning-button>
+                    <div class="quote-item slds-grid slds-wrap">
+                        <div class="slds-col">
+                            
+                            <div class="quote-field">
+                                <span class="label">Underwriter:</span>
+                                <span class="value">{quote.Underwriter__c}</span>
+                            </div>
+                            <div class="quote-field">
+                                <span class="label">Policy Type:</span>
+                                <span class="value">{quote.Policy_Type_picklist__c}</span>
+                            </div>
+                            <div class="quote-field">
+                                <span class="label">Vehicle Type:</span>
+                                <span class="value">{quote.Vehicle_Type__c}</span>
+                            </div>
+                            <div class="quote-field">
+                                <span class="label">Vehicle Type:</span>
+                                <span class="value">{quote.Vehicle_Make__c}</span>
+                            </div>
+                            <div class="quote-field">
+                                <span class="label">Vehicle Type:</span>
+                                <span class="value">{quote.Vehicle_Type__c}</span>
+                            </div>
+                            <div class="quote-field">
+                                <span class="label">Vehicle Type:</span>
+                                <span class="value">{quote.Vehicle_Model__c}</span>
+                            </div>
+                            <div class="quote-field">
+                                <span class="label">Vehicle Type:</span>
+                                <span class="value">{quote.Vehicle_Sub_type__c}</span>
+                            </div>
+                            
+                            <div class="quote-field">
+                                <span class="label">Vehicle Type:</span>
+                                <span class="value">{quote.Vehicle_Value__c}</span>
+                            </div>
+                            <div class="quote-field">
+                                <span class="label">Vehicle Type:</span>
+                                <span class="value">{quote.Vehicle_Year__c}</span>
+                            </div>
+                            <div class="quote-field">
+                                <span class="label">Medical:</span>
+                                <span class="value">{quote.Medical__c}</span>
+                            </div>
+                            <div class="quote-field">
+                                <span class="label">Liability:</span>
+                                <span class="value">{quote.Liability__c}</span>
+                            </div>
+                            <div class="quote-field">
+                                <span class="label">Coverage:</span>
+                                <span class="value">{quote.Coverage__c}</span>
+                            </div>
+                        </div>
+                    
+                        <div class="slds-col">
+                            <div class="quote-field">
+                                <span class="label">Broker Policy Fee:</span>
+                                <span class="value">{quote.Broker_Policy_Fee__c}</span>
+                            </div>
+                            <div class="quote-field">
+                                <span class="label">IVA Mex Tax:</span>
+                                <span class="value">{quote.I_V_A_Mex_Tax__c}</span>
+                            </div>
+                            <div class="quote-field">
+                                <span class="label">Liability Payment:</span>
+                                <span class="value">{quote.Liability_Payment__c}</span>
+                            </div>
+                            
+                            <div class="quote-field">
+                                <span class="label">Medical Payment:</span>
+                                <span class="value">{quote.Medical_Payment__c}</span>
+                            </div>
+                            
+                            <div class="quote-field">
+                                <span class="label">Net Premium:</span>
+                                <span class="value">{quote.Net_Premium__c}</span>
+                            </div>
+                            <div class="quote-field">
+                                <span class="label">Physical Damage:</span>
+                                <span class="value">{quote.Physical_Damage__c}</span>
+                            </div>
+                            <div class="quote-field">
+                                <span class="label">Platinum Endorsment:</span>
+                                <span class="value">{quote.Platinum_Endorsment__c}</span>
+                            </div>
+                            <div class="quote-field">
+                                <span class="label">Quote Value:</span>
+                                <span class="value">{quote.Quote_Value__c}</span>
+                            </div>
+                            <div class="quote-field">
+                                <span class="label">Salvage Vehicle:</span>
+                                <span class="value">{quote.Salvage_Vehicle__c}</span>
+                            </div>
+                            <div class="quote-field">
+                                <span class="label">Surcharge:</span>
+                                <span class="value">{quote.Surcharge__c}</span>
+                            </div>
+                            
+                            <div class="quote-field">
+                                <span class="label">Total Theft Payment:</span>
+                                <span class="value">{quote.Total_Theft_Payment__c}</span>
+                            </div>
+                            
+                            
+                            <div class="quote-field">
+                                <span class="label">Vehicle Deductible Collision:</span>
+                                <span class="value">{quote.Vehicle_Deductible_Collision__c}</span>
+                            </div>
+                            <div class="quote-field">
+                                <span class="label">Vehicle Deductible Comprehensive:</span>
+                                <span class="value">{quote.Vehicle_Deductible_Comprehensive__c}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quote-item slds-grid slds-wrap">
+                        <div class="slds-col">
+                            
+                            <div class="quote-field">
+                                <span class="label">Start Date for Coverage:</span>
+                                <span class="value">{quote.Start_Date_for_Coverage__c}</span>
+                            </div>
+                            <div class="quote-field">
+                                <span class="label">End Date for Coverage:</span>
+                                <span class="value">{quote.End_Date_for_Coverage__c}</span>
+                            </div>
+                            <div class="quote-field">
+                                <span class="label">Start Time:</span>
+                                <span class="value">{quote.Start_Time__c}</span>
+                            </div>
+                            <div class="quote-field">
+                                <span class="label">End Time:</span>
+                                <span class="value">{quote.End_Time__c}</span>
+                            </div>
+                        </div>
+                        <div class="slds-col">
+                            <div class="quote-field">
+                                <span class="label">Term Days:</span>
+                                <span class="value">{quote.Term_Days__c}</span>
+                            </div>
+                            <div class="quote-field">
+                                <span class="label">Term:</span>
+                                <span class="value">{quote.Term__c}</span>
+                            </div>
+                            <div class="quote-field">
+                                <span class="label">Territory:</span>
+                                <span class="value">{quote.Territory__c}</span>
+                            </div>
+                            <div class="quote-field">
+                                <span class="label">Towed Unit:</span>
+                                <span class="value">{quote.Towed_Unit__c}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

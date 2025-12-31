@@ -1,0 +1,73 @@
+<aura:component controller="QuickQuotationCtrl" implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="title" type="String" access="public"/>
+    <aura:attribute name="backButtonVisibility" type="Boolean" default="false" access="public" />
+    <aura:attribute name="policyType" type="String" access="public"/>
+    <aura:attribute name="vehicleTypeQuoteOptions" type="list" access="private"/>
+    <aura:attribute name="under21Options" type="list" access="private"/>
+    <aura:attribute name="iscommunityUser" type="Boolean" default="false"/>
+    <aura:attribute name="newSectionOpen" type="Boolean" default="false" />
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    <aura:attribute name="onNextClick" type="Aura.Action"/>
+    <aura:attribute name="quoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" access="public"/>
+    <aura:attribute name="leadRecord" type="Lead" default="{ 'sobjectType': 'Lead'}" access="public"/>
+    
+    <aura:attribute name="firstName" type="String" />
+    <aura:attribute name="lastName" type="String" />
+    <aura:attribute name="emailAdder" type="String"/>
+    <aura:attribute name="phoneNumber" type="String"/>
+    
+    
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <lightning:layoutItem padding="around-small" size="12" class="align-center slds-m-top_xx-large">
+        <div class="page-title">
+            <aura:if isTrue="{!v.backButtonVisibility}">
+                <button class="button -plain -back-button" name="step_3" onclick="{!v.onBackClick }">
+                    <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/> Back
+                </button>
+            </aura:if>
+            <!-- <h1>{!v.title}</h1> -->
+            <b>Please enter your name and email below so that we can securely store your quote.</b><br></br>
+            <b>We know that your email is sacred. We will never share and sell any of your details, including email address.</b>
+            
+        </div>                    
+    </lightning:layoutItem>
+    
+    <div class="slds-size_12-of-12">
+        
+        <div class="form-container">
+            
+            <div class="c-container">
+                <lightning:layout multipleRows="true">
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                        <lightning:input aura:Id="validateField" type="text" name="firstName" label="First Name" placeholder="First Name" value="{!v.leadRecord.Firstname}" required="true" />
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                        <lightning:input aura:Id="validateField" type="text" name="lastName" label="Last Name" placeholder="Last Name" value="{!v.leadRecord.Lastname}" required="true"  class=""/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                        <lightning:input fieldLevelHelp="This is where we will email your insurance documents, and primarily how we communicate with you.  Make sure to add us to your whitelist!"
+                                         aura:id="validateField"  label="Email"  type="email" name="Email" placeholder="Email" value="{!v.leadRecord.Email}" 
+                                         onchange="{!c.updateValue}" required="true"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" class="slds-p-around_x-small">
+                        <lightning:input aura:Id="validateField" type="tel" name="phone"
+                                         placeholder="Phone" value="{!v.leadRecord.Phone}"
+                                         onchange="{!c.updatePhoneValue}"
+                                         pattern="^\(\d{3}\)\s\d{3}-\d{4}$"
+                                         label="Phone"
+                                         messageWhenPatternMismatch="Not a valid phone number"
+                                          class=""/>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </div>
+            
+            
+        </div>
+    </div>               
+    
+    <lightning:layoutItem size="12" class="slds-m-top_large align-center">                    
+        <button class="button -secondary -wider" onclick="{! c.onNextClick }">Next</button>
+    </lightning:layoutItem>
+</aura:component>

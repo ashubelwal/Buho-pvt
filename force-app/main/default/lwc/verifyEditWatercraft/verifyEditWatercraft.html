@@ -1,0 +1,273 @@
+<template>
+
+	<div class="maindiv notranslate slds-m-top_xx-large">
+		<div class="blue slds-text-heading_large slds-m-bottom_x-large screenHeading">{label.verifyandedit}</div>
+		<template if:true={QuoteDetails}>
+			<lightning-layout multiple-rows="true">
+				<lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12" class="slds-m-bottom_medium">
+					<div class="slds-text-heading_medium">{label.policysummary}</div>
+					<!-- <p>Vehicle Details: </p> -->
+					<div class="datatable">
+						<table class="listing-table">
+							<tr>
+								<th><strong>{label.insurancecompany}</strong></th>
+								<th><strong>{label.premium}</strong></th>
+								<th><strong>{label.surcharge}</strong></th>
+								<th><strong>{label.brokercharge}</strong></th>
+								<th><strong>{label.MexicanIVATAX}</strong></th>
+							</tr>
+
+							<tr>
+								<td>{QuoteDetails.Underwriter__c}</td>
+								<td>
+									<lightning-formatted-number value={QuoteDetails.Net_Premium__c}
+									format-style="currency" currency-code="USD"></lightning-formatted-number>
+								</td>
+								<td>
+									<lightning-formatted-number value={QuoteDetails.Surcharge__c} format-style="currency"
+									currency-code="USD"></lightning-formatted-number>
+								</td>
+								<td>
+									<lightning-formatted-number value={QuoteDetails.Broker_Policy_Fee__c}
+									format-style="currency" currency-code="USD"></lightning-formatted-number>
+								</td>
+								<td>
+									<lightning-formatted-number value={QuoteDetails.I_V_A_Mex_Tax__c} format-style="currency"
+									currency-code="USD"></lightning-formatted-number>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<!-- <p>Insurance Company: <strong>{QuoteDetails.Underwriter__c}</strong></p>
+					<p>Premium: <strong> <lightning-formatted-number value={QuoteDetails.Net_Premium__c}
+								format-style="currency" currency-code="USD"></lightning-formatted-number>
+						</strong></p>
+					</p>
+					<p>Surcharge: <strong>
+							<lightning-formatted-number value={QuoteDetails.Surcharge__c} format-style="currency"
+								currency-code="USD"></lightning-formatted-number>
+
+						</strong></p>
+					<p>Broker Charge: <strong>
+							<lightning-formatted-number value={QuoteDetails.Broker_Policy_Fee__c}
+								format-style="currency" currency-code="USD"></lightning-formatted-number>
+
+						</strong></p>
+					<p>Mexican IVA TAX: <strong>
+							<lightning-formatted-number value={QuoteDetails.I_V_A_Mex_Tax__c} format-style="currency"
+								currency-code="USD"></lightning-formatted-number>
+
+						</strong></p> -->
+				</lightning-layout-item>
+				<lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+					<div class="slds-text-heading_medium">{label.coveragedetails}</div>
+					<div class="datatable">
+						<table class="listing-table">
+							<tr>
+								<th><strong>{label.coverage}</strong></th>
+								<th><strong>{label.policytype}</strong></th>
+								<th><strong>{label.term}</strong></th>
+							</tr>
+
+							<tr>
+								<td>
+									{QuoteDetails.Coverage__c}
+								</td>
+								<td>{QuoteDetails.Policy_Type_picklist__c}</td>
+								<td>
+									<lightning-formatted-date-time value={QuoteDetails.Start_Date_for_Coverage__c}>
+									</lightning-formatted-date-time>
+									-
+									<lightning-formatted-date-time value={QuoteDetails.End_Date_for_Coverage__c}>
+									</lightning-formatted-date-time><br />
+									( {QuoteDetails.Term__c} @ {QuoteDetails.Term_Days__c} day )
+								</td>
+							</tr>
+						</table>
+					</div>
+					<!-- <p>Coverage: <strong>{QuoteDetails.Coverage__c}</strong>
+					</p>
+					<p>Policy Type: <strong>{QuoteDetails.Policy_Type_picklist__c}</strong></p>
+					<p>Term: <strong>
+							<lightning-formatted-date-time value={QuoteDetails.Start_Date_for_Coverage__c}>
+							</lightning-formatted-date-time>
+							&nbsp;
+							<lightning-formatted-time value={QuoteDetails.Start_Time__c}></lightning-formatted-time>
+							-
+							<lightning-formatted-date-time value={QuoteDetails.End_Date_for_Coverage__c}>
+							</lightning-formatted-date-time>
+							&nbsp;
+							<lightning-formatted-time value={QuoteDetails.End_Time__c}></lightning-formatted-time><br />
+							( {QuoteDetails.Term__c} @ {QuoteDetails.Term_Days__c} day )
+						</strong></p> -->
+					<!-- <p>Liablity: <strong><lightning-formatted-number value={QuoteDetails.Liability__c} format-style="currency"
+							currency-code="USD"></lightning-formatted-number></strong></p>
+						<p>Medical: <strong>{QuoteDetails.Medical__c}</strong></p> -->
+				</lightning-layout-item>
+			</lightning-layout>
+
+			<div class="totalSection">
+				<div class="total">
+					<p>{label.TOTAL}: <strong><lightning-formatted-number value={QuoteDetails.Quote_Value__c}
+								format-style="currency" currency-code="USD"></lightning-formatted-number></strong></p>
+				</div>
+			</div>
+		</template>
+		<template if:true={watercraftList}>
+			<div class="vehicleDetail slds-m-bottom_large">
+				<div class="slds-text-heading_medium">{label.watercraftdetails}</div>
+				<!-- <lightning-button-icon data-id={watercraftList.VIN_Number__c} data-index='01'
+					name={watercraftList.VIN_Number__c} icon-name="utility:edit" variant="bare"
+					onclick={editWatercraftDetail} alternative-text="edit" title="Edit Watercraft">
+				</lightning-button-icon>  -->
+				<div class="datatable">
+					<table class="listing-table">
+						<tr>
+							<th><strong>{label.Name}</strong></th>
+							<th><strong>{label.value}</strong></th>
+							<th><strong>{label.vesseltype}</strong></th>
+							<th><strong>{label.vessellength}</strong></th>
+							<th><strong>{label.Vin}</strong></th>
+							<th><strong>{label.Beam}</strong></th>
+						</tr>
+
+						<tr>
+							<td>{watercraftList.Year__c}&nbsp;{watercraftList.Make__c}&nbsp;{watercraftList.Model__c}</td>
+							<td><lightning-formatted-number value={watercraftList.Value__c}
+								format-style="currency" currency-code="USD"></lightning-formatted-number></td>
+							<td>{watercraftList.Type_of_Vessel__c}</td>
+							<td>{watercraftList.Vessel_Length__c}</td>
+							<td>{watercraftList.VIN_Number__c}</td>
+							<td>{watercraftList.Beam__c}</td>
+						</tr>
+					</table>
+				</div>
+
+				<!-- <ul>
+					<li>
+						<p>Name : <strong>{watercraftList.Year__c} &nbsp; {watercraftList.Make__c} &nbsp;
+								{watercraftList.Model__c}</strong> </p>
+					</li>
+					<li>
+						<p>Value : <strong><lightning-formatted-number value={watercraftList.Value__c}
+									format-style="currency" currency-code="USD"></lightning-formatted-number></strong>
+						</p>
+					</li>
+					<li>
+						<p>Vessel Type : <strong>{watercraftList.Type_of_Vessel__c}</strong></p>
+					</li>
+					<li>
+						<p>Vessel Length : <strong>{watercraftList.Vessel_Length__c}</strong></p>
+					</li>
+					<li>
+						<p>Registered Plate : <strong>{watercraftList.Registered_Plate__c}</strong></p>
+					</li>
+					<li>
+						<p>Vin : <strong>{watercraftList.VIN_Number__c}</strong></p>
+					</li>
+					<li>
+						<p>Beam : <strong>{watercraftList.Beam__c}</strong></p>
+					</li>
+
+				</ul> -->
+
+
+			</div>
+		</template>
+		<div class="driverDetailEdit">
+			<div class="slds-text-heading_medium">{label.DriverDetails}</div>
+			<div class="datatable">
+				<table class="listing-table">
+					<tr>
+						<th>{label.Name}</th>
+						<th>{label.DateOfBirth}</th>
+						<th>{label.State}</th>
+						<th>{label.Country}</th>
+						<th>{label.LicenseNumber}</th>
+						<th>{label.Edit}</th>
+					</tr>
+
+					<template for:each={driverList} for:item="driverItem" for:index="index">
+
+						<tr key={driverItem.Index}>
+							<td>{driverItem.First_Name__c} &nbsp; {driverItem.Last_Name__c}</td>
+							<td class="slds-m-horizontal_small">{driverItem.Dob__c}</td>
+							<td class="slds-m-horizontal_small">{driverItem.License_state__c}</td>
+							<td class="slds-m-horizontal_small">{driverItem.Country__c}</td>
+							<td class="slds-m-horizontal_small">{driverItem.license_number__c}</td>
+							<td>
+								<lightning-button-icon data-id={driverItem.License_Number__c} data-index={index}
+									name={driverItem.License_Number__c} icon-name="utility:edit" variant="bare"
+									onclick={editDriverDetail} alternative-text="edit" title={label.EditUnit}>
+								</lightning-button-icon>
+							</td>
+							<!-- <td style="width: 0px;">
+							<lightning-button-icon name={driverItem.index} icon-name="utility:close" variant="bare"
+								onclick={deleteDriver} alternative-text="close" title="Delete Unit"></lightning-button-icon>
+						</td> -->
+						</tr>
+
+					</template>
+				</table>
+			</div>
+
+		</div>
+		<div class="horizontalAlign">
+			<div>
+				<button class="buttonPrev btnHover" title={label.Prev} onclick={handlePrevClick}><span class="icon-prev"><i
+					class="icon-prevs"></i></span>{label.Prev}
+				</button>
+			</div>
+			<div>
+				<button class="buttonNext btnHover" title={label.Next} onclick={handleNextClick}><span class="icon-next"><i
+					class="icon-nexts"></i></span>{label.Next}
+				</button>
+			</div>
+		</div>
+	</div>
+	<template if:true={isDriverEdit}>
+		<section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+			aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+			<div class="slds-modal__container">
+				<header class="slds-modal__header">
+					<h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{label.EditDriver}</h2>
+				</header>
+				<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+					<c-add-driver-register is-owner={isOwner} onnewdriveradd={handleAddNewDriver}
+						driver-list={driverList} review-vehicle-data={reviewVehicleData} is-edit={isEdit}
+						edit-driver-data={editDriverData} leaddata={leaddata}></c-add-driver-register>
+				</div>
+				<!-- <footer class="slds-modal__footer">
+						<button class="slds-button slds-button_neutral" onclick="{!c.cancleEdit}">Cancel</button>
+						<button class="slds-button slds-button_brand" onclick="{!c.updateDriver}">Save</button>
+					</footer> -->
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open"></div>
+
+
+	</template>
+	<template if:true={isWatercraftEdit}>
+		<section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+			aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+			<div class="slds-modal__container">
+				<header class="slds-modal__header">
+					<h2 id="modal-heading-02" class="slds-modal__title slds-hyphenate">{label.EditWatercraft}</h2>
+				</header>
+				<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+					<c-watercraft-review onnewdriveradd={handleAddNewDriver} review-vehicle-data={watercraftList}
+						is-edit={isEdit} edit-driver-data={editDriverData} leaddata={leaddata}></c-watercraft-review>
+				</div>
+				<!-- <footer class="slds-modal__footer">
+						<button class="slds-button slds-button_neutral" onclick="{!c.cancleEdit}">Cancel</button>
+						<button class="slds-button slds-button_brand" onclick="{!c.updateDriver}">Save</button>
+					</footer> -->
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open"></div>
+
+
+	</template>
+
+
+</template>

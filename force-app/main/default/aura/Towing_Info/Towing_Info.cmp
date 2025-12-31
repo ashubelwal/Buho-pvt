@@ -1,0 +1,104 @@
+<aura:component controller="QuickQuotationCtrl" implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="title" type="String" access="public"/>
+    <aura:attribute name="backButtonVisibility" type="Boolean" default="true" access="public" />
+    <aura:attribute name="policyType" type="String" access="public"/>
+    <aura:attribute name="Towed_Unit_Types" type="list" access="public"/>
+    <aura:attribute name="Street_Legals" type="list" access="public"/>
+    <aura:attribute name="addOtherUnit" type="Boolean" access="public"/>
+
+    <aura:attribute name="onBackClick" type="Aura.Action"/>
+    <aura:attribute name="onNextClick" type="Aura.Action"/>
+    <aura:attribute name="quoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" />
+    <aura:attribute name="towedunitRecord" type="Towed_Unit__c" default="{ 'sobjectType': 'Towed_Unit__c'}" />
+    <aura:attribute name="leadRecord" type="Lead" default="{ 'sobjectType': 'Lead'}"  />
+    <aura:attribute name="iscommunityUser" type="Boolean" default="false"  />
+    <aura:attribute name="loginUserTransOption" type="list" access="public"/>
+    <aura:attribute name="loginUserTransporates" type="list" access="public"/>
+    <aura:attribute name="vehicleRecord" type="Vehicle__c" default="{ 'sobjectType': 'Vehicle__c'}"  />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:attribute name="iscloneConditionPass" type="boolean" default="false" />
+    <aura:attribute name="editPolicy" type="Boolean" default="false" />
+    <aura:attribute name="renewPolicy" type="Boolean" default="false" />
+    
+    <aura:attribute name="newSectionOpen" type="Boolean" default="false" />
+    <aura:attribute name="istowedunitRecord" type="Boolean" default="false"  />
+
+
+    <aura:if isTrue="{!v.editPolicy}">
+        <c:Policy_Edit_Steps step="step4" completedStep="4"/>
+        <aura:set attribute="else">
+            <c:Insurance_Flow_Steps step="step2" completedStep="2"/>
+        </aura:set>
+    </aura:if>
+
+    <lightning:layoutItem padding="around-small" size="12" class="align-center slds-m-top_xx-large">
+        <div class="page-title">
+            <aura:if isTrue="{!v.backButtonVisibility}">
+                <button class="button -plain -back-button" name="step_3" onclick="{!v.onBackClick }">
+                    <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/> Back
+                </button>
+            </aura:if>
+            <h1>{!v.title}</h1>
+            <img class="slds-m-bottom_large" src="{!$Resource.mexinsurance_assets + '/images/icon-towing-unit.svg'}" alt="Towing Unit"/>
+        </div>                    
+    </lightning:layoutItem>
+    
+    <div class="slds-size_12-of-12">
+        <aura:if isTrue="{!v.iscommunityUser }">
+            <lightning:combobox name="progress" placeholder="Select a Towed Unit from your account" options="{!v.loginUserTransOption}" onchange="{!c.handleChange}"/>
+        </aura:if>
+        <table class="listing-table" width="100%">
+            <tr>
+                <th width="200">Unit Name</th>
+                <th>Registration #/License Plate</th>
+                <th></th>
+            </tr>
+            <aura:if isTrue="{!v.istowedunitRecord}">
+                <tr>
+                    <td>{!v.towedunitRecord.Make__c} &nbsp; {!v.towedunitRecord.Model__c} &nbsp; {!v.towedunitRecord.Year__c}</td>
+                    <td>{!v.towedunitRecord.Plate__c}</td>
+                    <td style="width: 0px;">
+                        <lightning:buttonIcon name="{!v.towedunitRecord.Id}" iconName="utility:close" variant="bare" onclick="{! c.deleteTowedUnit }" alternativeText="close" title="Delete Unit" />
+                    </td>
+                </tr>
+            </aura:if>
+            <!-- If no transporates are added -->
+            <aura:if isTrue="{!!v.istowedunitRecord}" >
+                <tr>
+                    <td colspan="3">
+                        <div class="align-center">No Towed Unit added</div>
+                    </td>
+                </tr>
+            </aura:if>
+            <!-- End if no transporates are added -->
+        </table>
+        <div class="form-container slds-p-top_x-large">
+            <aura:if isTrue="{!v.iscommunityUser }">
+                <lightning:accordion allowMultipleSectionsOpen="true" onsectiontoggle="{! c.handleSectionToggle }" >
+                    <lightning:accordionSection name="A" label="ADD A DIFFERENT TOWED"></lightning:accordionSection>
+                </lightning:accordion>
+            </aura:if>
+
+            <aura:if isTrue="{!v.newSectionOpen}">
+                <lightning:input aura:id="validateField" required="true" pattern="^(19|20)\d{2}$" maxlength="4"  messageWhenPatternMismatch ="Enter a valid year" variant = "label-hidden" type="text" name="Year__c" placeholder="Year" value="{!v.towedunitRecord.Year__c}" onchange="{!c.updateValue}" />
+                <lightning:input aura:id="validateField" required="true" variant = "label-hidden" type="text" name="Make__c" placeholder="Make" value="{!v.towedunitRecord.Make__c}" onchange="{!c.updateValue}" />
+                <lightning:input type="text" name="Model__c" placeholder="Model" value="{!v.towedunitRecord.Model__c}" onchange="{!c.updateValue}" />
+                <lightning:input aura:id="validateField" required="true" pattern="[A-Z0-9]+" messageWhenPatternMismatch ="Whitespace are not allowed" variant = "label-hidden" type="text" name="VIN_Number__c" placeholder="VIN Number" value="{!v.towedunitRecord.VIN_Number__c}" onchange="{!c.updateValue}" />
+                <lightning:input aura:id="validateField" required="true" variant = "label-hidden" type="text" name="Plate__c" placeholder="Plate" value="{!v.towedunitRecord.Plate__c}" onchange="{!c.updateValue}" />
+                <lightning:input aura:id="validateField" required="true" variant = "label-hidden" type="number" name="Towed_Unit_Value__c" formatter="currency" step="0.01" placeholder="Towed Unit Value" value="{!v.towedunitRecord.Towed_Unit_Value__c}" onchange="{!c.updateValue}" />
+                <!-- lightning:input type="text" name="Towing_Terms__c" placeholder="Days in Tow" value="{!v.towedunitRecord.Towing_Terms__c}" onchange="{!c.updateValue}" / -->
+                <lightning:combobox aura:id="validateField" required="true" variant = "label-hidden" name="Towed_Unit_Type__c" label="Towed Unit Type" placeholder="Towed Unit Type" value="{!v.towedunitRecord.Towed_Unit_Type__c}" options="{!v.Towed_Unit_Types }"  onchange="{!c.updateValue}"/>
+                <lightning:combobox name="Street_Legal__c" label="Does this towed unit have a motor, is it drive-able, and does it also have a Mexican registration?" placeholder="" value="{!v.towedunitRecord.Street_Legal__c}" options="{!v.Street_Legals }" onchange="{!c.updateValue}"/>
+            </aura:if>
+        </div>
+    </div>               
+    
+    <lightning:layoutItem size="12" class="slds-m-top_large align-center">  
+        <aura:if isTrue="{! and(v.policyType != 'Northbound')}">
+            <button class="button -secondary -wider" name="addOtherUnit" onclick="{! c.onNextClick }">Add</button>   
+        </aura:if>               
+        <button class="button -secondary -wider" onclick="{! c.onNextClick }">Next</button>
+    </lightning:layoutItem>
+</aura:component>

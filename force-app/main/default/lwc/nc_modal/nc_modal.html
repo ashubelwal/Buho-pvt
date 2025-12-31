@@ -1,0 +1,23 @@
+<template>
+    <template if:false={isVisible}>
+        <button class={classNames} onclick={handleOpenModal}>
+            {btnName}
+        </button>
+    </template>
+
+    <template if:true={isVisible}>
+        <section role="dialog" class={modalClass}>
+            <div class="slds-modal__container modal">
+                <div class="modal-content">
+                    <div>
+                        <h2 class="slds-text-heading_medium slds-p-vertical_small">{modalTitle}</h2>
+                        <p class="slds-p-vertical_small">{modalContent}</p>
+                    </div>
+                    <lightning-button label="Close" onclick={handleCloseModal}></lightning-button>
+                </div>
+            </div>
+        </section>
+
+        <div class={backdropClass}></div>
+    </template>
+</template>

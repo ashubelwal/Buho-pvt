@@ -1,0 +1,41 @@
+<template>
+    <div class="maindiv">
+        <template if:false={submittedDetails}>
+        <template if:true={fetchPolicyDetails}>
+        <div class="slds-p-around_medium">
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={fetchPolicyDetails} for:item="Data">
+                        <tr key={Data.name}>
+                            <td>{Data.label}</td>
+                            <td>{Data.value}</td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+    </template>
+        <div class="slds-p-around_medium">
+            
+            <lightning-input label="Vehicle Value" name="Vehicle_Value__c" value={vehicleValue} onchange={handleFieldChange}></lightning-input>
+            <template if:true={isWaterCraft}>
+                <lightning-combobox label="Medical" name="Medical__c" value={medicalValue} placeholder="Select Medical " options={medicalOption} onchange={handleFieldChange} ></lightning-combobox>
+            </template>
+            <lightning-combobox label="Liability" name="Liability__c" value={liabilityvalue} placeholder="Select Liability " options={liabilityOption} onchange={handleFieldChange} ></lightning-combobox>
+
+            <lightning-button variant="brand" label="Submit" onclick={handleSubmit}></lightning-button>
+        </div>
+    </template>
+    <template if:true={submittedDetails}>
+        <div class="thankspage">
+            <h1>Thank You for Reviewing and Setting Policy for Auto-Renewal!</h1>
+            </div>
+    </template>
+    </div>
+</template>

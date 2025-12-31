@@ -1,0 +1,150 @@
+/* ============================= */
+/*        CARD STYLES            */
+/* ============================= */
+.article-card {
+    perspective: 1000px;
+    cursor: pointer;
+    position: relative;
+    width: 100%;
+    height: 200px;
+    z-index: 2;
+    /* Asegura que las cards tengan prioridad sobre algunos elementos */
+}
+
+.article-card .card-front,
+.article-card .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    transition: transform 0.6s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.article-card .card-front {
+    background: white;
+    border: 1px solid #ddd;
+}
+
+.article-card .card-back {
+    background: #f3f3f3;
+    transform: rotateY(180deg);
+}
+
+.article-card:hover .card-front {
+    transform: rotateY(180deg);
+}
+
+.article-card:hover .card-back {
+    transform: rotateY(0);
+}
+
+/* ============================= */
+/*        RESPONSIVE GRID         */
+/* ============================= */
+@media screen and (min-width: 1024px) {
+
+    /* 3 columnas en pantallas grandes */
+    .slds-col {
+        flex: 1 1 calc(33.333% - 20px);
+        max-width: calc(33.333% - 20px);
+    }
+}
+
+@media screen and (max-width: 1023px) and (min-width: 600px) {
+
+    /* 2 columnas en tablets */
+    .slds-col {
+        flex: 1 1 calc(50% - 20px);
+        max-width: calc(50% - 20px);
+    }
+}
+
+@media screen and (max-width: 599px) {
+
+    /* 1 columna en móviles */
+    .slds-col {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+
+    /* Ajustar altura en móviles para mejor visibilidad */
+    .article-card {
+        height: auto;
+        min-height: 180px;
+    }
+}
+
+/* ============================= */
+/*        MODAL STYLES           */
+/* ============================= */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    /* Oculto por defecto */
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 50%;
+    max-height: 80%;
+    overflow-y: auto;
+    position: relative;
+    z-index: 10000;
+}
+
+/* Ajustar el modal en pantallas pequeñas */
+@media screen and (max-width: 768px) {
+    .modal-content {
+        width: 90%;
+    }
+}
+
+
+.slds-modal__close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* ============================= */
+/*     BUTTON CONTAINER STYLES   */
+/* ============================= */
+.button-container {
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* ============================= */
+/*      FIXES FOR SALESFORCE     */
+/* ============================= */
+/* Asegura que Salesforce no oculte elementos flotantes */
+body {
+    overflow: visible !important;
+}
+
+/* Forzar que lightning-card no limite visibilidad */
+lightning-card {
+    overflow: visible !important;
+    z-index: 1;
+    /* Evita que las cards sean tapadas por otros elementos */
+}

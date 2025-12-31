@@ -1,0 +1,16 @@
+.THIS .contactSupportBtn {
+   display: block;
+    border-width: 2px;
+    border-style: solid;
+    padding: 5px 24px;
+    min-width: 135px;
+    transition: all .2s;
+    width: 100%;
+    background-color: rgb(50,128,129);
+    color: #fff;
+    border-color: rgb(50,128,129);
+    border-radius: 0px;
+    margin: 0 auto;
+    font-size: 0.8125rem;
+    text-transform: capitalize;
+}

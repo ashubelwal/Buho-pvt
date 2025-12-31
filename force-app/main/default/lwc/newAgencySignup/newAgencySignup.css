@@ -1,0 +1,30 @@
+.wrapper{
+	background-color: #ffffff;
+	padding: 20px;
+	border-radius: 4px;
+}
+
+.wrapper {
+	--slds-c-input-color-border: #dadada;
+	--sds-c-textarea-color-border: #dadada;
+	--slds-c-checkbox-color-border: #dadada;
+	--lwc-formLabelFontSize: 13px;
+}
+
+.card {
+    font-weight: 600;    
+}
+
+.card input{
+	border: 1px solid #eee;
+	--slds-c-input-color-border: green;	
+}
+
+.header {
+	--lwc-spacingXxSmall: 0px;
+}
+
+.checkBoxGroup .slds-checkbox_button-group {
+    display: inline-flex;
+    flex-wrap: wrap;
+}

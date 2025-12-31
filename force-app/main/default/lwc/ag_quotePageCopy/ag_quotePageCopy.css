@@ -1,0 +1,230 @@
+/* Active tab styling */
+.slds-tabs_default__item.slds-is-active {
+    background: #e6f7ff;
+    border-radius: 4px;
+    width: auto;
+    padding: 5px 15px;
+}
+
+.spinner-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    /* Nice translucent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    /* Prevent going out of parent */
+    border-radius: 0.5rem;
+    /* Optional: Rounded corners */
+}
+
+
+/* Sticky tab navigation */
+.tabs-container {
+    position: relative;
+    transition: all .1s ease-in;
+    /* Smooth transition effect */
+}
+
+.sticky-content {
+    display: none;
+}
+
+.sticky .slds-is-active .sticky-content {
+    display: block;
+    text-align: right;
+
+}
+
+.sticky .slds-is-active .sticky-wrap {
+    width: 100%;
+    text-align: left;
+    transition: 1s ease-out;
+}
+
+.tabs-container.sticky .slds-tabs_default__item.slds-is-active {
+    position: fixed;
+    top: 0;
+    width: 76%;
+    z-index: 999 !important;
+    background-color: #fff;
+    box-shadow: -1px 8px 6px 2px rgba(0, 0, 0, 0.10);
+    transition: all .1s ease-out;
+}
+
+/* General styling for tab items */
+.slds-tabs_default__item {
+    display: flex;
+    /* Flexbox layout for proper alignment */
+    justify-content: left;
+    align-items: flex-end;
+    text-align: center;
+    height: 70px;
+    /* Fixed height to standardize tab size */
+}
+
+
+/* Active tab link styling */
+.slds-tabs_default__item.slds-is-active .slds-tabs_default__link {
+    font-size: 2rem;
+    /* Larger font for active tab links */
+}
+
+/* Mobile view: Adjust font size */
+@media (max-width: 768px) {
+    .slds-tabs_default__item.slds-is-active .slds-tabs_default__link {
+        font-size: 1.2rem;
+    }
+}
+
+
+@media only screen and (max-width: 600px) {
+    .test {}
+
+    .tabs-container.sticky .slds-tabs_default__item.slds-is-active {
+        left: 0;
+        width: 100%;
+        transition: .3s ease-out;
+        padding: 2px 15px;
+    }
+
+    /* .sticky-wrap {
+        flex-direction: column;
+        align-items: flex-start;
+    } */
+
+    .coverage {
+        text-align: center;
+    }
+
+    .sticky-wrap .slds-col {
+        padding: 0px 10px;
+    }
+
+    .slds-tabs_default__nav li {
+        padding: 0.5rem 0;
+    }
+
+    .slds-tabs_default__nav {
+        overflow-x: auto;
+        white-space: nowrap;
+        display: flex;
+        flex-wrap: nowrap;
+    }
+
+    .slds-tabs_default__nav li {
+        flex: 0 0 auto;
+        margin-right: 1rem;
+    }
+
+    /* .slds-button.slds-button_brand {
+        width: 100%;
+        font-size: 1rem;
+        padding: 0.75rem;
+    } */
+}
+
+/* Coverage card styling */
+.coverage {
+    padding: 10px;
+    /* Spacing inside the coverage container */
+    border: 1px solid #eee;
+    /* Light border to define coverage boundaries */
+    border-radius: 4px;
+    margin-bottom: 10px;
+    /* Space between multiple coverage cards */
+}
+
+.coverage .slds-truncate {
+    white-space: normal !important;
+}
+
+/* Layout for coverage adjustment controls */
+.coverageAdjustment {
+    display: flex;
+    /* Flexbox for row layout */
+    flex-wrap: nowrap;
+    /* Prevent wrapping */
+    flex-direction: row;
+    align-content: space-between;
+    /* Evenly distribute content */
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+    /* Spacing between elements */
+    margin-bottom: 20px;
+}
+
+/* Container for number input and buttons */
+.number-input-container {
+    display: flex;
+    /* Flexbox for centering */
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    /* Space between input and buttons */
+    font-size: 18px;
+    /* Font size for consistency */
+    text-align: center;
+    flex-wrap: wrap;
+    /* Wrap content for smaller screens */
+    align-content: center;
+    border: 1px solid #eee;
+    /* Border around the container */
+    padding: 10px;
+    /* Internal padding for spacing */
+    border-radius: 4px;
+}
+
+/* Styling for adjust buttons (+ and -) */
+.adjust-btn {
+    background-color: #e6f7ff;
+    /* Light blue background */
+    border-color: #91d5ff;
+    border: none;
+    padding: 1px 10px;
+    /* Padding for click area */
+    cursor: pointer;
+    /* Pointer cursor for interactivity */
+    border-radius: 4px;
+    font-size: 18px;
+    /* Font size for visibility */
+    transition: background-color 0.3s, color 0.3s;
+    /* Smooth hover effect */
+}
+
+/* Hover state for adjust buttons */
+.adjust-btn:hover {
+    background-color: #0070d2;
+    /* Change to dark blue on hover */
+    color: #fff;
+    /* White text for contrast */
+}
+
+.adjust-btn:disabled {
+    background-color: #d8d8d8;
+    /* Light gray */
+    color: #a0a0a0;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Number input field styling */
+.number-input {
+    max-width: 150px;
+    padding: 3px 10px;
+    text-align: left;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.coverage-image {
+    height: 50px;
+    width: auto;
+    object-fit: cover;
+}

@@ -1,0 +1,27 @@
+.pageTitle h2 {
+	border-bottom: 1px solid #eee;
+    padding: 10px 0;
+}
+
+.buttonNext,.buttonPrev{
+    position: relative;
+    cursor: pointer;
+    background: #003a70;
+    border: 1px solid #003a70;
+    color: #fff;
+    font-weight: 600;
+    height: 33px;
+    width: 120px;
+    border-radius: 4px;
+    user-select: none;
+    outline: none;
+    float: left;
+    margin-right: 10px;
+}
+
+.loading {
+    background-color: #fff;
+    border: 1px solid #003a70;    
+    user-select: none;
+    color: #003a70; 
+}

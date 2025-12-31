@@ -1,0 +1,197 @@
+<aura:component controller="QuickQuotationCtrl" implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable" access="global">
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>    
+    <aura:attribute name="screenName" type="String" />
+    <aura:attribute name="communityUser" type="Boolean" default="false"/>
+    <aura:attribute name="recordId" type="String" default="" />
+    <aura:attribute name="policyType" type="String" />
+    <aura:attribute name="spinner" type="boolean" default="false" />
+    <aura:attribute name="countVehicle" type="Integer" access="public" />
+    <aura:attribute name="quoteRecord" type="Quote__c" default="{ 'sobjectType': 'Quote__c'}" />
+    <aura:attribute name="towedunitRecord" type="Towed_Unit__c" default="{ 'sobjectType': 'Towed_Unit__c'}" />
+    <aura:attribute name="vehicleRecord" type="Vehicle__c" default="{ 'sobjectType': 'Vehicle__c'}" />
+    <aura:attribute name="leadRecord" type="Lead" default="{ 'sobjectType': 'Lead'}"  />
+    <aura:attribute name="rateRecord" type="Rate_Table__c" default="{ 'sobjectType': 'Rate_Table__c'}" access="public" />
+    <aura:attribute name="rateRecordList" type="List" access="public" />
+    <aura:attribute name="driverRecord" type="Driver__c" default="{ 'sobjectType': 'Driver__c'}"/>
+    <aura:attribute name="drivers" type="List" access="public" />
+    <aura:attribute name="quoteIds" type="List" access="public" />
+    <aura:attribute name="anotherVehicle" type="String" default="No" access="public" />
+    <aura:attribute name="highLiability" type="String" default="200,000"  />
+    <aura:attribute name="lowLiability" type="String" default="100,000"  />
+    <aura:attribute name="driverOptions" type="list"  />
+    <aura:attribute name="vehicleTypeOptions" type="list"  />
+    <aura:attribute name="policyMapList" type="list"  />
+    
+    <aura:attribute name="policyRecord" type="Policy__c" default="{ 'sobjectType': 'Policy__c'}"/>
+    <aura:attribute name="contactRecord" type="Contact" default="{ 'sobjectType': 'Contact'}"/>
+    <aura:attribute name="affiliateNumber" type="String"/>
+    <aura:attribute name="affiliateAccount" type="Account" default="{ 'sobjectType': 'Account'}"/>
+    <aura:attribute name="minDate" type="String" />
+    <aura:attribute name="endMinDate" type="String" />
+
+    <aura:attribute name="Final_total_Premium" type="Decimal" access="public"/>
+    
+    <ltng:require styles="{!$Resource.mexinsurance_assets + '/style.css'}" afterScriptsLoaded="{!c.doInit}"/>
+
+    <!--********Payment******** -->
+    <aura:handler name="paymentIsSuccessful" event="c:paymentIsSuccessful" action="{!c.handleNext}"/>
+
+    <!--********Spinner******** -->
+    <aura:if isTrue="{!v.spinner}">
+        <lightning:spinner alternativeText="Loading" variant="brand" />
+    </aura:if> 
+    
+    <!--********Header******* *-->
+    <header class="page-header">
+        <div class="wrap">
+            <span class="product-name"><strong class="red">Northbound</strong> Insurance</span>
+        </div>
+    </header>
+    
+    <div class="wrap -size-md">
+        <lightning:layout multipleRows="true">
+            
+            <aura:if isTrue="{!v.screenName == 'UserInfo'}">
+                <c:Northbound_Lead_Generate_Step step="step1" completedStep="1"/>
+                <c:UserInfo_Screen_Detail quoteRecord="{!v.quoteRecord}" leadRecord="{!v.leadRecord}" backButtonVisibility="false"
+                                          iscommunityUser="{!v.communityUser}" policyType="{!v.policyType}" title="Please fill in some details below:"
+                                          onBackClick="{!c.handleBack}" onNextClick="{!c.handleNext}" />
+            </aura:if>
+
+            <!--********Please fill in vehicle options below:******* *-->
+            <aura:if isTrue="{!v.screenName == 'VehicleOptions'}">
+                <c:Northbound_Lead_Generate_Step step="step2" completedStep="2"/>
+                <c:Vehicle_Detail quoteRecord="{!v.quoteRecord}" leadRecord="{!v.leadRecord}" backButtonVisibility="{!!v.communityUser}"
+                                    vehicleRecord ="{!v.vehicleRecord}" iscommunityUser="{!v.communityUser}"
+                                    policyType="{!v.policyType}" title="Please fill in vehicle details below:" onBackClick="{!c.handleBack}"
+                                    onNextClick="{!c.handleNext}" />
+            </aura:if>
+
+            <!--********Please select term options:******* *-->
+            <aura:if isTrue="{!v.screenName == 'TermOptions'}">
+                <c:Northbound_Lead_Generate_Step step="step3" completedStep="3"/>
+                <c:Term_Option quoteRecord="{!v.quoteRecord}" leadRecord="{!v.leadRecord}"
+                                     policyType="{!v.policyType}" title="Please select term options" onBackClick="{!c.handleBack}"
+                                     onNextClick="{!c.handleNext}"
+                                     minDate="{!v.minDate}" 
+                                     endMinDate = "{!v.endMinDate}"  />
+            </aura:if>
+
+            <!--********Are you towing anything?:******* *-->
+            <aura:if isTrue="{!v.screenName == 'TowningAnything'}">
+                <c:Northbound_Lead_Generate_Step step="step4" completedStep="4"/>
+                <c:Towing_Anything quoteRecord="{!v.quoteRecord}" leadRecord="{!v.leadRecord}"
+                                    policyType="{!v.policyType}" title="Are you towing anything?" 
+                                    towedunitRecord="{!v.towedunitRecord}"
+                                    onBackClick="{!c.handleBack}"
+                                    onNextClick="{!c.handleNext}" />
+            </aura:if>
+
+            <!--********Tell us more about what you're towing?******* *-->
+            <aura:if isTrue="{!v.screenName == 'TowningInfo'}">
+                <c:Towing_Info quoteRecord="{!v.quoteRecord}" 
+                                    towedunitRecord="{!v.towedunitRecord}" iscommunityUser="{!v.communityUser}"
+                                    vehicleRecord="{!v.vehicleRecord}"
+                                    policyType="{!v.policyType}" title="Tell us more about what you're towing?" onBackClick="{!c.handleBack}"
+                                    onNextClick="{!c.handleNext}" />
+            </aura:if>
+
+            <!--********Get your quick quote!******* *-->
+            <aura:if isTrue="{!v.screenName == 'QuickQuote'}">
+                <c:Quick_Quote_Detail quoteRecord="{!v.quoteRecord}" countVehicle="{!v.countVehicle}" rateRecord="{!v.rateRecord}"
+                                        leadRecord = "{!v.leadRecord}" communityUser="{!v.communityUser}"
+                                        policyType="{!v.policyType}" title="Get your quick quote!" onBackClick="{!c.handleBack}"
+                                        onNextClick="{!c.handleNext}"
+                                        minDate="{!v.minDate}"
+                                        endMinDate = "{!v.endMinDate}" />
+            </aura:if>
+
+            <!--********Review vehicle information******* *-->
+            <aura:if isTrue="{!v.screenName == 'ReviewVehicle'}">
+                <c:Review_Vehicle quoteRecord="{!v.quoteRecord}" vehicleRecord="{!v.vehicleRecord}"  leadRecord = "{!v.leadRecord}"
+                                     policyType="{!v.policyType}" title="Review vehicle information" onBackClick="{!c.handleBack}"
+                                     onNextClick="{!c.handleNext}" communityUser="{!v.communityUser}" />
+            </aura:if>
+
+            <!--********Company information******* *-->
+            <aura:if isTrue="{!v.screenName == 'CompanyInfo'}">
+                <c:Company_Info quoteRecord="{!v.quoteRecord}" vehicleRecord="{!v.vehicleRecord}" leadRecord = "{!v.leadRecord}"
+                                     policyType="{!v.policyType}" title="Company information" onBackClick="{!c.handleBack}"
+                                     onNextClick="{!c.handleNext}" />
+            </aura:if>
+
+            <!--********Company information******* *-->
+            <aura:if isTrue="{!v.screenName == 'LienHolder'}">
+                <c:LienHolder_Info quoteRecord="{!v.quoteRecord}" leadRecord = "{!v.leadRecord}" vehicleRecord="{!v.vehicleRecord}"
+                                     policyType="{!v.policyType}" title="Lienholder Information" onBackClick="{!c.handleBack}"
+                                     onNextClick="{!c.handleNext}" />
+            </aura:if>
+
+            <!--********Owner of the Registered Vehicle******* *-->
+            <aura:if isTrue="{!v.screenName == 'RegisteredVehicle'}">
+                <c:Driver_Registration quoteRecord="{!v.quoteRecord}" driverRecord="{!v.driverRecord}" leadRecord = "{!v.leadRecord}"
+                                        drivers="{!v.drivers}" isCommunityUser="{!v.communityUser}" vehicleRecord="{!v.vehicleRecord}"
+                                        policyType="{!v.policyType}" title="Review vehicle information" onBackClick="{!c.handleBack}"
+                                        onNextClick="{!c.handleNext}" />
+            </aura:if>
+
+            <!--********Would you like to insure another vehicle?******* *-->
+            <aura:if isTrue="{!v.screenName == 'AnotherVehicle'}">
+                <c:Another_Vehicle quoteRecord="{!v.quoteRecord}" anotherVehicle="{!v.anotherVehicle}"
+                                     policyType="{!v.policyType}" title="Would you like to insure another vehicle?" onBackClick="{!c.handleBack}"
+                                     onNextClick="{!c.handleNext}" />
+            </aura:if>
+
+            <!-- *Start Quote Detail 1 Page * -->
+            <aura:if isTrue="{!v.screenName == 'QuoteDetail' }" >
+                <lightning:layoutItem padding="around-small" size="12" class="slds-align_absolute-center">
+                    <c:verifyEditQuoteDetail vehicleTypeOptions="{!v.vehicleTypeOptions}"
+                                             Final_total_Premium="{!v.Final_total_Premium}"
+                                             quoteIds="{!v.quoteIds}" rateObectList="{!v.rateRecordList}" 
+                                             highLiability="{!v.highLiability}" lowLiability="{!v.lowLiability}" onbackClick="{!c.handleBack}" 
+                                             isCommunityUser="{!v.communityUser}" quoteRecord="{!v.quoteRecord}" />
+                </lightning:layoutItem>
+                
+                <lightning:layoutItem padding="around-small" size="12" class="slds-align_absolute-center slds-m-top_large">
+                    <button class="button -secondary -wider -margin-left" name="step_12" onclick="{! c.handleNext }" >Confirm</button>
+                </lightning:layoutItem>
+            </aura:if>
+
+            <!-- START*Payment Page* -->
+            <aura:if isTrue="{!v.screenName == 'PaymentDetail'}">
+                <c:Insurance_Flow_Steps step="step5" completedStep="5"/>
+
+                <lightning:layoutItem padding="around-small" size="12" class="slds-align-center slds-m-top_xx-large">
+                    <div class="page-title">
+                        <button class="button -plain -back-button" name="step_14" onclick="{! c.handleBack }">
+                            <img class="icon-back" src="{!$Resource.mexinsurance_assets + '/images/icon-back.svg'}" alt="Back"/> Back
+                        </button>
+                        <h1>Let's tackle the Payment now</h1>                        
+                    </div>
+                </lightning:layoutItem>
+
+                <c:paymentForm drivers="{!v.drivers}" policyType="{!v.quoteRecord.Policy_Type_picklist__c}" onBackClick="{!c.handleBack}" 
+                               communityUser="{!v.communityUser}" quoteRecord="{!v.quoteRecord}" 
+                               Final_total_Premium="{!v.Final_total_Premium}" quoteIds="{!v.quoteIds}" 
+                               quoteId="{!v.quoteRecord.Id}"></c:paymentForm>
+            </aura:if>
+
+            <!-- ***************Start Online Insurance Final Details*************** -->
+            <aura:if isTrue="{!v.screenName == 'InsuranceFinalDetail' }">
+                
+                <c:Insurance_Final_Detail quoteIds="{!v.quoteIds}" rateRecordList="{!v.rateRecordList}"
+                                    policyMapList="{!v.policyMapList}" isCommunityUser="{!v.communityUser}"
+                                    policyRecord="{!v.policyRecord}" contactRecord="{!v.contactRecord}"
+                                     policyType="{!v.policyType}" title="Online Insurance Final Details" onBackClick="{!c.handleBack}"
+                                     onNextClick="{!c.handleNext}" quoteRecord="{!v.quoteRecord}" />
+            </aura:if>
+
+            <!-- START*Payment Page* --> 
+            <aura:if isTrue="{!v.screenName == 'PolicyDetail'}">
+                <c:Policy_Detail policyMapList="{!v.policyMapList}" quoteRecord="{!v.quoteRecord}" quoteIds="{!v.quoteIds}" iscommunityUser="{!v.communityUser}"/>
+            </aura:if>
+
+        </lightning:layout>  
+    </div>
+</aura:component>

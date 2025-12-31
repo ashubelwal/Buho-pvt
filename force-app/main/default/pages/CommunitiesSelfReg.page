@@ -1,0 +1,220 @@
+<apex:page id="communitiesSelfRegPage" showHeader="false" sidebar="false" controller="CommunitiesSelfRegController" title="{!$Label.site.user_registration}">
+    <head>
+        <style type="text/css">
+            body{
+            background:#ededed;
+            }
+            
+            .container{
+            margin:10px auto;
+            width:600px;
+            }
+            
+            /*-- Email CSS --*/
+            
+            .mexemeailtheme{
+            background-color:#fff;
+            font-family:Arial;
+            overflow:hidden;
+            width:100%;
+            }
+            
+            .mexemeailhead{
+            background-color:#328081;
+            padding:3px 5px 5px 5px;
+            overflow:hidden;
+            width:100%;
+            }
+            
+            .mexemeaillogo{
+            padding-left:35px;
+            overflow:hidden;
+            width:100%;
+            }
+            
+            .mexemeaillogo p{
+            font-family:Arial;
+            font-weight:400;
+            font-size:22px;
+            color:#fff;
+            }
+            
+            .mexemeaillogo p > sup{
+            font-size:15px;
+            }
+            
+            .mexemeailphoto{
+            overflow:hidden;
+            width:100%;
+            }
+            
+            .mexemeailphoto img{
+            max-width:100%;
+            }
+            
+            .mexemeailcontent{
+            background-color:#fff;
+            padding:10px 30px;
+            overflow:hidden;
+            color:#5e5e5e;
+            width:90%;
+            }
+            
+            .mexemeailcontent p{
+            line-height:26px;
+            font-size:18px;
+            color:#5e5e5e;
+            }
+            
+            .mexemeailbut{
+            background-color:#cf614d;
+            text-transform:uppercase;
+            text-decoration:none;
+            padding:15px 35px;
+            border-radius:30px;
+            width:max-content;
+            margin:10px 0px;
+            font-weight:600;
+            font-size:18px;
+            display:block;
+            color:#fff;
+            }
+            
+            .mexemeailbut:hover,
+            .mexemeailbut:focus{
+            opacity:0.9;
+            }
+            
+            .mexemeailsocial{
+            padding:15px 35px 35px 35px;
+            background-color:#ebf3f3;
+            overflow:hidden;
+            width:100%;
+            }
+            
+            .mexemeailsocial h3{
+            color:#5e5e5e;
+            }
+            
+            .mexemico{
+            background-size:100%!important;
+            margin-right:10px;
+            overflow:hidden;
+            display:block;
+            float:left;
+            }
+            
+            .mexemico:hover,
+            .mexemico:focus{
+            
+            .mexemeailfooter{
+            background-color:#328081;
+            padding:25px 35px;
+            overflow:hidden;
+            width:100%;
+            }
+            
+            .mexemeailfooter p{
+            line-height:26px;
+            font-size:16px;
+            color:#bcd5d5;
+            }
+            
+            .mexemeailfooter p > a{
+            text-decoration:none;
+            color:#ffffff;
+            }
+            
+            .mexemeailfooter p > a:hover,
+            .mexemeailfooter p > a:focus{
+            opacity:0.9;
+            }
+            
+            .mexemeailfooter a{
+            text-decoration:none;
+            color:#ffffff;
+            }
+            
+            .mexemeailfooter a:hover,
+            .mexemeailfooter a:focus{
+            opacity:0.9;
+            }
+
+        </style>
+    </head> 
+	<apex:slds />
+    <apex:define name="body">  
+        <center>
+            <apex:form id="theForm" forceSSL="true">
+                <apex:pageMessages id="error"/>
+                <div style="background-color:#fff;font-family:Arial;overflow:hidden;width:100%;">
+                    <div class="mexemeailhead" style="background-color:#328081;padding:3px 5px 5px 5px;overflow:hidden;width:100%;">
+                        <div style="padding-left:35px;overflow:hidden;width:100%;" class="mexemeaillogo"><p style="font-family:Arial;font-weight:400;font-size:22px;color:#fff; text-align: left;"><b>Mex</b>Insurance <sup style="font-size:15px;">&reg;</sup></p></div>
+                    </div>
+                    <div style="overflow:hidden;width:100%;" class="mexemeailphoto">
+                        <img style="max-width:100%;width:100%;" src="https://www.mexinsurance.com/wp-content/uploads/emailhead.jpg"/>
+                    </div>
+                    <div style="background-color:#fff;padding:10px 30px;overflow:hidden;color:#5e5e5e;width:90%;" class="mexemeailcontent">
+                        <apex:panelGrid columns="1" style="margin-top:1em; width: 35%;">
+                            <!--apex:outputLabel value="First Name" for="firstName"/-->
+                            <apex:inputText required="true" id="firstName" value="{!firstName}" label="First Name" styleClass="slds-input">
+								<apex:outputLabel value="First Name" for="firstName"/>
+							</apex:inputText>
+                            
+                            <apex:inputText required="true" id="lastName" value="{!lastName}" label="Last Name" styleClass="slds-input">
+								<apex:outputLabel value="Last Name" for="lastName"/>
+							</apex:inputText>
+
+							<apex:inputText required="true" id="MobilePhone" value="{!mobilePhone}" label="MobilePhone" styleClass="slds-input">
+								<apex:outputLabel value="MobilePhone" for="MobilePhone"/>
+							</apex:inputText>
+
+                            <!--apex:outputLabel value="{!$Label.site.community_nickname}" for="communityNickname"/>
+                            <apex:inputText required="true" id="communityNickname" value="{!communityNickname}" label="{!$Label.site.community_nickname}"/-->
+
+                            
+                            <apex:inputText required="true" id="email" value="{!email}" label="{!$Label.site.email}" styleClass="slds-input">
+								<apex:outputLabel value="{!$Label.site.email}" for="email"/>
+							</apex:inputText>
+                            
+                            <apex:inputSecret id="password" value="{!password}" styleClass="slds-input">
+								<apex:outputLabel value="{!$Label.site.password}" for="password"/>
+							</apex:inputSecret>
+
+                            
+                            <apex:inputSecret id="confirmPassword" value="{!confirmPassword}" styleClass="slds-input">
+								<apex:outputLabel value="{!$Label.site.confirm_password}" for="confirmPassword"/>
+							</apex:inputSecret>
+                            <apex:outputText value=""/>
+                            <apex:commandButton action="{!registerUser}" value="{!$Label.site.submit}" id="submit" 
+							style="background: #cf614d; background-color:#cf614d;text-transform:uppercase;text-decoration:none;padding:15px 35px;border-radius:30px;width:max-content;font-weight:600;font-size:18px;display:block;color:#fff;margin: auto; margin-top: 10px; "  styleClass=" slds-m-top_medium mexemeailbut"/>
+                        </apex:panelGrid>
+                    </div>
+                    <div style="padding:15px 35px 35px 35px;background-color:#ebf3f3;overflow:hidden;width:100%; text-align: left;" class="mexemeailsocial">
+                        <p><h3 style="color:#5e5e5e;">Follow us</h3></p>
+                        <p>
+							<a style="background:no-repeat; text-decoration: none;" class="mexemico mexemailfaceboock" target="_blank" href="https://www.facebook.com/mexinsurance">
+								<img src="https://www.mexinsurance.com/wp-content/uploads/emailfaceboock.png"/>
+							</a>
+							<a style="background:no-repeat; text-decoration: none;" class="mexemico mexemailinstagram" target="_blank" href="https://www.instagram.com/mexinsurance/">
+								<img src="https://www.mexinsurance.com/wp-content/uploads/emailinstagram.png"/>
+							</a>
+							<a style="background:no-repeat; text-decoration: none;" class="mexemico mexemailtweeter" target="_blank" href="https://twitter.com/mexinsurance">
+								<img src="https://www.mexinsurance.com/wp-content/uploads/emailtweeter.png"/>
+							</a>
+                        </p>
+                    </div>
+                    <div style="background-color:#328081;padding:25px 35px;overflow:hidden;width:100%;" class="mexemeailfooter">
+                        <p style="line-height:26px;font-size:16px;color:#bcd5d5;">By using this website you agree to the <br/><a style="text-decoration:none;color:#ffffff;" target="_blank" href="https://www.mexinsurance.com/terms/">Terms of Purchase, Access and Use Agreement</a></p>
+                        <p style="line-height:26px;font-size:16px;color:#bcd5d5;"><a style="text-decoration:none;color:#ffffff;" target="_blank" href="https://www.mexinsurance.com/privacy-policy/">Privacy Policy</a>&ensp;|&ensp;<a target="_blank" href="https://www.mexinsurance.com/sitemap_index.xml">Sitemap</a>&ensp;|&ensp;<a target="_blank" href="https://www.mexinsurance.com/s/affiliate/auth/login/">Affiliates Login</a></p>
+                        <p style="line-height:26px;font-size:16px;color:#bcd5d5;">California Insurance License: 0G35864 <br/><a style="text-decoration:none;color:#ffffff;" target="_blank" href="https://www.mexinsurance.com/">&copy; Mexico Insurance Services, Inc.</a></p>
+                        <p style="line-height:26px;font-size:16px;color:#bcd5d5;">3813 Ray Street, San Diego, CA 92104</p>
+                    </div>
+                </div>
+                
+                <br/>
+            </apex:form>
+        </center>
+        <br/>
+    </apex:define>
+</apex:page>

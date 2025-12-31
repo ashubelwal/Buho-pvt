@@ -1,0 +1,286 @@
+<template>
+	<div class="notranslate">
+	<template if:true={isVehicleDetails}>
+		<lightning-layout multiple-rows="true" class="pagelayout">
+			<lightning-layout-item size="3" class="slds-show_medium">
+				<c-insurance-steps steps='steps2' completed-steps='2' policy-type={policyType}></c-insurance-steps>
+			</lightning-layout-item>
+			<lightning-layout-item size="12" large-device-size="9" small-device-size="12" medium-device-size="12">
+				<c-vehicle-details oncustomerecordchange={handleCustomerRecordChange} policy-type={policyType}
+					customer-record={customerRecord} changesnextscreen={changeNextScreen} vehicle-data={vehicleData} onerrorgenerated={showLogaCase}
+					community-user={communityUser} changeprevscreen={changePrevScreen}></c-vehicle-details>
+			</lightning-layout-item>
+		</lightning-layout>
+	</template>
+
+	<template if:true={isTermOptions}>
+		<lightning-layout multiple-rows="true" class="pagelayout">
+			<lightning-layout-item size="3" class="slds-show_medium">
+				<c-insurance-steps steps='steps3' completed-steps='3' policy-type={policyType}></c-insurance-steps>
+			</lightning-layout-item>
+			<lightning-layout-item size="12" large-device-size="9" small-device-size="12" medium-device-size="12">
+				<c-term-options oncustomerecordchange={handleCustomerRecordChange} policy-type={policyType}
+					customer-record={customerRecord} changesnextscreen={changeNextScreen} community-user={communityUser} onerrorgenerated={showLogaCase}
+					changeprevscreen={changePrevScreen}>
+				</c-term-options>
+			</lightning-layout-item>
+		</lightning-layout>
+	</template>
+
+	<template if:true={isTowing}>
+		<lightning-layout multiple-rows="true" class="pagelayout">
+			<lightning-layout-item size="3" class="slds-show_medium">
+				<c-insurance-steps steps='steps4' completed-steps='4' policy-type={policyType}></c-insurance-steps>
+			</lightning-layout-item>
+			<lightning-layout-item size="12" large-device-size="9" small-device-size="12" medium-device-size="12">
+				<c-towed-option policy-type={policyType} oncustomerecordchange={handleCustomerRecordChange} onupdatetowedoption={updateTowingOption}
+					customer-record={customerRecord} changesnextscreen={changeNextScreen} community-user={communityUser} onerrorgenerated={showLogaCase}
+					changeprevscreen={changePrevScreen}>
+				</c-towed-option>
+			</lightning-layout-item>
+		</lightning-layout>
+	</template>
+
+	<template if:true={isTowingDetails}>
+		<lightning-layout multiple-rows="true" class="pagelayout">
+			<lightning-layout-item size="3" class="slds-show_medium">
+				<c-insurance-steps steps='steps4' completed-steps='4' policy-type={policyType}></c-insurance-steps>
+			</lightning-layout-item>
+			<lightning-layout-item size="12" large-device-size="9" small-device-size="12" medium-device-size="12">
+				<c-towed-details changesnextscreen={changeNextScreen} community-user={communityUser} onupdatetowedoption={updateTowingOption}
+					towed-unit-data={towedUnitData} oncustomerecordchange={handleCustomerRecordChange} onerrorgenerated={showLogaCase}
+					customer-record={customerRecord} step="1" changeprevscreen={changePrevScreen}>
+				</c-towed-details>
+			</lightning-layout-item>
+		</lightning-layout>
+	</template>
+
+
+	<template if:true={isTerritoryCoverage}>
+		<lightning-layout multiple-rows="true" class="pagelayout">
+			<lightning-layout-item size="3" class="slds-show_medium">
+				<c-insurance-steps policy-type={policytype} steps='steps5' is-towing={isTowingOption}
+					completed-steps='5'></c-insurance-steps>
+			</lightning-layout-item>
+			<lightning-layout-item size="12" large-device-size="9" small-device-size="12" medium-device-size="12">
+				<div class="territoryCoverageMaindiv slds-m-top--xx-large">
+					<div class="blue slds-text-heading_large slds-p-around_small">{label.territorycoverage}
+						</div>
+					<div class="territoryMainDiv">
+						<lightning-layout multiple-rows="true">
+							<lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+								medium-device-size="12" class="slds-p-around_large">
+								<label for="baja">
+									<div class="imageSection">
+										<img alt="Baja/sonora" src={imagebaja} />
+
+									</div>
+									<p class="territorySection slds-align_absolute-center">{label.bajasonora}</p>
+								</label>
+								<div class="inputsection">
+									<input class="radiotype slds-align_absolute-center slds-p-around_small" type="radio"
+										id="baja" value="Baja/Sonora" name="category" checked={isBajaSonaraValue}
+										onchange={handleTerritoryChange} />
+								</div>
+							</lightning-layout-item>
+							<lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+								medium-device-size="12" class="slds-p-around_large">
+								<label for="partial">
+									<div class="imageSection">
+										<img alt="Baja/sonora" src={imageparital} />
+
+									</div>
+									<p class="territorySection slds-align_absolute-center">{label.partial}<br />
+										{label.bajasonarachihuahua}</p>
+								</label>
+								<div class="inputsection">
+									<input class="radiotype slds-align_absolute-center slds-p-around_small" type="radio"
+										id="partial" value="Limited" name="category" checked={isPartialValue}
+										onchange={handleTerritoryChange} />
+								</div>
+							</lightning-layout-item>
+							<lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+								medium-device-size="12" class="slds-p-around_large">
+								<label for="mexico">
+									<div class="imageSection">
+										<img alt="Baja/sonora" src={imagemexico} />
+
+									</div>
+									<p class="territorySection slds-align_absolute-center">{label.entiremexico}</p>
+								</label>
+								<div class="inputsection">
+									<input class="radiotype slds-align_absolute-center slds-p-around_small" type="radio"
+										id="mexico" value="Full" name="category" checked={isEntireMexico}
+										onchange={handleTerritoryChange} />
+								</div>
+							</lightning-layout-item>
+
+						</lightning-layout>
+					</div>
+
+					<div class="horizontalAlign">
+						<div class="">
+							<button class="buttonPrev btnHover" onclick={handlePrevClick}><span class="icon-prev"><i
+								class="icon-prevs"></i></span>{label.prev}</button>
+						</div>
+						<div class="">
+							<button class="buttonNext btnHover" onclick={handleNextClick}><span class="icon-next"><i
+								class="icon-nexts"></i></span>{label.next}</button>
+						</div>
+					</div>
+				</div>
+			</lightning-layout-item>
+		</lightning-layout>
+	</template>
+	<template if:true={isSouthboundQuickQuote}>
+		<c-southbound-quick-quote changesnextscreen={changeNextScreen} community-user={communityUser}
+			oncustomerecordchange={handleCustomerRecordChange} customer-record={customerRecord} onerrorgenerated={showLogaCase}
+			changeprevscreen={changePrevScreen}>
+		</c-southbound-quick-quote>
+	</template>
+
+	<template if:true={isNorthboundQuickQuote}>
+		<c-northbound-quick-quote changesnextscreen={changeNextScreen} community-user={communityUser}
+			changeprevscreen={changePrevScreen} oncustomerecordchange={handleCustomerRecordChange} onerrorgenerated={showLogaCase}
+			customer-record={customerRecord}>
+		</c-northbound-quick-quote>
+	</template>
+
+	<template if:true={ReviewTowDetail}>
+		<lightning-layout multiple-rows="true" class="pagelayout">
+			<lightning-layout-item size="3" class="slds-show_medium">
+				<c-policy-paymentflow-steps steps='steps1' is-towing={isTowingOption}
+					completed-steps='1'></c-policy-paymentflow-steps>
+			</lightning-layout-item>
+			<lightning-layout-item size="12" large-device-size="9" small-device-size="12" medium-device-size="12">
+				<c-towed-details policy-type={policyType} changesnextscreen={changeNextScreen}
+					community-user={communityUser} oncustomerecordchange={handleCustomerRecordChange} onerrorgenerated={showLogaCase}
+					customer-record={customerRecord} changeprevscreen={changePrevScreen} step="2">
+				</c-towed-details>
+			</lightning-layout-item>
+		</lightning-layout>
+	</template>
+
+	<template if:true={isReviewVehicle}>
+		<lightning-layout multiple-rows="true" class="pagelayout">
+			<lightning-layout-item size="3" class="slds-show_medium">
+				<c-policy-paymentflow-steps steps='steps2' is-towing={isTowingOption}
+					completed-steps='2'></c-policy-paymentflow-steps>
+			</lightning-layout-item>
+			<lightning-layout-item size="12" large-device-size="9" small-device-size="12" medium-device-size="12">
+				<c-review-vehicle policy-type={policyType} changesnextscreen={changeNextScreen}
+					changeprevscreen={changePrevScreen} community-user={communityUser} onerrorgenerated={showLogaCase}
+					oncustomerecordchange={handleCustomerRecordChange} customer-record={customerRecord}>
+				</c-review-vehicle>
+			</lightning-layout-item>
+		</lightning-layout>
+
+	</template>
+
+	<template if:true={isCompanyInfo}>
+		<lightning-layout multiple-rows="true" class="pagelayout">
+			<lightning-layout-item size="3" class="slds-show_medium">
+				<c-policy-paymentflow-steps steps='steps2' is-towing={isTowingOption}
+					completed-steps='2'></c-policy-paymentflow-steps>
+			</lightning-layout-item>
+			<lightning-layout-item size="12" large-device-size="9" small-device-size="12" medium-device-size="12">
+				<c-company-information policy-type={policyType} changesnextscreen={changeNextScreen}
+					changeprevscreen={changePrevScreen} community-user={communityUser} onerrorgenerated={showLogaCase}
+					oncustomerecordchange={handleCustomerRecordChange} customer-record={customerRecord}>
+				</c-company-information>
+			</lightning-layout-item>
+		</lightning-layout>
+	</template>
+
+	<template if:true={isLienholderDetails}>
+		<lightning-layout multiple-rows="true" class="pagelayout">
+			<lightning-layout-item size="3" class="slds-show_medium">
+				<c-policy-paymentflow-steps steps='steps2' is-towing={isTowingOption}
+					completed-steps='2'></c-policy-paymentflow-steps>
+			</lightning-layout-item>
+			<lightning-layout-item size="12" large-device-size="9" small-device-size="12" medium-device-size="12">
+				<c-lienholder-information policy-type={policyType} changesnextscreen={changeNextScreen}
+					changeprevscreen={changePrevScreen} community-user={communityUser} onerrorgenerated={showLogaCase}
+					oncustomerecordchange={handleCustomerRecordChange} customer-record={customerRecord}>
+				</c-lienholder-information>
+			</lightning-layout-item>
+		</lightning-layout>
+	</template>
+
+	<template if:true={isDriverDetail}>
+		<lightning-layout multiple-rows="true" class="pagelayout">
+			<lightning-layout-item size="3" class="slds-show_medium">
+				<c-policy-paymentflow-steps steps='steps3' is-towing={isTowingOption}
+					completed-steps='3'></c-policy-paymentflow-steps>
+			</lightning-layout-item>
+			<lightning-layout-item size="12" large-device-size="9" small-device-size="12" medium-device-size="12">
+				<c-driver-registered policy-type={policyType} changesnextscreen={changeNextScreen}
+					changeprevscreen={changePrevScreen} community-user={communityUser} onerrorgenerated={showLogaCase}
+					oncustomerecordchange={handleCustomerRecordChange} customer-record={customerRecord}
+					driver-data={driverData}>
+				</c-driver-registered>
+			</lightning-layout-item>
+		</lightning-layout>
+	</template>
+	<template if:true={isVerifyEditQuickQuote}>
+		<lightning-layout multiple-rows="true" class="pagelayout">
+			<lightning-layout-item size="3" class="slds-show_medium">
+				<c-policy-paymentflow-steps steps='steps4' is-towing={isTowingOption}
+					completed-steps='4'></c-policy-paymentflow-steps>
+			</lightning-layout-item>
+			<lightning-layout-item size="12" large-device-size="9" small-device-size="12" medium-device-size="12">
+				<c-verify-edit-quick-quote changesnextscreen={changeNextScreen} changeprevscreen={changePrevScreen} onerrorgenerated={showLogaCase}
+					community-user={communityUser} oncustomerecordchange={handleCustomerRecordChange}
+					customer-record={customerRecord}>
+				</c-verify-edit-quick-quote>
+			</lightning-layout-item>
+		</lightning-layout>
+	</template>
+	<template if:true={isInsurenceLegalTerm}>
+		<lightning-layout multiple-rows="true" class="pagelayout">
+			<lightning-layout-item size="3" class="slds-show_medium">
+				<c-policy-paymentflow-steps steps='steps5' is-towing={isTowingOption}
+					completed-steps='5'></c-policy-paymentflow-steps>
+			</lightning-layout-item>
+			<lightning-layout-item size="12" large-device-size="9" small-device-size="12" medium-device-size="12">
+				<c-term-agreement changesnextscreen={changeNextScreen} policy-type={policyType}
+					changeprevscreen={changePrevScreen} community-user={communityUser} onerrorgenerated={showLogaCase}
+					oncustomerecordchange={handleCustomerRecordChange} customer-record={customerRecord}>
+				</c-term-agreement>
+			</lightning-layout-item>
+		</lightning-layout>
+	</template>
+	<template if:true={isPaymentDetail}>
+		<lightning-layout multiple-rows="true" class="pagelayout">
+			<lightning-layout-item size="3" class="slds-show_medium">
+				<c-policy-paymentflow-steps steps='steps6' is-towing={isTowingOption}
+					completed-steps='6'></c-policy-paymentflow-steps>
+			</lightning-layout-item>
+			<lightning-layout-item size="12" large-device-size="9" small-device-size="12" medium-device-size="12">
+				<lightning-layout padding="around-small" size="12" class="slds-align-center slds-m-top_xx-large">
+					<div class="page-title ">
+						<h1
+							class="slds-text screenHeading blue slds-text-heading_medium slds-p-around_small">
+							{label.letstacklepayment}</h1>
+					</div>
+				</lightning-layout>
+				<c-payment changesnextscreen={changeNextScreen} changeprevscreen={changePrevScreen} onerrorgenerated={showLogaCase}
+					community-user={communityUser} policy-type={policyType} oncustomerecordchange={handleCustomerRecordChange}
+					customer-record={customerRecord}></c-payment>
+			</lightning-layout-item>
+		</lightning-layout>
+	</template>
+	<template if:true={isPolicyDetail}>
+		<lightning-layout multiple-rows="true" class="pagelayout">
+			<lightning-layout-item size="3" class="slds-show_medium">
+				<c-policy-paymentflow-steps steps='steps7' is-towing={isTowingOption}
+					completed-steps='7'></c-policy-paymentflow-steps>
+			</lightning-layout-item>
+			<lightning-layout-item size="12" large-device-size="9" small-device-size="12" medium-device-size="12">
+				<c-policy-detail policy-name={policyName}></c-policy-detail>
+			</lightning-layout-item>
+		</lightning-layout>
+	</template>
+    </div>
+	<c-log-acase lwc:if={isShowCaseLog} onopenlogcasemodalsection={openModalLogCase}></c-log-acase>
+</template>

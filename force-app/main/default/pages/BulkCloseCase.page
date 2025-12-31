@@ -1,0 +1,1 @@
+<apex:page standardController="Case" recordSetVar="Cases" extensions="BulkCloseCaseController" action="{!UpdateStatusToClose}"/>

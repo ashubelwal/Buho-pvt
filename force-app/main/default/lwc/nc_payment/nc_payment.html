@@ -1,0 +1,152 @@
+<template>
+	<div class="notranslate maindiv">
+		<div>
+           <c-custom-toast auto-close-time="8000"></c-custom-toast>
+        </div>
+		<template if:true={spinner}>
+			Loading
+			<!-- <lightning-spinner alternative-text="Loading" variant="brand"></lightning-spinner> -->
+		</template>
+
+		<template if:false={isCardLoaded}>
+			Loading
+			<!-- <lightning-spinner alternative-text="Loading" variant="brand"></lightning-spinner> -->
+		</template>
+
+		<template if:true={isCardLoaded}>
+			<lightning-accordion lwc:if={refreshAccordian} class="mycustomaccordian" onsectiontoggle={handleToggleSection}
+				active-section-name={activeAccordinSectionForNewCard}>
+
+				<template if:true={showExistingSaveCards}>
+					<lightning-accordion-section name="A" label="Saved Cards">
+						<template for:each={saveCreditCard} for:item="cardItem" for:index="index">
+							<div key={cardItem.Index}>
+								<div class="cards slds-m-bottom--small">
+									<div class="slds-float_left slds-p-around_large">
+										<lightning-input type="radio" variant="label-hidden" onchange={handleCardChange}
+											data-index={index} data-id={cardItem.Index} data-cardinput="savedCards"
+											checked={cardItem.selected}></lightning-input>
+									</div>
+									<div class="slds-box slds-m-bottom_small cursor-pointer">
+										<p class="slds-m-bottom_x-small" style="font-weight: 700;">{cardItem.cardType} -
+											{cardItem.cardNumber}</p>
+										<p class="slds-m-bottom_x-small slds-text-title_caps">{cardItem.name}</p>
+									</div>
+								</div>
+							</div>
+
+						</template>
+					</lightning-accordion-section>
+
+				</template>
+
+
+				<lightning-accordion-section name="B" label={label.Addanewcreditcard}>
+					<lightning-layout multiple-rows="true">
+						<lightning-layout-item size="12" medium-device-size="12" small-device-size="6" large-device-size="6"
+							class="slds-p-around_small">
+
+							<div class="slds-text-heading_medium slds-p-around_small blue">{label.AddressInformation}</div>
+							<template if:true={addressOfbussines}>
+								<template if:false={companyaddress}>
+									<lightning-input type="checkbox" label={label.Copyaddressfromcompanyinfo} name="copyAdd"
+										onchange={copyAddress}>
+									</lightning-input>
+								</template>
+							</template>
+							<lightning-input class="Validation" type="text" label={label.address}
+								placeholder={label.address} name="address1" pattern="^\S+(?: \S+)*$" value={address}
+								required onchange={handleChange}></lightning-input>
+							<lightning-input type="text" label={label.Addressline2} placeholder={label.Addressline2}
+								name="address2" pattern="^\S+(?: \S+)*$" value={address2} onchange={handleChange}>
+							</lightning-input>
+							
+								<lightning-combobox class="Validation" name="country" label={label.Country} value={countryValue}
+									placeholder={label.Country} options={countryoptions} onchange={handleChange} required>
+								</lightning-combobox>
+							
+							<template if:true={otheCountry}>
+								<lightning-input class="Validation" type="text" label={label.Country} placeholder={label.Country}
+									name="otherCountry"  value={otherCountryValue} onchange={handleChange} required>
+							</lightning-input>
+							<lightning-input class="Validation" type="text" label={label.State} placeholder={label.Stateprovince}
+									name="otherState" value={otherStateValue} onchange={handleChange} required>
+							</lightning-input>
+							</template>
+
+							<template if:false={otheCountry}>
+								<lightning-combobox class="Validation" name="state" label={label.State} value={stateValue}
+									placeholder={label.Stateprovince} options={stateOption} onchange={handleChange} required>
+								</lightning-combobox>
+							</template>
+							<lightning-input class="Validation" type="text" label={label.City} placeholder={label.City}
+								name="city" value={CityValue} required onchange={handleChange}></lightning-input>
+							<lightning-input class="Validation" type="text" label={label.PostalCode} value={postalCode}
+								placeholder={label.PostalCode} name="zip" maxlength="8" required onchange={handleChange}
+								pattern="^*([AaBbCcEeGgHhJjKkLlMmNnPpRrSsTtVvXxYy]\d[a-zA-Z])*-**(\d[a-zA-Z]\d)*$|^*(\d{5})*$|^*(\d{5})*-**(\d{4})*$">
+							</lightning-input>
+
+						</lightning-layout-item>
+						<lightning-layout-item size="12" medium-device-size="12" small-device-size="6" large-device-size="6"
+							class="slds-p-around_small">
+							<div class="slds-text-heading_medium slds-p-around_small slds-m-bottom--x-small blue">
+								{label.CardDetails}</div>
+							<template if:false={addressOfbussines}>
+								<div class="" style="visibility: hidden;">&nbsp;</div>
+							</template>
+
+							<lightning-input class="Validation" type="text" label={label.CardholderName}
+								placeholder={label.Nameoncard} pattern="^([a-zA-Z]+\s)*[a-zA-Z]+$" name="name"
+								value={CardName} required onchange={handleChange}></lightning-input>
+							<lightning-input class="Validation" type="text" label={label.CardNumber} pattern="[0-9\s]*" inputmode="numeric"
+								placeholder={label.CardNumber} name="cardNumber" value={cardNumber} maxlength="16" required
+								onchange={handleChange}>
+							</lightning-input>
+							<div class="slds-grid slds-wrap slds-gutters">
+								<div class="slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12 slds-p-around_small">
+									<lightning-combobox class="Validation" name="month" label={label.ExpirationMonth}
+										value={monthValue} placeholder={label.ExpirationMonth} options={months}
+										onchange={handleChange} required>
+									</lightning-combobox>
+								</div>
+								<div class="slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12 slds-p-around_small">
+									<lightning-combobox class="Validation" name="year" label={label.Expirationyear}
+										value={yearValue} placeholder={label.Expirationyear} options={YYYY}
+										onchange={handleChange} required>
+									</lightning-combobox>
+								</div>
+							</div>
+
+							<lightning-input class="Validation" type="text" label={label.SecurityCode}
+								placeholder={label.SecurityCode} name="code" maxlength="4" value={cvvNumber}
+								pattern="^[0-9]{3,4}$" required onchange={handleChange}>
+							</lightning-input>
+							<template if:true={showSaveCards}>
+								<lightning-input class="slds-p-top_small slds-p-bottom_small" type="checkbox"
+									label={label.SaveCard} name="saveCard" onchange={handleChange}>
+
+								</lightning-input>
+							</template>
+							<template if:false={istestcase}>
+								<span class="Amount">{label.Amount}:&nbsp; <lightning-formatted-number value={AmountToCharge} format-style="currency"
+								currency-code="USD"></lightning-formatted-number></span>
+							</template>
+							<template if:true={istestcase}>
+								<span class="Amount">{label.Amount}:&nbsp; <lightning-formatted-number value={amounttestcase} format-style="currency"
+								currency-code="USD"></lightning-formatted-number></span>
+							</template>
+
+						</lightning-layout-item>
+					</lightning-layout>
+				</lightning-accordion-section>
+			</lightning-accordion>
+		</template>
+
+		<!-- <div class="slds-m-top--x-large horizontalAlign">
+			<button class="buttonPrev btnHover" onclick={handlePrevClick}><span class="icon-prev"><i
+                class="icon-prevs"></i></span>{label.Prev}</button>
+			<button class="buttonNext btnHover payNowBtn"  onclick={handlePayment}><span class="icon-next"><i
+                class="icon-nexts"></i></span>{label.PayNow}</button>
+		</div> -->
+	</div>
+</template>

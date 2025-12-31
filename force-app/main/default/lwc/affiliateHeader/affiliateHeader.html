@@ -1,0 +1,44 @@
+<template>
+    <div if:false={isFrame}>
+        <div class="affiliateHead" if:true={isAffiliate}>
+            <div class="slds-grid slds-grid_vertical-align-center">
+                <div class="affiliateLogo slds-col">
+                    <img src={affiliateUserInfo.Agency_Logo__c} onclick={handleImageClick} />
+                </div>
+                <div class="slds-col affusrDlt">
+                    <div class="affiliateUserDetails">
+                        <img src={affiliateUserInfo.Owner_Photo__c} />
+                        <div class="container">
+                            <div class="box">
+                                <h2>{affiliateUserInfo.Owner_Name__c} </h2>
+                            </div>
+                            <div class="box">
+                                <template if:true={isLoggedIn}>
+                                    <span> <a class="slds-button slds-button_brand"
+                                            href={loginUrl}>{loginButtonLabel}</a>
+                                    </span>
+
+                                </template>
+                                <template if:true={isLoggedOut}>
+                                    <span><a class="slds-button slds-button_destructive"
+                                            onclick={handleLogOut}>Logout</a></span>
+                                </template>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div if:true={isFrame} class="slds-col affusrDlt">
+        <template if:true={isLoggedIn}>
+            <span><a class="slds-button slds-button_brand" href={loginUrl}>{loginButtonLabel}</a></span>
+
+        </template>
+        <template if:true={isLoggedOut}>
+            <span><a class="slds-button slds-button_destructive" onclick={handleLogOut}>Logout</a></span>
+        </template>
+    </div>
+</template>

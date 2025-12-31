@@ -1,0 +1,38 @@
+<template>
+    <div class="accordion-container">
+        <template for:each={processedCoverageList} for:item="item">
+            <div key={item.key} class="accordion-item">
+                <!-- Accordion Header -->
+                <div class="accordion-header" data-key={item.key} onclick={toggleItem}>
+                    <div class="accordion-header-content">
+                        <img src={item.image} alt={item.key} class="accordion-icon" />
+                        <h4 class="accordion-title">{item.key}</h4>
+                    </div>
+                    <span class={item.expandIconClass}>
+                        <template if:false={item.isExpanded}>▼</template>
+                        <template if:true={item.isExpanded}>▲</template>
+                    </span>
+                </div>
+
+                <!-- Accordion Body -->
+                <template if:true={item.isExpanded}>
+                    <div class="accordion-body">
+                        <p class="accordion-description">{item.description}</p>
+                        <template if:true={item.showSeeMore}>
+                            <div class="accordion-modal-trigger">
+                                <c-buho_modal 
+                                    modal-title={item.key} 
+                                    data-key={item.key}
+                                    btn-name='See more' 
+                                    class-names='cBtn'
+                                    modal-content={item.fullDescription}>
+                                </c-buho_modal>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </div>
+        </template>
+    </div>
+</template>
+

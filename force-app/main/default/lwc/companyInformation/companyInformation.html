@@ -1,0 +1,116 @@
+<template>
+    <div class="maindiv notranslate slds-m-top_xx-large">
+        <template if:true={spinner}>
+            <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+        </template>
+        <template if:false={spinner}>
+            <div class="blue">
+                <div class="slds-text-heading_large slds-p-around_small screenHeading">{label.Companyinformation}
+                    </div>
+            </div>
+            
+            
+            <!-- <div class="icon slds-p-around_small">
+                <lightning-icon class="slds-col slds-p-around_small slds-align_absolute-center slds-size_1-of-12"
+                    icon-name="custom:custom24">
+                </lightning-icon>
+            </div> -->
+            <lightning-layout multiple-rows="true">
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4"
+                    class="slds-p-around_x-small">
+                    <lightning-input name="Company_Name__c" class="Validation" label={label.CompanyName} value={companyName}
+                        placeholder={label.CompanyName} onchange={handleChange} required>
+                    </lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4"
+                    class="slds-p-around_x-small">
+                    <lightning-input name="Company_Phone__c" class="Validation" label={label.Phone} value={companyPhone} placeholder={label.Phone}
+                        max-length="17" type="text" pattern="^\(\d{3}\)\s\d{3}-\d{4,7}$" onchange={handleChange} required>
+                    </lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4"
+                    class="slds-p-around_x-small">
+                    <lightning-input name="Tax_ID__c" label={label.TaxID} class="Validation" value={companyTaxId} placeholder={label.TaxID} max-length="80"
+                        onchange={handleChange} required>
+                    </lightning-input>
+                </lightning-layout-item>
+                </lightning-layout>
+                <lightning-layout multiple-rows="true">
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                    class="slds-p-around_x-small">
+                    <lightning-combobox name="Company_Country__cmbx" class="Validation" label={label.Country} value={companyCountryCombox}
+                        placeholder={label.Country} options={countryoptions} onchange={handleChange} required></lightning-combobox>
+                </lightning-layout-item>
+                <template if:true={otherCountry}>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                        class="slds-p-around_x-small">
+                        <lightning-input name="Company_Country__c" label={label.Country} value={companyCountry} class="Validation"
+                            placeholder={label.Country} onchange={handleChange} required></lightning-input>
+                    </lightning-layout-item>
+                </template>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                    class="slds-p-around_x-small">
+                    <template if:false={otherCountry}>
+                        <c-custom-lookup isrequired=true objecttype="Address__c" searchagainst="Postal_Code__c" placeholder={label.EnterPostalCode} filter-value={companyCountryCombox} filter-api="Name" label={label.PostalCode}
+                            value={postalCode} selectedname={postalCode} selectedid={postalCodeId} onselection={handleSearch} postal-code-id={postalCodeId} state-id={stateId} city-id={cityId} required></c-custom-lookup>
+                    </template>
+                    <template if:true={otherCountry}>
+                        <lightning-input name="Company_Zip__c"  label={label.ZIP} value={compnayZip} placeholder={label.ZIP} type="text" max-length="9" pattern="^*([AaBbCcEeGgHhJjKkLlMmNnPpRrSsTtVvXxYy]\d[a-zA-Z])*-**(\d[a-zA-Z]\d)*$|^*(\d{5})*$|^*(\d{5})*-**(\d{4})*$"
+                            onchange={handleChange} required>
+                        </lightning-input>
+                    </template>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                    class="slds-p-around_x-small">
+                    <template if:false={otherCountry}>
+                        <c-custom-lookup isrequired=true objecttype="Address__c" searchagainst="State__c" placeholder={label.EnterState} filter-value={companyCountryCombox} filter-api="Name" label={label.States}
+                                        secondaryfield="Postal_Code__c" selectedname={state} selectedid={stateId} value={state} onselection={handleSearch} postal-code-id={postalCodeId} state-id={stateId} city-id={cityId} required></c-custom-lookup>
+                        <!--lightning-combobox name="Company_State__c" class="Validation" label="State" value={companyState}
+                            placeholder="State" options={stateOption} onchange={handleChange} required></lightning-combobox-->
+                    </template>
+                    <template if:true={otherCountry}>
+                        <lightning-input name="Company_State__c" label={label.State} class="Validation" value={companyState} placeholder={label.State}
+                            onchange={handleChange} required></lightning-input>
+                    </template>
+
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                    class="slds-p-around_x-small">
+                    <template if:false={otherCountry}>
+                        <c-custom-lookup isrequired=true objecttype="Address__c" searchagainst="City__c" placeholder={label.EnterCity} filter-value={companyCountryCombox} filter-api="Name" label={label.City}
+                                    secondaryfield="Postal_Code__c" selectedname={city} selectedid={cityId} value={city} onselection={handleSearch} postal-code-id={postalCodeId} state-id={stateId} city-id={cityId} required></c-custom-lookup>
+                    </template>
+                    <template if:true={otherCountry}>
+                        <lightning-input name="Company_City__c" label={label.City} value={companyCity} placeholder={label.City}
+                            onchange={handleChange} class="Validation" required>
+                            </lightning-input>
+                    </template>
+                </lightning-layout-item>
+                
+            </lightning-layout>
+            <lightning-layout multiple-rows>
+                
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="3" large-device-size="3"
+                    class="slds-p-around_x-small">
+                    <lightning-input style="height:2.2rem;" name="Company_Address__c" label={label.Address} class="Validation" value={companyAddress} pattern="^\S+(?: \S+)*$"
+                        placeholder={label.Address} onchange={handleChange} required>
+                    </lightning-input>
+                </lightning-layout-item>
+
+            </lightning-layout>
+
+            <div class="slds-m-top_large slds-p-around_small horizontalAlign">
+                <div class="">
+                    <button class="buttonPrev btnHover" onclick={handlePrevClick}><span class="icon-prev"><i
+                                class="icon-prevs"></i></span>{label.Prev}</button>
+                </div>
+                <div class="">
+                    <button class="buttonNext btnHover" onclick={handleNextClick}><span class="icon-next"><i
+                                class="icon-nexts"></i></span>{label.Next}</button>
+                </div>
+                
+            </div>
+        </template>
+    </div>
+</template>

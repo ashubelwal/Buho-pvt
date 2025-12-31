@@ -1,0 +1,78 @@
+<apex:page controller="leadsurvey"  sidebar="false" showheader="false">
+<style>
+#showText{
+display:none;
+margin-left:20px;
+}
+#showTextArea{
+display:none;
+margin-left:20px;
+}
+
+#qList{
+margin-top:1%;
+}
+#page{
+margin:1%;
+}
+
+</style>
+
+<script>
+
+function goTovalue(val){
+if(val=='I went with another company.'){
+document.getElementById("showText").style.display= "block";
+}
+else{
+document.getElementById("showText").style.display= "none";
+}
+if(val=='Mex-Insurance didn’t meet my needs.'){
+document.getElementById("showTextArea").style.display= "block";
+}
+else{
+document.getElementById("showTextArea").style.display= "none";
+}
+}
+</script>
+
+<div id="page">
+<img width="200px" height="30px" src="https://mexinsurance--c.na22.content.force.com/servlet/servlet.ImageServer?id=01515000004uv8u&oid=00DVD000008v4ez&lastMod=1455732738000"/> 
+ <apex:pageBlock id="pblock" >
+
+<center>   <apex:outputPanel rendered="{!thankYou}">
+ <b> <i><h1>Your survey has been submitted. Thank you for taking our survey. </h1></i></b>
+</apex:outputPanel>
+</center>
+
+<apex:form id="myform" rendered="{!mform}"  >
+<!-- {!$CurrentPage.parameters.leadid} -->
+<div id="qList">
+<apex:pageMessages />
+
+ 
+ 
+ <h1 class="question">
+                            <span class="questionNumber">1.</span>
+                            Why didn’t you purchase from Mex-Insurance.com?
+                          <apex:selectRadio id="myoption" onclick="goTovalue(this.value)" value="{!selectedans}" >
+
+                <apex:selectOptions value="{!items}"/>
+
+                </apex:selectRadio>
+                        </h1>
+<div id="showText">
+<apex:inputText html-placeholder="Which Company" value="{!whccom}"/>
+</div>
+<div id="showTextArea">
+
+<apex:inputtextarea html-placeholder="Please Explain" rows="7" cols="50" value="{!explain}"/>
+</div>
+
+ 
+</div>
+<apex:commandButton value="Submit" action="{!save}" />
+</apex:form>
+</apex:pageBlock>
+</div>
+</apex:page>

@@ -1,0 +1,102 @@
+.custom-table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 20px;
+    -webkit-overflow-scrolling: touch;
+    /* Soft slide*/
+}
+.selected-ownership {
+    background-color: #dfffe0; /* light green */
+    border: 2px solid #2e8540; /* optional darker green border */
+    border-radius: 0.5rem;
+}
+.test {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 4px;
+}
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.pageTitle h2 {
+	border-bottom: 1px solid #eee;
+    padding: 10px 0;
+}
+
+.custom-table th,
+.custom-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.custom-table th {
+    background-color: #f4f4f4;
+}
+
+.delete-btn {
+    margin-left: 10px;
+    color: red;
+}
+
+.scrollable-address-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    /* Movile Scroll */
+}
+
+/* Contenedor del componente de sugerencias */
+.scrollable-address-wrapper {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+/* Estilo base para el componente interno si aplica */
+c-address-recommendations {
+    display: block;
+    max-width: 100%;
+}
+
+/* Prevenir que los ítems se desborden */
+.scrollable-address-wrapper * {
+    max-width: 100%;
+    word-break: break-word;
+    white-space: normal;
+}
+
+/* // TEXT TRANSFORMATIONS */
+.uppercase-input input {
+    text-transform: uppercase;
+}
+
+.custom-add-driver {
+    background-color: #232564;
+    color: #ffffff;
+    border: none;
+    padding: 4px 16px;
+    /*vertical padding*/
+
+    border-radius: 8px;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 16px;
+
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.custom-add-driver:hover {
+    background-color: #1b1d4a;
+}
+
+.slds-modal__container {
+    width: 30rem;
+    max-width: 95%;
+}
+
+.slds-modal__content p {
+    font-size: 0.9rem;
+}

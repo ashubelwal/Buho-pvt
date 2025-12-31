@@ -1,0 +1,60 @@
+<template>
+    <div class="test">
+        <div class="pageTitle slds-m-bottom_medium">
+            <h2 class="slds-text-heading_medium"> Choose your dates & time of coverage
+            </h2>
+        </div>
+
+        <!-- Display error message if present -->
+        <template if:true={errorMessage}>
+            <div class="slds-text-color_error slds-m-bottom_small">
+                {errorMessage}
+            </div>
+        </template>
+
+        <template if:true={flags.isLoaded}>
+            <div class="slds-grid slds-wrap slds-gutters">
+
+                <!-- Term Type Radio Buttons -->
+                <div class="slds-size_1-of-1 slds-p-around_small">
+                    <div class="termType-wrapper slds-form-element">
+                        <lightning-radio-group name="Term__c" label="Select Term Type" options={termOptions}
+                            value={termType} type="button" required onchange={handleInputChange} class="termType">
+                        </lightning-radio-group>
+                    </div>
+                </div>
+
+                <div class="slds-size_1-of-1 slds-p-around_small">
+                    <h2>System time: {displayPstTime}</h2>
+                </div>
+
+                <!-- Start Date for Coverage -->
+                <template if:true={flags.isDateLoaded}>
+                    <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                        <c-nc_datepicker id="Start_Date_for_Coverage__c" name="Start_Date_for_Coverage__c"
+                            onchange={handleInputChange} term-selected={selectedTerm} onselect={handleChildSelectEvent}
+                            defaultdate={defaultDate} inputdisabled={flags.disableDateRange}></c-nc_datepicker>
+                    </div>
+                </template>
+
+                <!-- Start Time -->
+                <div class="slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12 slds-p-around_small">
+                    <lightning-input type="time" data-id="start-time" name="Start_Time__c" label="Start Time"
+                        value={inputValues.Start_Time__c} onchange={handleInputChange} required></lightning-input>
+                </div>
+
+                <div class="slds-col slds-size_1-of-1 slds-p-around_small" if:true={dateRange}>
+                    <template if:true={dateRange}>
+                        <div class="selected-time-slot">
+                            <p><strong>Your policy start from :</strong> {dateRange}
+                                <template if:true={inputValues.Start_Time__c}>
+                                    &nbsp; | {inputValues.Start_Time__c}
+                                </template>
+                            </p>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,6 @@
+.THIS {
+}
+
+.THIS .quote-box .quote-highlight {
+    text-transform: capitalize !important;
+}
