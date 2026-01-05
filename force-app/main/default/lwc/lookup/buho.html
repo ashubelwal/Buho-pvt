@@ -1,0 +1,116 @@
+<template>
+    <div class="buho-lookup-wrapper">
+        <div class="buho-lookup-container">
+            <div class="buho-combobox-wrapper" aria-expanded="false" aria-haspopup="listbox" role="combobox">
+                <template if:false={hasSelection}>
+                    <div class="buho-input-wrapper">
+                        <c-buho_input
+                            label={label}
+                            label-class=""
+                            container-class="form-group"
+                            type="input"
+                            name="lookupField"
+                            value={selectedName}
+                            placeholder={placeholder}
+                            input-type="search"
+                            disabled={isdisabled}
+                            onchange={handleBuhoInputChange}
+                            oninput={handleBuhoInput}
+                            onkeyup={handleBuhoKeyUp}>
+                        </c-buho_input>
+                        <template if:true={_isLoading}>
+                            <div class="buho-loading-spinner">
+                                <div class="spinner-border spinner-border-sm" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+                <template if:true={hasSelection}>
+                    <div class="buho-selected-wrapper">
+                        <div class="buho-selected-input-wrapper">
+                            <c-buho_input
+                                label={label}
+                                label-class=""
+                                container-class="form-group buho-selected-input-container"
+                                type="input"
+                                name="inputselection"
+                                value={selectedName}
+                                placeholder="Select an Option…"
+                                input-type="text"
+                                disabled
+                                input-class="buho-lookup-input buho-selected-input">
+                            </c-buho_input>
+                            <button 
+                                if:false={isdisabled}
+                                type="button"
+                                class="buho-clear-btn" 
+                                title="Remove selected option" 
+                                onclick={clearSelection}>
+                                <i class="bi bi-x-circle"></i>
+                                <span class="visually-hidden">Remove selected option</span>
+                            </button>
+                            <button 
+                                if:true={isdisabled}
+                                type="button"
+                                class="buho-clear-btn" 
+                                disabled
+                                title="Remove selected option">
+                                <i class="bi bi-x-circle"></i>
+                                <span class="visually-hidden">Remove selected option</span>
+                            </button>
+                        </div>
+                        <div class="buho-form-help"></div>
+                    </div>
+                </template>
+
+                <div if:true={isDropDownVisible} id="buho-listbox" class="buho-dropdown" role="listbox" onmouseover={handleDropdownMouseOver} onmouseout={handleDropdownMouseOut}>
+                    <ul class="buho-dropdown-list" role="presentation">
+                        <template if:true={hasSearchResults}>
+                            <template for:each={_searchResults} for:item="result">
+                                <li key={result.Id} data-name={result.Name} data-id={result.Id} role="presentation" class="buho-dropdown-item" onclick={handleSelection}>
+                                    <template if:true={result.secondaryField}>
+                                        <div class="buho-dropdown-option" role="option">
+                                            <span class="buho-dropdown-icon">
+                                                <i class="bi bi-record-circle"></i>
+                                            </span>
+                                            <span class="buho-dropdown-text">
+                                                <span if:true={result.primaryField} title={result.primaryField} class="buho-dropdown-primary">{result.primaryField}</span>
+                                                <span if:false={result.primaryField} title={result.Name} class="buho-dropdown-primary">{result.Name}</span>
+                                            </span>
+                                        </div>
+                                    </template>
+
+                                    <template if:false={result.secondaryField}>
+                                        <div class="buho-dropdown-option buho-dropdown-option-simple" role="option">
+                                            <span class="buho-dropdown-icon">
+                                                <i class="bi bi-record-circle"></i>
+                                            </span>
+                                            <span class="buho-dropdown-text">
+                                                <span if:true={result.primaryField} title={result.primaryField} class="buho-dropdown-primary">{result.primaryField}</span>
+                                                <span if:false={result.primaryField} title={result.Name} class="buho-dropdown-primary">{result.Name}</span>
+                                            </span>
+                                        </div>
+                                    </template>
+                                </li>
+                            </template>
+                        </template>
+
+                        <template if:false={hasSearchResults}>
+                            <li role="presentation" class="buho-dropdown-item">
+                                <div class="buho-dropdown-option buho-dropdown-no-results" role="option">
+                                    <span class="buho-dropdown-text">
+                                        {translatedlabel.NoResultsFound}
+                                    </span>
+                                </div>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+

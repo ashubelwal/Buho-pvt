@@ -97,8 +97,8 @@ export default class Buho_finalizeVehicleDetails extends LightningElement {
         this.registeredCountry = value;
 
         // Reset state when country changes
-        this.vehicleDetails.Registered_State__c = '';
-        this.registeredState = '';
+        //this.vehicleDetails.Registered_State__c = '';
+        //this.registeredState = '';
         this.stateOptions = [];
 
         // Load states for selected country
@@ -149,7 +149,7 @@ export default class Buho_finalizeVehicleDetails extends LightningElement {
                     ...payloadVehicleDetails // Override with payload data
                 };
                 this.vehicleDetails.Vin__c = this.vehicleDetails.Vin__c || '';
-                this.vehicleDetails.licensePlate = this.vehicleDetails.licensePlate || '';
+                this.vehicleDetails.licensePlate = this.vehicleDetails.licensePlate || (this.vehicleDetails.Registered_Plate__c || '');
                 this.registeredCountry = payloadVehicleDetails?.Registered_Country__c ?? '';
                 this.registeredState = payloadVehicleDetails?.Registered_State__c ?? '';
             }
@@ -165,6 +165,9 @@ export default class Buho_finalizeVehicleDetails extends LightningElement {
                 this.registeredState = this.vehicleDetails?.Registered_State__c ?? '';
                 console.log('Updated values', this.registeredCountry);
                 console.log('Registred', this.registeredState);
+            }
+            if(this.registeredCountry) {
+                this.handleCountryChange({detail:{value:this.registeredCountry}});
             }
         }
 

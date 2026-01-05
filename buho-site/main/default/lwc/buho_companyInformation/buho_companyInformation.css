@@ -1,0 +1,14 @@
+/* Buho Company Information Component */
+/* All styles inherited from buhoStyles.css */
+
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+/* Uppercase input */
+.uppercase-input {
+    text-transform: uppercase;
+}

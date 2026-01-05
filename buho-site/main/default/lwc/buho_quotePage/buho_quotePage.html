@@ -6,12 +6,8 @@
                 <!-- Company Logo/Name Section -->
                 <div class="company-section">
                     <div class="company-logo-wrapper">
-                        <template if:true={isMapfreActive}>
-                            <img src={mapfreLogo} alt="Mapfre" class="company-logo" />
-                        </template>
-                        <template if:false={isMapfreActive}>
-                            <div class="company-name-text">{activeCompanyLabel}</div>
-                        </template>
+                        <img src={companyLogo} alt={activeCompanyLabel} class="company-logo" />
+                        <!--div class="company-name-text">{activeCompanyLabel}</div-->
                     </div>
                 </div>
 
@@ -48,7 +44,7 @@
         </div>
 
 
-        <div  class="quote-content">
+        <div class="quote-content">
             <!-- Term Coverage Selection -->
             <div class="term-coverage-section">
                 <h2 class="section-title">
@@ -72,8 +68,7 @@
                     </template>
                     <!-- Semi Annual Coverage Card (Upsell) -->
                     <template if:true={showSemiAnnualTrip}>
-                        <div class={semiAnnualCardClass} onclick={handleSelectSemiAnnual}
-                            data-term="semi-annual">
+                        <div class={semiAnnualCardClass} onclick={handleSelectSemiAnnual} data-term="semi-annual">
                             <h3 class="term-title">Semi Annual Coverage</h3>
                             <div class="term-price">${semiAnnualPreviewTotal}</div>
                             <ul class="term-features">
@@ -107,17 +102,11 @@
                 <div class="coverage-grid-container">
                     <!-- Liability Section -->
                     <div class="coverage-field">
-                            <c-buho_input
-                                label="Combined Liability:"
-                                label-class="coverage-label"
-                                container-class="coverage-field"
-                                type="combobox"
-                                name="coverage"
-                                value={combinedLiabilityValue}
-                                options={liabilityOptions}
-                                dropdown-class="coverage-dropdown"
-                                onchange={handleLiabilityChange}>
-                            </c-buho_input>
+                        <c-buho_input label="Combined Liability:" label-class="coverage-label"
+                            container-class="coverage-field" type="combobox" name="coverage"
+                            value={combinedLiabilityValue} options={liabilityOptions} dropdown-class="coverage-dropdown"
+                            onchange={handleLiabilityChange}>
+                        </c-buho_input>
 
                         <div class="button-group">
                             <button class="adjust-btn-pink" onclick={decrementLiability}
@@ -129,18 +118,11 @@
 
                     <!-- Medical Section -->
                     <template if:true={quotePreviewData.showMedical}>
-                        
+
                         <div class="coverage-field">
-                            <c-buho_input
-                                label="Medical:"
-                                label-class="coverage-label"
-                                container-class="coverage-field"
-                                type="combobox"
-                                name="coverage"
-                                value={medicalValue}
-                                options={medicalOptions}
-                                dropdown-class="coverage-dropdown"
-                                onchange={handleMedicalChange}>
+                            <c-buho_input label="Medical:" label-class="coverage-label" container-class="coverage-field"
+                                type="combobox" name="coverage" value={medicalValue} options={medicalOptions}
+                                dropdown-class="coverage-dropdown" onchange={handleMedicalChange}>
 
                             </c-buho_input>
                             <div class="button-group">
@@ -155,45 +137,26 @@
                     <!-- Checkboxes Section -->
                     <div class="checkbox-options-container">
                         <template if:true={quotePreviewData.Gold}>
-                            <c-buho_input
-                                label="Gold:"
-                                label-class="coverage-label"
-                                container-class="custom-checkbox"
-                                type="checkbox"
-                                name="Gold__c"
-                                checked={checkedData.Gold__c}
+                            <c-buho_input label="Gold:" label-class="coverage-label" container-class="custom-checkbox"
+                                type="checkbox" name="Gold__c" checked={checkedData.Gold__c}
                                 onchange={handleInputChange}></c-buho_input>
                         </template>
 
                         <template if:true={quotePreviewData.Max}>
-                            <c-buho_input
-                                label="Gold"
-                                label-class="coverage-label"
-                                container-class="custom-checkbox"
-                                type="checkbox"
-                                name="Max__c"
-                                checked={checkedData.Max__c}
+                            <c-buho_input label="Gold" label-class="coverage-label" container-class="custom-checkbox"
+                                type="checkbox" name="Max__c" checked={checkedData.Max__c}
                                 onchange={handleInputChange}></c-buho_input>
                         </template>
 
                         <template if:true={quotePreviewData.Platinum}>
-                            <c-buho_input
-                                label="Platinum"
-                                label-class="coverage-label"
-                                container-class="custom-checkbox"
-                                type="checkbox"
-                                name="Platinum__c"
-                                disabled = "true"
+                            <c-buho_input label="Platinum" label-class="coverage-label"
+                                container-class="custom-checkbox" type="checkbox" name="Platinum__c" disabled="true"
                                 onchange={handleInputChange}></c-buho_input>
                         </template>
 
                         <div class="checkbox-option">
-                            <c-buho_input
-                                label="Liability Only"
-                                label-class="coverage-label"
-                                container-class="custom-checkbox"
-                                type="checkbox"
-                                name="Coverage__c"
+                            <c-buho_input label="Liability Only" label-class="coverage-label"
+                                container-class="custom-checkbox" type="checkbox" name="Coverage__c"
                                 checked={liabilityOnly} disabled={liabilityDisabled}
                                 onchange={handleInputChange}></c-buho_input>
                         </div>
@@ -233,6 +196,6 @@
                 </template>
             </div>
         </div>
-         
+
     </div>
 </template>

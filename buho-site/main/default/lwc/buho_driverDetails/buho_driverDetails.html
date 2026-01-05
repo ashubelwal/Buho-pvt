@@ -1,0 +1,382 @@
+<template>
+    <div class="vehicle-details-wrapper">
+        <!-- Header -->
+        <div class="step-header">
+            <h1>Who Drives <span class="highlight">the vehicle?</span></h1>
+            <p class="step-subtitle">
+                The registered owner(s) of the vehicle will be covered under this policy. Please list all legal owners to ensure proper coverage. 
+                Additional authorized drivers may also be listed below to grant them implied consent to operate the vehicle in Mexico in accordance with the Terms and Conditions.
+            </p>
+        </div>
+
+        <!-- Ownership Type Selection -->
+        <div class="ownership-cards">
+            <div data-value="business"
+                 class={businessCardClass}
+                 onclick={handleOwnershipSelection}>
+                <div class="ownership-icon">
+                    <img src="/sfsites/c/resource/buhoAssets/images/building.svg" alt="Business Vehicle" />
+                </div>
+                <h3 class="ownership-title">Business Vehicle</h3>
+                <p class="ownership-subtitle">Registered to a company</p>
+            </div>
+            
+            <div data-value="personal"
+                 class={personalCardClass}
+                 onclick={handleOwnershipSelection}>
+                <div class="ownership-icon">
+                    <img src="/sfsites/c/resource/buhoAssets/images/user.svg" alt="Personal Vehicle" />
+                </div>
+                <h3 class="ownership-title">Personal Vehicle</h3>
+                <p class="ownership-subtitle">Registered to an individual</p>
+            </div>
+        </div>
+
+        <!-- Step: Company Details -->
+        <template if:true={isStepCompanyDetails}>
+            <div class="wizard-form">
+                <div class="step-header">
+                    <h2>Add company information</h2>
+                </div>
+                
+                <c-buho_company-information 
+                    onadd={handleCompanyInfoUpdate} 
+                    payload={payload}>
+                </c-buho_company-information>
+
+                <div class="form-actions">
+                    <button type="button" 
+                            class="btn btn-primary" 
+                            onclick={goToDriverForm}>
+                        Save and Add Human Operator
+                    </button>
+                </div>
+            </div>
+        </template>
+
+        <!-- Step: Human Owner / Driver -->
+        <template if:true={isStepHumanOwner}>
+            <div class="wizard-form">
+                <template if:true={currentUserType}>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <c-buho_input
+                                label="Select a driver"
+                                label-class=""
+                                container-class="form-group"
+                                type="combobox"
+                                name="driverSelection"
+                                value={selectedDriverId}
+                                options={loginUserDriverOption}
+                                placeholder="Select a driver"
+                                dropdown-class="form-select"
+                                onchange={changeDriverOption}>
+                            </c-buho_input>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Edit Company Button -->
+                <template if:true={flag.Is_the_vehicle_registered_to_a_business__c}>
+                    <template if:false={isStepCompanyDetails}>
+                        <div class="form-actions">
+                            <button type="button" 
+                                    class="btn btn-light" 
+                                    onclick={goToCompanyDetails}>
+                                Edit Company Info
+                            </button>
+                        </div>
+                    </template>
+                </template>
+
+                <!-- Driver Form -->
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <c-buho_input
+                            label="First Name"
+                            label-class=""
+                            container-class="form-group"
+                            type="input"
+                            name="First_Name__c"
+                            value={driver.First_Name__c}
+                            placeholder="Enter First Name"
+                            input-type="text"
+                            required
+                            onchange={handleInputChange}>
+                        </c-buho_input>
+                    </div>
+
+                    <div class="col-md-6">
+                        <c-buho_input
+                            label="Last Name"
+                            label-class=""
+                            container-class="form-group"
+                            type="input"
+                            name="Last_Name__c"
+                            value={driver.Last_Name__c}
+                            placeholder="Enter Last Name"
+                            input-type="text"
+                            required
+                            onchange={handleInputChange}>
+                        </c-buho_input>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Date of birth</label>
+                            <input 
+                                type="text" 
+                                class="form-control dobDate" 
+                                name="Dob__c"
+                                value={formattedDob}
+                                placeholder="MM/DD/YYYY"
+                                readonly
+                                required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <c-buho_input
+                            label="License Country"
+                            label-class=""
+                            container-class="form-group"
+                            type="combobox"
+                            name="License_Country__c"
+                            value={driver.License_Country__c}
+                            options={countryOptions}
+                            placeholder="Select a state/province"
+                            dropdown-class="form-select"
+                            required
+                            onchange={handleCountryChange}>
+                        </c-buho_input>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <c-buho_input
+                            label="License Number"
+                            label-class=""
+                            container-class="form-group"
+                            type="input"
+                            name="license_number__c"
+                            value={driver.license_number__c}
+                            placeholder="Enter First Name"
+                            input-type="text"
+                            pattern="^[A-Z0-9\-]+$"
+                            max-length="40"
+                            required
+                            input-class="uppercase-input"
+                            onchange={handleInputChange}>
+                        </c-buho_input>
+                    </div>
+
+                    <div class="col-md-6">
+                        <c-buho_input
+                            label="License State"
+                            label-class=""
+                            container-class="form-group"
+                            type="combobox"
+                            name="License_state__c"
+                            value={driver.License_state__c}
+                            options={stateOptions}
+                            placeholder="Enter Last Name"
+                            dropdown-class="form-select"
+                            disabled={flag.isStateDisabled}
+                            required
+                            onchange={handleStateChange}>
+                        </c-buho_input>
+                    </div>
+                </div>
+
+                <!-- Owner Address Fields -->
+                <template if:true={driver.Driver_Type__c}>
+                    <!-- Address Recommendations - Only for Business Vehicles -->
+                    <template if:true={showAddressRecommendations}>
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <c-buho_address-recommendations 
+                                    onsendaddress={handleCompanyAddress}
+                                    placeholder="Start typing owner address to search...">
+                                </c-buho_address-recommendations>
+                            </div>
+                        </div>
+                    </template>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <c-buho_input
+                                label="Country"
+                                label-class=""
+                                container-class="form-group"
+                                type="combobox"
+                                name="Country__c"
+                                value={driver.Country__c}
+                                options={countryOptions}
+                                dropdown-class="form-select"
+                                required
+                                onchange={handleInputChange}>
+                            </c-buho_input>
+                        </div>
+
+                        <div class="col-md-6">
+                            <c-buho_input
+                                label="State/Province"
+                                label-class=""
+                                container-class="form-group"
+                                type="input"
+                                name="State_Province__c"
+                                value={driver.State_Province__c}
+                                placeholder="Enter state/province"
+                                input-type="text"
+                                required
+                                onchange={handleInputChange}>
+                            </c-buho_input>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <c-buho_input
+                                label="Postal Code"
+                                label-class=""
+                                container-class="form-group"
+                                type="input"
+                                name="Postal_Code__c"
+                                value={driver.Postal_Code__c}
+                                placeholder="Enter postal code"
+                                input-type="text"
+                                required
+                                onchange={handleInputChange}>
+                            </c-buho_input>
+                        </div>
+
+                        <div class="col-md-6">
+                            <c-buho_input
+                                label="City"
+                                label-class=""
+                                container-class="form-group"
+                                type="input"
+                                name="City__c"
+                                value={driver.City__c}
+                                placeholder="Enter city"
+                                input-type="text"
+                                required
+                                onchange={handleInputChange}>
+                            </c-buho_input>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-12">
+                            <c-buho_input
+                                label="Address"
+                                label-class=""
+                                container-class="form-group"
+                                type="input"
+                                name="Address__c"
+                                value={driver.Address__c}
+                                placeholder="Enter address"
+                                input-type="text"
+                                required
+                                onchange={handleInputChange}>
+                            </c-buho_input>
+                        </div>
+                    </div>
+
+                    <!-- Hidden Country Text field -->
+                    <div style="display: none;">
+                        <c-buho_input
+                            label="Country Text"
+                            type="input"
+                            name="Country_Text__c"
+                            value={driver.Country_Text__c}
+                            input-type="text"
+                            onchange={handleInputChange}>
+                        </c-buho_input>
+                    </div>
+                </template>
+
+                <!-- Checkbox for leased/financed -->
+                <div class="row g-4">
+                    <div class="col-12">
+                        <c-buho_input
+                            label="Is vehicle leased or financed"
+                            type="checkbox"
+                            name="isLeasedOrFinanced"
+                            checked={driver.isLeasedOrFinanced}
+                            onchange={handleInputChange}>
+                        </c-buho_input>
+                    </div>
+                </div>
+
+                <!-- Add Driver Button -->
+                <div class="form-actions">
+                    <button type="button" 
+                            class="btn btn-dark" 
+                            onclick={addDriver}>
+                        Add Driver & Operators
+                    </button>
+                </div>
+
+                <!-- Drivers Table -->
+                <template if:true={drivers.length}>
+                    <div class="towed-units-table">
+                        <div class="table-responsive">
+                            <table class="buho-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>License Country</th>
+                                        <th>License State</th>
+                                        <th>Licence No</th>
+                                        <th>Date of Birth</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={drivers} for:item="drv" for:index="index">
+                                        <tr key={drv.diff} data-label="Driver">
+                                            <td data-label="Name">{drv.First_Name__c} {drv.Last_Name__c}</td>
+                                            <td data-label="License Country">{drv.License_Country__c}</td>
+                                            <td data-label="License State">{drv.License_state__c}</td>
+                                            <td data-label="Licence No">{drv.license_number__c}</td>
+                                            <td data-label="Date of Birth">{drv.Dob__c}</td>
+                                            <td data-label="Action">
+                                                <div class="action-buttons">
+                                                    <button type="button" 
+                                                            class="btn-icon btn-edit" 
+                                                            data-index={index}
+                                                            onclick={editDriver}
+                                                            title="Edit">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button type="button" 
+                                                            class="btn-icon btn-delete" 
+                                                            data-index={index}
+                                                            onclick={deleteDriver}
+                                                            title="Delete">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Continue Button -->
+                <button type="button" 
+                        class="btn btn-primary btn-continue" 
+                        onclick={handleContinue}>
+                    Continue
+                </button>
+            </div>
+        </template>
+    </div>
+</template>

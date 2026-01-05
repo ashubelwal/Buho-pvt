@@ -1,0 +1,159 @@
+<template>
+    <div class="wizard-form">
+        <template if:true={flag.isLoaded}>
+            <div class="row g-4">
+                <!-- Company Name -->
+                <div class="col-md-4">
+                    <c-buho_input
+                        label="Company Name"
+                        label-class=""
+                        container-class="form-group"
+                        type="input"
+                        name="Company_Name__c"
+                        value={companyInfo.Company_Name__c}
+                        placeholder="Enter company name"
+                        input-type="text"
+                        required
+                        onchange={handleInputChange}>
+                    </c-buho_input>
+                </div>
+
+                <!-- Company Phone -->
+                <div class="col-md-4">
+                    <c-buho_input
+                        label="Company Phone"
+                        label-class=""
+                        container-class="form-group"
+                        type="input"
+                        name="Company_Phone__c"
+                        value={formattedPhone}
+                        placeholder="(123) 456-7890"
+                        input-type="tel"
+                        max-length="14"
+                        required
+                        onchange={handleInputChange}>
+                    </c-buho_input>
+                </div>
+
+                <!-- Tax ID -->
+                <div class="col-md-4">
+                    <c-buho_input
+                        label="Tax ID"
+                        label-class=""
+                        container-class="form-group"
+                        type="input"
+                        name="Tax_ID__c"
+                        value={companyInfo.Tax_ID__c}
+                        placeholder="Enter tax ID"
+                        input-type="text"
+                        input-class="uppercase-input"
+                        onchange={handleInputChange}>
+                    </c-buho_input>
+                </div>
+            </div>
+
+            <!-- Address Recommendations -->
+            <div class="row g-4">
+                <div class="col-12">
+                    <c-buho_address-recommendations 
+                        onsendaddress={handleCompanyAddress}
+                        placeholder="Start typing company address to autofill fields below">
+                    </c-buho_address-recommendations>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <!-- Company Country -->
+                <div class="col-md-6">
+                    <c-buho_input
+                        label="Company Country"
+                        label-class=""
+                        container-class="form-group"
+                        type="combobox"
+                        name="Company_Country__c"
+                        value={companyInfo.Company_Country__c}
+                        options={countryOptions}
+                        placeholder="Select country"
+                        dropdown-class="form-select"
+                        required
+                        onchange={handleInputChange}>
+                    </c-buho_input>
+                </div>
+
+                <!-- Company Address -->
+                <div class="col-md-6">
+                    <c-buho_input
+                        label="Company Address"
+                        label-class=""
+                        container-class="form-group"
+                        type="input"
+                        name="Company_Address__c"
+                        value={companyInfo.Company_Address__c}
+                        placeholder="Enter company address"
+                        input-type="text"
+                        required
+                        onchange={handleInputChange}>
+                    </c-buho_input>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <!-- Company Zip -->
+                <div class="col-md-4">
+                    <c-buho_input
+                        label="Company Zip"
+                        label-class=""
+                        container-class="form-group"
+                        type="input"
+                        name="Company_Zip__c"
+                        value={companyInfo.Company_Zip__c}
+                        placeholder="Enter zip code"
+                        input-type="text"
+                        required
+                        onchange={handleInputChange}>
+                    </c-buho_input>
+                </div>
+
+                <!-- Company State -->
+                <div class="col-md-4">
+                    <c-buho_input
+                        label="Company State"
+                        label-class=""
+                        container-class="form-group"
+                        type="input"
+                        name="Company_State__c"
+                        value={companyInfo.Company_State__c}
+                        placeholder="Enter state"
+                        input-type="text"
+                        required
+                        onchange={handleInputChange}>
+                    </c-buho_input>
+                </div>
+
+                <!-- Company City -->
+                <div class="col-md-4">
+                    <c-buho_input
+                        label="Company City"
+                        label-class=""
+                        container-class="form-group"
+                        type="input"
+                        name="Company_City__c"
+                        value={companyInfo.Company_City__c}
+                        placeholder="Enter city"
+                        input-type="text"
+                        required
+                        onchange={handleInputChange}>
+                    </c-buho_input>
+                </div>
+            </div>
+        </template>
+        
+        <template if:false={flag.isLoaded}>
+            <div class="loading-container">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>
