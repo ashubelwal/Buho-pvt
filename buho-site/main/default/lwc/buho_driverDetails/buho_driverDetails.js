@@ -11,7 +11,7 @@ export default class Buho_driverDetails extends LightningElement {
     @api payload;
     ISDEBUG = true;
     @track tempDrivers = [];
-    @track isSelected = false; 
+    @track isSelected = false;
     label = { Selectadriverfromyouraccount };
 
     @track inputValues = { drivers: [], companyInformation: {} };
@@ -33,7 +33,7 @@ export default class Buho_driverDetails extends LightningElement {
         isLeasedOrFinanced: false
     };
     @track selectedDriverId = '';
-    
+
     @track flag = {
         isOwner: true,
         isCompanyDisabled: false,
@@ -48,8 +48,8 @@ export default class Buho_driverDetails extends LightningElement {
     @track loginUserDriverOption = [];
     @track flagForRender = true;
     @track userType;
-    @track currentVehicleType = 'personal';
-    @track currentStep = 'humanOwner';
+    @track currentVehicleType;
+    @track currentStep = 'ownership';
     @track countryOptions = [];
     @track stateOptions = [];
 
@@ -58,7 +58,7 @@ export default class Buho_driverDetails extends LightningElement {
         { label: 'Human Owner', value: 'owner' },
         { label: 'Company', value: 'company' }
     ];
-    
+
     flatpickrInstance = null;
 
     // ------------------------
@@ -85,21 +85,21 @@ export default class Buho_driverDetails extends LightningElement {
             return 'Add Owner';
         }
     }
-    
+
     // Ownership card classes
     get businessCardClass() {
         return this.currentVehicleType === 'business' || this.isSelected ? 'ownership-card selected' : 'ownership-card';
     }
-    
+
     get personalCardClass() {
         return this.currentVehicleType === 'personal' || !this.isSelected ? 'ownership-card selected' : 'ownership-card';
     }
-    
+
     // Format DOB for display
     get formattedDob() {
         return this.formatDateForDisplay(this.driver.Dob__c);
     }
-    
+
     formatDateForDisplay(dateString) {
         if (!dateString) return '';
         try {
@@ -116,7 +116,7 @@ export default class Buho_driverDetails extends LightningElement {
             return '';
         }
     }
-    
+
     parseDateAsLocal(dateString) {
         if (!dateString) return null;
         if (typeof dateString === 'string' && dateString.includes('-')) {
@@ -125,7 +125,7 @@ export default class Buho_driverDetails extends LightningElement {
         }
         return new Date(dateString);
     }
-    
+
     formatDateForApi(date) {
         if (!date) return '';
         const year = date.getFullYear();
@@ -159,53 +159,9 @@ export default class Buho_driverDetails extends LightningElement {
             console.error('Error al editar company:', err.message);
         }
     }
-    
+
     // Handle ownership card selection
-    handleOwnershipSelection(event) {
-        const selectedValue = event.currentTarget.dataset.value;
-        this.currentVehicleType = selectedValue;
-        
-        if (selectedValue === 'business') {
-            this.isSelected = true;
-            this.flag.isCompanyStatus = true;
-            this.flag.isOwner = false;
-            this.currentStep = 'companyDetails';
-        } else {
-            this.isSelected = false;
-            this.flag.isCompanyStatus = false;
-            this.flag.isOwner = true;
-            this.currentStep = 'humanOwner';
-        }
 
-        this.dispatchPayloadUpdate({
-            finalizeVehicleDetails: {
-                Is_the_vehicle_registered_to_a_business__c: this.flag.isCompanyStatus
-            }
-        });
-        
-        this.saveSnapshot();
-    }
-
-    handleOwnershipChange(event) {
-        this.ownershipValue = event.detail.value;
-
-        if (this.ownershipValue === 'company') {
-            this.flag.isCompanyStatus = true;
-            this.flag.isOwner = false;
-            this.currentStep = 'companyDetails';
-        } else {
-            this.flag.isCompanyStatus = false;
-            this.flag.isOwner = true;
-            this.currentStep = 'humanOwner';
-        }
-
-        this.dispatchPayloadUpdate({
-            finalizeVehicleDetails: {
-                Is_the_vehicle_registered_to_a_business__c: this.flag.isCompanyStatus
-            }
-        });
-    }
-    
     goToCompanyDetails() {
         this.currentStep = 'companyDetails';
         this.saveSnapshot();
@@ -218,7 +174,7 @@ export default class Buho_driverDetails extends LightningElement {
 
     // ------------------------
     dispatchPayloadUpdate(detailObj) {
-        console.log('OUTPUT detailObj: ',detailObj);
+        console.log('OUTPUT detailObj: ', detailObj);
         try {
             // Always send { updates: { ... } } because parent expects event.detail.updates
             this.payload = [...detailObj];
@@ -228,9 +184,9 @@ export default class Buho_driverDetails extends LightningElement {
                 composed: true
             });
             this.dispatchEvent(evt);
-                if (this.ISDEBUG) console.log('DD dispatched payloadupdate:', JSON.stringify({ updates: detailObj }));
-            } catch (e) {
-           // console.warn('dispatchPayloadUpdate error', e.message);
+            if (this.ISDEBUG) console.log('DD dispatched payloadupdate:', JSON.stringify({ updates: detailObj }));
+        } catch (e) {
+            // console.warn('dispatchPayloadUpdate error', e.message);
         }
     }
 
@@ -252,9 +208,9 @@ export default class Buho_driverDetails extends LightningElement {
             const selectedDriver = this.loginUserDriverOption.find(driver => driver.value === selectedDriverId);
             if (selectedDriver) {
                 this.driver = {
-                    ...this.driver, 
-                    Id : selectedDriver.Id || null,
-                   First_Name__c: selectedDriver.First_Name__c || '',
+                    ...this.driver,
+                    Id: selectedDriver.Id || null,
+                    First_Name__c: selectedDriver.First_Name__c || '',
                     Last_Name__c: selectedDriver.Last_Name__c || '',
                     License_Country__c: selectedDriver.License_Country__c || 'United States',
                     License_state__c: selectedDriver.License_state__c || '',
@@ -284,7 +240,7 @@ export default class Buho_driverDetails extends LightningElement {
             console.error('Error changing driver option:', error);
         }
     }
-    
+
     // Handle country change from buho_input
     handleCountryChange(event) {
         const value = event.detail?.value || event.target?.value;
@@ -292,14 +248,14 @@ export default class Buho_driverDetails extends LightningElement {
         this.loadStatesForCountry(value);
         this.isCompanyOrDriverOwner();
     }
-    
+
     // Handle state change from buho_input
     handleStateChange(event) {
         const value = event.detail?.value || event.target?.value;
         this.driver = { ...this.driver, License_state__c: value };
         this.isCompanyOrDriverOwner();
     }
-    
+
     // Handle generic input change from buho_input
     handleInputChange(event) {
         try {
@@ -311,18 +267,72 @@ export default class Buho_driverDetails extends LightningElement {
 
             if (this.ISDEBUG) console.log('DD handleInputChange:', { name, value, checked, type });
 
-            // Handle checkbox fields
-            if (type === 'checkbox' || name === 'isLeasedOrFinanced') {
-                this.driver = { ...this.driver, [name]: checked };
-                this.isCompanyOrDriverOwner();
+            // Company checkbox handling - Special case from nc_driverDetails
+            if (name === 'Is_the_vehicle_registered_to_a_business__c') {
+                this.flag.isCompanyStatus = checked;
+                this.flag.Is_the_vehicle_registered_to_a_business__c = checked;
+
+                // Change step based on checkbox
+                this.currentStep = checked ? 'companyDetails' : 'humanOwner';
+
+                // Only adjust options (do not alter driver/owner fields here)
+                if (checked) {
+                    this.loginUserDriverOption = [
+                        { label: '-- Select a Driver --', value: '' },
+                        ...this.existingDriversList.filter(d => !d.Driver_Type__c)
+                    ];
+                } else {
+                    this.loginUserDriverOption = [
+                        { label: '-- Select a Driver --', value: '' },
+                        ...this.existingDriversList
+                    ];
+                }
+
+                // Persist change into payload & notify parent
+                try {
+                    const newPayload = JSON.parse(JSON.stringify(this.payload || []));
+
+                    const finalizeIndex = newPayload.findIndex(item => item.finalizeVehicleDetails);
+                    if (finalizeIndex >= 0) {
+                        newPayload[finalizeIndex].finalizeVehicleDetails = {
+                            ...newPayload[finalizeIndex].finalizeVehicleDetails,
+                            Is_the_vehicle_registered_to_a_business__c: checked
+                        };
+                    } else {
+                        newPayload.push({
+                            finalizeVehicleDetails: {
+                                Is_the_vehicle_registered_to_a_business__c: checked
+                            }
+                        });
+                    }
+                    this.payload = newPayload;
+                } catch (e) {
+                    console.warn('error', e.message);
+                }
+
+                this.dispatchPayloadUpdate({
+                    finalizeVehicleDetails: {
+                        Is_the_vehicle_registered_to_a_business__c: checked
+                    }
+                });
+
+                // Snapshot
+                this.saveSnapshot();
                 return;
             }
 
-            // Handle text inputs
+            // license number uppercase / maxlength
             if (name === 'license_number__c') {
                 let upperValue = (value || '').toUpperCase();
                 if (upperValue.length > 40) upperValue = upperValue.substring(0, 40);
                 this.driver = { ...this.driver, [name]: upperValue };
+                this.isCompanyOrDriverOwner();
+                return;
+            }
+
+            // Registered Owner checkbox change (only updates driver object)
+            if (name === 'Driver_Type__c') {
+                this.driver = { ...this.driver, [name]: checked };
                 this.isCompanyOrDriverOwner();
                 return;
             }
@@ -338,8 +348,15 @@ export default class Buho_driverDetails extends LightningElement {
                 return;
             }
 
+            // Handle checkbox fields
+            if (type === 'checkbox') {
+                this.driver = { ...this.driver, [name]: checked };
+                this.isCompanyOrDriverOwner();
+                return;
+            }
+
             // Default - update driver fields
-            this.driver = { ...this.driver, [name]: value };
+            this.driver = { ...this.driver, [name]: type === 'checkbox' ? checked : value };
             this.isCompanyOrDriverOwner();
         } catch (err) {
             console.log('DD ERROR in handleInputChange: ', err.message);
@@ -435,15 +452,15 @@ export default class Buho_driverDetails extends LightningElement {
                 allValid = false;
             }
         });
-        
+
         if (this.ISDEBUG) console.log('DD Validating driver:', this.driver);
-        
+
         if (!allValid) {
-            this.dispatchEvent(new CustomEvent('toastevent', { 
-                detail: { 
-                    variant: 'error', 
-                    title: 'Validation Error', 
-                    message: 'Some required fields are invalid.' 
+            this.dispatchEvent(new CustomEvent('toastevent', {
+                detail: {
+                    variant: 'error',
+                    title: 'Validation Error',
+                    message: 'Some required fields are invalid.'
                 },
                 bubbles: true,
                 composed: true
@@ -452,70 +469,70 @@ export default class Buho_driverDetails extends LightningElement {
         }
 
         if (!this.driver.First_Name__c || !this.driver.Last_Name__c) {
-            this.dispatchEvent(new CustomEvent('toastevent', { 
-                detail: { 
-                    variant: 'error', 
-                    title: 'Validation Error', 
-                    message: 'First and Last name are required' 
+            this.dispatchEvent(new CustomEvent('toastevent', {
+                detail: {
+                    variant: 'error',
+                    title: 'Validation Error',
+                    message: 'First and Last name are required'
                 },
                 bubbles: true,
                 composed: true
             }));
             return false;
         }
-        
+
         if (!this.driver.Dob__c) {
-            this.dispatchEvent(new CustomEvent('toastevent', { 
-                detail: { 
-                    variant: 'error', 
-                    title: 'Validation Error', 
-                    message: 'Date of Birth is required' 
+            this.dispatchEvent(new CustomEvent('toastevent', {
+                detail: {
+                    variant: 'error',
+                    title: 'Validation Error',
+                    message: 'Date of Birth is required'
                 },
                 bubbles: true,
                 composed: true
             }));
             return false;
         }
-        
+
         if (!this.driver.License_Country__c) {
-            this.dispatchEvent(new CustomEvent('toastevent', { 
-                detail: { 
-                    variant: 'error', 
-                    title: 'Validation Error', 
-                    message: 'License country is required' 
+            this.dispatchEvent(new CustomEvent('toastevent', {
+                detail: {
+                    variant: 'error',
+                    title: 'Validation Error',
+                    message: 'License country is required'
                 },
                 bubbles: true,
                 composed: true
             }));
             return false;
         }
-        
+
         if (!this.driver.license_number__c) {
-            this.dispatchEvent(new CustomEvent('toastevent', { 
-                detail: { 
-                    variant: 'error', 
-                    title: 'Validation Error', 
-                    message: 'License number is required' 
+            this.dispatchEvent(new CustomEvent('toastevent', {
+                detail: {
+                    variant: 'error',
+                    title: 'Validation Error',
+                    message: 'License number is required'
                 },
                 bubbles: true,
                 composed: true
             }));
             return false;
         }
-        
+
         if (!this.driver.License_state__c) {
-            this.dispatchEvent(new CustomEvent('toastevent', { 
-                detail: { 
-                    variant: 'error', 
-                    title: 'Validation Error', 
-                    message: 'License state is required' 
+            this.dispatchEvent(new CustomEvent('toastevent', {
+                detail: {
+                    variant: 'error',
+                    title: 'Validation Error',
+                    message: 'License state is required'
                 },
                 bubbles: true,
                 composed: true
             }));
             return false;
         }
-        
+
         return true;
     }
 
@@ -526,7 +543,7 @@ export default class Buho_driverDetails extends LightningElement {
         try {
             console.log('inside handle change (legacy)');
             const { name, checked, value, type } = event.target || {};
-            
+
             // Redirect to handleInputChange for consistency
             this.handleInputChange({
                 detail: { name, value, checked, type },
@@ -571,43 +588,27 @@ export default class Buho_driverDetails extends LightningElement {
         return true;
     }
 
-    // goToDriverForm() {        
-    //     const childCmp = this.template.querySelector('c-nc_company-information');
-    //     console.log('childCmp.validateInputs: ', childCmp.validateInputs);
-
-    //     if (childCmp && typeof childCmp.validateInputs === 'function' && !childCmp.validateInputs()) {
-    //         console.log('Enter company information');
-    //         this.dispatchEvent(new CustomEvent('toastevent', {
-    //             detail: { variant: 'error', title: 'Error', message: '⚠️ Company Information is invalid.' }
-    //         }));            
-    //         return;
-    //     }  else {
-    //         console.log('OUTPUT : in else ondition');
-    //     }
-    //     this.currentStep = 'humanOwner';     
-          
-    // }
 
     goToDriverForm() {
-      
-        if(this.currentStep === 'companyDetails'){
-           
+
+        if (this.currentStep === 'companyDetails') {
+
             for (let i = 0; i < this.drivers.length; i++) {
-                let driv = this.drivers[i]; 
+                let driv = this.drivers[i];
 
                 console.log(i, ':: ', driv?.Driver_Type__c, ' ');
 
-                if (driv?.Driver_Type__c === true || driv?.Driver_Type__c ==='Owner' || driv?.Driver_Type__c ==='Co-Owner'|| driv?.Driver_Type__c ==='Owner & Driver') {
+                if (driv?.Driver_Type__c === true || driv?.Driver_Type__c === 'Owner' || driv?.Driver_Type__c === 'Co-Owner' || driv?.Driver_Type__c === 'Owner & Driver') {
                     this.tempDrivers.push(driv);
-                    
+
                     this.drivers.splice(i, 1);
                     i--; // Adjust index since the array has shrunk
                 }
             }
-            
+
 
         }
-            
+
         // Since we're already in the company information step, we know the component exists
         const childCmp = this.template.querySelector('c-buho_company-information');
 
@@ -636,7 +637,7 @@ export default class Buho_driverDetails extends LightningElement {
                 console.log('Validation passed, proceeding to driver form');
                 this.currentStep = 'humanOwner';
                 this.driver.Driver_Type__c = false;
-                if(this.currentVehicleType !=='personal'){
+                if (this.currentVehicleType !== 'personal') {
                     this.flag.Is_the_vehicle_registered_to_a_business__c = true;
                 }
             } else {
@@ -651,35 +652,29 @@ export default class Buho_driverDetails extends LightningElement {
 
     get isStepCompanyDetails() { return this.currentStep === 'companyDetails'; }
     get isStepHumanOwner() { return this.currentStep === 'humanOwner'; }
-    
-    // Show address recommendations only for business vehicles
-    get showAddressRecommendations() {
-        return this.currentVehicleType === 'business' || 
-               this.flag.Is_the_vehicle_registered_to_a_business__c === true;
-    }
 
     // ------------------------
     // Drivers List / Add / Edit / Delete
     // ------------------------
     addDriver() {
         if (!this.validateDriver()) return;
-        if(this.drivers.length >0){
-                const isDuplicate = this.drivers.some(driver => 
-                driver.license_number__c === this.driver.license_number__c 
+        if (this.drivers.length > 0) {
+            const isDuplicate = this.drivers.some(driver =>
+                driver.license_number__c === this.driver.license_number__c
             );
-            if(isDuplicate){
+            if (isDuplicate) {
                 this.dispatchEvent(new CustomEvent('toastevent', {
                     detail: {
                         variant: 'error',
                         title: 'Duplicate License',
                         message: 'You cannot add a driver with the same license number.'
                     }
-                    }));
-                    return ;
+                }));
+                return;
             }
         }
-        
-       if (this.driver.First_Name__c && this.driver.Last_Name__c) {
+
+        if (this.driver.First_Name__c && this.driver.Last_Name__c) {
             this.drivers = [...this.drivers, { ...this.driver, diff: Date.now() }];
 
             this.reCheckDriverOwnerOnChange();
@@ -754,7 +749,7 @@ export default class Buho_driverDetails extends LightningElement {
     }
 
     updateLoginUserDriverOption() {
-        const hasOwner = this.drivers?.some(driver => driver.Driver_Type__c === true || driver.Driver_Type__c ==='Owner' || driver.Driver_Type__c ==='Co-Owner'|| driver.Driver_Type__c ==='Owner & Driver');
+        const hasOwner = this.drivers?.some(driver => driver.Driver_Type__c === true || driver.Driver_Type__c === 'Owner' || driver.Driver_Type__c === 'Co-Owner' || driver.Driver_Type__c === 'Owner & Driver');
         const isBusinessVehicle = this.flag?.Is_the_vehicle_registered_to_a_business__c === true;
 
         if (hasOwner || isBusinessVehicle) {
@@ -769,63 +764,63 @@ export default class Buho_driverDetails extends LightningElement {
     }
 
     isCompanyOrDriverOwner() {
-        const hasDriverOwner = this.drivers.some(d => d.Driver_Type__c === true || d.Driver_Type__c ==='Owner' || d.Driver_Type__c ==='Co-Owner'|| d.Driver_Type__c ==='Owner & Driver');
+        const hasDriverOwner = this.drivers.some(d => d.Driver_Type__c === true || d.Driver_Type__c === 'Owner' || d.Driver_Type__c === 'Co-Owner' || d.Driver_Type__c === 'Owner & Driver');
         // base isOwner only on added drivers
         const hasUserStartingWith = this.payload.some(item => item?.userDetails?.Id?.startsWith("003"));
-        if(!hasUserStartingWith){
+        if (!hasUserStartingWith) {
             this.flag.isOwner = hasDriverOwner;
         }
-       this.flag.isCompanyDisabled = hasDriverOwner;
+        this.flag.isCompanyDisabled = hasDriverOwner;
 
         this.updateLoginUserDriverOption();
     }
-    isShowOwnerAndDriverInfo(){
-       
+    isShowOwnerAndDriverInfo() {
+
         if (this.ISDEBUG) console.log('Payload Data:>>>', JSON.stringify(this.payload));
-        if(this.payload){
+        if (this.payload) {
             const driverPayload = this.payload.find(item => item?.driverDetails)?.driverDetails;
             const hasUserStartingWith = this.payload.some(item => item?.userDetails?.Id?.startsWith("003"));
             const companyPayload = driverPayload?.companyInformation;
             const OwnerDrivers = driverPayload?.driverList || [];
             const existingDrivers = driverPayload?.drivers || [];
-    
-           
-            if (Array.isArray(OwnerDrivers) && OwnerDrivers.length > 0 &&  typeof companyPayload === 'object' && companyPayload && !companyPayload.Company_Name__c ) {
+
+
+            if (Array.isArray(OwnerDrivers) && OwnerDrivers.length > 0 && typeof companyPayload === 'object' && companyPayload && !companyPayload.Company_Name__c) {
                 // Filter owners
-                const hasDriverOwner = this.drivers.some(d => d.Driver_Type__c === true || d.Driver_Type__c ==='Owner' || d.Driver_Type__c ==='Co-Owner'|| d.Driver_Type__c ==='Owner & Driver');
-                
-                if(!hasDriverOwner){
-                this.existingOwnerList = OwnerDrivers
-                    .filter(d => d.Driver_Type__c === true || d.Driver_Type__c ==='Owner' || d.Driver_Type__c ==='Co-Owner'|| d.Driver_Type__c ==='Owner & Driver')
-                    .map(d => ({
-                        ...d,
-                        label: `${d.First_Name__c} ${d.Last_Name__c}`,
-                        value: d.Id || `temp-${Math.random().toString(36).substr(2, 9)}`
-                    }));
+                const hasDriverOwner = this.drivers.some(d => d.Driver_Type__c === true || d.Driver_Type__c === 'Owner' || d.Driver_Type__c === 'Co-Owner' || d.Driver_Type__c === 'Owner & Driver');
+
+                if (!hasDriverOwner) {
+                    this.existingOwnerList = OwnerDrivers
+                        .filter(d => d.Driver_Type__c === true || d.Driver_Type__c === 'Owner' || d.Driver_Type__c === 'Co-Owner' || d.Driver_Type__c === 'Owner & Driver')
+                        .map(d => ({
+                            ...d,
+                            label: `${d.First_Name__c} ${d.Last_Name__c}`,
+                            value: d.Id || `temp-${Math.random().toString(36).substr(2, 9)}`
+                        }));
                     this.loginUserDriverOption = [
                         { label: '-- Select an Owner --', value: '' },
                         ...this.existingOwnerList
                     ];
                 }
-                    else if(hasDriverOwner && companyPayload && typeof companyPayload === 'object' &&  companyPayload.Company_Name__c && companyPayload.Company_Name__c.trim() !== ''){
-                        this.existingDriverList = OwnerDrivers
-                            .filter(d => d.Driver_Type__c === false || d.Driver_Type__c ==='Driver')
-                            .map(d => ({
-                                ...d,
-                                label: `${d.First_Name__c} ${d.Last_Name__c}`,
-                                value: d.Id || `temp-${Math.random().toString(36).substr(2, 9)}`
-                            }));
-                            this.loginUserDriverOption = [
-                            { label: '-- Select a Driver --', value: '' },
-                            ...this.existingDriverList
-                        ];
-                    }
-                
+                else if (hasDriverOwner && companyPayload && typeof companyPayload === 'object' && companyPayload.Company_Name__c && companyPayload.Company_Name__c.trim() !== '') {
+                    this.existingDriverList = OwnerDrivers
+                        .filter(d => d.Driver_Type__c === false || d.Driver_Type__c === 'Driver')
+                        .map(d => ({
+                            ...d,
+                            label: `${d.First_Name__c} ${d.Last_Name__c}`,
+                            value: d.Id || `temp-${Math.random().toString(36).substr(2, 9)}`
+                        }));
+                    this.loginUserDriverOption = [
+                        { label: '-- Select a Driver --', value: '' },
+                        ...this.existingDriverList
+                    ];
+                }
+
             }
-            else if(companyPayload && typeof companyPayload === 'object' &&  companyPayload.Company_Name__c && companyPayload.Company_Name__c.trim() !== '' && this.currentVehicleType !=='personal' && this.currentVehicleType !==undefined){
+            else if (companyPayload && typeof companyPayload === 'object' && companyPayload.Company_Name__c && companyPayload.Company_Name__c.trim() !== '' && this.currentVehicleType !== 'personal' && this.currentVehicleType !== undefined) {
                 // Filter drivers (store for later)
                 this.existingDriverList = OwnerDrivers
-                    .filter(d => d.Driver_Type__c === false || d.Driver_Type__c ==='Driver')
+                    .filter(d => d.Driver_Type__c === false || d.Driver_Type__c === 'Driver')
                     .map(d => ({
                         ...d,
                         label: `${d.First_Name__c} ${d.Last_Name__c}`,
@@ -838,24 +833,32 @@ export default class Buho_driverDetails extends LightningElement {
                     ...this.existingDriverList
                 ];
                 this.flag.Is_the_vehicle_registered_to_a_business__c = true;
-                if(this.currentVehicleType ==='personal'){
+                if (this.currentVehicleType === 'personal') {
                     this.driver.Driver_Type__c = true;
                 }
-            } 
-            else if(Array.isArray(OwnerDrivers) && OwnerDrivers.length ===0 && Array.isArray(existingDrivers) && existingDrivers.length ===0 && this.currentVehicleType !== undefined && this.currentVehicleType !=='personal' && this.currentVehicleType !== 'business'){
+            }
+            else if (Array.isArray(OwnerDrivers) && OwnerDrivers.length === 0 && Array.isArray(existingDrivers) && existingDrivers.length === 0 && this.currentVehicleType !== undefined && this.currentVehicleType !== 'personal' && this.currentVehicleType !== 'business') {
                 this.driver.Driver_Type__c = true;
-            } 
-            else if(Array.isArray(OwnerDrivers) && OwnerDrivers.length ===0 && Array.isArray(existingDrivers) && existingDrivers.length ===0 && this.currentVehicleType ==='personal' &&  typeof companyPayload === 'object' && companyPayload && !companyPayload.Company_Name__c && !this.flag.isOwner){
+            }
+            else if (Array.isArray(OwnerDrivers) && OwnerDrivers.length === 0 && Array.isArray(existingDrivers) && existingDrivers.length === 0 && this.currentVehicleType === 'personal' && typeof companyPayload === 'object' && companyPayload && !companyPayload.Company_Name__c && !this.flag.isOwner) {
                 this.driver.Driver_Type__c = true;
             }
             
-            else if(!this.flag.isOwner && !hasUserStartingWith && this.currentVehicleType !== 'business' && !this.flag?.Is_the_vehicle_registered_to_a_business__c){
+            // Set Driver_Type__c to true for Personal Vehicle when no owner exists yet
+            else if (!this.flag.isOwner && !hasUserStartingWith && this.currentVehicleType !== 'business' && !this.flag?.Is_the_vehicle_registered_to_a_business__c) {
                 this.driver.Driver_Type__c = true;
-            } else if(this.flag?.Is_the_vehicle_registered_to_a_business__c && Array.isArray(OwnerDrivers) && OwnerDrivers.length ===0){
+            }
+            
+            // Additional check: if currentVehicleType is explicitly 'personal' and no owner exists
+            else if (this.currentVehicleType === 'personal' && !this.flag.isOwner && !this.flag?.Is_the_vehicle_registered_to_a_business__c) {
+                this.driver.Driver_Type__c = true;
+            }
+            
+            else if (this.flag?.Is_the_vehicle_registered_to_a_business__c && Array.isArray(OwnerDrivers) && OwnerDrivers.length === 0) {
                 this.isSelected = true;
-            } else if(hasUserStartingWith && this.flag?.Is_the_vehicle_registered_to_a_business__c && !this.flag.isCompanyStatus){
+            } else if (hasUserStartingWith && this.flag?.Is_the_vehicle_registered_to_a_business__c && !this.flag.isCompanyStatus) {
                 this.isSelected = true;
-            } else if(hasUserStartingWith && this.flag?.Is_the_vehicle_registered_to_a_business__c && companyPayload && typeof companyPayload === 'object' &&  companyPayload.Company_Name__c && companyPayload.Company_Name__c.trim() !== ''){
+            } else if (hasUserStartingWith && this.flag?.Is_the_vehicle_registered_to_a_business__c && companyPayload && typeof companyPayload === 'object' && companyPayload.Company_Name__c && companyPayload.Company_Name__c.trim() !== '') {
                 this.isSelected = true;
             }
         }
@@ -901,7 +904,7 @@ export default class Buho_driverDetails extends LightningElement {
                 ...this.inputValues,
                 companyInformation
             };
-            console.log('inputValues22@###',this.inputValues);
+            console.log('inputValues22@###', this.inputValues);
             // Merge locally best-effort
             try {
                 const newPayload = JSON.parse(JSON.stringify(this.payload || []));
@@ -1009,24 +1012,24 @@ export default class Buho_driverDetails extends LightningElement {
                     this.currentStep = this.flag.isCompanyStatus ? 'companyDetails' : 'humanOwner';
                 }
             }
-           
-            if(companyPayload && Object.keys(companyPayload).length > 0 && companyPayload?.Company_Name__c?.trim() && Array.isArray(hasdriversInfo) && hasdriversInfo.length ===0){
-               this.isSelected = true;
+
+            if (companyPayload && Object.keys(companyPayload).length > 0 && companyPayload?.Company_Name__c?.trim() && Array.isArray(hasdriversInfo) && hasdriversInfo.length === 0) {
+                this.isSelected = true;
                 this.currentStep = 'companyDetails';
-            }else if(companyPayload && Object.keys(companyPayload).length > 0 && companyPayload?.Company_Name__c?.trim() && Array.isArray(this.existingDriversList) && this.existingDriversList.length >0){
+            } else if (companyPayload && Object.keys(companyPayload).length > 0 && companyPayload?.Company_Name__c?.trim() && Array.isArray(this.existingDriversList) && this.existingDriversList.length > 0) {
                 const hasAccountDriver = this.existingDriversList.some(
                     driver => !!driver.Account_Driver__c
                 );
-                if(hasAccountDriver){
+                if (hasAccountDriver) {
                     this.isSelected = true;
                     this.currentStep = 'companyDetails'
-                } else if(!hasAccountDriver && this.currentVehicleType !==undefined){
+                } else if (!hasAccountDriver && this.currentVehicleType !== undefined) {
                     this.isSelected = false;
                     this.currentStep = 'humanOwner';
                 }
-               
-           }
-           if ((!this.driver.First_Name__c || !this.driver.Last_Name__c) && driverPayload?.drivers?.length > 0) {
+
+            }
+            if ((!this.driver.First_Name__c || !this.driver.Last_Name__c) && driverPayload?.drivers?.length > 0) {
                 const lastDriver = driverPayload.drivers[driverPayload.drivers.length - 1];
                 this.driver.First_Name__c = lastDriver.First_Name__c || this.driver.First_Name__c;
                 this.driver.Last_Name__c = lastDriver.Last_Name__c || this.driver.Last_Name__c;
@@ -1077,19 +1080,19 @@ export default class Buho_driverDetails extends LightningElement {
         if (this.payload && this.payload.length > 0 && this.flagForRender) {
             this.flagForRender = false;
         }
-        
+
         // Initialize Flatpickr for Date of Birth
         if (!this.flag.flatpickrInitialized && typeof flatpickr !== 'undefined') {
             this.initializeFlatpickr();
         }
     }
-    
+
     /**
      * Initialize Flatpickr on the Date of Birth input
      */
     initializeFlatpickr() {
         const dobInput = this.template.querySelector('.dobDate');
-        
+
         if (!dobInput || typeof flatpickr === 'undefined') {
             if (this.ISDEBUG) console.log('DD Flatpickr not ready yet');
             return;
@@ -1099,16 +1102,16 @@ export default class Buho_driverDetails extends LightningElement {
             // Calculate max date (16 years ago from today)
             const maxDate = new Date();
             maxDate.setFullYear(maxDate.getFullYear() - 16);
-            
+
             // Parse current DOB value
             const dobObj = this.driver.Dob__c ? this.parseDateAsLocal(this.driver.Dob__c) : maxDate;
-            
+
             if (this.ISDEBUG) console.log('DD Initializing Flatpickr for DOB with:', {
                 dobString: this.driver.Dob__c,
                 dobObj: dobObj,
                 maxDate: maxDate
             });
-            
+
             // Initialize Flatpickr
             this.flatpickrInstance = flatpickr(dobInput, {
                 dateFormat: 'm/d/Y',
@@ -1120,13 +1123,13 @@ export default class Buho_driverDetails extends LightningElement {
             });
 
             this.flag.flatpickrInitialized = true;
-            
+
             if (this.ISDEBUG) console.log('DD Flatpickr initialized successfully');
         } catch (error) {
             console.error('DD Error initializing Flatpickr:', error);
         }
     }
-    
+
     /**
      * Handle DOB change from Flatpickr
      */
@@ -1136,12 +1139,12 @@ export default class Buho_driverDetails extends LightningElement {
         // Format date for API (YYYY-MM-DD)
         const dob = new Date(selectedDate);
         this.driver.Dob__c = this.formatDateForApi(dob);
-        
+
         if (this.ISDEBUG) console.log('DD DOB changed:', this.driver.Dob__c);
-        
+
         this.isCompanyOrDriverOwner();
     }
-    
+
     /**
      * Handle continue button click
      */
@@ -1149,7 +1152,7 @@ export default class Buho_driverDetails extends LightningElement {
         if (!this.validate()) {
             return;
         }
-        
+
         // Dispatch event to parent to move to next step
         this.dispatchEvent(new CustomEvent('changescreen', {
             detail: { direction: 'next' },
@@ -1185,8 +1188,8 @@ export default class Buho_driverDetails extends LightningElement {
             const driversRecord = driverDetailsObj?.driverDetails?.drivers?.length > 0
                 ? driverDetailsObj.driverDetails.drivers
                 : '';
-            
-            console.log('String Data',driversRecord);
+
+            console.log('String Data', driversRecord);
 
             try {
                 const updateVehicleResp = await updateQuoteRecordData({
@@ -1220,36 +1223,36 @@ export default class Buho_driverDetails extends LightningElement {
     }
 
     handleCompanyInfoUpdate(event) {
-        console.log('Company Information1 : ',event.detail);
+        console.log('Company Information1 : ', event.detail);
         this.inputValues = {
             ...this.inputValues,
             companyInformation: event.detail.companyInformation
         };
-        console.log('All data with cmpy info : ',this.inputValues.companyInformation);
-        
-        try{
-        this.payload = (this.payload || []).map(item => {
-            if (item.driverDetails) {
-                return {
-                    ...item,
-                    driverDetails: {
-                        ...item.driverDetails,
-                        companyInformation: this.inputValues.companyInformation
-                    }
-                };
-            }
-            return item;
-        });
-        console.log('this.payload@@#######',this.payload);
-    }catch(error){
-        console.log('error :: ',error.message);
-    }
-        console.log('OUTPUT 111: ',this.payload);
+        console.log('All data with cmpy info : ', this.inputValues.companyInformation);
+
+        try {
+            this.payload = (this.payload || []).map(item => {
+                if (item.driverDetails) {
+                    return {
+                        ...item,
+                        driverDetails: {
+                            ...item.driverDetails,
+                            companyInformation: this.inputValues.companyInformation
+                        }
+                    };
+                }
+                return item;
+            });
+            console.log('this.payload@@#######', this.payload);
+        } catch (error) {
+            console.log('error :: ', error.message);
+        }
+        console.log('OUTPUT 111: ', this.payload);
     }
 
     async handleCompanyDataSave() {
         try {
-            console.log('I am in the company data save',this.payload);
+            console.log('I am in the company data save', this.payload);
             const result = await saveCompanyInformationDetails({ strLeadDetails: JSON.stringify(this.payload) });
             if (result.Status === 'Success') {
                 if (this.ISDEBUG) console.log('DD Company data inserted successfully', result);
@@ -1272,8 +1275,8 @@ export default class Buho_driverDetails extends LightningElement {
             { label: '-- Select a Driver --', value: '' },
             ...this.existingDriversList.filter(d => !d.Driver_Type__c)
         ];
-        console.log('loginUserDriverOption@@## ',this.loginUserDriverOption);
-        console.log('OUTPUT edit cmpy data: ',this.payload);
+        console.log('loginUserDriverOption@@## ', this.loginUserDriverOption);
+        console.log('OUTPUT edit cmpy data: ', this.payload);
 
         try {
             const newPayload = JSON.parse(JSON.stringify(this.payload || []));
@@ -1287,11 +1290,11 @@ export default class Buho_driverDetails extends LightningElement {
             } else {
                 newPayload.push({ finalizeVehicleDetails: finalizeUpdate });
             }
-            console.log('OUTPUT newPayload: ',newPayload);
-            console.log('OUTPUT this.inputValues: ',this.inputValues);
+            console.log('OUTPUT newPayload: ', newPayload);
+            console.log('OUTPUT this.inputValues: ', this.inputValues);
             // New code added  *****************************************************************
             this.payload = [
-                ...newPayload,                
+                ...newPayload,
                 {
                     driverDetails: {
                         drivers: this.drivers,
@@ -1326,7 +1329,7 @@ export default class Buho_driverDetails extends LightningElement {
     // Validate all the condition when user click on continue button
     @api validate() {
         let allValid = true;
-        console.log('OUTPUT Flag : ',this.flag.Is_the_vehicle_registered_to_a_business__c);
+        console.log('OUTPUT Flag : ', this.flag.Is_the_vehicle_registered_to_a_business__c);
 
         // If vehicle is registered to a business:
         // - company child component must be valid
@@ -1337,7 +1340,7 @@ export default class Buho_driverDetails extends LightningElement {
             const childCmp = this.template.querySelector('c-nc_company-information');
 
             const hasAtLeastOneDriver = this.drivers.length > 0;
-            const hasAnyOwnerMarked = this.drivers.some(driver => driver.Driver_Type__c === true || driver.Driver_Type__c ==='Owner' || driver.Driver_Type__c ==='Co-Owner'|| driver.Driver_Type__c ==='Owner & Driver');
+            const hasAnyOwnerMarked = this.drivers.some(driver => driver.Driver_Type__c === true || driver.Driver_Type__c === 'Owner' || driver.Driver_Type__c === 'Co-Owner' || driver.Driver_Type__c === 'Owner & Driver');
 
             if (!hasAtLeastOneDriver) {
                 this.dispatchEvent(new CustomEvent('toastevent', {
@@ -1359,7 +1362,7 @@ export default class Buho_driverDetails extends LightningElement {
 
         } else {
             // Personal vehicle: require at least one driver marked as owner
-            const hasOwner = this.drivers.length >= 1 && this.drivers.some(driver => driver.Driver_Type__c === true || driver.Driver_Type__c ==='Owner' || driver.Driver_Type__c ==='Co-Owner'|| driver.Driver_Type__c ==='Owner & Driver' );
+            const hasOwner = this.drivers.length >= 1 && this.drivers.some(driver => driver.Driver_Type__c === true || driver.Driver_Type__c === 'Owner' || driver.Driver_Type__c === 'Co-Owner' || driver.Driver_Type__c === 'Owner & Driver');
             if (!hasOwner) {
                 this.dispatchEvent(new CustomEvent('toastevent', {
                     detail: { variant: 'error', title: 'Error', message: '⚠️ There should be at least one owner driver.' }
@@ -1378,7 +1381,7 @@ export default class Buho_driverDetails extends LightningElement {
             return true;
         }
         // Otherwise require at least one owner driver added
-        if (!this.drivers || !this.drivers.some(d => d.Driver_Type__c === true || d.Driver_Type__c ==='Owner' || d.Driver_Type__c ==='Co-Owner'|| d.Driver_Type__c ==='Owner & Driver')) {
+        if (!this.drivers || !this.drivers.some(d => d.Driver_Type__c === true || d.Driver_Type__c === 'Owner' || d.Driver_Type__c === 'Co-Owner' || d.Driver_Type__c === 'Owner & Driver')) {
             if (this.ISDEBUG) console.log('DD Please add owner first');
             return false;
         }
@@ -1390,14 +1393,14 @@ export default class Buho_driverDetails extends LightningElement {
         let filteredDrivers = [...this.drivers];
         let companyInformation = {};
         if (this.currentVehicleType === 'business') {
-            filteredDrivers = filteredDrivers.filter(d => d.Driver_Type__c === false || d.Driver_Type__c ==='Driver');
+            filteredDrivers = filteredDrivers.filter(d => d.Driver_Type__c === false || d.Driver_Type__c === 'Driver');
             companyInformation = this.inputValues.companyInformation || {};
             this.flag.Is_the_vehicle_registered_to_a_business__c = true;
         } else if (this.currentVehicleType === 'personal') {
-            filteredDrivers = filteredDrivers.filter(d => d.Driver_Type__c === true || d.Driver_Type__c === false || d.Driver_Type__c ==='Owner' || d.Driver_Type__c ==='Co-Owner'|| d.Driver_Type__c ==='Owner & Driver');
+            filteredDrivers = filteredDrivers.filter(d => d.Driver_Type__c === true || d.Driver_Type__c === false || d.Driver_Type__c === 'Owner' || d.Driver_Type__c === 'Co-Owner' || d.Driver_Type__c === 'Owner & Driver');
             companyInformation = {};
             this.flag.Is_the_vehicle_registered_to_a_business__c = false;
-       }
+        }
         if (this.ISDEBUG) console.log('DD getDatafilteredDrivers1060 ', filteredDrivers);
         this.inputValues = {
             drivers: filteredDrivers,
@@ -1412,7 +1415,7 @@ export default class Buho_driverDetails extends LightningElement {
                 driverList: [...this.existingDriversList] || []
             }
         };
-        
+
         if (this.ISDEBUG) console.log('DD getDatadrivers: ', driverPageData);
         const driverPageIndex = this.payload.findIndex(item => item.driverDetails);
 
@@ -1425,7 +1428,7 @@ export default class Buho_driverDetails extends LightningElement {
         } else {
             this.payload = [...this.payload, driverPageData];
         }
-       
+
         if (this.flag.isCompanyStatus) {
             const data = this.updateBusinessAddress();
             let newPayload = JSON.parse(JSON.stringify(this.payload));
@@ -1445,19 +1448,19 @@ export default class Buho_driverDetails extends LightningElement {
             this.payload = newPayload;
             if (!this.currentUserType) {
                 console.log('DD saveFinalizeVehicleDetails');
-                try { 
-                    await saveFinalizeVehicleDetails({ strLeadDetails: JSON.stringify(this.payload) }); 
-                } 
-                catch (e) { 
+                try {
+                    await saveFinalizeVehicleDetails({ strLeadDetails: JSON.stringify(this.payload) });
+                }
+                catch (e) {
                     console.log('DD error in saveFinalizeVehicleDetails', e.message);
                 }
                 await this.handleCompanyDataSave();
             }
-        } 
-        else if(!this.flag.Is_the_vehicle_registered_to_a_business__c){
+        }
+        else if (!this.flag.Is_the_vehicle_registered_to_a_business__c) {
             const data = this.updateBusinessAddress();
             let newPayload = JSON.parse(JSON.stringify(this.payload));
-           
+
             const finalizeIndex = newPayload.findIndex(item => item.finalizeVehicleDetails);
             if (finalizeIndex >= 0) {
                 newPayload[finalizeIndex].finalizeVehicleDetails = {
@@ -1473,11 +1476,11 @@ export default class Buho_driverDetails extends LightningElement {
             }
             this.payload = newPayload;
             if (!this.currentUserType) {
-                console.log('DD saveFinalizeVehicleDetails1330',this.payload);
-                try { 
-                    await saveFinalizeVehicleDetails({ strLeadDetails: JSON.stringify(this.payload) }); 
-                } 
-                catch (e) { 
+                console.log('DD saveFinalizeVehicleDetails1330', this.payload);
+                try {
+                    await saveFinalizeVehicleDetails({ strLeadDetails: JSON.stringify(this.payload) });
+                }
+                catch (e) {
                     console.log('DD error in saveFinalizeVehicleDetails', e.message);
                 }
             }
@@ -1525,7 +1528,7 @@ export default class Buho_driverDetails extends LightningElement {
 
     updateBusinessAddress() {
         const company = this.inputValues?.companyInformation || {};
-        
+
         const businessAddress = {
             Country__c: company.Company_Country__c || '',
             State_Province__c: company.Company_State__c || '',
@@ -1549,7 +1552,7 @@ export default class Buho_driverDetails extends LightningElement {
     handleOwnershipSelection(event) {
         const selection = event.currentTarget.dataset.value;
         console.log('selection@@###', selection);
-        this.currentVehicleType = selection; 
+        this.currentVehicleType = selection;
         if (selection === 'business') {
             this.isSelected = true;
             this.handleChange({
@@ -1563,29 +1566,29 @@ export default class Buho_driverDetails extends LightningElement {
             this.isCompanyOrDriverOwner();
         } else {
             this.isSelected = false;
-            if(this.tempDrivers.length != 0){
-                console.log('temPfriveress',this.tempDrivers);
+            if (this.tempDrivers.length != 0) {
+                console.log('temPfriveress', this.tempDrivers);
                 this.drivers = [...this.drivers, ...this.tempDrivers]
-                this.tempDrivers =[];
+                this.tempDrivers = [];
             }
             const hasUserStartingWith = this.payload.some(item => item?.userDetails?.Id?.startsWith("003"));
-            if(hasUserStartingWith){
+            if (hasUserStartingWith) {
                 this.flag.isOwner = false;
-           }
+            }
             this.handleChange({
                 target: {
                     name: 'Is_the_vehicle_registered_to_a_business__c',
                     checked: false,
                     type: 'checkbox'
                 }
-                
+
             });
             this.reCheckDriverOwnerOnChange();
         }
     }
 
     reCheckDriverOwnerOnChange() {
-        const hasAnyOwnerMarked = this.drivers.some(driver => driver.Driver_Type__c === true || driver.Driver_Type__c ==='Owner' || driver.Driver_Type__c ==='Co-Owner'|| driver.Driver_Type__c ==='Owner & Driver');        
+        const hasAnyOwnerMarked = this.drivers.some(driver => driver.Driver_Type__c === true || driver.Driver_Type__c === 'Owner' || driver.Driver_Type__c === 'Co-Owner' || driver.Driver_Type__c === 'Owner & Driver');
         this.driver = { ...this.driver, ['Driver_Type__c']: !hasAnyOwnerMarked };
         this.isCompanyOrDriverOwner();
     }

@@ -3237,7 +3237,7 @@ lightning-input[type="checkbox"] .slds-checkbox [type="checkbox"]:checked + .sld
 /* Towed Units Table */
 .towed-units-table {
     margin: 24px 0;
-    background: #ffffff;
+    /*background: #ffffff;*/
     border-radius: 12px;
     padding: 20px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -3250,11 +3250,11 @@ lightning-input[type="checkbox"] .slds-checkbox [type="checkbox"]:checked + .sld
 .buho-table {
     width: 100%;
     border-collapse: collapse;
-    background: #ffffff;
+    /*background: #ffffff;*/
 }
 
 .buho-table thead {
-    background-color: #F9FAFB;
+    background-color: var(--buho-accent-pink);
 }
 
 .buho-table thead th {
@@ -3262,7 +3262,7 @@ lightning-input[type="checkbox"] .slds-checkbox [type="checkbox"]:checked + .sld
     text-align: left;
     font-size: 13px;
     font-weight: 600;
-    color: #6B7280;
+    color: #ffff;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     border-bottom: 2px solid #E5E7EB;

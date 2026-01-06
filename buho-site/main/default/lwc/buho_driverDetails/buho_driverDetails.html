@@ -46,7 +46,7 @@
 
                 <div class="form-actions">
                     <button type="button" 
-                            class="btn btn-primary" 
+                            class="btn-dark" 
                             onclick={goToDriverForm}>
                         Save and Add Human Operator
                     </button>
@@ -193,17 +193,14 @@
 
                 <!-- Owner Address Fields -->
                 <template if:true={driver.Driver_Type__c}>
-                    <!-- Address Recommendations - Only for Business Vehicles -->
-                    <template if:true={showAddressRecommendations}>
-                        <div class="row g-4">
-                            <div class="col-12">
-                                <c-buho_address-recommendations 
-                                    onsendaddress={handleCompanyAddress}
-                                    placeholder="Start typing owner address to search...">
-                                </c-buho_address-recommendations>
-                            </div>
+                    <div class="row g-4">
+                        <div class="col-12">
+                            <c-buho_address-recommendations 
+                                onsendaddress={handleCompanyAddress}
+                                placeholder="Start typing owner address to search...">
+                            </c-buho_address-recommendations>
                         </div>
-                    </template>
+                    </div>
 
                     <div class="row g-4">
                         <div class="col-md-6">
