@@ -77,8 +77,17 @@ export function createTransformedData(returnLeadValue) {
                 Vehicle_sub_type__c:
                     vehicleData?.Vehicle_sub_type__c ?? 'Automobile-Van-Minivan',
                 Make: vehicleData?.Make__c ?? vehicleData?.Make ?? null,
+                Make__c: vehicleData?.Make__c ?? vehicleData?.Make ?? null,
+                Model__c: vehicleData?.Model__c ?? vehicleData?.Model ?? null,
                 Model: vehicleData?.Model__c ?? vehicleData?.Model ?? null,
-                Value__c: vehicleData?.Value__c ?? null
+                Value__c: vehicleData?.Value__c ?? null,
+                licensePlate: vehicleData?.Registered_Plate__c ?? null,
+                Registered_Plate__c: vehicleData?.Registered_Plate__c ?? null,
+                Vin__c: vehicleData?.Vin__c ?? null,
+                Registered_Country__c: vehicleData?.Registered_Country__c ?? null,
+                Registered_State__c: vehicleData?.Registered_State__c ?? null
+                
+
             }
         },
         {

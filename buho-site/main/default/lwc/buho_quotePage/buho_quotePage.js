@@ -8,7 +8,7 @@ import saveQuoteRecord from '@salesforce/apex/QuoteOptionFlow.saveQuoteRecord';
 import saveQuoteRecordData from '@salesforce/apex/NcExistingCustomerFlow.saveQuoteRecordData';
 import sendEmailQuoteDetails from '@salesforce/apex/Mex_NewLeadProcess.sendEmailQuoteDetails';
 import { NavigationMixin } from 'lightning/navigation';
-import MAPFRE_LOGO from '@salesforce/resourceUrl/buhoAssets';
+import RESOURCE_PATH from '@salesforce/resourceUrl/buhoAssets';
 
 
 export default class Buho_quotePage extends NavigationMixin(LightningElement) {
@@ -114,17 +114,16 @@ export default class Buho_quotePage extends NavigationMixin(LightningElement) {
     }
 
     // New getters for updated design
-    get mapfreLogo() {
-        return MAPFRE_LOGO + '/images/mapfre.png';
+    get companyLogo() {
+        return RESOURCE_PATH + `/images/${this.activeCompanyId}.png`;
     }
 
-    get isMapfreActive() {
-        return this.activeTab === 'Mapfre';
-    }
 
     get activeCompanyLabel() {
+        /*
         const activeCompany = this.tabs?.find(tab => tab?.id === this.activeTab);
-        return activeCompany ? activeCompany.label : '';
+        return activeCompany ? activeCompany.label : '';*/
+        return this.activeTab;
     }
 
     get activeCompanyId() {
@@ -1217,7 +1216,7 @@ export default class Buho_quotePage extends NavigationMixin(LightningElement) {
                 //window.open(`/apex/selectedQuoteNewRate?Id=${this.selectedQuote.QuoteData.Id}`, "_blank");
                 console.log('this.selectedQuote.QuoteData :: ' + this.selectedQuote.QuoteData.Id);
                 this.isDownloadQuote == false;
-                window.open( `${this.baseUrl}/apex/selectedQuoteNewRate?Id=${this.selectedQuote.QuoteData.Id}`, "_blank");
+                window.open( `${this.baseUrl}vforcesite/apex/selectedQuoteNewRate?Id=${this.selectedQuote.QuoteData.Id}`, "_blank");
                 this.dispatchEvent(new CustomEvent('loadingstatuschange', { detail: true }));
                 return;
 

@@ -1,4 +1,3 @@
-// nc_driverDetails.js (versión corregida)
 import { LightningElement, track, api, wire } from 'lwc';
 import getCountries from '@salesforce/apex/FinalizeVehicleDetailsFlow.getCountries';
 import getStatesByCountry from '@salesforce/apex/FinalizeVehicleDetailsFlow.getStatesByCountry';
@@ -8,7 +7,7 @@ import saveFinalizeVehicleDetails from '@salesforce/apex/FinalizeVehicleDetailsF
 import updateQuoteRecordData from '@salesforce/apex/NcExistingCustomerFlow.updateQuoteRecordData';
 import Selectadriverfromyouraccount from '@salesforce/label/c.TR_Select_a_driver_from_your_account';
 
-export default class Nc_driverDetails extends LightningElement {
+export default class Buho_driverDetails extends LightningElement {
     @api payload;
     ISDEBUG = true;
     @track tempDrivers = [];
@@ -30,7 +29,8 @@ export default class Nc_driverDetails extends LightningElement {
         State_Province__c: '',
         Postal_Code__c: '',
         City__c: '',
-        Address__c: ''
+        Address__c: '',
+        isLeasedOrFinanced: false
     };
     @track selectedDriverId = '';
 
@@ -39,7 +39,8 @@ export default class Nc_driverDetails extends LightningElement {
         isCompanyDisabled: false,
         isCompanyStatus: false,
         isStateDisabled: false,
-        Is_the_vehicle_registered_to_a_business__c: false
+        Is_the_vehicle_registered_to_a_business__c: false,
+        flatpickrInitialized: false
     };
 
     @track drivers = [];
@@ -57,6 +58,8 @@ export default class Nc_driverDetails extends LightningElement {
         { label: 'Human Owner', value: 'owner' },
         { label: 'Company', value: 'company' }
     ];
+
+    flatpickrInstance = null;
 
     // ------------------------
     // Getters
@@ -83,6 +86,55 @@ export default class Nc_driverDetails extends LightningElement {
         }
     }
 
+    // Ownership card classes
+    get businessCardClass() {
+        return this.currentVehicleType === 'business' || this.isSelected ? 'ownership-card selected' : 'ownership-card';
+    }
+
+    get personalCardClass() {
+        return this.currentVehicleType === 'personal' || !this.isSelected ? 'ownership-card selected' : 'ownership-card';
+    }
+
+    // Format DOB for display
+    get formattedDob() {
+        return this.formatDateForDisplay(this.driver.Dob__c);
+    }
+
+    formatDateForDisplay(dateString) {
+        if (!dateString) return '';
+        try {
+            const date = this.parseDateAsLocal(dateString);
+            if (!date || isNaN(date.getTime())) {
+                return '';
+            }
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${month}/${day}/${year}`;
+        } catch (error) {
+            console.error('Error formatting date:', error, dateString);
+            return '';
+        }
+    }
+
+    parseDateAsLocal(dateString) {
+        if (!dateString) return null;
+        if (typeof dateString === 'string' && dateString.includes('-')) {
+            const [year, month, day] = dateString.split('-').map(num => parseInt(num, 10));
+            return new Date(year, month - 1, day);
+        }
+        return new Date(dateString);
+    }
+
+    formatDateForApi(date) {
+        if (!date) return '';
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+
     handleEditCompany() {
         try {
             this.currentStep = 'companyDetails';
@@ -108,24 +160,11 @@ export default class Nc_driverDetails extends LightningElement {
         }
     }
 
-    handleOwnershipChange(event) {
-        this.ownershipValue = event.detail.value;
+    // Handle ownership card selection
 
-        if (this.ownershipValue === 'company') {
-            this.flag.isCompanyStatus = true;
-            this.flag.isOwner = false;
-            this.currentStep = 'companyDetails';
-        } else {
-            this.flag.isCompanyStatus = false;
-            this.flag.isOwner = true;
-            this.currentStep = 'humanOwner';
-        }
-
-        this.dispatchPayloadUpdate({
-            finalizeVehicleDetails: {
-                Is_the_vehicle_registered_to_a_business__c: this.flag.isCompanyStatus
-            }
-        });
+    goToCompanyDetails() {
+        this.currentStep = 'companyDetails';
+        this.saveSnapshot();
     }
 
     editCompany() {
@@ -162,7 +201,8 @@ export default class Nc_driverDetails extends LightningElement {
 
     changeDriverOption(event) {
         try {
-            const selectedDriverId = event.detail.value;
+            // Handle buho_input event
+            const selectedDriverId = event.detail?.value || event.target?.value;
             this.selectedDriverId = selectedDriverId;
 
             const selectedDriver = this.loginUserDriverOption.find(driver => driver.value === selectedDriverId);
@@ -198,6 +238,128 @@ export default class Nc_driverDetails extends LightningElement {
             }
         } catch (error) {
             console.error('Error changing driver option:', error);
+        }
+    }
+
+    // Handle country change from buho_input
+    handleCountryChange(event) {
+        const value = event.detail?.value || event.target?.value;
+        this.driver = { ...this.driver, License_Country__c: value, License_state__c: '' };
+        this.loadStatesForCountry(value);
+        this.isCompanyOrDriverOwner();
+    }
+
+    // Handle state change from buho_input
+    handleStateChange(event) {
+        const value = event.detail?.value || event.target?.value;
+        this.driver = { ...this.driver, License_state__c: value };
+        this.isCompanyOrDriverOwner();
+    }
+
+    // Handle generic input change from buho_input
+    handleInputChange(event) {
+        try {
+            // buho_input dispatches custom event with detail.value
+            const name = event.detail?.name || event.target?.name;
+            const value = event.detail?.value !== undefined ? event.detail.value : event.target?.value;
+            const checked = event.detail?.checked !== undefined ? event.detail.checked : event.target?.checked;
+            const type = event.detail?.type || event.target?.type;
+
+            if (this.ISDEBUG) console.log('DD handleInputChange:', { name, value, checked, type });
+
+            // Company checkbox handling - Special case from nc_driverDetails
+            if (name === 'Is_the_vehicle_registered_to_a_business__c') {
+                this.flag.isCompanyStatus = checked;
+                this.flag.Is_the_vehicle_registered_to_a_business__c = checked;
+
+                // Change step based on checkbox
+                this.currentStep = checked ? 'companyDetails' : 'humanOwner';
+
+                // Only adjust options (do not alter driver/owner fields here)
+                if (checked) {
+                    this.loginUserDriverOption = [
+                        { label: '-- Select a Driver --', value: '' },
+                        ...this.existingDriversList.filter(d => !d.Driver_Type__c)
+                    ];
+                } else {
+                    this.loginUserDriverOption = [
+                        { label: '-- Select a Driver --', value: '' },
+                        ...this.existingDriversList
+                    ];
+                }
+
+                // Persist change into payload & notify parent
+                try {
+                    const newPayload = JSON.parse(JSON.stringify(this.payload || []));
+
+                    const finalizeIndex = newPayload.findIndex(item => item.finalizeVehicleDetails);
+                    if (finalizeIndex >= 0) {
+                        newPayload[finalizeIndex].finalizeVehicleDetails = {
+                            ...newPayload[finalizeIndex].finalizeVehicleDetails,
+                            Is_the_vehicle_registered_to_a_business__c: checked
+                        };
+                    } else {
+                        newPayload.push({
+                            finalizeVehicleDetails: {
+                                Is_the_vehicle_registered_to_a_business__c: checked
+                            }
+                        });
+                    }
+                    this.payload = newPayload;
+                } catch (e) {
+                    console.warn('error', e.message);
+                }
+
+                this.dispatchPayloadUpdate({
+                    finalizeVehicleDetails: {
+                        Is_the_vehicle_registered_to_a_business__c: checked
+                    }
+                });
+
+                // Snapshot
+                this.saveSnapshot();
+                return;
+            }
+
+            // license number uppercase / maxlength
+            if (name === 'license_number__c') {
+                let upperValue = (value || '').toUpperCase();
+                if (upperValue.length > 40) upperValue = upperValue.substring(0, 40);
+                this.driver = { ...this.driver, [name]: upperValue };
+                this.isCompanyOrDriverOwner();
+                return;
+            }
+
+            // Registered Owner checkbox change (only updates driver object)
+            if (name === 'Driver_Type__c') {
+                this.driver = { ...this.driver, [name]: checked };
+                this.isCompanyOrDriverOwner();
+                return;
+            }
+
+            // Handle Country__c separately to update Country_Text__c
+            if (name === 'Country__c') {
+                this.driver = {
+                    ...this.driver,
+                    Country__c: value,
+                    Country_Text__c: value
+                };
+                this.isCompanyOrDriverOwner();
+                return;
+            }
+
+            // Handle checkbox fields
+            if (type === 'checkbox') {
+                this.driver = { ...this.driver, [name]: checked };
+                this.isCompanyOrDriverOwner();
+                return;
+            }
+
+            // Default - update driver fields
+            this.driver = { ...this.driver, [name]: type === 'checkbox' ? checked : value };
+            this.isCompanyOrDriverOwner();
+        } catch (err) {
+            console.log('DD ERROR in handleInputChange: ', err.message);
         }
     }
 
@@ -281,7 +443,7 @@ export default class Nc_driverDetails extends LightningElement {
     }
 
     validateDriver() {
-        const inputs = this.template.querySelectorAll('input, c-nc_combobox, lightning-input, lightning-combobox');
+        const inputs = this.template.querySelectorAll('input, c-buho_input, lightning-input, lightning-combobox');
         let allValid = true;
 
         inputs.forEach(input => {
@@ -290,128 +452,105 @@ export default class Nc_driverDetails extends LightningElement {
                 allValid = false;
             }
         });
-        console.log('this.driverlicesn@@#', this.driver)
+
+        if (this.ISDEBUG) console.log('DD Validating driver:', this.driver);
+
         if (!allValid) {
-            this.dispatchEvent(new CustomEvent('toastevent', { detail: { variant: 'error', title: 'Error', message: 'Some required fields are invalid.' } }));
+            this.dispatchEvent(new CustomEvent('toastevent', {
+                detail: {
+                    variant: 'error',
+                    title: 'Validation Error',
+                    message: 'Some required fields are invalid.'
+                },
+                bubbles: true,
+                composed: true
+            }));
             return false;
         }
 
         if (!this.driver.First_Name__c || !this.driver.Last_Name__c) {
-            this.dispatchEvent(new CustomEvent('toastevent', { detail: { variant: 'error', title: 'Error', message: 'First and Last name are required' } }));
+            this.dispatchEvent(new CustomEvent('toastevent', {
+                detail: {
+                    variant: 'error',
+                    title: 'Validation Error',
+                    message: 'First and Last name are required'
+                },
+                bubbles: true,
+                composed: true
+            }));
             return false;
         }
+
+        if (!this.driver.Dob__c) {
+            this.dispatchEvent(new CustomEvent('toastevent', {
+                detail: {
+                    variant: 'error',
+                    title: 'Validation Error',
+                    message: 'Date of Birth is required'
+                },
+                bubbles: true,
+                composed: true
+            }));
+            return false;
+        }
+
+        if (!this.driver.License_Country__c) {
+            this.dispatchEvent(new CustomEvent('toastevent', {
+                detail: {
+                    variant: 'error',
+                    title: 'Validation Error',
+                    message: 'License country is required'
+                },
+                bubbles: true,
+                composed: true
+            }));
+            return false;
+        }
+
         if (!this.driver.license_number__c) {
-            this.dispatchEvent(new CustomEvent('toastevent', { detail: { variant: 'error', title: 'Error', message: 'License number is required' } }));
+            this.dispatchEvent(new CustomEvent('toastevent', {
+                detail: {
+                    variant: 'error',
+                    title: 'Validation Error',
+                    message: 'License number is required'
+                },
+                bubbles: true,
+                composed: true
+            }));
             return false;
         }
+
         if (!this.driver.License_state__c) {
-            this.dispatchEvent(new CustomEvent('toastevent', { detail: { variant: 'error', title: 'Error', message: 'License state is required' } }));
+            this.dispatchEvent(new CustomEvent('toastevent', {
+                detail: {
+                    variant: 'error',
+                    title: 'Validation Error',
+                    message: 'License state is required'
+                },
+                bubbles: true,
+                composed: true
+            }));
             return false;
         }
+
         return true;
     }
 
     // ------------------------
-    // Main change handler (single place to touch flags)
+    // Main change handler (kept for backward compatibility)
     // ------------------------
     handleChange(event) {
         try {
-            console.log('inside handle change');
-            const { name, checked, value, type } = event.target;
+            console.log('inside handle change (legacy)');
+            const { name, checked, value, type } = event.target || {};
 
-            // Avoid handling combobox custom events here
-            if (name === 'License_Country__c' || name === 'License_state__c') {
-                return;
-            }
-
-            // Company checkbox handling - DO NOT change isOwner here
-            if (name === 'Is_the_vehicle_registered_to_a_business__c') {
-                this.flag.isCompanyStatus = checked;
-                this.flag.Is_the_vehicle_registered_to_a_business__c = checked;
-
-                // Change step based on checkbox
-                this.currentStep = checked ? 'companyDetails' : 'humanOwner';
-
-                // Only adjust options (do not alter driver/owner fields here)
-                if (checked) {
-                    this.loginUserDriverOption = [
-                        { label: '-- Select a Driver --', value: '' },
-                        ...this.existingDriversList.filter(d => !d.Driver_Type__c)
-                    ];
-                } else {
-                    this.loginUserDriverOption = [
-                        { label: '-- Select a Driver --', value: '' },
-                        ...this.existingDriversList
-                    ];
-                }
-
-                // Persist change into payload & notify parent (wrap in updates)
-                try {
-                    const newPayload = JSON.parse(JSON.stringify(this.payload || []));
-
-                    const finalizeIndex = newPayload.findIndex(item => item.finalizeVehicleDetails);
-                    if (finalizeIndex >= 0) {
-                        newPayload[finalizeIndex].finalizeVehicleDetails = {
-                            ...newPayload[finalizeIndex].finalizeVehicleDetails,
-                            Is_the_vehicle_registered_to_a_business__c: checked
-                        };
-                    } else {
-                        newPayload.push({
-                            finalizeVehicleDetails: {
-                                Is_the_vehicle_registered_to_a_business__c: checked
-                            }
-                        });
-                    }
-                    this.payload = newPayload;
-                } catch (e) {
-                    console.warn('error', e.message);
-                    // if cloning fails, we'll still dispatch the update below
-                }
-                this.dispatchPayloadUpdate({
-                    finalizeVehicleDetails: {
-                        Is_the_vehicle_registered_to_a_business__c: checked
-                    }
-                });
-
-                // Snapshot
-                this.saveSnapshot();
-
-                return;
-            }
-
-            // license number uppercase / maxlength
-            if (name === 'license_number__c') {
-                let upperValue = (value || '').toUpperCase();
-                if (upperValue.length > 17) upperValue = upperValue.substring(0, 17);
-                this.driver = { ...this.driver, [name]: upperValue };
-                this.isCompanyOrDriverOwner();
-                return;
-            }
-
-            // Registered Owner checkbox change (only updates driver object)
-            if (name === 'Driver_Type__c') {
-                this.driver = { ...this.driver, [name]: checked };
-                this.isCompanyOrDriverOwner();
-                return;
-            }
-
-            // Default - update driver fields
-            this.driver = { ...this.driver, [name]: type === 'checkbox' ? checked : value };
-
-            if (name === 'License_Country__c') {
-                this.driver.License_state__c = '';
-                this.loadStatesForCountry(value);
-            }
-            if (name === 'Country__c') {
-                this.driver = {
-                    ...this.driver,
-                    Country_Text__c: event.target.value || ''
-                };
-            }
-            console.log('this.driverr@###', this.driver);
-            this.isCompanyOrDriverOwner();
+            // Redirect to handleInputChange for consistency
+            this.handleInputChange({
+                detail: { name, value, checked, type },
+                target: event.target
+            });
         } catch (err) {
-            console.log('DD ERROR: ', err.message);
+            console.log('DD ERROR in handleChange: ', err.message);
         }
     }
 
@@ -471,7 +610,7 @@ export default class Nc_driverDetails extends LightningElement {
         }
 
         // Since we're already in the company information step, we know the component exists
-        const childCmp = this.template.querySelector('c-nc_company-information');
+        const childCmp = this.template.querySelector('c-buho_company-information');
 
         // Add debug logging to see what's happening
         console.log('childCmp:', childCmp);
@@ -487,7 +626,9 @@ export default class Nc_driverDetails extends LightningElement {
                 if (!isValid) {
                     console.log('Company information is invalid');
                     this.dispatchEvent(new CustomEvent('toastevent', {
-                        detail: { variant: 'error', title: 'Error', message: '⚠️ Company Information is invalid.' }
+                        detail: { variant: 'error', title: 'Error', message: '⚠️ Company Information is invalid.' },
+                        bubbles: true,
+                        composed: true
                     }));
                     return;
                 }
@@ -508,7 +649,7 @@ export default class Nc_driverDetails extends LightningElement {
             console.log('OUTPUT : ', err.message);
         }
     }
-    
+
     get isStepCompanyDetails() { return this.currentStep === 'companyDetails'; }
     get isStepHumanOwner() { return this.currentStep === 'humanOwner'; }
 
@@ -702,10 +843,18 @@ export default class Nc_driverDetails extends LightningElement {
             else if (Array.isArray(OwnerDrivers) && OwnerDrivers.length === 0 && Array.isArray(existingDrivers) && existingDrivers.length === 0 && this.currentVehicleType === 'personal' && typeof companyPayload === 'object' && companyPayload && !companyPayload.Company_Name__c && !this.flag.isOwner) {
                 this.driver.Driver_Type__c = true;
             }
-
+            
+            // Set Driver_Type__c to true for Personal Vehicle when no owner exists yet
             else if (!this.flag.isOwner && !hasUserStartingWith && this.currentVehicleType !== 'business' && !this.flag?.Is_the_vehicle_registered_to_a_business__c) {
                 this.driver.Driver_Type__c = true;
-            } else if (this.flag?.Is_the_vehicle_registered_to_a_business__c && Array.isArray(OwnerDrivers) && OwnerDrivers.length === 0) {
+            }
+            
+            // Additional check: if currentVehicleType is explicitly 'personal' and no owner exists
+            else if (this.currentVehicleType === 'personal' && !this.flag.isOwner && !this.flag?.Is_the_vehicle_registered_to_a_business__c) {
+                this.driver.Driver_Type__c = true;
+            }
+            
+            else if (this.flag?.Is_the_vehicle_registered_to_a_business__c && Array.isArray(OwnerDrivers) && OwnerDrivers.length === 0) {
                 this.isSelected = true;
             } else if (hasUserStartingWith && this.flag?.Is_the_vehicle_registered_to_a_business__c && !this.flag.isCompanyStatus) {
                 this.isSelected = true;
@@ -931,6 +1080,85 @@ export default class Nc_driverDetails extends LightningElement {
         if (this.payload && this.payload.length > 0 && this.flagForRender) {
             this.flagForRender = false;
         }
+
+        // Initialize Flatpickr for Date of Birth
+        if (!this.flag.flatpickrInitialized && typeof flatpickr !== 'undefined') {
+            this.initializeFlatpickr();
+        }
+    }
+
+    /**
+     * Initialize Flatpickr on the Date of Birth input
+     */
+    initializeFlatpickr() {
+        const dobInput = this.template.querySelector('.dobDate');
+
+        if (!dobInput || typeof flatpickr === 'undefined') {
+            if (this.ISDEBUG) console.log('DD Flatpickr not ready yet');
+            return;
+        }
+
+        try {
+            // Calculate max date (16 years ago from today)
+            const maxDate = new Date();
+            maxDate.setFullYear(maxDate.getFullYear() - 16);
+
+            // Parse current DOB value
+            const dobObj = this.driver.Dob__c ? this.parseDateAsLocal(this.driver.Dob__c) : maxDate;
+
+            if (this.ISDEBUG) console.log('DD Initializing Flatpickr for DOB with:', {
+                dobString: this.driver.Dob__c,
+                dobObj: dobObj,
+                maxDate: maxDate
+            });
+
+            // Initialize Flatpickr
+            this.flatpickrInstance = flatpickr(dobInput, {
+                dateFormat: 'm/d/Y',
+                maxDate: maxDate,
+                defaultDate: dobObj,
+                onChange: (selectedDates, dateStr, instance) => {
+                    this.handleDobChange(selectedDates[0]);
+                }
+            });
+
+            this.flag.flatpickrInitialized = true;
+
+            if (this.ISDEBUG) console.log('DD Flatpickr initialized successfully');
+        } catch (error) {
+            console.error('DD Error initializing Flatpickr:', error);
+        }
+    }
+
+    /**
+     * Handle DOB change from Flatpickr
+     */
+    handleDobChange(selectedDate) {
+        if (!selectedDate) return;
+
+        // Format date for API (YYYY-MM-DD)
+        const dob = new Date(selectedDate);
+        this.driver.Dob__c = this.formatDateForApi(dob);
+
+        if (this.ISDEBUG) console.log('DD DOB changed:', this.driver.Dob__c);
+
+        this.isCompanyOrDriverOwner();
+    }
+
+    /**
+     * Handle continue button click
+     */
+    handleContinue() {
+        if (!this.validate()) {
+            return;
+        }
+
+        // Dispatch event to parent to move to next step
+        this.dispatchEvent(new CustomEvent('changescreen', {
+            detail: { direction: 'next' },
+            bubbles: true,
+            composed: true
+        }));
     }
 
     // ------------------------

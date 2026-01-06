@@ -74,7 +74,7 @@
          <div class = "header">
             <div align="auto">
                 <apex:outputPanel rendered="{!IF(CONTAINS(sitePath,'Buho'),true,false)}">
-                    <img src="{!$Resource.buhoAssets + '/images/Logo.png'}" style="height:30px; width:auto; float:left;" />
+                    <img src="{!$Resource.buhoAssets + '/images/Logo.png'}" style="height:60px; width:auto; float:left;" />
                 </apex:outputPanel>
                 <apex:outputPanel rendered="{!IF(CONTAINS(sitePath,'Buho'),false,true)}">
                     <img src="{!$Resource.MexInsuranceLogo}" style="height:30px; width:auto; float:left;" />

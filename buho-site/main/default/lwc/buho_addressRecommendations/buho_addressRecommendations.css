@@ -1,0 +1,110 @@
+/* Buho Address Recommendations Component */
+
+.buho-address-recommendations {
+    position: relative;
+    width: 100%;
+}
+
+/* Address Dropdown Styles */
+.address-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    margin-top: 4px;
+    background-color: #ffffff;
+    border: 1px solid var(--buho-input-border, #D1D5DB);
+    border-radius: var(--buho-radius-md, 8px);
+    box-shadow: var(--buho-shadow-lg, 0 8px 24px rgba(0, 0, 0, 0.12));
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.address-dropdown-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.address-dropdown-item {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.address-dropdown-item:hover {
+    background-color: var(--buho-hover, #F3F4F6);
+}
+
+.address-option {
+    display: flex;
+    align-items: flex-start;
+    padding: 12px 16px;
+    gap: 12px;
+}
+
+.address-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background-color: var(--buho-primary, #1e3a8a);
+    color: #ffffff;
+    border-radius: var(--buho-radius-sm, 4px);
+    flex-shrink: 0;
+}
+
+.address-icon i {
+    font-size: 16px;
+}
+
+.address-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.address-main {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--buho-text-dark, #1F2937);
+    line-height: 1.4;
+}
+
+.address-secondary {
+    font-size: 13px;
+    color: var(--buho-text-light, #6B7280);
+    line-height: 1.4;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .address-dropdown {
+        max-height: 250px;
+    }
+    
+    .address-option {
+        padding: 10px 12px;
+        gap: 10px;
+    }
+    
+    .address-icon {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .address-icon i {
+        font-size: 14px;
+    }
+    
+    .address-main {
+        font-size: 13px;
+    }
+    
+    .address-secondary {
+        font-size: 12px;
+    }
+}
+

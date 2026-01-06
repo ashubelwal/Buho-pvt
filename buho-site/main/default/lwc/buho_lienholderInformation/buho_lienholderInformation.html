@@ -1,0 +1,201 @@
+<template>
+    <div class="vehicle-details-wrapper">
+        <!-- Page Header -->
+        <div class="step-header">
+            <h1>Lienholder <span class="highlight">Information</span></h1>
+            <p class="step-subtitle">Provide details about the lienholder for your vehicle</p>
+        </div>
+
+        <!-- Lienholder Form -->
+        <form class="wizard-form">
+            <div class="row g-4">
+                <!-- Country -->
+                <div class="col-md-6">
+                    <c-buho_input
+                        label="Country"
+                        label-class=""
+                        container-class="form-group"
+                        type="combobox"
+                        name="Lienholder_Country__cmbx"
+                        value={lienholderData.Lienholder_Country__cmbx}
+                        options={countryoptions}
+                        dropdown-class="form-select"
+                        onchange={handleCountryChange}>
+                    </c-buho_input>
+                </div>
+
+                <!-- Other Country Input -->
+                <template if:true={otherCountry}>
+                    <div class="col-md-6">
+                        <c-buho_input
+                            label="Country"
+                            label-class=""
+                            container-class="form-group"
+                            type="input"
+                            name="Lienholder_Country__c"
+                            value={lineHolderCountry}
+                            placeholder="Enter country"
+                            input-type="text"
+                            onchange={handleInputChange}>
+                        </c-buho_input>
+                    </div>
+                </template>
+
+                <!-- Name Field -->
+                <div class="col-md-6">
+                    <template if:true={otherCountry}>
+                        <c-buho_input
+                            label="Name"
+                            label-class=""
+                            container-class="form-group"
+                            type="input"
+                            name="Lienholder_name__c"
+                            value={lineHolderName}
+                            placeholder="Enter name"
+                            input-type="text"
+                            max-length="100"
+                            onchange={handleInputChange}>
+                        </c-buho_input>
+                    </template>
+
+                    <template if:false={otherCountry}>
+                        <template if:false={addNewLienHolder}>
+                            <c-lookup 
+                                isrequired="true" 
+                                validation="Validation" 
+                                filter-value={filterValue}
+                                filter-api="Country__c" 
+                                objecttype="Lienholder__c" 
+                                searchagainst="Name__c" 
+                                placeholder="Select Lienholder"
+                                label="Name" 
+                                value={lineHolderName} 
+                                selectedname={lineHolderName}
+                                selectedid={lineHolderName} 
+                                buho-theme="true"
+                                onselection={handleSearch}>
+                            </c-lookup>
+                        </template>
+                        <template if:true={addNewLienHolder}>
+                            <c-buho_input
+                                label="Name"
+                                label-class=""
+                                container-class="form-group"
+                                type="input"
+                                name="Lienholder_name__c"
+                                value={lineHolderName}
+                                placeholder="Enter name"
+                                input-type="text"
+                                max-length="100"
+                                onchange={handleInputChange}>
+                            </c-buho_input>
+                        </template>
+                    </template>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <!-- Postal Code -->
+                <div class="col-md-6">
+                    <c-buho_input
+                        label="Postal Code"
+                        label-class=""
+                        container-class="form-group"
+                        type="input"
+                        name="Lienholder_Postal_Code__c"
+                        value={postalCode}
+                        placeholder="Enter postal code"
+                        input-type="text"
+                        max-length="9"
+                        pattern="^(([A-CEGHJKL-MNPR-STVXY]\d[A-Za-z])*(-\d[A-Za-z]\d)*|\d{5}|\d{5}-\d{4})$"
+                        message-when-pattern-mismatch="Please enter a valid postal code"
+                        onblur={handlePostalCodeChange}>
+                    </c-buho_input>
+                </div>
+
+                <!-- State -->
+                <div class="col-md-6">
+                    <c-buho_input
+                        label="State"
+                        label-class=""
+                        container-class="form-group"
+                        type="input"
+                        name="Lienholder_State__c"
+                        value={lineHolderState}
+                        placeholder="Enter state"
+                        input-type="text"
+                        pattern="^([a-zA-Z]+\s)*[a-zA-Z]+$"
+                        message-when-pattern-mismatch="Only letters and spaces are allowed"
+                        onchange={handleInputChange}>
+                    </c-buho_input>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <!-- City -->
+                <div class="col-md-6">
+                    <c-buho_input
+                        label="City"
+                        label-class=""
+                        container-class="form-group"
+                        type="input"
+                        name="Lienholder_City__c"
+                        value={lineHolderCity}
+                        placeholder="Enter city"
+                        input-type="text"
+                        pattern="^([a-zA-Z]+\s)*[a-zA-Z]+$"
+                        message-when-pattern-mismatch="Only letters and spaces are allowed"
+                        onchange={handleInputChange}>
+                    </c-buho_input>
+                </div>
+
+                <!-- Address -->
+                <div class="col-md-6">
+                    <c-buho_input
+                        label="Address"
+                        label-class=""
+                        container-class="form-group"
+                        type="input"
+                        name="Lienholder_Street__c"
+                        value={lineHolderStreet}
+                        placeholder="Enter address"
+                        input-type="text"
+                        pattern="^\S+(?: \S+)*$"
+                        message-when-pattern-mismatch="Please enter a valid address"
+                        onchange={handleInputChange}>
+                    </c-buho_input>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <!-- Phone -->
+                <div class="col-md-6">
+                    <c-buho_input
+                        label="Phone"
+                        label-class=""
+                        container-class="form-group"
+                        type="input"
+                        name="Lienholder_Phone__c"
+                        value={lineHolderPhone}
+                        placeholder="(123) 456-7890"
+                        input-type="text"
+                        max-length="14"
+                        pattern="^\(\d{3}\)\s\d{3}-\d{4,7}$"
+                        message-when-pattern-mismatch="Please enter phone in format (123) 456-7890"
+                        onchange={handlePhoneChange}>
+                    </c-buho_input>
+                </div>
+            </div>
+
+            <!-- Continue Button -->
+            <button type="button" class="btn btn-primary btn-continue" onclick={handleContinue}>
+                Continue
+            </button>
+
+            <!-- Info Text -->
+            <p class="step-info-text">
+                Accurate completion of your application is required under our Terms of Use. Providing false information may jeopardize your coverage in the event of a claim.
+            </p>
+        </form>
+    </div>
+</template>

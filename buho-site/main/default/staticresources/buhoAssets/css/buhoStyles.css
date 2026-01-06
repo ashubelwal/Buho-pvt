@@ -3237,7 +3237,7 @@ lightning-input[type="checkbox"] .slds-checkbox [type="checkbox"]:checked + .sld
 /* Towed Units Table */
 .towed-units-table {
     margin: 24px 0;
-    background: #ffffff;
+    /*background: #ffffff;*/
     border-radius: 12px;
     padding: 20px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -3250,11 +3250,11 @@ lightning-input[type="checkbox"] .slds-checkbox [type="checkbox"]:checked + .sld
 .buho-table {
     width: 100%;
     border-collapse: collapse;
-    background: #ffffff;
+    /*background: #ffffff;*/
 }
 
 .buho-table thead {
-    background-color: #F9FAFB;
+    background-color: var(--buho-accent-pink);
 }
 
 .buho-table thead th {
@@ -3262,7 +3262,7 @@ lightning-input[type="checkbox"] .slds-checkbox [type="checkbox"]:checked + .sld
     text-align: left;
     font-size: 13px;
     font-weight: 600;
-    color: #6B7280;
+    color: #ffff;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     border-bottom: 2px solid #E5E7EB;
@@ -4376,6 +4376,289 @@ lightning-input[type="checkbox"] .slds-checkbox [type="checkbox"]:checked + .sld
     
     .coverage-list-title {
         font-size: 1.25rem;
+    }
+}
+
+/* =============================================================================
+   Buho Lookup Component Styles (for buho.html template)
+   ============================================================================= */
+
+/* Lookup Wrapper */
+.buho-lookup-wrapper {
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.buho-lookup-wrapper .bi-x-circle::before {
+    position: absolute;
+    right: 0;
+}
+
+.buho-lookup-wrapper .form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--buho-primary-blue, #13203D);
+    font-size: 14px;
+}
+
+.buho-lookup-wrapper .required-indicator {
+    color: #EF4444;
+    margin-right: 4px;
+}
+
+.buho-lookup-container {
+    position: relative;
+}
+
+.buho-combobox-wrapper {
+    position: relative;
+}
+
+.buho-input-wrapper {
+    position: relative;
+}
+
+.buho-input-wrapper c-buho_input {
+    width: 100%;
+}
+
+.buho-lookup-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--buho-primary-blue, #13203D);
+    background-color: var(--buho-input-bg, #F9FAFB);
+    border: 1px solid var(--buho-input-border, #D1D5DB);
+    border-radius: var(--buho-radius-md, 8px);
+    transition: border-color var(--buho-transition-fast, 0.15s ease), box-shadow var(--buho-transition-fast, 0.15s ease);
+}
+
+.buho-lookup-input:focus {
+    outline: none;
+    border-color: var(--buho-primary-blue, #13203D);
+    box-shadow: 0 0 0 3px rgba(19, 32, 61, 0.1);
+    background-color: #ffffff;
+}
+
+.buho-lookup-input:disabled {
+    background-color: #E5E7EB;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Loading Spinner */
+.buho-loading-spinner {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.buho-loading-spinner .spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+    border-width: 0.15em;
+    border: 0.15em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner-border 0.75s linear infinite;
+}
+
+/* Selected State */
+.buho-selected-wrapper {
+    position: relative;
+}
+
+.buho-selected-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.buho-selected-input-container {
+    flex: 1;
+    margin: 0;
+}
+
+.buho-selected-input-wrapper c-buho_input {
+    flex: 1;
+}
+
+.buho-selected-icon {
+    position: absolute;
+    left: 12px;
+    color: var(--buho-primary-blue, #13203D);
+    font-size: 16px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.buho-selected-input {
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.buho-clear-btn {
+    position: absolute;
+    right: 8px;
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: #6B7280;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color var(--buho-transition-fast, 0.15s ease);
+    z-index: 1;
+}
+
+.buho-clear-btn:hover:not(:disabled) {
+    color: var(--buho-accent-pink, #E53C7B);
+}
+
+.buho-clear-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.buho-clear-btn i {
+    font-size: 18px;
+}
+
+.buho-form-help {
+    margin-top: 0.25rem;
+    font-size: 12px;
+    display: none;
+}
+
+.buho-lookup-wrapper.has-error .buho-lookup-input {
+    border-color: #EF4444;
+}
+
+.buho-lookup-wrapper.has-error .buho-form-help {
+    display: block;
+    color: #EF4444;
+}
+
+/* Dropdown Styles - Combobox-like appearance */
+.buho-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    margin-top: 4px;
+    background-color: #ffffff;
+    border: 1px solid var(--buho-input-border, #D1D5DB);
+    border-radius: var(--buho-radius-md, 8px);
+    box-shadow: var(--buho-shadow-lg, 0 8px 24px rgba(0, 0, 0, 0.12));
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.buho-dropdown-list {
+    list-style: none;
+    margin: 0;
+    padding: 0.25rem 0;
+}
+
+.buho-dropdown-item {
+    margin: 0;
+    padding: 0;
+}
+
+.buho-dropdown-option {
+    display: flex;
+    align-items: center;
+    padding: 0.625rem 1rem;
+    cursor: pointer;
+    transition: background-color var(--buho-transition-fast, 0.15s ease);
+    border: none;
+    width: 100%;
+    text-align: left;
+}
+
+.buho-dropdown-option:hover {
+    background-color: var(--buho-input-bg, #F9FAFB);
+}
+
+.buho-dropdown-option:active {
+    background-color: #E5E7EB;
+}
+
+.buho-dropdown-option-simple {
+    justify-content: flex-start;
+}
+
+/* Hide the icon to make it look like a combobox */
+.buho-dropdown-icon {
+    display: none;
+}
+
+.buho-dropdown-text {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+}
+
+.buho-dropdown-primary {
+    display: block;
+    color: var(--buho-primary-blue, #13203D);
+    font-size: 14px;
+    font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.5;
+}
+
+.buho-dropdown-no-results {
+    padding: 1rem;
+    text-align: center;
+    color: var(--buho-gray-text, #6B7280);
+    font-size: 14px;
+    cursor: default;
+}
+
+.buho-dropdown-no-results:hover {
+    background-color: transparent;
+}
+
+/* Visually Hidden Helper */
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+/* Responsive Design for Lookup */
+@media (max-width: 768px) {
+    .buho-dropdown {
+        max-height: 250px;
+    }
+    
+    .buho-dropdown-option {
+        padding: 0.75rem 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .buho-dropdown {
+        max-height: 200px;
     }
 }
 

@@ -66,7 +66,7 @@ export default class Nc_customerQuote extends LightningElement {
                 this.copyDataToPayload(cleanedData, ['userDetails']); // console.log('CQ Payload after data copy', this.payload);
                 this.copyDataToPayload(cleanedData, ['vehicleDetails']); // console.log('CQ Payload after data copy', this.payload);
                 this.copyDataToPayload(cleanedData, ['UserType']); // console.log('CQ Payload after data copy', this.payload);
-                this.copyDataToPayload(cleanedData, ['driverDetails']);  
+                this.copyDataToPayload(cleanedData, ['driverDetails']);
                 console.log('CQ Payload after data copy', this.payload);
 
                 this.currentStep++;
@@ -88,14 +88,14 @@ export default class Nc_customerQuote extends LightningElement {
         })
     }
 
-    handleLoadingStatus(event) {        
+    handleLoadingStatus(event) {
         this.childLoaded = event.detail;
     }
 
-    handleToastEvent(event) {        
+    handleToastEvent(event) {
         let toastData = event.detail;
         console.log('CQ OUTPUT-- toastData', toastData);
-        if(toastData) {
+        if (toastData) {
             this.template.querySelector('c-custom-toast').showToast(toastData);
         }
     }
@@ -203,7 +203,7 @@ export default class Nc_customerQuote extends LightningElement {
                 }
                 case 'c/nc_territory': {
                     const { default: ctor } = await import('c/nc_territory');
-                    this.componentConstructor = ctor;                    
+                    this.componentConstructor = ctor;
                     break;
                 }
                 case 'c/nc_quotePage': {
@@ -285,7 +285,7 @@ export default class Nc_customerQuote extends LightningElement {
             if (direction === 'next') {
                 // Validate the current step
                 const isValid = await this.validateStep();
-                console.log('CQ OUTPUT isValid: ',isValid);
+                console.log('CQ OUTPUT isValid: ', isValid);
 
                 if (!isValid) {
                     console.log('CQ -- ERROR: Validation failed at:', this.steps[this.currentStep].component);
@@ -308,7 +308,7 @@ export default class Nc_customerQuote extends LightningElement {
                         this.currentStep++;
                         this.processedData = this.processSections(this.payload)
 
-                        const { component } = this.steps[this.currentStep];                        
+                        const { component } = this.steps[this.currentStep];
                         if ((component === 'c/nc_towDetails' && !this.payload.find(item => item.vehicleDetails)?.vehicleDetails?.isTowing) || (component === 'c/nc_lienholderInformation' && !this.payload.find(item => item.finalizeVehicleDetails)?.finalizeVehicleDetails?.Is_Lienholder__c)) {
                             this.currentStep++;
                             this.loadComponent();
@@ -391,7 +391,7 @@ export default class Nc_customerQuote extends LightningElement {
 
                 // Check if an object with the same key already exists in the payload
                 const existingIndex = this.payload.findIndex(item => Object.keys(item)[0] === key);
-                
+
                 if (existingIndex !== -1) {
                     // If it exists, update the existing object
                     this.payload[existingIndex] = { ...temp };
@@ -399,7 +399,7 @@ export default class Nc_customerQuote extends LightningElement {
                     // If it doesn't exist, add it as a new object
                     this.payload = [...this.payload, { ...temp }];
                 }
-                console.log('After payload update in CQ',this.payload);
+                console.log('After payload update in CQ', this.payload);
 
                 // console.log('CQ capturePayloadDat a: payload in customer quote component ', JSON.stringify(this.payload));
             }
@@ -610,7 +610,7 @@ export default class Nc_customerQuote extends LightningElement {
             Company_City__c: vehicles[0]?.Company_City__c || ''
         };
 
-        
+
         // Helper function to determine Driver_Type__c
         const getDriverType = (driverType) => {
             if (driverType === undefined || driverType === null) return false;
@@ -623,7 +623,7 @@ export default class Nc_customerQuote extends LightningElement {
             return false;
         };
 
-        console.log('CQ OUTPUT : ',drivers);
+        console.log('CQ OUTPUT : ', drivers);
         const driverList = drivers.map(driver => ({
             Id: driver?.Id || null,
             label: `${driver.First_Name__c || ''} ${driver.Last_Name__c || ''} - ${driver.Dob__c || ''} - ${driver.license_number__c || ''}`,
@@ -644,7 +644,7 @@ export default class Nc_customerQuote extends LightningElement {
             diff: Date.now()
         }));
 
-        console.log('CQ OUTPUT driverList: ',driverList);
+        console.log('CQ OUTPUT driverList: ', driverList);
 
         // Build the final structure
         return [
