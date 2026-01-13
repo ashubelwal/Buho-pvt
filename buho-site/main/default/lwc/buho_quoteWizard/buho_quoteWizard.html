@@ -42,8 +42,10 @@
                             ontoastevent={handleToastEvent}
                             onstepchange={handleStepChange}
                             total-steps={totalSteps}
-                            path-prefix={currentSiteData.pathPrefix}
+                            path-prefix={pathPrefix}
                             base-url={currentSiteData.baseUrl}
+                            start-url={startUrl}
+                            is-user-logged-in={isUserLoggedIn}
                             >
                         </lwc:component>
                     </template>

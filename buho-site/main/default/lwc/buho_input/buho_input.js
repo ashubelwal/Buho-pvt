@@ -2,7 +2,7 @@ import { LightningElement, api, track } from 'lwc';
 
 export default class Buho_input extends LightningElement {
     @api label = '';
-    @api type = 'input'; // input, combobox, checkbox, radio
+    @api type = 'input'; // input, combobox, checkbox, radio, textarea
     @api name = '';
     @api value = '';
     @api placeholder = '';
@@ -20,6 +20,8 @@ export default class Buho_input extends LightningElement {
     @api maxLength; // maximum length for input
     @api pattern; // regex pattern for validation
     @api messageWhenPatternMismatch = ''; // error message when pattern doesn't match
+    @api textareaStyle = ''; // custom style for textarea (e.g., "height: 180px;")
+    @api required = false; // whether the field is required
 
 
     get computedContainerClass() {
@@ -58,6 +60,10 @@ export default class Buho_input extends LightningElement {
         return this.type === 'radio';
     }
 
+    get isTextarea() {
+        return this.type === 'textarea';
+    }
+
     get hasIcon() {
         return this.icon && this.isInput;
     }
@@ -71,7 +77,7 @@ export default class Buho_input extends LightningElement {
     }
 
     get comboboxOptions() {
-        return this.options.map(option => {
+        const mappedOptions = this.options?.map(option => {
             if (typeof option === 'string') {
                 return {
                     label: option,
@@ -84,7 +90,19 @@ export default class Buho_input extends LightningElement {
                 value: option.value,
                 isSelected: option.value === this.value
             };
-        });
+        }) || [];
+
+        // Add blank option at the beginning if no value is pre-selected
+        // This forces users to actively select an option
+        const hasValue = this.value !== null && this.value !== undefined && this.value !== '';
+        if (!hasValue && mappedOptions.length > 0) {
+            return [
+                { label: '-- Select --', value: '', isSelected: true },
+                ...mappedOptions
+            ];
+        }
+
+        return mappedOptions;
     }
 
     @track showPatternError = false;
@@ -117,7 +135,8 @@ export default class Buho_input extends LightningElement {
         this.dispatchEvent(new CustomEvent('change', {
             detail: {
                 name: this.name,
-                value: value
+                value: value,
+                type: this.type
             }
         }));
     }
@@ -128,7 +147,8 @@ export default class Buho_input extends LightningElement {
         this.dispatchEvent(new CustomEvent('change', {
             detail: {
                 name: this.name,
-                value: value
+                value: value,
+                type: this.type
             }
         }));
     }
@@ -140,7 +160,8 @@ export default class Buho_input extends LightningElement {
             detail: {
                 name: this.name,
                 checked: checked,
-                value: checked
+                value: checked,
+                type: this.type
             }
         }));
     }
@@ -150,7 +171,8 @@ export default class Buho_input extends LightningElement {
             detail: {
                 name: this.name,
                 value: event.target.value,
-                key: event.key
+                key: event.key,
+                type: this.type
             }
         }));
     }
@@ -172,8 +194,136 @@ export default class Buho_input extends LightningElement {
         this.dispatchEvent(new CustomEvent('input', {
             detail: {
                 name: this.name,
-                value: value
+                value: value,
+                type: this.type
             }
         }));
+    }
+
+    /**
+     * @api reportValidity()
+     * Validates the input field and reports validity
+     * Returns true if valid, false otherwise
+     */
+    @api
+    reportValidity() {
+        let inputElement;
+        
+        // Get the appropriate input element based on type
+        if (this.isInput || this.isTextarea) {
+            inputElement = this.template.querySelector('input, textarea');
+        } else if (this.isCombobox) {
+            inputElement = this.template.querySelector('select');
+        } else if (this.isCheckbox || this.isRadio) {
+            inputElement = this.template.querySelector('input[type="checkbox"], input[type="radio"]');
+        }
+
+        if (inputElement) {
+            // Check native HTML5 validation
+            const isValid = inputElement.reportValidity();
+            
+            // Additional pattern validation for custom error messages
+            if (this.pattern && this.messageWhenPatternMismatch) {
+                const regex = new RegExp(this.pattern);
+                const value = inputElement.value;
+                if (value && value.trim() !== '' && !regex.test(value)) {
+                    this.showPatternError = true;
+                    inputElement.setCustomValidity(this.messageWhenPatternMismatch);
+                    inputElement.reportValidity();
+                    return false;
+                } else {
+                    this.showPatternError = false;
+                    inputElement.setCustomValidity('');
+                }
+            }
+            
+            return isValid;
+        }
+        
+        return true;
+    }
+
+    /**
+     * @api checkValidity()
+     * Checks the validity of the input without showing error messages
+     * Returns true if valid, false otherwise
+     */
+    @api
+    checkValidity() {
+        let inputElement;
+        
+        // Get the appropriate input element based on type
+        if (this.isInput || this.isTextarea) {
+            inputElement = this.template.querySelector('input, textarea');
+        } else if (this.isCombobox) {
+            inputElement = this.template.querySelector('select');
+        } else if (this.isCheckbox || this.isRadio) {
+            inputElement = this.template.querySelector('input[type="checkbox"], input[type="radio"]');
+        }
+
+        if (inputElement) {
+            // Check native HTML5 validation
+            const isValid = inputElement.checkValidity();
+            
+            // Additional pattern validation
+            if (this.pattern) {
+                const regex = new RegExp(this.pattern);
+                const value = inputElement.value;
+                if (value && value.trim() !== '' && !regex.test(value)) {
+                    return false;
+                }
+            }
+            
+            return isValid;
+        }
+        
+        return true;
+    }
+
+    /**
+     * @api setCustomValidity(message)
+     * Sets a custom validation message
+     * @param {string} message - The custom error message to display
+     */
+    @api
+    setCustomValidity(message) {
+        let inputElement;
+        
+        // Get the appropriate input element based on type
+        if (this.isInput || this.isTextarea) {
+            inputElement = this.template.querySelector('input, textarea');
+        } else if (this.isCombobox) {
+            inputElement = this.template.querySelector('select');
+        } else if (this.isCheckbox || this.isRadio) {
+            inputElement = this.template.querySelector('input[type="checkbox"], input[type="radio"]');
+        }
+
+        if (inputElement) {
+            inputElement.setCustomValidity(message || '');
+        }
+    }
+
+    /**
+     * @api validity
+     * Returns the ValidityState object for the input
+     */
+    @api
+    get validity() {
+        let inputElement;
+        
+        // Get the appropriate input element based on type
+        if (this.isInput || this.isTextarea) {
+            inputElement = this.template.querySelector('input, textarea');
+        } else if (this.isCombobox) {
+            inputElement = this.template.querySelector('select');
+        } else if (this.isCheckbox || this.isRadio) {
+            inputElement = this.template.querySelector('input[type="checkbox"], input[type="radio"]');
+        }
+
+        if (inputElement) {
+            return inputElement.validity;
+        }
+        
+        return { valid: true };
     }
 }

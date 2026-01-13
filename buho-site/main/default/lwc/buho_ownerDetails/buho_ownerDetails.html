@@ -1,0 +1,257 @@
+<template>
+    <div class="buho-owner-details">
+        <!-- Ownership Type Selection -->
+        <div class="ownership-cards">
+            <div data-value="business"
+                 class={businessCardClass}
+                 onclick={handleOwnershipSelection}>
+                <div class="ownership-icon">
+                    <img src="/sfsites/c/resource/buhoAssets/images/building.svg" alt="Business Vehicle" />
+                </div>
+                <h3 class="ownership-title">Business Vehicle</h3>
+                <p class="ownership-subtitle">Registered to a company</p>
+            </div>
+            
+            <div data-value="personal"
+                 class={personalCardClass}
+                 onclick={handleOwnershipSelection}>
+                <div class="ownership-icon">
+                    <img src="/sfsites/c/resource/buhoAssets/images/user.svg" alt="Personal Vehicle" />
+                </div>
+                <h3 class="ownership-title">Personal Vehicle</h3>
+                <p class="ownership-subtitle">Registered to an individual</p>
+            </div>
+        </div>
+
+        <!-- Step: Company Details -->
+        <template if:true={isStepCompanyDetails}>
+            <div class="wizard-form">
+                <div class="step-header">
+                    <h2>Add company information</h2>
+                </div>
+                
+                <c-buho_company-information 
+                    onadd={handleCompanyInfoUpdate} 
+                    payload={payload}>
+                </c-buho_company-information>
+
+                <div class="form-actions">
+                    <button type="button" 
+                            class="btn btn-primary btn-continue" 
+                            onclick={handleContinue}>
+                        Continue
+                    </button>
+                </div>
+            </div>
+        </template>
+
+        <!-- Step: Select Owner and Add Address -->
+        <template if:true={isStepOwnerSelection}>
+            <div class="wizard-form">
+                <div class="step-header">
+                    <h2>{ownerTitle}</h2>
+                    <p class="step-subtitle">Select the vehicle owner from the drivers added in the previous step</p>
+                </div>
+
+                <!-- Edit Company Button -->
+                <template if:true={flag.Is_the_vehicle_registered_to_a_business__c}>
+                    <div class="form-actions">
+                        <button type="button" 
+                                class="btn-dark" 
+                                onclick={goToCompanyDetails}>
+                            Edit Company Info
+                        </button>
+                    </div>
+                </template>
+
+                <!-- Select Owner from Previously Added Drivers -->
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <c-buho_input
+                            label="Select Vehicle Owner"
+                            label-class=""
+                            container-class="form-group"
+                            type="combobox"
+                            name="ownerSelection"
+                            value={selectedOwnerId}
+                            options={driverOptions}
+                            placeholder="Select owner from drivers"
+                            dropdown-class="form-select"
+                            required
+                            onchange={handleDriverSelection}>
+                        </c-buho_input>
+                    </div>
+                </div>
+
+                <!-- Selected Owner Information (Read-only display) -->
+                <template if:true={selectedOwnerId}>
+                    <div class="owner-info-display">
+                        <h3>Owner Information</h3>
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <div class="info-field">
+                                    <label>Name</label>
+                                    <p>{owner.First_Name__c} {owner.Last_Name__c}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info-field">
+                                    <label>Date of Birth</label>
+                                    <p>{formattedDob}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info-field">
+                                    <label>License Number</label>
+                                    <p>{owner.license_number__c}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <div class="info-field">
+                                    <label>License Country</label>
+                                    <p>{owner.License_Country__c}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info-field">
+                                    <label>License State</label>
+                                    <p>{owner.License_state__c}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Owner Address Fields (Editable) -->
+                    <div class="owner-address-section">
+                        <h3>Owner Address Details</h3>
+                        <p class="section-subtitle">Provide the address information for the vehicle owner</p>
+
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <c-buho_address-recommendations 
+                                    onsendaddress={handleOwnerAddress}
+                                    placeholder="Start typing owner address to search...">
+                                </c-buho_address-recommendations>
+                            </div>
+                        </div>
+
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <c-buho_input
+                                    label="Country"
+                                    label-class=""
+                                    container-class="form-group"
+                                    type="combobox"
+                                    name="Country__c"
+                                    value={owner.Country__c}
+                                    options={countryOptions}
+                                    dropdown-class="form-select"
+                                    required
+                                    onchange={handleInputChange}>
+                                </c-buho_input>
+                            </div>
+
+                            <div class="col-md-6">
+                                <c-buho_input
+                                    label="State/Province"
+                                    label-class=""
+                                    container-class="form-group"
+                                    type="input"
+                                    name="State_Province__c"
+                                    value={owner.State_Province__c}
+                                    placeholder="Enter state/province"
+                                    input-type="text"
+                                    required
+                                    onchange={handleInputChange}>
+                                </c-buho_input>
+                            </div>
+                        </div>
+
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <c-buho_input
+                                    label="Postal Code"
+                                    label-class=""
+                                    container-class="form-group"
+                                    type="input"
+                                    name="Postal_Code__c"
+                                    value={owner.Postal_Code__c}
+                                    placeholder="Enter postal code"
+                                    input-type="text"
+                                    required
+                                    onchange={handleInputChange}>
+                                </c-buho_input>
+                            </div>
+
+                            <div class="col-md-6">
+                                <c-buho_input
+                                    label="City"
+                                    label-class=""
+                                    container-class="form-group"
+                                    type="input"
+                                    name="City__c"
+                                    value={owner.City__c}
+                                    placeholder="Enter city"
+                                    input-type="text"
+                                    required
+                                    onchange={handleInputChange}>
+                                </c-buho_input>
+                            </div>
+                        </div>
+
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <c-buho_input
+                                    label="Address"
+                                    label-class=""
+                                    container-class="form-group"
+                                    type="input"
+                                    name="Address__c"
+                                    value={owner.Address__c}
+                                    placeholder="Enter address"
+                                    input-type="text"
+                                    required
+                                    onchange={handleInputChange}>
+                                </c-buho_input>
+                            </div>
+                        </div>
+
+                        <!-- Hidden Country Text field -->
+                        <div style="display: none;">
+                            <c-buho_input
+                                label="Country Text"
+                                type="input"
+                                name="Country_Text__c"
+                                value={owner.Country_Text__c}
+                                input-type="text"
+                                onchange={handleInputChange}>
+                            </c-buho_input>
+                        </div>
+
+                        <!-- Checkbox for leased/financed --
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <c-buho_input
+                                    label="Is vehicle leased or financed"
+                                    type="checkbox"
+                                    name="isLeasedOrFinanced"
+                                    checked={owner.isLeasedOrFinanced}
+                                    onchange={handleInputChange}>
+                                </c-buho_input>
+                            </div>
+                        </div-->
+                    </div>
+                </template>
+
+                <!-- Continue Button -->
+                <button type="button" 
+                        class="btn btn-primary btn-continue" 
+                        onclick={handleContinue}>
+                    Continue
+                </button>
+            </div>
+        </template>
+    </div>
+</template>

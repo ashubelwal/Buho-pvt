@@ -1,1 +1,46 @@
-/* All styles consolidated in buhoAssets/css/buhoStyles.css */
+/* Vehicle Details Component Styles */
+
+/* Input with prefix (for $ symbol) */
+.input-group {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.input-group-text {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1F2937;
+    background-color: #F3F4F6;
+    border: 1px solid var(--input-border);
+    border-right: none;
+    border-radius: 8px 0 0 8px;
+}
+
+.input-with-prefix {
+    border-radius: 0 8px 8px 0 !important;
+    border-left: none !important;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+/* Form text helper */
+.form-text {
+    font-size: 13px;
+    color: var(--gray-text);
+    margin-top: 6px;
+    display: block;
+}
+
+.text-muted {
+    color: #6B7280;
+}
+
+c-buho_input {
+    flex: .47;
+}

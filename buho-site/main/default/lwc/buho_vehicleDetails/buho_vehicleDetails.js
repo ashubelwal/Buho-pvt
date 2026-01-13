@@ -62,14 +62,27 @@ export default class Buho_vehicleDetails extends LightningElement {
         return false;
     }
 
+    get isTowning() {
+        return this.inputValues.isTowing;
+    }
     // Handle checkbox change for towing
     handleisTowing(event) {
-        this.inputValues.isTowing = event.target.checked;
+        // Handle both buho_input events (event.detail) and native input events (event.target)
+        const checked = event.detail?.checked;
+        
+        // Use spread operator to trigger reactivity
+        this.inputValues = {
+            ...this.inputValues,
+            isTowing: checked
+        };
+        
+        console.log('BVD isTowing changed to:', checked);
+        console.log('BVD inputValues.isTowing:', this.inputValues.isTowing);
     }
 
     // Fetch vehicle types metadata and update dropdown options
-    getVehicleTypeOptions() {
-        getVehicleTypesMetadata()
+    async getVehicleTypeOptions() {
+        await getVehicleTypesMetadata()
             .then((result) => {
                 if (result.Status === 'Success') {
                     this.vehicleTypeOptions = result.Data.map(option => ({
@@ -163,8 +176,13 @@ export default class Buho_vehicleDetails extends LightningElement {
     // Handle input changes
     async handleInputChange(event) {
         try {
-            const fieldName = event.target.name.replace(/ /g, '').toLowerCase();
-            const { name, value, type, checked } = event.target;
+            // Handle both buho_input events (event.detail) and native input events (event.target)
+            const name = event.detail?.name || event.target?.name;
+            const value = event.detail?.value || event.target?.value;
+            const type = event.detail?.type || event.target?.type;
+            const checked = event.detail?.checked || event.target?.checked;
+            
+            const fieldName = name.replace(/ /g, '').toLowerCase();
 
             this.inputValues[name] = type === 'checkbox' ? checked : value;
             console.log('BVD Input values on vehicle Change', this.inputValues);
@@ -187,6 +205,7 @@ export default class Buho_vehicleDetails extends LightningElement {
                 this.handleComboboxReset('Year');
                 this.year = value;
                 // Update yearOptions with new selected value
+                
                 this.yearOptions = this.yearOptions.map(option => ({
                     ...option,
                     selected: option.value === value
@@ -228,7 +247,8 @@ export default class Buho_vehicleDetails extends LightningElement {
     }
 
     handleMakeChange(event) {
-        const selectedMake = event.target.value;
+        // Handle both buho_input events (event.detail) and native input events (event.target)
+        const selectedMake = event.detail?.value || event.target?.value;
         this.make = selectedMake;
         this.inputValues['Make'] = selectedMake;
         this.handleComboboxReset('Make');
@@ -243,7 +263,8 @@ export default class Buho_vehicleDetails extends LightningElement {
     }
 
     handleModelChange(event) {
-        const selectedModel = event.target.value;
+        // Handle both buho_input events (event.detail) and native input events (event.target)
+        const selectedModel = event.detail?.value || event.target?.value;
         this.model = selectedModel;
         this.inputValues['Model'] = selectedModel;
         // Update modelOptions with new selected value
@@ -255,7 +276,7 @@ export default class Buho_vehicleDetails extends LightningElement {
 
     // Validation method (returns true if valid, false if invalid)
     @api validate() {
-        const inputs = this.template.querySelectorAll('input[required], select[required], lightning-input[required], lightning-combobox[required]');
+        const inputs = this.template.querySelectorAll('c-buho_input[required], input[required], select[required]');
         let allValid = true;
 
         inputs.forEach(input => {
@@ -377,9 +398,9 @@ export default class Buho_vehicleDetails extends LightningElement {
         this.inputValues.Model__c = this.model;
     }
 
-    connectedCallback() {
+    async connectedCallback() {
         if (this.year === '') {
-            this.year = '2025';
+            this.year = new Date().getFullYear();
         }
         // Initialize yearOptions with selected property
         this.yearOptions = Array.from({ length: 30 }, (_, i) => {
@@ -390,7 +411,7 @@ export default class Buho_vehicleDetails extends LightningElement {
                 selected: yearValue === this.year.toString()
             };
         });
-        this.getVehicleTypeOptions();
+        await this.getVehicleTypeOptions();
     }
 
     async renderedCallback() {
@@ -504,7 +525,8 @@ export default class Buho_vehicleDetails extends LightningElement {
     }
 
     async changevehicleOption(event) {
-        const selectedId = event.target.value;
+        // Handle both buho_input events (event.detail) and native input events (event.target)
+        const selectedId = event.detail?.value || event.target?.value;
         const vehicleList = this.vehicleDetails.vehicleList || [];
 
         const selectedVehicle = vehicleList.find(vehicle => vehicle.Id === selectedId);

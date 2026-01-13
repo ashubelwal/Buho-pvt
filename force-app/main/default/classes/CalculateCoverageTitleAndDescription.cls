@@ -481,21 +481,17 @@ public class CalculateCoverageTitleAndDescription {
                             coverageMap.put('Legal Assistance Coverage',granchildNestedMap);
                             continue;
                         }
-                        
-                        
                     }
-                    
                 }
                 responseMap.put(vendor,coverageMap);
             }
-            
             
             System.debug('Data Map'+JSON.serialize(dataMap));
             System.debug('Response Map'+JSON.serialize(responseMap));
             return responseMap;
         }catch(Exception e){
             System.debug('Exception at:'+e.getLineNumber()+e.getMessage());
-            throw new AuraHandledException('Error' + e.getLineNumber()+e.getMessage());
+            throw new AuraHandledException('Error at ' + e.getLineNumber() +' : errormessage: ' +e.getMessage());
         }
     }
     

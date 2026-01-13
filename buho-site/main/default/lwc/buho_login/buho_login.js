@@ -16,7 +16,7 @@ export default class Buho_login extends NavigationMixin(LightningElement) {
     @api showSocialLogin = false;
     @api forgotPasswordUrl = '/ForgotPassword';
     @api signUpUrl = '/SelfRegister';
-    @api startUrl = '/Buho';
+    @api startUrl = '/community';
 
     // Private tracked properties
     @track email = '';

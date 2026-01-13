@@ -115,6 +115,13 @@ export function createTransformedData(returnLeadValue) {
             termOption: {
                 ...termDetails
             }
+        },
+        {
+            quotePage: {
+                QuoteData : {
+                    ...quoteInfo
+                }
+            }
         }
     ];
 }

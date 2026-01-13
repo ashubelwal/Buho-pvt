@@ -514,7 +514,13 @@ public without sharing class Mex_NewLeadProcess {
             string query = 'SELECT '+ screenName + ' ,Insurance_Type__c FROM Lead WHERE Id=\'' + LeadId + '\'';
             fetchLeadData = Database.query(query);
             responseMap.put('status', 'success');
-            responseMap.put('data', fetchLeadData); }catch(Exception ex){ responseMap.put('status', 'error'); responseMap.put('message', ex.getMessage()+ ' at line : '+ex.getLineNumber()); CustomErrorExceptionHandlerException.data = 'screenName>>'+ screenName+'\n leadId>>'+LeadId; CustomErrorExceptionHandlerException.LogException(ex); }
+            responseMap.put('data', fetchLeadData); 
+        }catch(Exception ex){ 
+            responseMap.put('status', 'error'); 
+            responseMap.put('message', ex.getMessage()+ ' at line : '+ex.getLineNumber()); 
+            CustomErrorExceptionHandlerException.data = 'screenName>>'+ screenName+'\n leadId>>'+LeadId; 
+            CustomErrorExceptionHandlerException.LogException(ex); 
+        }
         return responseMap;
     }
 

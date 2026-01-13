@@ -3928,7 +3928,7 @@ lightning-input[type="checkbox"] .slds-checkbox [type="checkbox"]:checked + .sld
 }
 
 /* Quote Page Section Titles */
-.section-title {
+.quote-page-container .section-title {
     font-size: 2rem;
     font-weight: 400;
     color: #16325c;

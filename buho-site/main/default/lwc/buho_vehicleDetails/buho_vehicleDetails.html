@@ -9,14 +9,15 @@
         <!-- Existing Customer Vehicle Selection -->
         <template if:true={currentUserType}>
             <div class="row g-4">
-                <div class="col-12">
-                    <lightning-combobox 
+                <div class="col-6">
+                    <c-buho_input 
+                        type="combobox"
                         name="progress" 
                         placeholder={label.selectavehicle} 
                         value={selectedVehicleId}
                         options={vehicleDetails.vehicleList} 
                         onchange={changevehicleOption}>
-                    </lightning-combobox>
+                    </c-buho_input>
                 </div>
             </div>
         </template>
@@ -26,98 +27,81 @@
             <!-- Vehicle Type and Year Row -->
             <div class="row g-4">
                 <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="vehicleType">Vehicle Type</label>
-                        <select 
-                            id="vehicleType"
-                            name="Vehicle_sub_type__c" 
-                            class="form-select"
-                            onchange={handleInputChange}
-                            required>
-                            <option value="">Select Vehicle Type</option>
-                            <template for:each={vehicleTypeOptions} for:item="option">
-                                <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
-                            </template>
-                        </select>
-                    </div>
+                    <c-buho_input 
+                        type="combobox"
+                        label="Vehicle Type"
+                        name="Vehicle_sub_type__c" 
+                        placeholder="Select Vehicle Type"
+                        value={vehicleType}
+                        options={vehicleTypeOptions}
+                        required
+                        onchange={handleInputChange}>
+                    </c-buho_input>
                 </div>
                 <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="vehicleYear">Vehicle Year</label>
-                        <select 
-                            id="vehicleYear"
-                            name="Year__c" 
-                            class="form-select"
-                            onchange={handleInputChange}
-                            value={year}
-                            required>
-                            <option value="">Select Year</option>
-                            <template for:each={yearOptions} for:item="option">
-                                <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
-                            </template>
-                        </select>
-                    </div>
+                    <c-buho_input 
+                        type="combobox"
+                        label="Vehicle Year"
+                        name="Year__c" 
+                        placeholder="Select Year"
+                        value={year}
+                        options={yearOptions}
+                        required
+                        onchange={handleInputChange}>
+                    </c-buho_input>
                 </div>
             </div>
 
             <!-- Make and Model Row -->
             <div class="row g-4">
                 <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="vehicleMake">Vehicle Make</label>
-                        <select 
-                            id="vehicleMake"
-                            name="Make" 
-                            class="form-select"
-                            onchange={handleMakeChange}
-                            required>
-                            <option value="">Select Make</option>
-                            <template for:each={makeOptions} for:item="option">
-                                <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
-                            </template>
-                        </select>
-                    </div>
+                    <c-buho_input 
+                        type="combobox"
+                        label="Vehicle Make"
+                        name="Make" 
+                        placeholder="Select Make"
+                        value={make}
+                        options={makeOptions}
+                        required
+                        onchange={handleMakeChange}>
+                    </c-buho_input>
                 </div>
                 <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="vehicleModel">Vehicle Model</label>
-                        <select 
-                            id="vehicleModel"
-                            name="Model" 
-                            class="form-select"
-                            onchange={handleModelChange}
-                            required
-                            disabled={booleanVar.isModelLoaded}>
-                            <option value="">Select Model</option>
-                            <template for:each={modelOptions} for:item="option">
-                                <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
-                            </template>
-                        </select>
-                        <template if:true={booleanVar.isModelLoaded}>
-                            <small class="form-text text-muted">Loading models...</small>
-                        </template>
-                    </div>
+                    <c-buho_input 
+                        type="combobox"
+                        label="Vehicle Model"
+                        name="Model" 
+                        placeholder="Select Model"
+                        value={model}
+                        options={modelOptions}
+                        disabled={booleanVar.isModelLoaded}
+                        required
+                        onchange={handleModelChange}>
+                    </c-buho_input>
+                    <template if:true={booleanVar.isModelLoaded}>
+                        <small class="form-text text-muted">Loading models...</small>
+                    </template>
                 </div>
             </div>
 
             <!-- Vehicle Value Row -->
             <div class="row g-4">
-                <div class="col-md-6">
+                <div class="col-12">
                     <div class="form-group">
                         <label for="vehicleValue">Vehicle Value</label>
                         <div class="input-group">
                             <span class="input-group-text">$</span>
-                            <input 
-                                type="number" 
-                                id="vehicleValue"
+                            <c-buho_input 
+                                type="input"
+                                input-type="number" 
                                 name="Value__c"
-                                class="form-control" 
                                 placeholder="42,500"
                                 value={vehicleValue}
-                                onchange={handleInputChange}
-                                min="0"
-                                max="200000"
-                                required>
+                                container-class="flex-1"
+                                input-class="form-control input-with-prefix"
+                                required
+                                onchange={handleInputChange}>
+                            </c-buho_input>
                         </div>
                         <small class="form-text text-muted">Your stated value below will serve as a limit for payout. Company will pay Actual Cash Value based on Kelly Blue and Nada Guides</small>
                     </div>
@@ -129,87 +113,63 @@
                 <h3 class="section-title">Coverage Terms Option</h3>
                 
                 <div class="checkbox-options">
-                    <div class="custom-checkbox">
-                        <input 
-                            type="checkbox" 
-                            id="hybridElectric" 
-                            name="Electric_Hybrid__c"
-                            checked={inputValues.Electric_Hybrid__c}
-                            onchange={handleInputChange}>
-                        <label for="hybridElectric">
-                            <span class="checkbox-title">The vehicle is Hybrid or Fully Electric</span>
-                            <span class="checkbox-hint">Surcharge may apply. Some carriers charge extra for hybrid vehicles due to higher repair costs.</span>
-                        </label>
-                    </div>
+                    <c-buho_input 
+                        type="checkbox"
+                        name="Electric_Hybrid__c"
+                        label="The vehicle is Hybrid or Fully Electric"
+                        hint="Surcharge may apply. Some carriers charge extra for hybrid vehicles due to higher repair costs."
+                        checked={inputValues.Electric_Hybrid__c}
+                        onchange={handleInputChange}>
+                    </c-buho_input>
 
-                    <div class="custom-checkbox">
-                        <input 
-                            type="checkbox" 
-                            id="driversUnder21" 
-                            name="is_there_a_driver_under_21__c"
-                            checked={inputValues.is_there_a_driver_under_21__c}
-                            onchange={handleInputChange}>
-                        <label for="driversUnder21">
-                            <span class="checkbox-title">Drivers under 21?</span>
-                        </label>
-                    </div>
+                    <c-buho_input 
+                        type="checkbox"
+                        name="is_there_a_driver_under_21__c"
+                        label="Drivers under 21?"
+                        checked={inputValues.is_there_a_driver_under_21__c}
+                        onchange={handleInputChange}>
+                    </c-buho_input>
 
-                    <div class="custom-checkbox">
-                        <input 
-                            type="checkbox" 
-                            id="businessSignage" 
-                            name="is_the_vehicle_used_for_business_purpose__c"
-                            checked={inputValues.is_the_vehicle_used_for_business_purpose__c}
-                            onchange={handleInputChange}>
-                        <label for="businessSignage">
-                            <span class="checkbox-title">Business signage on the vehicle</span>
-                            <span class="checkbox-hint">Requires commercial coverage add-on</span>
-                        </label>
-                    </div>
+                    <c-buho_input 
+                        type="checkbox"
+                        name="is_the_vehicle_used_for_business_purpose__c"
+                        label="Business signage on the vehicle"
+                        hint="Requires commercial coverage add-on"
+                        checked={inputValues.is_the_vehicle_used_for_business_purpose__c}
+                        onchange={handleInputChange}>
+                    </c-buho_input>
 
-                    <div class="custom-checkbox">
-                        <input 
-                            type="checkbox" 
-                            id="salvageTitle" 
-                            name="salvage_vehicle__c"
-                            checked={inputValues.salvage_vehicle__c}
-                            onchange={handleInputChange}>
-                        <label for="salvageTitle">
-                            <span class="checkbox-title">Vehicle with a Salvage title?</span>
-                            <span class="checkbox-hint">Check this box if vehicle has been rebuilt and DMV-approved for use.</span>
-                        </label>
-                    </div>
+                    <c-buho_input 
+                        type="checkbox"
+                        name="salvage_vehicle__c"
+                        label="Vehicle with a Salvage title?"
+                        hint="Check this box if vehicle has been rebuilt and DMV-approved for use."
+                        checked={inputValues.salvage_vehicle__c}
+                        onchange={handleInputChange}>
+                    </c-buho_input>
 
-                    <div class="custom-checkbox">
-                        <input 
-                            type="checkbox" 
-                            id="rentalVehicle" 
-                            name="Is_this_a_Rental_Vehicle__c"
-                            checked={inputValues.Is_this_a_Rental_Vehicle__c}
-                            onchange={handleInputChange}>
-                        <label for="rentalVehicle">
-                            <span class="checkbox-title">Is this vehicle a rental?</span>
-                            <span class="checkbox-hint">Check this box if rented from a car rental company</span>
-                        </label>
-                    </div>
+                    <c-buho_input 
+                        type="checkbox"
+                        name="Is_this_a_Rental_Vehicle__c"
+                        label="Is this vehicle a rental?"
+                        hint="Check this box if rented from a car rental company"
+                        checked={inputValues.Is_this_a_Rental_Vehicle__c}
+                        onchange={handleInputChange}>
+                    </c-buho_input>
 
-                    <div class="custom-checkbox">
-                        <input 
-                            type="checkbox" 
-                            id="towingAnything" 
-                            name="isTowing"
-                            checked={inputValues.isTowing}
-                            onchange={handleisTowing}>
-                        <label for="towingAnything">
-                            <span class="checkbox-title">Are you towing anything?</span>
-                            <span class="checkbox-hint">Check this box if you will tow a boat, trailer, or other items during your coverage.</span>
-                        </label>
-                    </div>
+                    <c-buho_input 
+                        type="checkbox"
+                        name="isTowing"
+                        label="Are you towing anything?"
+                        hint="Check this box if you will tow a boat, trailer, or other items during your coverage."
+                        checked={inputValues.isTowing}
+                        onchange={handleisTowing}>
+                    </c-buho_input>
                 </div>
             </div>
 
             <!-- Towing Section (conditionally displayed) -->
-            <template if:true={inputValues.isTowing}>
+            <template if:true={isTowning}>
                 <div class="towing-section">
                     <c-buho_towed 
                         towed-units={inputValues.towunits}

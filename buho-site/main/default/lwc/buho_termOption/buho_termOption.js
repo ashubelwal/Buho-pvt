@@ -4,6 +4,8 @@ import saveLeadPolicyTerms from '@salesforce/apex/TermOptionFlow.saveLeadPolicyT
 import getCalculatedTermEndTime from '@salesforce/apex/TermOptionFlow.getCalculatedTermEndTime';
 import getTimeZone from '@salesforce/apex/Mex_NewLeadProcess.getTimeZone';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { loadScript, loadStyle } from 'lightning/platformResourceLoader';
+import BUHO_ASSETS from '@salesforce/resourceUrl/buhoAssets';
 
 export default class Buho_termOption extends LightningElement {
     @api payload;
@@ -119,7 +121,7 @@ export default class Buho_termOption extends LightningElement {
 
     // Handle term button click
     handleTermClick(event) {
-        event.preventDefault();
+        event?.preventDefault?.();
         const selectedTerm = event.target.dataset.term;
         if (selectedTerm) {
             const previousTerm = this.selectedTerm;
@@ -787,8 +789,8 @@ export default class Buho_termOption extends LightningElement {
         
         const startDateInput = this.template.querySelector('.startDate');
         const endDateInput = this.template.querySelector('.endDate');
-        
-        if (!startDateInput || !endDateInput || typeof flatpickr === 'undefined') {
+        console.log('flatpickr===>',window.flatpickr);
+        if (!startDateInput || !endDateInput || typeof window.flatpickr === 'undefined') {
             if (this.DEBUG_MODE) console.log('BTO Flatpickr not ready yet');
             return;
         }
@@ -810,7 +812,7 @@ export default class Buho_termOption extends LightningElement {
             });
             
             // Initialize Start Date Picker
-            this.flatpickrInstance = flatpickr(startDateInput, {
+            this.flatpickrInstance = window.flatpickr(startDateInput, {
                 dateFormat: 'm/d/Y',
                 minDate: minDateObj,
                 defaultDate: startDateObj,
@@ -822,7 +824,7 @@ export default class Buho_termOption extends LightningElement {
 
             // Initialize End Date Picker (for Daily term only)
             if (this.isDailyTerm) {
-                this.endDateFlatpickrInstance = flatpickr(endDateInput, {
+                this.endDateFlatpickrInstance = window.flatpickr(endDateInput, {
                     dateFormat: 'm/d/Y',
                     minDate: startDateObj || minDateObj, // End date must be >= start date
                     defaultDate: endDateObj,
@@ -1001,7 +1003,17 @@ export default class Buho_termOption extends LightningElement {
     renderedCallback() {
         // Initialize Flatpickr if not already done
         if (this.flags.isDateLoaded && !this.flags.flatpickrInitialized) {
-            this.initializeFlatpickr();
+            Promise.all([
+                loadScript(this, BUHO_ASSETS + '/js/flatpickr.js')
+            ])
+            .then(() => {
+                console.log('script loaded initializing js');
+                this.initializeFlatpickr();
+            })
+            .catch(error => {
+                console.error('Flatpickr failed to load', error);
+            });
+            
         }
 
         // Populate input fields from termOption data (if returning to step)
@@ -1009,6 +1021,7 @@ export default class Buho_termOption extends LightningElement {
             this.populateInputFields();
             this.flags.isRendered = true;
         }
+        
     }
 
     /**

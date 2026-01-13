@@ -26,6 +26,8 @@ export default class Buho_userDetails extends LightningElement {
     @api payload;
     @api totalSteps;
     @api baseUrl;
+    @api startUrl;
+    @api isUserLoggedIn;
     userDetails = {};
 
 
@@ -286,7 +288,7 @@ export default class Buho_userDetails extends LightningElement {
                     bubbles: true,
                     composed: true
                 }));*/
-
+                
                 if (this.returnLeadValue?.userData.IsActive) {
                     console.log('user is active');
                     this.flag = { ...this.flag, isCustomer: true };
@@ -540,15 +542,15 @@ export default class Buho_userDetails extends LightningElement {
         this.loginError = '';
 
         try {
-            const startUrl = '/Buho';
+            
             const result = await login({
                 username: this.loginUsername,
                 password: this.loginPassword,
-                startUrl: startUrl
+                startUrl: this.startUrl
             });
 
             // Check if result is a URL (successful login) or error message
-            if (result && result.startsWith('/')) {
+            if (result && result.startsWith('https://')) {
                 // Success - redirect to the URL
                 window.location.href = result;
             } else {
