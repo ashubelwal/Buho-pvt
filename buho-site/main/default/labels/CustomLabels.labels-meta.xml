@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>RemainderEmail</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>RemainderEmail</shortDescription>
+        <value>agent@mexinsurance.com</value>
+    </labels>
+    <labels>
+        <fullName>DriverLicense_New_Policy_Purchase_TemplateName</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Driver License Policy EmailTemplate</shortDescription>
+        <value>New_Policy_Purchase_DriverLicense</value>
+    </labels>
+    <labels>
+        <fullName>Northbound_New_Policy_Purchase_TemplateName</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Northbound Policy EmailTemplate</shortDescription>
+        <value>New_Policy_Purchase_Northbound_New</value>
+    </labels>
+    <labels>
+        <fullName>New_Policy_Purchase_TemplateName</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>New Policy EmailTemplate</shortDescription>
+        <value>New_Policy_Purchase</value>
+    </labels>
+    <labels>
+        <fullName>Watercraft_New_Policy_Purchase_TemplateName</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Watercraft Policy EmailTemplate</shortDescription>
+        <value>New_Policy_Purchase_Watercraft</value>
+    </labels>
+</CustomLabels>

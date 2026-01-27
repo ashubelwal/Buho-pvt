@@ -88,7 +88,7 @@ public without sharing class PolicyEditRenewUtils {
             List<Vehicle__c> vehicles = new List<Vehicle__c>();
             vehicles = [Select Id, Name, Vin__c, Registered_Country__c, Registered_State__c, Registered_Plate__c, Is_Lienholder__c, Lienholder_City__c, Lienholder_Country__c, Lienholder_Fax__c,
             Lienholder_name__c, Lienholder_Phone__c, Lienholder_Postal_Code__c, Lienholder_State__c, Lienholder_Street__c, Lienholder_Street_2__c, Company_Name__c, Company_Country__c, Company_Zip__c,Value__c,
-            Company_State__c, Company_City__c, Company_Address__c, Company_Phone__c, Is_vehicle_owned_by_a_company_or_rented__c,Vehicle_Type__c,Make__c,Model__c,Year__c, Electric_Hybrid__c
+            Company_State__c, Company_City__c, Company_Address__c, Company_Phone__c,Is_the_vehicle_registered_to_a_business__c, Is_vehicle_owned_by_a_company_or_rented__c,Vehicle_Type__c,Make__c,Model__c,Year__c, Electric_Hybrid__c
             from Vehicle__c 
             Where Id =:vehicleId LIMIT 1];
             System.debug('vehicles--->'+vehicles);
@@ -216,6 +216,17 @@ public without sharing class PolicyEditRenewUtils {
                     Vehicle__c vehicleRecord;
                     if (!String.isEmpty(vehicleData)) {
                         vehicleRecord = (Vehicle__c) JSON.deserialize(vehicleData, Vehicle__c.class);
+                        if (!String.isEmpty(vehicleRecord.Company_Name__c) && vehicleRecord.Is_vehicle_owned_by_a_company_or_rented__c == true) {
+                            vehicleRecord.Vehicle_Owner_Name__c = '';
+                            vehicleRecord.Vehicle_Owner_Phone__c = '';
+                            vehicleRecord.Vehicle_Owner_Address__c = '';
+                            vehicleRecord.Vehicle_Owner_Driver_License__c = '';
+                            vehicleRecord.Vehicle_Owner_Driver_License_State__c = '';
+                            vehicleRecord.Vehicle_Owner_City__c = '';
+                            vehicleRecord.Vehicle_Owner_State__c = '';
+                            vehicleRecord.Vehicle_Owner_Postal_Code__c = '';
+                            vehicleRecord.Vehicle_Owner_Country__c = '';
+                        }
                         upsert vehicleRecord;
                     } else {
                         // return error -> Vehicle record missing
@@ -234,7 +245,55 @@ public without sharing class PolicyEditRenewUtils {
                     } else {
                         // return error -> Driver record missing
                     }
-                    
+                    try {
+                        if (String.isNotBlank(vehicleData) && !String.isEmpty(DriverData)) {
+                            List<Driver__c> allDrivers = (List<Driver__c>) JSON.deserialize(DriverData, List<Driver__c>.class);
+
+                            System.debug('All drivers@@###' + allDrivers);
+
+                            // Filter drivers by Driver_Type__c values
+                            List<Driver__c> filteredDrivers = new List<Driver__c>();
+                            for (Driver__c d : allDrivers) {
+                                // You can adjust this condition as needed
+                                String driverType = d.Driver_Type__c.toLowerCase();
+                                    if (driverType == 'true' || driverType == 'owner' || driverType == 'co-owner' || driverType == 'owner & driver') {
+                                        filteredDrivers.add(d);
+                                    }
+                            }
+
+                            System.debug('Filtered drivers@@###' + filteredDrivers);
+
+                            if (!filteredDrivers.isEmpty()) {
+                                Driver__c ownerDriver = filteredDrivers[0];
+                                vehicleRecord.Vehicle_Owner_Name__c = ownerDriver.First_Name__c + ' ' + ownerDriver.Last_Name__c;
+                                vehicleRecord.Vehicle_Owner_Phone__c = ownerDriver.Phone__c;
+                                vehicleRecord.Vehicle_Owner_Address__c = ownerDriver.Address__c;
+                                vehicleRecord.Vehicle_Owner_Driver_License__c = ownerDriver.license_number__c;
+                                vehicleRecord.Vehicle_Owner_Driver_License_State__c = ownerDriver.License_state__c;
+                                vehicleRecord.Vehicle_Owner_City__c = ownerDriver.City__c;
+                                vehicleRecord.Vehicle_Owner_State__c = ownerDriver.State_Province__c;
+                                vehicleRecord.Vehicle_Owner_Postal_Code__c = ownerDriver.Postal_Code__c;
+                                vehicleRecord.Vehicle_Owner_Country__c = ownerDriver.Country__c;
+                                vehicleRecord.Is_the_vehicle_registered_to_a_business__c = false;
+                                vehicleRecord.Company_Name__c = '';
+                                vehicleRecord.Company_Phone__c = '';
+                                vehicleRecord.Tax_ID__c = '';
+                                vehicleRecord.Company_Country__c = '';
+                                vehicleRecord.Company_Address__c = '';
+                                vehicleRecord.Company_Zip__c = '';
+                                vehicleRecord.Company_State__c = '';
+                                vehicleRecord.Company_City__c = '';
+                                update vehicleRecord;
+                                System.debug('vehicleRecord@@###' + vehicleRecord);
+
+                                responseMap.put('status', 'success');
+                               // responseMap.put('vehicleData', vehicleRecord);
+                            } 
+                        } 
+                    } catch (Exception e) {
+                        responseMap.put('status', 'error');
+                        responseMap.put('message', e.getMessage());
+                    }
                     // Upsert the Towed Unit Record
                     List<Towed_Unit__c> towedUnitList;
                     if (!String.isEmpty(towedUnitData)) {
@@ -523,6 +582,17 @@ public without sharing class PolicyEditRenewUtils {
                     Vehicle__c vehicleRecord;
                     if (!String.isEmpty(vehicleData)) {
                         vehicleRecord = (Vehicle__c) JSON.deserialize(vehicleData, Vehicle__c.class);
+                        if (!String.isEmpty(vehicleRecord.Company_Name__c) && vehicleRecord.Is_vehicle_owned_by_a_company_or_rented__c == true) {
+                            vehicleRecord.Vehicle_Owner_Name__c = '';
+                            vehicleRecord.Vehicle_Owner_Phone__c = '';
+                            vehicleRecord.Vehicle_Owner_Address__c = '';
+                            vehicleRecord.Vehicle_Owner_Driver_License__c = '';
+                            vehicleRecord.Vehicle_Owner_Driver_License_State__c = '';
+                            vehicleRecord.Vehicle_Owner_City__c = '';
+                            vehicleRecord.Vehicle_Owner_State__c = '';
+                            vehicleRecord.Vehicle_Owner_Postal_Code__c = '';
+                            vehicleRecord.Vehicle_Owner_Country__c = '';
+                        }
                         upsert vehicleRecord;
                     } else {
                         // return error -> Vehicle record missing
@@ -541,7 +611,55 @@ public without sharing class PolicyEditRenewUtils {
                     } else {
                         // return error -> Driver record missing
                     }
-                    
+                    try {
+                        if (String.isNotBlank(vehicleData) && !String.isEmpty(DriverData)) {
+                            List<Driver__c> allDrivers = (List<Driver__c>) JSON.deserialize(DriverData, List<Driver__c>.class);
+
+                            System.debug('All drivers@@###' + allDrivers);
+
+                            // Filter drivers by Driver_Type__c values
+                            List<Driver__c> filteredDrivers = new List<Driver__c>();
+                            for (Driver__c d : allDrivers) {
+                                // You can adjust this condition as needed
+                                String driverType = d.Driver_Type__c.toLowerCase();
+                                    if (driverType == 'true' || driverType == 'owner' || driverType == 'co-owner' || driverType == 'owner & driver') {
+                                        filteredDrivers.add(d);
+                                    }
+                            }
+
+                            System.debug('Filtered drivers@@###' + filteredDrivers);
+
+                            if (!filteredDrivers.isEmpty()) {
+                                Driver__c ownerDriver = filteredDrivers[0];
+                                vehicleRecord.Vehicle_Owner_Name__c = ownerDriver.First_Name__c + ' ' + ownerDriver.Last_Name__c;
+                                vehicleRecord.Vehicle_Owner_Phone__c = ownerDriver.Phone__c;
+                                vehicleRecord.Vehicle_Owner_Address__c = ownerDriver.Address__c;
+                                vehicleRecord.Vehicle_Owner_Driver_License__c = ownerDriver.license_number__c;
+                                vehicleRecord.Vehicle_Owner_Driver_License_State__c = ownerDriver.License_state__c;
+                                vehicleRecord.Vehicle_Owner_City__c = ownerDriver.City__c;
+                                vehicleRecord.Vehicle_Owner_State__c = ownerDriver.State_Province__c;
+                                vehicleRecord.Vehicle_Owner_Postal_Code__c = ownerDriver.Postal_Code__c;
+                                vehicleRecord.Vehicle_Owner_Country__c = ownerDriver.Country__c;
+                                vehicleRecord.Is_the_vehicle_registered_to_a_business__c = false;
+                                vehicleRecord.Company_Name__c = '';
+                                vehicleRecord.Company_Phone__c = '';
+                                vehicleRecord.Tax_ID__c = '';
+                                vehicleRecord.Company_Country__c = '';
+                                vehicleRecord.Company_Address__c = '';
+                                vehicleRecord.Company_Zip__c = '';
+                                vehicleRecord.Company_State__c = '';
+                                vehicleRecord.Company_City__c = '';
+                                update vehicleRecord;
+                                System.debug('vehicleRecord@@###' + vehicleRecord);
+
+                                responseMap.put('status', 'success');
+                               // responseMap.put('vehicleData', vehicleRecord);
+                            } 
+                        } 
+                    } catch (Exception e) {
+                        responseMap.put('status', 'error');
+                        responseMap.put('message', e.getMessage());
+                    }
                     // Upsert the Towed Unit Record
                     List<Towed_Unit__c> towedUnitList;
                     if (!String.isEmpty(towedUnitData)) {

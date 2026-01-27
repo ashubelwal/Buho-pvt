@@ -311,12 +311,7 @@ public without sharing class Mex_existingCustomerFlowController {
                         responseMap.put('PolicyId', String.valueOf(newPolicy.Id));
                     }
                 }
-            } 
-        } catch (Exception ex) { 
-            responseMap.put('status', 'error');
-            responseMap.put('message', ex.getMessage());
-            CustomErrorExceptionHandlerException.LogException(ex); 
-        }
+            } } catch (Exception ex) { responseMap.put('status', 'error'); responseMap.put('message', ex.getMessage()); CustomErrorExceptionHandlerException.LogException(ex); }
         return JSON.serialize(responseMap);
     }
 

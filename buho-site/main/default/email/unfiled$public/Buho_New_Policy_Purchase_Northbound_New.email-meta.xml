@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Buho_New_Policy_Purchase_Northbound_New</name>
+    <style>none</style>
+    <subject>Your BÚHO Policy – Covered in the US &amp; Canada!</subject>
+    <textOnly>Congratulations, you are covered in the United States and Canada!
+¡Felicitaciones por estar cubierto en los Estados Unidos y Canadá!
+
+Your policy is attached to this email. We recommend that you print a copy and keep it in the glove box. Having the paperwork in your glove box allows for the retrieval of important information in case you cannot provide it electronically.
+
+Su póliza se adjunta a este correo electrónico. Le recomendamos que imprima una copia y la guarde en la guantera. Tener el papeleo en la guantera permite la recuperación de información importante en caso de que usted no pueda proporcionarla electrónicamente.
+
+Thank you for your business.
+¡Gracias por su patrocinio!
+
+Charles Lundy
+Founder and CEO
+BÚHO Insurance Brokerage
+License 0E02163
+
+---
+
+BÚHO Insurance Brokerage
+Smart protection for your Mexican adventures
+
+📧 support@gobuho.com | 📞 1-800-BUHO-INS
+
+© 2024 BÚHO Insurance Brokerage. All rights reserved.
+You are receiving this email because you purchased a policy with BÚHO.</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

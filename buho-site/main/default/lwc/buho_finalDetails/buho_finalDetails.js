@@ -138,16 +138,19 @@ export default class Nc_finalDetails extends LightningElement {
     }
 
     get tripDestination() {
-        return this.termsAndAgreement.What_is_your_trip_destination_in_US__c != undefined ? this.termsAndAgreement.What_is_your_trip_destination_in_US__c : '';
+        return this.termsAndAgreement.What_is_your_trip_destination_in_US__c ?? '';
     }
+    
     get tripPurpose() {
-        return this.termsAndAgreement.What_is_the_purpose_of_trip__c != undefined ? this.termsAndAgreement.What_is_the_purpose_of_trip__c : '';
+        return this.termsAndAgreement.What_is_the_purpose_of_trip__c ?? '';
     }
+    
     get hearAboutUs() {
-        return this.termsAndAgreement.How_did_you_hear_about_us__c != undefined ? this.termsAndAgreement.How_did_you_hear_about_us__c : '';
+        return this.termsAndAgreement.How_did_you_hear_about_us__c ?? '';
     }
+    
     get hearAboutUsOther() {
-        return this.termsAndAgreement.How_did_you_hear_about_us_Other__c != undefined ? this.termsAndAgreement.How_did_you_hear_about_us_Other__c : '';
+        return this.termsAndAgreement.How_did_you_hear_about_us_Other__c ?? '';
     }
 
     // get Newsletter() {
@@ -358,13 +361,15 @@ export default class Nc_finalDetails extends LightningElement {
 
     isInputValid = () => {
         let isValid = true;
-        let inputFields = this.template.querySelectorAll('.Validation');
+        let inputFields = this.template.querySelectorAll('c-buho_input');
+        console.log('@@@inputFields',inputFields);
         inputFields.forEach(inputField => {
             if (!inputField.checkValidity()) {
                 inputField.reportValidity();
-                isValid = false;
+                isValid = false;                                                                                                                                                                                       
             }
         });
+        console.log('isValid==',isValid);
         return isValid;
     }
 
@@ -412,7 +417,7 @@ export default class Nc_finalDetails extends LightningElement {
     }
 
     @api validate() {
-        console.log('Valid method in jS of Final Details called');
+        console.log('Valid method in jS of Final Details called checkin buho');
         return this.isInputValid();
     }
 

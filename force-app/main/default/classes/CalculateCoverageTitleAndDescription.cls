@@ -491,7 +491,7 @@ public class CalculateCoverageTitleAndDescription {
             return responseMap;
         }catch(Exception e){
             System.debug('Exception at:'+e.getLineNumber()+e.getMessage());
-            throw new AuraHandledException('Error at ' + e.getLineNumber() +' : errormessage: ' +e.getMessage());
+            throw new AuraHandledException('Error' + e.getLineNumber()+e.getMessage());
         }
     }
     

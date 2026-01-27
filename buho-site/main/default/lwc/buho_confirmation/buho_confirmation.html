@@ -1,0 +1,122 @@
+<template>
+    <!-- Buho Theme Confirmation Component -->
+    <div class="buho-container notranslate">
+        <div class="wizard-main">
+            <div class="wizard-container">
+                
+                <!-- Main Completion Card -->
+                <div class="user-details-card" style="text-align: center; padding: 48px 32px;">
+                    <div class="card-body-section">
+                        <!-- Success Icon -->
+                        <div style="margin-bottom: 24px;">
+                            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto; display: block;">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </div>
+
+                        <!-- Completion Message -->
+                        <h1 style="font-size: 38px; font-weight: 700; color: #10B981; margin-bottom: 16px; line-height: 1.3;">
+                            {label.complete}
+                        </h1>
+                        
+                        <h3 style="font-size: 20px; font-weight: 600; color: var(--primary-blue); margin-bottom: 12px;">
+                            {label.policy}: <span style="color: var(--accent-pink);">{policyData}</span>
+                        </h3>
+                        
+                        <p style="font-size: 15px; color: var(--gray-text); margin-bottom: 32px;">
+                            {label.theinsurancepacket}: <strong>{policyEmail}</strong>
+                        </p>
+
+                        <!-- Important Notice -->
+                        <div style="background-color: #FEF2F5; border-left: 4px solid var(--accent-pink); padding: 20px; border-radius: 8px; margin: 32px 0; text-align: left;">
+                            <h3 style="font-size: 18px; font-weight: 600; color: var(--primary-blue); margin-bottom: 12px;">
+                                {label.important}
+                            </h3>
+                            <p style="font-size: 15px; color: #1F2937; line-height: 1.6; margin: 0;">
+                                {label.youraccountisready} 
+                                <mark style="background-color: #FEF3C7; padding: 2px 6px; border-radius: 4px; font-weight: 600;">
+                                    {label.checkyouremail}
+                                </mark>
+                            </p>
+                        </div>
+
+                        <!-- CTA Button -->
+                        <!--button 
+                            class="btn-primary"
+                            onclick={gotohome}
+                            style="margin-top: 24px; padding: 16px 48px; font-size: 16px;">
+                            {label.MYMEXINSURANCE}&trade;
+                        </button-->
+                        <button type="button" 
+                                class="btn btn-primary btn-continue" 
+                                onclick={handleContinue}>
+                            Continue
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Insurance Category Cards -->
+                <div class="row g-4" style="margin-top: 48px;">
+                    <!-- Auto Insurance Card -->
+                    <div class="col-12 col-md-4">
+                        <div class="user-details-card" style="height: 100%; text-align: center; transition: all 0.3s ease;">
+                            <div class="card-body-section">
+                                <a href="https://www.mexinsurance.com/auto-insurance/" target="_blank" style="text-decoration: none; color: inherit;">
+                                    <div style="margin-bottom: 16px;">
+                                        <img src={roundCar} alt={label.autoinsurance} style="width: 80px; height: 80px; object-fit: contain;" />
+                                    </div>
+                                    <h4 style="font-size: 18px; font-weight: 600; color: var(--primary-blue); margin-bottom: 12px;">
+                                        {label.autoinsurance}
+                                    </h4>
+                                    <p style="font-size: 14px; color: var(--gray-text); line-height: 1.6; margin: 0;">
+                                        {label.grabyourvehicle}
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Home Insurance Card -->
+                    <div class="col-12 col-md-4">
+                        <div class="user-details-card" style="height: 100%; text-align: center; transition: all 0.3s ease;">
+                            <div class="card-body-section">
+                                <a href="https://www.mexinsurance.com/homeowners-insurance/" target="_blank" style="text-decoration: none; color: inherit;">
+                                    <div style="margin-bottom: 16px;">
+                                        <img src={roundHouse} alt={label.homeinnsuranceformex} style="width: 80px; height: 80px; object-fit: contain;" />
+                                    </div>
+                                    <h4 style="font-size: 18px; font-weight: 600; color: var(--primary-blue); margin-bottom: 12px;">
+                                        {label.homeinnsuranceformex}
+                                    </h4>
+                                    <p style="font-size: 14px; color: var(--gray-text); line-height: 1.6; margin: 0;">
+                                        {label.confirmthedates}
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Medical Insurance Card -->
+                    <div class="col-12 col-md-4">
+                        <div class="user-details-card" style="height: 100%; text-align: center; transition: all 0.3s ease;">
+                            <div class="card-body-section">
+                                <a href="https://www.mexinsurance.com/medical-health-care-in-mexico/" target="_blank" style="text-decoration: none; color: inherit;">
+                                    <div style="margin-bottom: 16px;">
+                                        <img src={roundSteering} alt={label.medicalinsurance} style="width: 80px; height: 80px; object-fit: contain;" />
+                                    </div>
+                                    <h4 style="font-size: 18px; font-weight: 600; color: var(--primary-blue); margin-bottom: 12px;">
+                                        {label.medicalinsurance}
+                                    </h4>
+                                    <p style="font-size: 14px; color: var(--gray-text); line-height: 1.6; margin: 0;">
+                                        {label.downloadyour}
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>

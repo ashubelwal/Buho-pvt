@@ -243,13 +243,10 @@ public with sharing class PaymentFormController {
     @AuraEnabled
     public static String getPaymentInfo(List<String> quoteIds) {
         ContactService.PaymentInfo paymentInfo;
-        try {
+       
             paymentInfo = ContactService.getPaymentInfo(quoteIds);
             system.debug('paymentInfo : '+ paymentInfo);
-        } catch (Exception ex) {
-            CustomErrorExceptionHandlerException.LogException(ex);
-            throw new AuraHandledException('An error occurred during retrieving credit card information');
-        }
+        
         return JSON.serialize(paymentInfo);
     }
 

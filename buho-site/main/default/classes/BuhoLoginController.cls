@@ -205,4 +205,21 @@ public without sharing class BuhoLoginController {
 
         return siteDetails;
     }
+
+    @AuraEnabled
+    public static void updateLeadStep(Id leadId, Integer step) {
+        if(leadId != null) {
+            update new Lead(Id = leadId, Current_Step__c = step);
+        }
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static Id getAgencyId(){
+        Contact objContact = [
+                            SELECT  Id 
+                            FROM Contact 
+                            WHERE Name = 'Buho Insurance' AND RecordType.Name = 'Agency RT' 
+                            LIMIT 1];
+        return objContact.Id;
+    }
 }

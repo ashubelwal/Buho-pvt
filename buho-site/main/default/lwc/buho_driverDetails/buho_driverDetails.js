@@ -3,7 +3,9 @@ import getCountries from '@salesforce/apex/FinalizeVehicleDetailsFlow.getCountri
 import getStatesByCountry from '@salesforce/apex/FinalizeVehicleDetailsFlow.getStatesByCountry';
 import saveDriverDetails from '@salesforce/apex/DriverDetailsFlow.saveDriverDetails';
 import updateQuoteRecordData from '@salesforce/apex/NcExistingCustomerFlow.updateQuoteRecordData';
-
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { loadScript, loadStyle } from 'lightning/platformResourceLoader';
+import BUHO_ASSETS from '@salesforce/resourceUrl/buhoAssets';
 export default class Buho_driverDetails extends LightningElement {
     @api payload;
     ISDEBUG = true;
@@ -229,8 +231,8 @@ export default class Buho_driverDetails extends LightningElement {
 
         // Check for duplicate license number
         if (this.drivers.length > 0) {
-            const isDuplicate = this.drivers.some(driver => 
-                driver.license_number__c === this.driver.license_number__c 
+            const isDuplicate = this.drivers.some(driver =>
+                driver.license_number__c === this.driver.license_number__c
             );
             if (isDuplicate) {
                 this.dispatchEvent(new CustomEvent('toastevent', {
@@ -314,14 +316,14 @@ export default class Buho_driverDetails extends LightningElement {
         if (!dateStr) return null;
         const parts = dateStr.includes('/') ? dateStr.split('/') : dateStr.split('-');
         if (parts.length !== 3) return null;
-        
+
         let year, month, day;
         if (dateStr.includes('/')) {
             [month, day, year] = parts;
         } else {
             [year, month, day] = parts;
         }
-        
+
         return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
     }
 
@@ -378,43 +380,69 @@ export default class Buho_driverDetails extends LightningElement {
     }
 
     renderedCallback() {
-        // Initialize Flatpickr for Date of Birth
-        if (!this.flag.flatpickrInitialized && typeof flatpickr !== 'undefined') {
-            this.initializeFlatpickr();
-        }
-    }
 
+        // Initialize Flatpickr for Date of Birth
+        if (!this.flag.flatpickrInitialized) {
+            Promise.all([
+                loadScript(this, BUHO_ASSETS + '/js/flatpickr.js')
+            ]).then(() => {
+                console.log('script loaded initializing js');
+                this.initializeFlatpickr();
+            }).catch(error => {
+                console.error('Flatpickr failed to load', error);
+            });
+
+        }
+
+
+    }
     initializeFlatpickr() {
         const dobInput = this.template.querySelector('.dobDate');
-
+    
         if (!dobInput || typeof flatpickr === 'undefined') {
             return;
         }
-
+    
         try {
             const maxDate = new Date();
             maxDate.setFullYear(maxDate.getFullYear() - 16);
-
-            const dobObj = this.driver.Dob__c ? this.parseDateAsLocal(this.driver.Dob__c) : maxDate;
-
+    
+            // Fixed: Proper date parsing that handles Salesforce date format
+            let dobObj = maxDate; // Default to maxDate
+            
+            if (this.driver.Dob__c) {
+                // Parse the date string correctly (assuming format: YYYY-MM-DD from Salesforce)
+                const parts = this.driver.Dob__c.split('-');
+                if (parts.length === 3) {
+                    // Create date in local timezone: new Date(year, monthIndex, day)
+                    dobObj = new Date(
+                        parseInt(parts[0], 10),  // year
+                        parseInt(parts[1], 10) - 1,  // month (0-indexed)
+                        parseInt(parts[2], 10)   // day
+                    );
+                }
+            }
+            
+            console.log('dobObj', dobObj);
+            console.log('Original Dob__c', this.driver.Dob__c);
+    
             this.flatpickrInstance = flatpickr(dobInput, {
                 dateFormat: 'm/d/Y',
                 maxDate: maxDate,
                 defaultDate: dobObj,
                 onChange: (selectedDates, dateStr, instance) => {
                     if (selectedDates[0]) {
-                        const dob = new Date(selectedDates[0]);
+                        const dob = selectedDates[0];
                         this.driver.Dob__c = this.formatDateForApi(dob);
                     }
                 }
             });
-
+    
             this.flag.flatpickrInitialized = true;
         } catch (error) {
             console.error('DD Error initializing Flatpickr:', error);
         }
     }
-
     // Continue
     handleContinue() {
         // Dispatch event to parent (wizard) to move to next step
@@ -428,16 +456,16 @@ export default class Buho_driverDetails extends LightningElement {
     // Save Driver Data
     async handleDriverDataSave() {
         console.log('DD handleDriverDataSave called');
-        
+
         if (!this.currentUserType) {
             // New user - save via saveDriverDetails
             try {
-                console.log('DD Saving driver details for new user',this.payload);
+                console.log('DD Saving driver details for new user', this.payload);
                 let saveResponse = await saveDriverDetails({ strLeadDetails: JSON.stringify(this.payload) });
-                console.log('DD Driver details saved response',saveResponse);
+                console.log('DD Driver details saved response', saveResponse);
             } catch (err) {
                 console.log('DD ERROR: Getting error while saving the Driver Data: ', JSON.stringify(err));
-                this.dispatchEvent(new CustomEvent('toastevent', { 
+                this.dispatchEvent(new CustomEvent('toastevent', {
                     detail: { variant: 'error', title: 'Error', message: 'Failed to save driver details: ' + err.message },
                     bubbles: true,
                     composed: true
@@ -470,7 +498,7 @@ export default class Buho_driverDetails extends LightningElement {
 
                 if (updateVehicleResp.status == 'success') {
                     console.log('DD Quote record updated successfully');
-                    
+
                     // Update drivers with the response
                     if (updateVehicleResp && Array.isArray(updateVehicleResp.DriversData)) {
                         const normalizedDrivers = updateVehicleResp.DriversData.map(driver => {
@@ -480,14 +508,14 @@ export default class Buho_driverDetails extends LightningElement {
                                 Driver_Type__c: type === 'true' || type === 'owner'
                             };
                         });
-                        
+
                         // Update our local drivers array with saved IDs
                         this.drivers = normalizedDrivers.filter(d => !d.Driver_Type__c);
                     }
                 }
             } catch (err) {
                 console.error('DD Error updating quote record data', err);
-                this.dispatchEvent(new CustomEvent('toastevent', { 
+                this.dispatchEvent(new CustomEvent('toastevent', {
                     detail: { variant: 'error', title: 'Error', message: 'Failed to update driver details: ' + err.message },
                     bubbles: true,
                     composed: true
@@ -514,7 +542,7 @@ export default class Buho_driverDetails extends LightningElement {
         if (vehicleDetails.hasOwnProperty('licensePlate')) {
             processedData['Registered_Plate__c'] = vehicleDetails.licensePlate;
         }
-        
+
         return processedData;
     }
 
@@ -529,7 +557,7 @@ export default class Buho_driverDetails extends LightningElement {
     @api
     async getData() {
         console.log('DD getData() called');
-        
+
         // Get existing driver details from payload
         const existingDriverDetails = this.payload?.find(item => item?.driverDetails)?.driverDetails;
 

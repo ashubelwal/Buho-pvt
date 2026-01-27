@@ -281,7 +281,7 @@ public with sharing class AuthorizeNetClient {
     private static HttpRequest buildRequest() {
         HttpRequest request = new HttpRequest();
         system.debug('CA log request 1 '+ request);
-        request.setEndpoint('callout:authorize_net');
+        request.setEndpoint('callout:authorize_dot_net');
         request.setMethod('POST');
         system.debug('CA log request 2 '+ request);
         return request;
@@ -290,11 +290,11 @@ public with sharing class AuthorizeNetClient {
     private static HttpRequest buildRequest(String email) {
         HttpRequest request = new HttpRequest();
         if (String.isNotBlank(email) && email == 'tech@mexinsurance.com') {
-            request.setEndpoint('callout:authorize_net');
+            request.setEndpoint('callout:authorize_dot_net');
             request.setMethod('POST');
         } else {
             system.debug('CA log request 1 '+ request);
-            request.setEndpoint('callout:authorize_net');
+            request.setEndpoint('callout:authorize_dot_net');
             request.setMethod('POST');
             system.debug('CA log request 2 '+ request);
         }

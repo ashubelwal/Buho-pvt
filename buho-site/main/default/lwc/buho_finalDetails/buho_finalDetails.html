@@ -5,7 +5,7 @@
         </div>
          <!-- Trip Details Section -->
          <div class="row g-4" style="margin-top: 24px;">
-            <div class="col-md-6">
+            <div class="col-md-6">   
                 <c-buho_input 
                     type="combobox" 
                     name="What_is_your_trip_destination_in_US__c"
@@ -13,7 +13,8 @@
                     label={label.WhatisyourTripDestination} 
                     value={tripDestination}
                     options={usDestinations} 
-                    onchange={handleChange}>
+                    onchange={handleChange}
+                    required="true">
                 </c-buho_input>
             </div>
             <div class="col-md-6">
@@ -24,7 +25,8 @@
                     label={label.Whatisthetrippurposetrip} 
                     value={tripPurpose}
                     options={tripPurposes} 
-                    onchange={handleChange}>
+                    onchange={handleChange}
+                    required="true">
                 </c-buho_input>
             </div>
             <div class="col-md-6">
@@ -35,7 +37,8 @@
                     label={label.Howdidyouhearaboutus} 
                     value={hearAboutUs}
                     options={aboutusOption} 
-                    onchange={handleChange}>
+                    onchange={handleChange}
+                    required="true">
                 </c-buho_input>
             </div>
              <!-- Other Option Textarea -->
@@ -48,7 +51,8 @@
                         value={hearAboutUsOther}
                         textarea-style="height: 180px;"
                         max-length="350"
-                        onchange={handleChange}>
+                        onchange={handleChange}
+                        required="true">
                     </c-buho_input>
                 </div>
             </template>
@@ -63,7 +67,8 @@
                     label="Term"
                     name="Term"
                     value={termDateRange}
-                    disabled>
+                    disabled
+                    required="true">
                 </c-buho_input>
             </div>
             <div class="col-md-6">
@@ -73,7 +78,8 @@
                     label="Coverage"
                     name="Coverage"
                     value={coverageValue}
-                    disabled>
+                    disabled
+                    required="true">
                 </c-buho_input>
             </div>
             <div class="col-md-6">
@@ -83,7 +89,8 @@
                     label="Territory"
                     name="Territory"
                     value={territoryValue}
-                    disabled>
+                    disabled
+                    required="true">
                 </c-buho_input>
             </div>
             <div class="col-md-6">
@@ -93,7 +100,8 @@
                     label="Company"
                     name="Company"
                     value={companyValue}
-                    disabled>
+                    disabled
+                    required="true">
                 </c-buho_input>
             </div>
             <div class="col-md-6">
@@ -103,7 +111,8 @@
                     label="Premium And Fees"
                     name="Premium_And_Fees"
                     value={premiumAndFeesValue}
-                    disabled>
+                    disabled
+                    required="true">
                 </c-buho_input>
             </div>
             <!--div class="col-md-6">
@@ -253,7 +262,8 @@
                     type="checkbox"
                     name="Terms_of_Purchase_Confirmed__c"
                     checked={TermsOfPurchaseConfirmed}
-                    onchange={handleChange}>
+                    onchange={handleChange}
+                    required="true">
                 </c-buho_input>
                 <label class="terms-link" onclick={handleTermsOfPurchaseClick}>
                     {label.Termsofpurchase}
@@ -264,7 +274,8 @@
                     type="checkbox"
                     name="Terms_of_Cancellation_Confirmed__c"
                     checked={TermsOfPurchaseCancellation}
-                    onchange={handleChange}>
+                    onchange={handleChange}
+                    required="true">
                 </c-buho_input>
                 <label class="terms-link" onclick={handleTermsOfCancellationClick}>
                     {label.Termsofcancellation}

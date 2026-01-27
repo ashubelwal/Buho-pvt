@@ -9,10 +9,11 @@ public class Mex_Insurance_Calloututility {
         map<String,object> ldObjectMap = new map<String,Object>();
         ldObjectMap.put('policyIdset', policyIdset);
         ldObjectMap.put('add_attachment', add_attachment);
-system.debug('ldObjectMap-->'+ldObjectMap);
+        system.debug('ldObjectMap-->'+ldObjectMap);
         
         HttpResponse response = make_request(endPoint, 'POST', JSON.serialize(ldObjectMap) );
         system.debug('sendEmail  response--->'+ response);
+        system.debug('sendEmail  response--->'+ response.getBody());
     }
 
     public static String getLeadId( map<String,object> ldObjectMap ){

@@ -598,6 +598,10 @@ export default class Payment extends NavigationMixin(LightningElement) {
         }
 
         // Dispatch event to notify parent
+        this.handleProceedToPayment();
+    }
+
+    handleProceedToPayment() {
         this.dispatchEvent(new CustomEvent('changescreen', {
             detail: { direction: 'next' },
             bubbles: true,

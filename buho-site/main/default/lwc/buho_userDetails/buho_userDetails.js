@@ -28,6 +28,7 @@ export default class Buho_userDetails extends LightningElement {
     @api baseUrl;
     @api startUrl;
     @api isUserLoggedIn;
+    @api agencyId;
     userDetails = {};
 
 
@@ -206,7 +207,7 @@ export default class Buho_userDetails extends LightningElement {
         this.flag.isInActiveCustomer = false;
         this.showActiveCustomerMessage = false;
         this.showPreviousInquiryModal = false;
-
+        
         try {
             let data = this.paramData?.Email ? this.paramData : this.inputValues;
             console.log('BUD OUTPUT : data', JSON.stringify(data));
@@ -238,6 +239,7 @@ export default class Buho_userDetails extends LightningElement {
 
             // Case 1: Lead exists (previous inquiry)
             if (this.returnLeadValue?.LeadInfo) {
+                
                 transformedData = createTransformedData?.(this.returnLeadValue) || [];
                 this.payload = JSON.parse(JSON.stringify(transformedData));
 
@@ -273,6 +275,7 @@ export default class Buho_userDetails extends LightningElement {
                 } else {
                     this.dispatchEvent(new CustomEvent('flagupdate', { detail: false }));
                 }
+                this.setUrlParam('email', this.inputValues.Email);
 
             }
             // Case 2: User exists (active or inactive)
@@ -349,6 +352,7 @@ export default class Buho_userDetails extends LightningElement {
                 } else {
                     this.dispatchEvent(new CustomEvent('flagupdate', { detail: false }));
                 }
+                this.setUrlParam('email', this.inputValues.Email);
 
                 return;
             }
@@ -373,6 +377,12 @@ export default class Buho_userDetails extends LightningElement {
                 this.dispatchEvent(new CustomEvent('flagupdate', { detail: false }));
             }
         }
+    }
+
+    setUrlParam(key, value) {
+        const url = new URL(window.location.href);
+        url.searchParams.set(key, value);
+        window.history.replaceState({}, '', url.toString());
     }
 
     // Alias for handleEmailInput to match the blur event
@@ -680,11 +690,14 @@ export default class Buho_userDetails extends LightningElement {
         this.inputValues = {
             ...this.inputValues,
             Company: 'Vehicle Insurance',
+            Agency__c: this.agencyId,
+            Source__c: 'GoBuho Portal',
+            LeadSource: 'GoBuho'
         }
 
         // Add if there is some data validation 
         await this.checkData();
-
+        
         //Save data in the backend
         await saveLeadUserDetails({ strLeadDetails: JSON.stringify(this.inputValues) })
             .then((result) => {

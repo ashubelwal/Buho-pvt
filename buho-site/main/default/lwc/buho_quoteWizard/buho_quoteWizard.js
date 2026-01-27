@@ -5,6 +5,8 @@ import { createTransformedData } from 'c/buho_utils';
 import checkalreadyExistUserAction from '@salesforce/apex/CustomerQuoteFlow.checkalreadyExistUserAction';
 import checkCommunityUserAndFetchDetails from '@salesforce/apex/NcExistingCustomerFlow.checkCommunityUserAndFetchDetails';
 import getCurrentSiteDetails from '@salesforce/apex/BuhoLoginController.getCurrentSiteDetails';
+import updateLeadStep from '@salesforce/apex/BuhoLoginController.updateLeadStep';
+import getAgencyId from '@salesforce/apex/BuhoLoginController.getAgencyId';
 import USER_ID from '@salesforce/user/Id';
 
 export default class Buho_quoteWizard extends LightningElement {
@@ -17,7 +19,8 @@ export default class Buho_quoteWizard extends LightningElement {
         hideNavigation: true // Navigation is inside each step component
     };
     @track currentSiteData;
-
+    @track agencyId;
+    leadId;
     stylesLoaded = false; // Flag to prevent multiple CSS loads
 
 
@@ -36,6 +39,8 @@ export default class Buho_quoteWizard extends LightningElement {
         { component: "c/buho_ownerDetails", name: "driverDetails" },
         { component: "c/buho_finalDetails", name: "finalDetails" },
         { component: "c/buho_payment", name: "payment" },
+        { component: "c/buho_confirmation", name: "confirmation" },
+        { component: "c/buho_feedback", name: "feedback" },
     ];
     // Total steps in the wizard
     get totalSteps() {
@@ -45,6 +50,10 @@ export default class Buho_quoteWizard extends LightningElement {
     // Asset URLs
     get logoUrl() {
         return `${buhoAssets}/images/Logo.svg`;
+    }
+
+    get loadingIconUrl() {
+        return `${buhoAssets}/images/buho_loading_icon-botheye.gif`;
     }
 
     get pathPrefix() {
@@ -58,6 +67,10 @@ export default class Buho_quoteWizard extends LightningElement {
 
     get isLastStep() {
         return this.currentStep === this.steps.length;
+    }
+
+    get showPrgressBar() {
+        return !this.isFirstStep && this.currentStep < 13
     }
 
     // Generate progress segments
@@ -92,14 +105,28 @@ export default class Buho_quoteWizard extends LightningElement {
         }
     }
 
+    @wire(getAgencyId)
+    wiredAgencyId({ data, error }) {
+        if (data) {
+            this.agencyId = data;
+            this.error = undefined;
+            console.log('agencyId', JSON.stringify(data));
+        } else if (error) {
+            this.error = error;
+            this.currentSiteData = undefined;
+            console.error('Error:', error);
+        }
+    }
+
 
     // Lifecycle hook: triggered when component is inserted into the DOM
     async connectedCallback() {
         console.log('connected callback of wizard called');
         const urlParams = new URLSearchParams(window.location.search);
+        const quoteId = urlParams.has('quote') ?? '';
         try {
             const data = await checkCommunityUserAndFetchDetails();
-            console.log('community user data',data)
+            console.log('community user data', data)
             const parseData = JSON.parse(data);
 
             if (parseData.status == 'success' && parseData.userType) {
@@ -115,15 +142,16 @@ export default class Buho_quoteWizard extends LightningElement {
 
                 console.log('BQW Payload after data copy', this.payload);
 
-
             } else if (urlParams.has('email')) {
                 const result = await checkalreadyExistUserAction({
-                    'leadDataItem': JSON.stringify({ Email: urlParams.get('email') })
+                    'leadDataItem': JSON.stringify({ Email: decodeURIComponent(urlParams.get('email')) })
                 }).catch(err => {
                     console.error('API Error:', err);
                     throw new Error('API call failed');
                 });
                 if (result?.LeadInfo) {
+                    this.leadId = result?.LeadInfo?.Id;
+                    console.log('onload lead result', result);
                     const transformedData = createTransformedData?.(result) || [];
                     this.payload = JSON.parse(JSON.stringify(transformedData));
                     console.log('@@@payload wizard', this.payload);
@@ -141,7 +169,7 @@ export default class Buho_quoteWizard extends LightningElement {
             this.childLoaded = true;
             console.error('BQW Error in connectedCallback:', err.message);
         }
-        console.log('is user already loggedin',USER_ID);
+        console.log('is user already loggedin', USER_ID);
     }
 
 
@@ -237,6 +265,16 @@ export default class Buho_quoteWizard extends LightningElement {
                     this.componentConstructor = ctor;
                     break;
                 }
+                case 'c/buho_confirmation': {
+                    const { default: ctor } = await import("c/buho_confirmation");
+                    this.componentConstructor = ctor;
+                    break;
+                }
+                case 'c/buho_feedback': {
+                    const { default: ctor } = await import("c/buho_feedback");
+                    this.componentConstructor = ctor;
+                    break;
+                }
                 default:
                     console.error('BQW Component not found:', component);
                     break;
@@ -282,11 +320,7 @@ export default class Buho_quoteWizard extends LightningElement {
                 // Move to next step or handle completion
                 if (!this.isLastStep) {
                     this.currentStep++;
-                    const { component } = this.steps[this.currentStep - 1];
-                    if ((component === 'c/nc_towDetails' && !this.payload.find(item => item.vehicleDetails)?.vehicleDetails?.isTowing)
-                        || (component === 'c/nc_lienholderInformation' && !this.payload.find(item => item.finalizeVehicleDetails)?.finalizeVehicleDetails?.Is_Lienholder__c)) {
-                        this.currentStep++;
-                    }
+                    this.isSkipComponent(true);
                     await this.loadComponent();
                 } else {
                     // Last step - handle quote submission
@@ -294,6 +328,7 @@ export default class Buho_quoteWizard extends LightningElement {
                 }
             } else if (direction === 'previous' && !this.isFirstStep) {
                 this.currentStep--;
+                this.isSkipComponent(false);
                 await this.loadComponent();
             }
             console.log('@@@payload ', this.payload);
@@ -304,10 +339,34 @@ export default class Buho_quoteWizard extends LightningElement {
         this.updateUrlStep();
     }
 
-    updateUrlStep() {
+    isSkipComponent(moveNext) {
+        const { component } = this.steps[this.currentStep - 1];
+        if ((component === 'c/buho_towDetails' && this.payload.find(item => item.vehicleDetails)?.vehicleDetails?.isTowing == false)
+            || (component === 'c/buho_lienholderInformation' && !this.payload.find(item => item.finalizeVehicleDetails)?.finalizeVehicleDetails?.Is_Lienholder__c)) {
+            if (moveNext) {
+                this.currentStep++;
+            } else {
+                this.currentStep--;
+            }
+        }
+    }
+
+    async updateUrlStep() {
         const url = new URL(window.location.href);
         url.searchParams.set('step', this.currentStep);
         window.history.replaceState({}, '', url);
+        console.log('before updating step', this.leadId);
+        if (this.leadId) {
+            try {
+                const updateResult = await updateLeadStep({
+                    leadId: this.leadId,
+                    step: this.currentStep
+                });
+                console.log('@@@updateResult', updateResult);
+            } catch (err) {
+                console.error('Error updating step:', err);
+            }
+        }
     }
 
     async handleStepChange(event) {
@@ -352,19 +411,19 @@ export default class Buho_quoteWizard extends LightningElement {
             if (currentComponent && typeof currentComponent.getData === 'function') {
                 const data = await currentComponent.getData();
                 console.log('data@@@', data);
-                
+
                 // Check if data is an array
                 if (Array.isArray(data)) {
                     // Determine if this is a "payload array" or a "data array"
                     // Payload array: [{ driverDetails: {...} }, { finalizeVehicleDetails: {...} }]
                     // Data array: [{ Towed_Unit_Type__c: "...", ... }]
-                    
-                    const isPayloadArray = data.length > 0 && 
-                        typeof data[0] === 'object' && 
-                        Object.keys(data[0]).some(key => 
+
+                    const isPayloadArray = data.length > 0 &&
+                        typeof data[0] === 'object' &&
+                        Object.keys(data[0]).some(key =>
                             this.steps.some(step => step.name === key)
                         );
-                    
+
                     if (isPayloadArray) {
                         // This is a payload array (like from buho_ownerDetails) - merge it
                         this.payload = this.mergeArrayPayloads(this.payload, data);
@@ -384,6 +443,9 @@ export default class Buho_quoteWizard extends LightningElement {
                 } else {
                     // Standard handling - wrap with step name
                     const stepName = this.steps[this.currentStep - 1].name;
+                    if (!this.leadId && stepName == 'userDetails') {
+                        this.leadId = data.Id;
+                    }
                     const temp = { [stepName]: data };
                     const key = Object.keys(temp)[0];
                     const existingIndex = this.payload.findIndex(item => Object.keys(item)[0] === key);

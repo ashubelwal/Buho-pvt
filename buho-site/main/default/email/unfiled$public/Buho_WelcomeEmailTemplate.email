@@ -1,0 +1,161 @@
+<html>
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
+            <style type="text/css">
+                body {
+                    margin: 0;
+                    padding: 0;
+                    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+                    background-color: #F5F5F5;
+                    -webkit-font-smoothing: antialiased;
+                    -moz-osx-font-smoothing: grayscale;
+                }
+                table {
+                    border-collapse: collapse;
+                    border-spacing: 0;
+                }
+                img {
+                    border: 0;
+                    display: block;
+                    outline: none;
+                    text-decoration: none;
+                }
+                .email-container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    background-color: #ffffff;
+                }
+                @media only screen and (max-width: 600px) {
+                    .email-content {
+                        padding: 30px 20px !important;
+                    }
+                    .email-header {
+                        padding: 30px 20px !important;
+                    }
+                    .header-title {
+                        font-size: 22px !important;
+                    }
+                    .greeting {
+                        font-size: 18px !important;
+                    }
+                    .message-text {
+                        font-size: 14px !important;
+                    }
+                    .btn-primary {
+                        display: block !important;
+                        width: 100% !important;
+                        box-sizing: border-box;
+                    }
+                }
+            </style>
+        </head>
+        <body style="margin: 0; padding: 0; background-color: #F5F5F5;">
+            <!-- Main Table Wrapper -->
+            <table role="presentation" style="width: 100%; background-color: #F5F5F5;" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td style="padding: 20px 0;">
+                        <!-- Email Container -->
+                        <table role="presentation" class="email-container" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);" cellpadding="0" cellspacing="0">
+                            
+                            <!-- Header Section -->
+                            <tr>
+                                <td class="email-header" style="background: linear-gradient(135deg, #13203D  0%, #13203D  100%); padding: 40px 30px; text-align: center;">
+                                    <div>
+                                        <img src="https://mexinsurance--partialcpy.sandbox.my.site.com/Buho/webruntime/org-asset/e0b7252c3b/resource/081VD000000lA5b/images/Owl_logo_blue_bg.png" alt="BÚHO Insurance" style="width: 200px; height: auto; margin: 0 auto;" />
+                                    </div>
+                                    <h1 class="header-title" style="color: #ffffff; font-size: 28px; font-weight: 700; margin: 0; line-height: 1.3; font-family: 'Poppins', Arial, sans-serif;margin-top:-16px">
+                                        Welcome to BÚHO
+                                    </h1>
+                                </td>
+                            </tr>
+                            
+                            <!-- Content Section -->
+                            <tr>
+                                <td class="email-content" style="padding: 40px 30px; background-color: #ffffff;">
+                                    
+                                    <!-- Greeting -->
+                                    <h2 class="greeting" style="color: #1F2937; font-size: 20px; font-weight: 600; margin: 0 0 20px 0; font-family: 'Poppins', Arial, sans-serif;">
+                                        Hi {!Receiving_User.FirstName},
+                                    </h2>
+                                    
+                                    <!-- Message -->
+                                    <p class="message-text" style="color: #6B7280; font-size: 15px; line-height: 1.6; margin: 0 0 20px 0; font-family: 'Poppins', Arial, sans-serif;">
+                                        Congratulations – your account has been successfully set up with BÚHO Insurance!
+                                    </p>
+                                    
+                                    <p class="message-text" style="color: #6B7280; font-size: 15px; line-height: 1.6; margin: 0 0 20px 0; font-family: 'Poppins', Arial, sans-serif;">
+                                        To get started, please click the button below to set your password and access your account:
+                                    </p>
+                                    
+                                    <!-- CTA Button -->
+                                    <div style="text-align: center; margin: 30px 0;">
+                                        <a href="{!Community_Url}" class="btn-primary" style="display: inline-block; padding: 16px 40px; background-color: #13203D; color: #ffffff; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px; font-family: 'Poppins', Arial, sans-serif;">
+                                            Set Password to Gain Access
+                                        </a>
+                                    </div>
+                                    
+                                    <!-- Welcome Notice -->
+                                    <div style="background-color: #FEF2F8; border-left: 4px solid #E53C7B; padding: 20px; margin: 30px 0; border-radius: 8px;">
+                                        <p style="color: #1F2937; font-size: 14px; line-height: 1.6; margin: 0; font-family: 'Poppins', Arial, sans-serif;">
+                                            <strong style="color: #E53C7B;">Welcome Aboard!</strong> We're excited to provide you with comprehensive insurance coverage for your Mexican adventures. Your journey to smart protection starts here.
+                                        </p>
+                                    </div>
+                                    
+                                    <!-- Alternative Link -->
+                                    <p class="message-text" style="color: #6B7280; font-size: 13px; line-height: 1.6; margin: 20px 0 0 0; font-family: 'Poppins', Arial, sans-serif;">
+                                        If the button doesn't work, copy and paste this link into your browser:
+                                    </p>
+                                    <p style="color: #89DBEF; font-size: 12px; line-height: 1.6; margin: 10px 0 20px 0; word-break: break-all; font-family: 'Courier New', monospace;">
+                                        {!Community_Url}
+                                    </p>
+                                    
+                                    <!-- Support Message -->
+                                    <p class="message-text" style="color: #6B7280; font-size: 15px; line-height: 1.6; margin: 20px 0 10px 0; font-family: 'Poppins', Arial, sans-serif;">
+                                        If you have any questions or need assistance, feel free to reach out. Our support team is here for you.
+                                    </p>
+                                    
+                                    <!-- Support Button -->
+                                    <div style="text-align: center; margin: 20px 0;">
+                                        <a href="mailto:support@gobuho.com" style="display: inline-block; padding: 14px 32px; background-color: #E53C7B; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 600; border-radius: 8px; font-family: 'Poppins', Arial, sans-serif;">
+                                            Contact Support
+                                        </a>
+                                    </div>
+                                    
+                                </td>
+                            </tr>
+                            
+                            <!-- Footer Section -->
+                            <tr>
+                                <td class="email-footer" style="background-color: #13203D; padding: 30px; text-align: center;">
+                                    <p style="color: rgba(255, 255, 255, 0.8); font-size: 13px; line-height: 1.6; margin: 0 0 15px 0; font-family: 'Poppins', Arial, sans-serif;">
+                                        BÚHO Insurance Brokerage<br/>
+                                        Smart protection for your Mexican adventures
+                                    </p>
+                                    
+                                    <div style="margin: 20px 0;">
+                                        <a href="#" style="color: #89DBEF; text-decoration: none; font-size: 13px; margin: 0 10px; font-weight: 500; font-family: 'Poppins', Arial, sans-serif;">Privacy Policy</a>
+                                        <span style="color: rgba(255, 255, 255, 0.4);">|</span>
+                                        <a href="#" style="color: #89DBEF; text-decoration: none; font-size: 13px; margin: 0 10px; font-weight: 500; font-family: 'Poppins', Arial, sans-serif;">Terms of Service</a>
+                                        <span style="color: rgba(255, 255, 255, 0.4);">|</span>
+                                        <a href="#" style="color: #89DBEF; text-decoration: none; font-size: 13px; margin: 0 10px; font-weight: 500; font-family: 'Poppins', Arial, sans-serif;">Contact Us</a>
+                                    </div>
+                                    
+                                    <p style="color: rgba(255, 255, 255, 0.8); font-size: 13px; line-height: 1.6; margin: 15px 0; font-family: 'Poppins', Arial, sans-serif;">
+                                        📧 support@gobuho.com | 📞 1-800-BUHO-INS
+                                    </p>
+                                    
+                                    <p style="color: rgba(255, 255, 255, 0.6); font-size: 12px; margin-top: 20px; font-family: 'Poppins', Arial, sans-serif;">
+                                        © 2024 BÚHO Insurance Brokerage. All rights reserved.<br/>
+                                        You are receiving this email because you created an account with BÚHO.
+                                    </p>
+                                </td>
+                            </tr>
+                            
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </body>
+        </html>

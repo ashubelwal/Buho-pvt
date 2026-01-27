@@ -29,6 +29,7 @@ export function transformTowedUnits(unitsArray = []) {
 
 // ---------- Main reusable transformer ----------
 export function createTransformedData(returnLeadValue) {
+    console.log('@@@returnLeadValue',returnLeadValue);
     const leadInfo = returnLeadValue?.LeadInfo || {};
     const quoteInfo = returnLeadValue?.QuoteInfo || {};
 
@@ -39,7 +40,6 @@ export function createTransformedData(returnLeadValue) {
     const termsAndAlerts = safeParseJson(leadInfo.Terms_Alert__c, 'Terms_Alert__c');
     const termDetails = safeParseJson(leadInfo.Term_options__c, 'Term_options__c')?.[0];
     const rawTowDetails = safeParseJson(leadInfo.Towing__c, 'Towing__c');
-
     const towData = rawTowDetails
         ? transformTowedUnits(rawTowDetails)
         : [];

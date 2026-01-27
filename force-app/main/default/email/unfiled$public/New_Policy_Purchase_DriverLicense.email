@@ -1,0 +1,5 @@
+<messaging:emailTemplate subject="Welcome to MexInsurance" recipientType="Contact" relatedToType="Contact">
+<messaging:htmlEmailBody >
+<c:EmailTemplateStyling policyType="driverLicense" />
+</messaging:htmlEmailBody>
+</messaging:emailTemplate>

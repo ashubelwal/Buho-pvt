@@ -356,7 +356,7 @@ public without sharing class Mex_NewLeadProcess {
                 getLeadData.Insurance_Type__c = getLeadData.Policy_Type__c;
                 getLeadData.Liability__c = getLeadData.Liability__c;
             }
-            
+            System.debug('getLeadData----->'+getLeadData);
             upsert getLeadData;
             System.debug('getLeadData----->'+getLeadData);
             returnMap.put('LeadInfo', getLeadData);
@@ -514,13 +514,7 @@ public without sharing class Mex_NewLeadProcess {
             string query = 'SELECT '+ screenName + ' ,Insurance_Type__c FROM Lead WHERE Id=\'' + LeadId + '\'';
             fetchLeadData = Database.query(query);
             responseMap.put('status', 'success');
-            responseMap.put('data', fetchLeadData); 
-        }catch(Exception ex){ 
-            responseMap.put('status', 'error'); 
-            responseMap.put('message', ex.getMessage()+ ' at line : '+ex.getLineNumber()); 
-            CustomErrorExceptionHandlerException.data = 'screenName>>'+ screenName+'\n leadId>>'+LeadId; 
-            CustomErrorExceptionHandlerException.LogException(ex); 
-        }
+            responseMap.put('data', fetchLeadData); }catch(Exception ex){ responseMap.put('status', 'error'); responseMap.put('message', ex.getMessage()+ ' at line : '+ex.getLineNumber()); CustomErrorExceptionHandlerException.data = 'screenName>>'+ screenName+'\n leadId>>'+LeadId; CustomErrorExceptionHandlerException.LogException(ex); }
         return responseMap;
     }
 
@@ -820,12 +814,7 @@ public without sharing class Mex_NewLeadProcess {
             }else{
                 responseMap.put('status', 'error');
                 responseMap.put('message', 'Account already exist kindly retry creating policy after Logging-In!');
-            } 
-        }catch (Exception ex) { 
-            responseMap.put('status', 'error'); 
-            responseMap.put('message', ex.getMessage()); 
-            CustomErrorExceptionHandlerException.LogException(ex); 
-        }
+            } }catch (Exception ex) { responseMap.put('status', 'error'); responseMap.put('message', ex.getMessage()); CustomErrorExceptionHandlerException.LogException(ex); }
         return JSON.serialize(responseMap);
     }
 

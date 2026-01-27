@@ -2856,15 +2856,11 @@ lightning-input[type="checkbox"] .slds-checkbox [type="checkbox"]:checked + .sld
     border-width: 0.3em;
 }
 
-/* Wizard specific loading */
-.wizard-container .loading-overlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100px;
+.loading-overlay .loading-icon {
+    width: auto;
     height: 100px;
-    background-color: transparent;
+    max-width: 200px;
+    display: block;
 }
 
 .wizard-container {

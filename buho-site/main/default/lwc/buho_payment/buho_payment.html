@@ -46,6 +46,9 @@
                     <button type="button" class="btn btn-outline-primary add-method-btn" onclick={handleAddNewCard}>
                         Add New Method
                     </button>
+                    <button type="button" class="btn btn-primary btn-continue" onclick={handleProceedToPayment}>
+                        Proceed To Payment
+                    </button>
                 </div>
             </template>
         </template>
@@ -306,7 +309,7 @@
                 <div class="amount-summary">
                     <div class="summary-box">
                         <h3>Amount Summary</h3>
-                        <div class="summary-items">
+                        <!--div class="summary-items">
                             <div class="summary-row">
                                 <span>Mexico Insurance-6 Day Mapfre :</span>
                                 <span>$67.45</span>
@@ -323,7 +326,7 @@
                                 <span>Document Prep - Fishing Permit:</span>
                                 <span>$42</span>
                             </div>
-                        </div>
+                        </div-->
                         <div class="summary-total">
                             <span class="total-label">Total:</span>
                             <template if:false={istestcase}>
@@ -344,7 +347,7 @@
                         </button>
                     </template>
                     <button type="button" class="btn btn-primary btn-continue" onclick={handleSaveCardDetails}>
-                        Save Card Details
+                        Proceed To Payment
                     </button>
                 </div>
             </div>
