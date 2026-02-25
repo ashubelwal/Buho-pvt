@@ -1,0 +1,281 @@
+<template>
+    <div class="pd-container">
+        <!-- Back Navigation Bar -->
+        <div class="pd-back-bar">
+            <button class="pd-btn-back" onclick={handleBackToList}>
+                <img src={chevronLeftIconUrl} alt="" class="pd-icon-back" />
+                Back to Quotes
+            </button>
+        </div>
+
+        <!-- Loading State -->
+        <template if:true={isLoading}>
+            <div class="pd-loading">
+                <lightning-spinner alternative-text="Loading quote details..." size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+            <template if:true={quoteDetail}>
+                <!-- ── Quote Information Section ── -->
+                <div class="pd-section">
+                    <button class="pd-section-header" onclick={toggleInfo}>
+                        <img src={chevronDownIconUrl} alt="" class={infoChevronClass} />
+                        <h2 class="pd-section-title">Quote Information</h2>
+                    </button>
+                    <template if:true={showInfoSection}>
+                        <div class="pd-section-body">
+                            <div class="pd-field-grid">
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Quote Number</span>
+                                    <span class="pd-field-value">{formatted.quoteNumber}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Net Premium</span>
+                                    <span class="pd-field-value pd-field-currency">{formatted.netPremium}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Underwriter</span>
+                                    <span class="pd-field-value">{formatted.underwriter}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Broker/Policy Fee</span>
+                                    <span class="pd-field-value pd-field-currency">{formatted.brokerPolicyFee}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Policy Type</span>
+                                    <span class="pd-field-value">{formatted.policyType}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">I.V.A. / Mex. Tax</span>
+                                    <span class="pd-field-value pd-field-currency">{formatted.ivaMexTax}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Driver Age</span>
+                                    <span class="pd-field-value">{formatted.driverAge}</span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Vehicle Age</span>
+                                    <span class="pd-field-value">{formatted.vehicleAge}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Quote Value</span>
+                                    <span class="pd-field-value pd-field-currency">{formatted.quoteValue}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">End Time</span>
+                                    <span class="pd-field-value">{formatted.endTime}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Physical Damage</span>
+                                    <span class="pd-field-value pd-field-currency">{formatted.physicalDamage}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Date of Birth</span>
+                                    <span class="pd-field-value">{formatted.dateOfBirth}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Total Theft Payment</span>
+                                    <span class="pd-field-value pd-field-currency">{formatted.totalTheftPayment}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Type of Vessel</span>
+                                    <span class="pd-field-value">{formatted.typeOfVessel}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Medical Payment</span>
+                                    <span class="pd-field-value pd-field-currency">{formatted.medicalPayment}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Is the Maximum Speed more than 50 mph?</span>
+                                    <span class="pd-field-value">{formatted.maxSpeedOver50}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Liability Payment</span>
+                                    <span class="pd-field-value pd-field-currency">{formatted.liabilityPayment}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Is the owner living in Mexico?</span>
+                                    <span class="pd-field-value">{formatted.ownerLivingInMexico}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Platinum Endorsement</span>
+                                    <span class="pd-field-value pd-field-currency">{formatted.platinumEndorsement}</span>
+                                </div>
+                            </div>
+
+                            <!-- Single-column fields -->
+                            <div class="pd-field-grid">
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Any Boat Operator Under 22?</span>
+                                    <span class="pd-field-value">{formatted.boatOperatorUnder22}</span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Vessel Length</span>
+                                    <span class="pd-field-value">{formatted.vesselLength}</span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Third Party Bodily Injury</span>
+                                    <span class="pd-field-value">{formatted.thirdPartyBodilyInjury}</span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Property Damage Liability</span>
+                                    <span class="pd-field-value">{formatted.propertyDamageLiability}</span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Vehicle Sub type</span>
+                                    <span class="pd-field-value">{formatted.vehicleSubType}</span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Surcharge</span>
+                                    <span class="pd-field-value pd-field-currency">{formatted.surcharge}</span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Vehicle_Deductible_Collision</span>
+                                    <span class="pd-field-value">{formatted.vehicleDeductibleCollision}</span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Vehicle_Deductible_Comprehensive</span>
+                                    <span class="pd-field-value">{formatted.vehicleDeductibleComprehensive}</span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Renew Quote</span>
+                                    <span class="pd-field-value">{formatted.renewQuote}</span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Lead Id</span>
+                                    <span class="pd-field-value">{formatted.leadId}</span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+                            </div>
+
+                            <!-- Checkbox fields -->
+                            <div class="pd-field-grid">
+                                <div class="pd-field pd-field-checkbox">
+                                    <span class="pd-field-label">Gold</span>
+                                    <span class="pd-field-value">
+                                        <span class={goldCheckClass}></span>
+                                    </span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+
+                                <div class="pd-field pd-field-checkbox">
+                                    <span class="pd-field-label">Max</span>
+                                    <span class="pd-field-value">
+                                        <span class={maxCheckClass}></span>
+                                    </span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+
+                                <div class="pd-field pd-field-checkbox">
+                                    <span class="pd-field-label">Platinum</span>
+                                    <span class="pd-field-value">
+                                        <span class={platinumCheckClass}></span>
+                                    </span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- ── Coverage Details Section ── -->
+                <div class="pd-section">
+                    <button class="pd-section-header" onclick={toggleCoverage}>
+                        <img src={chevronDownIconUrl} alt="" class={coverageChevronClass} />
+                        <h2 class="pd-section-title">Coverage Details</h2>
+                    </button>
+                    <template if:true={showCoverageSection}>
+                        <div class="pd-section-body">
+                            <div class="pd-field-grid">
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Coverage</span>
+                                    <span class="pd-field-value">{formatted.coverage}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Start Date for Coverage</span>
+                                    <span class="pd-field-value">{formatted.startDateCoverage}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Medical</span>
+                                    <span class="pd-field-value">{formatted.medical}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">End Date for Coverage</span>
+                                    <span class="pd-field-value">{formatted.endDateCoverage}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Liability</span>
+                                    <span class="pd-field-value">{formatted.liability}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Start Time</span>
+                                    <span class="pd-field-value">{formatted.startTime}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Territory</span>
+                                    <span class="pd-field-value">{formatted.territory}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Time Zone</span>
+                                    <span class="pd-field-value">{formatted.timeZone}</span>
+                                </div>
+
+                                <div class="pd-field pd-field-checkbox">
+                                    <span class="pd-field-label">Trailering</span>
+                                    <span class="pd-field-value">
+                                        <span class={traileringCheckClass}></span>
+                                    </span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Term Days</span>
+                                    <span class="pd-field-value">{formatted.termDays}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+            </template>
+
+            <!-- Error State -->
+            <template if:false={quoteDetail}>
+                <div class="pd-error">
+                    <p>Unable to load quote details. Please try again.</p>
+                    <button class="pd-btn-retry" onclick={handleBackToList}>Return to Quotes</button>
+                </div>
+            </template>
+        </template>
+    </div>
+</template>

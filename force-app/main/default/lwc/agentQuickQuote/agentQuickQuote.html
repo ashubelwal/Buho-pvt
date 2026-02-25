@@ -17,7 +17,7 @@
                <button class="slds-button slds-button_neutral" aria-label="Cancel and close"
                   onclick={cancelTransferOwnership}>Cancel</button>
                <button class="slds-button slds-button_brand" onclick={handlerTransferOwnership}>Transfer
-               Ownership</button>
+                  Ownership</button>
             </div>
          </div>
       </section>
@@ -56,17 +56,30 @@
                         </legend>
                         <div class="slds-form-element__control">
                            <div class="slds-radio_button-group">
-                              <span class="slds-button slds-radio_button"> <input type="radio" name="Policy_Type__c" id="example-unique-id-94" value="Automobile-Van-Minivan" onchange={handleInputChange} checked={booleanVar.isPolicyAutomobile} disabled={booleanVar.isPolicyDisabled} /> <label class="slds-radio_button__label" for="example-unique-id-94"> <span class="slds-radio_faux">Create Policy</span>
-                              </label> </span>
+                              <span class="slds-button slds-radio_button"> <input type="radio" name="Policy_Type__c"
+                                    id="example-unique-id-94" value="Automobile-Van-Minivan"
+                                    onchange={handleInputChange} checked={booleanVar.isPolicyAutomobile}
+                                    disabled={booleanVar.isPolicyDisabled} /> <label class="slds-radio_button__label"
+                                    for="example-unique-id-94"> <span class="slds-radio_faux">Create Policy</span>
+                                 </label> </span>
                               <!-- <span class="slds-button slds-radio_button"> <input type="radio" name="Policy_Type__c" id="example-unique-id-95" value="RV" onchange={handleInputChange} checked={booleanVar.isPolicyRV} disabled={booleanVar.isPolicyDisabled} /> <label class="slds-radio_button__label" for="example-unique-id-95"> <span class="slds-radio_faux">RV</span>
                               </label> </span>
                               <span class="slds-button slds-radio_button"> <input type="radio" name="Policy_Type__c" id="example-unique-id-96" value="Motorcycle/Street Legal ATV" onchange={handleInputChange} checked={booleanVar.isPolicyMotorcycle} disabled={booleanVar.isPolicyDisabled} /> <label class="slds-radio_button__label" for="example-unique-id-96"> <span class="slds-radio_faux">Motorcycle/ATV</span>
                               </label> </span> -->
                               <template if:true={userType}>
-                                 <span class="slds-button slds-radio_button"> <input type="radio" name="ContactType" id="example-unique-id-98" disabled={booleanVar.isPolicyDisabled} onchange={handleContactType} value="DMV Service" checked={booleanVar.isDMVService} /> <label class="slds-radio_button__label" for="example-unique-id-98"> <span class="slds-radio_faux">DMV Service</span>
-                                 </label> </span>
-                                 <span class="slds-button slds-radio_button"> <input type="radio" name="ContactType" id="example-unique-id-99" disabled={booleanVar.isPolicyDisabled} onchange={handleContactType} value="Domestic Insurance" checked={booleanVar.isDomesticInsurance} /> <label class="slds-radio_button__label" for="example-unique-id-99"> <span class="slds-radio_faux">Domestic Insurance</span>
-                                 </label> </span>
+                                 <span class="slds-button slds-radio_button"> <input type="radio" name="ContactType"
+                                       id="example-unique-id-98" disabled={booleanVar.isPolicyDisabled}
+                                       onchange={handleContactType} value="DMV Service"
+                                       checked={booleanVar.isDMVService} /> <label class="slds-radio_button__label"
+                                       for="example-unique-id-98"> <span class="slds-radio_faux">DMV Service</span>
+                                    </label> </span>
+                                 <span class="slds-button slds-radio_button"> <input type="radio" name="ContactType"
+                                       id="example-unique-id-99" disabled={booleanVar.isPolicyDisabled}
+                                       onchange={handleContactType} value="Domestic Insurance"
+                                       checked={booleanVar.isDomesticInsurance} /> <label
+                                       class="slds-radio_button__label" for="example-unique-id-99"> <span
+                                          class="slds-radio_faux">Domestic Insurance</span>
+                                    </label> </span>
                               </template>
                               <!-- <span class="slds-button slds-radio_button"> <input type="radio" name="Policy_Type__c" id="example-unique-id-99" onchange={handleInputChange} value="Watercraft" checked={booleanVar.isPolicyWatercraft} disabled={booleanVar.isPolicyDisabled}/> <label class="slds-radio_button__label" for="example-unique-id-99"> <span class="slds-radio_faux">Watercraft</span> </label> </span> -->
                            </div>
@@ -105,6 +118,27 @@
                         name="getAQuote">
                         <div class="accordionDiv">
                            <div class="card slds-p-around_small slds-m-bottom_large slds-m-top_medium">
+
+                              <h2 class="sectionTitle">Agency Detail</h2>
+                              <div class="slds-grid slds-wrap">
+                                 <div class="slds-col slds-p-around_small">
+                                    <lightning-record-picker label="Agency" placeholder="Search Agency"
+                                       object-api-name="Contact" value={agency} filter={agencyFilter}
+                                       onchange={handleAgencyChange}>
+                                    </lightning-record-picker>
+                                 </div>
+                                 <div class="slds-col slds-p-around_small">
+                                    <lightning-record-picker label="Agent" placeholder="Search Agent"
+                                       object-api-name="Contact" value={agent} filter={agentFilter}
+                                       onchange={handleAgentChange}>
+                                    </lightning-record-picker>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="accordionDiv">
+                           <div class="card slds-p-around_small slds-m-bottom_large slds-m-top_medium">
+
                               <h2 class="sectionTitle">User details</h2>
                               <div class="slds-grid slds-wrap">
                                  <div class="slds-col slds-p-around_small">
@@ -271,8 +305,9 @@
                               </div>
                               <div class="slds-grid slds-wrap">
                                  <div class="slds-col slds-size_4-of-12 slds-p-around_small">
-                                          <lightning-input name="Electric_Hybrid__c" type="checkbox" label="Is this a Electric Hybrid vehicle?"
-                                             checked={trackVar.Electric_Hybrid__c} onchange={handleInputChange}></lightning-input>
+                                    <lightning-input name="Electric_Hybrid__c" type="checkbox"
+                                       label="Is this a Electric Hybrid vehicle?" checked={trackVar.Electric_Hybrid__c}
+                                       onchange={handleInputChange}></lightning-input>
                                  </div>
                                  <!-- Liability only -->
                                  <template if:false={booleanVar.isNorthbound}>
@@ -286,8 +321,13 @@
                                  <template if:true={booleanVar.isTowingCheckbox}>
                                     <div class="slds-col slds-size_3-of-12 slds-p-around_small slds-form-element">
                                        <div class="slds-form-element__control">
-                                          <div class="slds-checkbox"> <input type="checkbox" name="Is_towing__c" value="Yes" id="towing" onchange={handleInputChange} checked={booleanVar.isTowingChecked} />
-                                             <label class="slds-checkbox__label" for="towing"> <span class="slds-checkbox_faux"></span> <span class="slds-form-element__label">Are you towing anything?</span> </label>
+                                          <div class="slds-checkbox"> <input type="checkbox" name="Is_towing__c"
+                                                value="Yes" id="towing" onchange={handleInputChange}
+                                                checked={booleanVar.isTowingChecked} />
+                                             <label class="slds-checkbox__label" for="towing"> <span
+                                                   class="slds-checkbox_faux"></span> <span
+                                                   class="slds-form-element__label">Are you towing anything?</span>
+                                             </label>
                                           </div>
                                        </div>
                                     </div>
@@ -442,12 +482,13 @@
                                        </div>
                                     </template> -->
                                     <template if:false={isCommunity}>
-                                                    <div class="slds-col slds-p-around_small">
-                                                        <lightning-input class="quoteValidate timevalidate" type="time" label="Start Time" name="Start_Time__c"
-                                                            onchange={handleInputChange} value={trackVar.startTime} min={trackVar.minStartTime} required>
-                                                        </lightning-input>
-                                                    </div>
-                                                </template>
+                                       <div class="slds-col slds-p-around_small">
+                                          <lightning-input class="quoteValidate timevalidate" type="time"
+                                             label="Start Time" name="Start_Time__c" onchange={handleInputChange}
+                                             value={trackVar.startTime} min={trackVar.minStartTime} required>
+                                          </lightning-input>
+                                       </div>
+                                    </template>
                                     <div class="slds-col slds-p-around_small">
                                        <lightning-input class="quoteValidate" type="time" label="End Time"
                                           name="End_Time__c" onchange={handleInputChange} value={trackVar.endTime}
@@ -491,7 +532,7 @@
                            </div>
                         </div>
                      </lightning-accordion-section>
-                     <lightning-accordion-section class="quote accordionSection" label="Quote" name="quote">                     
+                     <lightning-accordion-section class="quote accordionSection" label="Quote" name="quote">
                         <template if:false={booleanVar.isQuoteLoaded}>
                            <div style="border: 2px solid red;padding: 20px">Loading... </div>
                         </template>
@@ -500,7 +541,9 @@
                            <div class="slds-notify_container slds-is-relative">
                               <div class="slds-notify slds-notify_toast slds-theme_error" role="status">
                                  <span class="slds-assistive-text">{toastVariant}</span>
-                                 <span class="slds-icon_container slds-icon-utility-error slds-m-right_small slds-no-flex slds-align-top" title=""> </span>
+                                 <span
+                                    class="slds-icon_container slds-icon-utility-error slds-m-right_small slds-no-flex slds-align-top"
+                                    title=""> </span>
                                  <lightning-icon icon-name="Utility:error" alternative-text="error" title="error">
                                  </lightning-icon>
                                  <div class="slds-notify__content">
@@ -554,12 +597,15 @@
                            <div class="accordionDiv slds-m-top_large">
 
                               <c-ag_quote-page key={agentFee} payload={payload} agentuserfee={agentFee}
-                                 onselectquote={handleSelectedQuote}  onemailordownload = {downloadOrSendEmail} onpolicyrestriction={handlePolicyRestriction}>
+                                 onselectquote={handleSelectedQuote} onemailordownload={downloadOrSendEmail}
+                                 onpolicyrestriction={handlePolicyRestriction}>
                               </c-ag_quote-page>
                               <template if:true={errorMessage}>
-                                 <p class="slds-text-color_error slds-m-top_medium slds-align_absolute-center myCustomClass">{errorMessage}</p>
+                                 <p
+                                    class="slds-text-color_error slds-m-top_medium slds-align_absolute-center myCustomClass">
+                                    {errorMessage}</p>
                               </template>
-                             <!-- <div class="slds-grid slds-wrap slds-gutters_small">
+                              <!-- <div class="slds-grid slds-wrap slds-gutters_small">
                                  <template
                                     if:false={booleanVar.isNorthbound}>
                                     <div class="slds-col slds-size_4-of-12">
@@ -1158,11 +1204,11 @@
                                              </td>
                                              <td>
                                                 <template if:true={driver.Driver_Type__c}>
-                                                    <div class="slds-truncate" title="">{driver.Driver_Type__c}</div>
+                                                   <div class="slds-truncate" title="">{driver.Driver_Type__c}</div>
                                                 </template>
 
                                                 <template if:false={driver.Driver_Type__c}>
-                                                    <div class="slds-truncate" title="">Driver</div>
+                                                   <div class="slds-truncate" title="">Driver</div>
                                                 </template>
                                              </td>
                                              <td>

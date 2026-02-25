@@ -58,9 +58,7 @@ public without sharing class VehicleDetailsFlow {
             return response ;
             
         }catch(Exception e){
-            CustomErrorExceptionHandlerException.LogException(e); 
-            throw new CustomErrorExceptionHandlerException(e.getMessage()+e.getStackTraceString()); 
-        }
+            CustomErrorExceptionHandlerException.LogException(e); throw new CustomErrorExceptionHandlerException(e.getMessage()); }
     }
     
     @AuraEnabled
@@ -81,8 +79,7 @@ public without sharing class VehicleDetailsFlow {
             
             return response;
         }catch(Exception e){
-            CustomErrorExceptionHandlerException.LogException(e);
-            throw new CustomErrorExceptionHandlerException(e.getMessage()+e.getStackTraceString());}
+            CustomErrorExceptionHandlerException.LogException(e);throw new CustomErrorExceptionHandlerException(e.getMessage());}
     }
     
     // New Lead for inserting vehicle details in the lead
@@ -145,7 +142,7 @@ public without sharing class VehicleDetailsFlow {
                 return response;
             }
         }catch (CustomErrorExceptionHandlerException ex){ CustomErrorExceptionHandlerException.LogException(ex); throw new CustomErrorExceptionHandlerException(ex.getMessage()); }
-         catch (Exception e) { CustomErrorExceptionHandlerException.LogException(e); throw new CustomErrorExceptionHandlerException(e.getMessage()); } 
+         catch (Exception e) { CustomErrorExceptionHandlerException.LogException(e); throw new CustomErrorExceptionHandlerException(e.getMessage()+e.getStackTraceString()); } 
     }
     
     // Helper method to update vehicle details

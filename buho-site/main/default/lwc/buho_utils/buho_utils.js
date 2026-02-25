@@ -52,7 +52,8 @@ export function createTransformedData(returnLeadValue) {
                 FirstName: leadInfo.FirstName ?? null,
                 LastName: leadInfo.LastName ?? null,
                 Phone: leadInfo.Phone ?? null,
-                Id: leadInfo.Id ?? null
+                Id: leadInfo.Id ?? null,
+                LeadSource: leadInfo.LeadSource ?? null,
             }
         },
         {
@@ -85,7 +86,8 @@ export function createTransformedData(returnLeadValue) {
                 Registered_Plate__c: vehicleData?.Registered_Plate__c ?? null,
                 Vin__c: vehicleData?.Vin__c ?? null,
                 Registered_Country__c: vehicleData?.Registered_Country__c ?? null,
-                Registered_State__c: vehicleData?.Registered_State__c ?? null
+                Registered_State__c: vehicleData?.Registered_State__c ?? null,
+                isOtherModel: vehicleData?.isOtherModel ?? null,
                 
 
             }
@@ -124,4 +126,8 @@ export function createTransformedData(returnLeadValue) {
             }
         }
     ];
+}
+
+export function log(...args) {
+    console.log(...args);
 }

@@ -43,6 +43,7 @@ import Pleaseenteravalidexpirationdate from '@salesforce/label/c.TR_Please_enter
 import PolicyCreated from '@salesforce/label/c.TR_Policy_Created';
 import Somethingwentwrongpleasetryagainlater from '@salesforce/label/c.TR_Something_went_wrong_please_try_again_later';
 import Success from '@salesforce/label/c.TR_Success';
+import buhoAssets from '@salesforce/resourceUrl/BuhoAssets';
 
 
 import InsertLeadData from '@salesforce/apex/Mex_NewLeadProcess.InsertLeadData';
@@ -118,7 +119,9 @@ export default class Payment extends NavigationMixin(LightningElement) {
     @track termsOfCancellationChecked = false;
 
     // Visa logo URL (you can update this with actual logo path)
-    visaLogoUrl = 'https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg';
+    get visaLogoUrl() {
+        return `${buhoAssets}/images/visa.png`;
+    }
 
     get currentUserType() {
         const existingIndex = this.payload.findIndex(item =>
@@ -1521,19 +1524,7 @@ export default class Payment extends NavigationMixin(LightningElement) {
             }
         } else {
             console.log('Inside else section for createPolicy');
-            // let eventExist = window.dataLayer.find((data) => data.step_number === 'step_12');
-            // console.log('Even exists',eventExist);
-            // if (eventExist == undefined) {
-            //     window.dataLayer.push({
-            //         'event': 'funnel_step',
-            //         'step_number': 'step_12',
-            //         'step_name': 'payment_details',
-            //         'insurance_category': this.policyType
-            //     });
-            // }
-
-            // // let eventExist = window.dataLayer.find((data) => data.event === 'payment_details_submit');
-            // // if (eventExist == undefined) this.setDataLayer();
+            
             if (this.policyType == 'Watercraft') {
                 console.log('creating watercraft real newuser ');
                 policy = await createWaterCraftPolicy({ 'leadId': this.leaddata?.Id });
@@ -1546,24 +1537,14 @@ export default class Payment extends NavigationMixin(LightningElement) {
         let resParse = JSON.parse(policy);
         this.policyDetails = resParse;
         if (resParse.status == 'success') {
-            // const evt = new ShowToastEvent({
-            //     title: this.label.Success,
-            //     message: this.label.PolicyCreated,
-            //     variant: 'success',
-            // });
-
-            // this.dispatchEvent(evt);
+           
 
             this.dispatchEvent(new CustomEvent('toastevent', { detail: { variant: 'success', title: this.label.Success, message: this.label.PolicyCreated } }));
 
             //this.changesnextscreen(resParse);
         } else {
             this.generateLogs();
-            // const evt = new ShowToastEvent({
-            //     message: this.label.Somethingwentwrongpleasetryagainlater,
-            //     variant: 'error',
-            // });
-            // this.dispatchEvent(evt);
+            
             this.dispatchEvent(new CustomEvent('toastevent', { detail: { variant: 'error', title: 'Error', message: this.label.Somethingwentwrongpleasetryagainlater } }));
         }
         console.log("--createPolicy---", resParse);

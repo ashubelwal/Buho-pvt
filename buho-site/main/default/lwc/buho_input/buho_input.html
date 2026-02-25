@@ -3,7 +3,15 @@
         <!-- Input Type -->
         <template if:true={isInput}>
             <template if:true={label}>
-                <label for={name} class={computedLabelClass}>{label}</label>
+                <div class="label-with-tooltip">
+                    <label for={name} class={computedLabelClass}>{label}</label>
+                    <template if:true={hasTooltip}>
+                        <span class="tooltip-icon-wrapper">
+                            <i class="bi bi-info-circle tooltip-icon"></i>
+                            <span class="tooltip-text">{tooltipText}</span>
+                        </span>
+                    </template>
+                </div>
             </template>
 
             <!-- Input with Icon -->
@@ -57,7 +65,15 @@
         <!-- Combobox Type -->
         <template if:true={isCombobox}>
             <template if:true={label}>
-                <label for={name} class={computedLabelClass}>{label}</label>
+                <div class="label-with-tooltip">
+                    <label for={name} class={computedLabelClass}>{label}</label>
+                    <template if:true={hasTooltip}>
+                        <span class="tooltip-icon-wrapper">
+                            <i class="bi bi-info-circle tooltip-icon"></i>
+                            <span class="tooltip-text">{tooltipText}</span>
+                        </span>
+                    </template>
+                </div>
             </template>
             <div class="dropdown-container">
                 <select id={name} name={name} class={computedDropdownClass} disabled={disabled}
@@ -73,6 +89,7 @@
         </template>
 
         <!-- Checkbox Type -->
+         
         <template if:true={isCheckbox}>
             <div class="custom-checkbox">
                 <input type="checkbox" id={name} name={name} checked={checked} disabled={disabled}
@@ -81,10 +98,17 @@
                 <template if:true={label}>
                     <label for={name}>
                         <span class={computedLabelTitleClass}>{label}</span>
+                        
                         <template if:true={hint}>
                             <span class="checkbox-hint">{hint}</span>
                         </template>
                     </label>
+                    <template if:true={hasTooltip}>
+                        <span class="tooltip-icon-wrapper">
+                            <i class="bi bi-info-circle tooltip-icon"></i>
+                            <span class="tooltip-text">{tooltipText}</span>
+                        </span>
+                    </template>
                 </template>
             </div>
         </template>
@@ -96,7 +120,15 @@
                     required={required}
                     onchange={handleCheckboxChange} />
                 <template if:true={label}>
-                    <label for={name} class={computedLabelClass}>{label}</label>
+                    <div class="label-with-tooltip">
+                        <label for={name} class={computedLabelClass}>{label}</label>
+                        <template if:true={hasTooltip}>
+                            <span class="tooltip-icon-wrapper">
+                                <i class="bi bi-info-circle tooltip-icon"></i>
+                                <span class="tooltip-text">{tooltipText}</span>
+                            </span>
+                        </template>
+                    </div>
                 </template>
             </div>
         </template>
@@ -104,7 +136,15 @@
         <!-- Textarea Type -->
         <template if:true={isTextarea}>
             <template if:true={label}>
-                <label for={name} class={computedLabelClass}>{label}</label>
+                <div class="label-with-tooltip">
+                    <label for={name} class={computedLabelClass}>{label}</label>
+                    <template if:true={hasTooltip}>
+                        <span class="tooltip-icon-wrapper">
+                            <i class="bi bi-info-circle tooltip-icon"></i>
+                            <span class="tooltip-text">{tooltipText}</span>
+                        </span>
+                    </template>
+                </div>
             </template>
             <textarea 
                 id={name} 

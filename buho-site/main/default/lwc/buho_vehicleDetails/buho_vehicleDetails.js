@@ -12,7 +12,7 @@ export default class Buho_vehicleDetails extends LightningElement {
     
     // Field values
     @track vehicleType = 'Automobile-Van-Minivan';
-    @track year = 2025;
+    @track year;
     @track make = '';
     @track model = '';
     @track vehicleValue = '';
@@ -35,7 +35,7 @@ export default class Buho_vehicleDetails extends LightningElement {
         "towunits": [],
         "Liability__c": '300,000',
         "Medical__c": "10,000/50,000",
-        "Year__c": 2025
+        "Year__c": ''
     };
     
     @track vehicleTypeOptions = [
@@ -48,8 +48,17 @@ export default class Buho_vehicleDetails extends LightningElement {
         value: `${new Date().getFullYear() - i}`,
     }));
     
-    @track makeOptions = [{ label: 'Select a year', value: 'Select a year' }];
-    @track modelOptions = [{ label: 'Select a make', value: 'Select a make' }];
+    @track makeOptions = [];
+    @track modelOptions = [];
+    @track showModelOtherInput = false;
+
+    get makeInputType() {
+        return this.makeOptions.length > 0 ? 'combobox' : 'input';
+    }
+
+    get modelInputType() {
+        return this.makeOptions.length > 0 ? 'combobox' : 'input';
+    }
 
     get currentUserType() {
         const existingIndex = this.payload.findIndex(item =>
@@ -64,6 +73,10 @@ export default class Buho_vehicleDetails extends LightningElement {
 
     get isTowning() {
         return this.inputValues.isTowing;
+    }
+
+    get modelPicklist() {
+        return !this.showModelOtherInput ? this.model : 'Other';
     }
     // Handle checkbox change for towing
     handleisTowing(event) {
@@ -157,6 +170,14 @@ export default class Buho_vehicleDetails extends LightningElement {
                             ...option,
                             selected: option.value === this.model
                         }));
+                        // Always ensure "Other" option is available
+                        const hasOther = this.modelOptions.some(opt => opt.value === 'Other');
+                        if (!hasOther) {
+                            this.modelOptions = [
+                                ...this.modelOptions,
+                                { label: 'Other', value: 'Other' }
+                            ];
+                        }
                     } else if (result.Status === 'Error') {
                         if (this.isDebug) console.error('BVD Error fetching vehicle models:', result.Message);
                     }
@@ -239,10 +260,17 @@ export default class Buho_vehicleDetails extends LightningElement {
             this.make = '';
             this.model = '';
             this.makeOptions = [{ label: 'Select a year', value: 'Select a year' }];
-            this.modelOptions = [{ label: 'Select a make', value: 'Select a make' }];
+            this.modelOptions = [
+                { label: 'Select a make', value: 'Select a make' },
+                { label: 'Other', value: 'Other' }
+            ];
         } else if (value === 'Make') {
             this.model = '';
-            this.modelOptions = [{ label: 'Select a make', value: 'Select a make' }];
+            this.showModelOtherInput = false;
+            this.modelOptions = [
+                { label: 'Select a make', value: 'Select a make' },
+                { label: 'Other', value: 'Other' }
+            ];
         }
     }
 
@@ -264,19 +292,36 @@ export default class Buho_vehicleDetails extends LightningElement {
 
     handleModelChange(event) {
         // Handle both buho_input events (event.detail) and native input events (event.target)
-        const selectedModel = event.detail?.value || event.target?.value;
-        this.model = selectedModel;
-        this.inputValues['Model'] = selectedModel;
-        // Update modelOptions with new selected value
-        this.modelOptions = this.modelOptions.map(option => ({
-            ...option,
-            selected: option.value === selectedModel
-        }));
+        const name = event.detail?.name || event.target?.name;
+        const value = event.detail?.value || event.target?.value;
+
+        // Change from combobox
+        if (name === 'Model') {
+            if (value === 'Other') {
+                // Show text input for custom model; do not persist "Other"
+                this.showModelOtherInput = true;
+            } else {
+                this.showModelOtherInput = false;
+                this.model = value;
+                this.inputValues['Model'] = value;
+                // Update modelOptions with new selected value
+                this.modelOptions = this.modelOptions.map(option => ({
+                    ...option,
+                    selected: option.value === value
+                }));
+            }
+            this.inputValues['isOtherModel'] = this.showModelOtherInput;
+        }
+        // Change from "Other" text input
+        else if (name === 'ModelOther') {
+            this.model = value;
+            this.inputValues['Model'] = value;
+        }
     }
 
     // Validation method (returns true if valid, false if invalid)
     @api validate() {
-        const inputs = this.template.querySelectorAll('c-buho_input[required], input[required], select[required]');
+        const inputs = this.template.querySelectorAll('c-buho_input, input, select');
         let allValid = true;
 
         inputs.forEach(input => {
@@ -375,17 +420,18 @@ export default class Buho_vehicleDetails extends LightningElement {
         }
         if (this.isDebug) console.log('BVD Payload after insert: ', JSON.stringify(this.payload, null, 4));
 
-        
-        try {
-            const result = await saveLeadVehicleDetails({ strLeadDetails: JSON.stringify(this.payload) });
-            if (this.isDebug) console.log('BVD Vehicle details saved: ', result);
-        } catch (error) {
-            console.error('BVD Error saving vehicle details:', error);
-            this.dispatchEvent(new CustomEvent('toastevent', { 
-                detail: { variant: 'error', title: 'Error', message: 'Error saving vehicle details' },
-                bubbles: true,
-                composed: true
-            }));
+        if (!this.currentUserType) {
+            try {
+                const result = await saveLeadVehicleDetails({ strLeadDetails: JSON.stringify(this.payload) });
+                if (this.isDebug) console.log('BVD Vehicle details saved: ', result);
+            } catch (error) {
+                console.error('BVD Error saving vehicle details:', error);
+                this.dispatchEvent(new CustomEvent('toastevent', { 
+                    detail: { variant: 'error', title: 'Error', message: 'Error saving vehicle details' },
+                    bubbles: true,
+                    composed: true
+                }));
+            }
         }
     }
 
@@ -399,16 +445,16 @@ export default class Buho_vehicleDetails extends LightningElement {
     }
 
     async connectedCallback() {
-        if (this.year === '') {
+        /*if (this.year === '') {
             this.year = new Date().getFullYear();
-        }
+        }*/
         // Initialize yearOptions with selected property
-        this.yearOptions = Array.from({ length: 30 }, (_, i) => {
+        this.yearOptions = Array.from({ length: 55 }, (_, i) => {
             const yearValue = `${new Date().getFullYear() - i}`;
             return {
                 label: yearValue,
                 value: yearValue,
-                selected: yearValue === this.year.toString()
+                selected: yearValue === this.year?.toString()
             };
         });
         await this.getVehicleTypeOptions();
@@ -455,12 +501,13 @@ export default class Buho_vehicleDetails extends LightningElement {
                 console.log('BVD After populate inputs', this.inputValues);
                 console.log('BVD Vehicle details', this.vehicleDetails);
             }
-        } else if (this.populateFlag) {
-            // For new users (no payload), fetch makes for the default year
-            this.populateFlag = false;
-            await this.getVehicleMake(this.year);
-        }
+            if(this.year) {
+                await this.getVehicleMake(this.year);
+            }
+        } 
+        console.log('year value on load',this.year);
     }
+
 
     // Method to update inputValues with vehicleDetails
     updateInputValues() {
@@ -483,6 +530,7 @@ export default class Buho_vehicleDetails extends LightningElement {
             console.log('BVD Updated values', updatedValues);
 
             this.inputValues = updatedValues;
+            this.showModelOtherInput = this.inputValues?.isOtherModel;
         }
     }
 
@@ -513,7 +561,7 @@ export default class Buho_vehicleDetails extends LightningElement {
         this.liabilityOnly = this.vehicleDetails['Coverage__c'] == 'Liability' ? true : false;
 
         // Fetch make and model options when navigating back
-        if (this.year && this.make && this.model) {
+        if (this.year && this.make && this.model && (this.vehicleType != 'Motorcycle' && this.vehicleType != 'Motorhome')) {
             // First, fetch makes for the selected year
             await this.getVehicleMake(this.year);
             

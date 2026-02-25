@@ -1143,6 +1143,14 @@ export default class PolicyUtils extends LightningElement {
             data['Id'] = this.leadId;
         }
 
+        if(this.agency) {
+            data['Agency__c'] = this.agency;
+        }
+
+        if(this.agent) {
+            data['Agent__c'] = this.agent;
+        }
+
         return data;
     }
 
@@ -1166,6 +1174,15 @@ export default class PolicyUtils extends LightningElement {
             'Term__c': this.customerData?.Term__c,
             'Territory__c': this.customerData?.territory,
         }
+
+        if(this.agency) {
+            data['Agency__c'] = this.agency;
+        }
+
+        if(this.agent) {
+            data['Agent__c'] = this.agent;
+        }
+
 
         if (this.booleanVar.isNorthbound === true) {
             data['Territory__c'] = 'Northbound';
@@ -1339,7 +1356,7 @@ export default class PolicyUtils extends LightningElement {
             }
             return null; // In case result is falsy
         } catch (error) {
-            console.log('Error in saving quote--->', error.message);
+            console.log('Error in saving quote--->',error);
             throw error; // Re-throw the error to be caught by the caller
         }
     }

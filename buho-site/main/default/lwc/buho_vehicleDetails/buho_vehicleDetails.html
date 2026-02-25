@@ -56,10 +56,9 @@
             <div class="row g-4">
                 <div class="col-md-6">
                     <c-buho_input 
-                        type="combobox"
+                        type={makeInputType}
                         label="Vehicle Make"
                         name="Make" 
-                        placeholder="Select Make"
                         value={make}
                         options={makeOptions}
                         required
@@ -68,16 +67,25 @@
                 </div>
                 <div class="col-md-6">
                     <c-buho_input 
-                        type="combobox"
+                        type= {modelInputType}
                         label="Vehicle Model"
                         name="Model" 
-                        placeholder="Select Model"
-                        value={model}
+                        value={modelPicklist}
                         options={modelOptions}
                         disabled={booleanVar.isModelLoaded}
                         required
                         onchange={handleModelChange}>
                     </c-buho_input>
+                    <template if:true={showModelOtherInput}>
+                        <c-buho_input
+                            type="input"
+                            label="Vehicle Model"
+                            name="ModelOther"
+                            value={model}
+                            required
+                            onchange={handleModelChange}>
+                        </c-buho_input>
+                    </template>
                     <template if:true={booleanVar.isModelLoaded}>
                         <small class="form-text text-muted">Loading models...</small>
                     </template>
@@ -99,7 +107,7 @@
                                 value={vehicleValue}
                                 container-class="flex-1"
                                 input-class="form-control input-with-prefix"
-                                required
+                                required="true"
                                 onchange={handleInputChange}>
                             </c-buho_input>
                         </div>

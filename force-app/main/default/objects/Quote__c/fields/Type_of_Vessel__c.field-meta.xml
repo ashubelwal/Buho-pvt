@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Type_of_Vessel__c</fullName>
+    <label>Type of Vessel</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Vehicle_Type__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetName>Vessel_Type</valueSetName>
+        <valueSettings>
+            <controllingFieldValue>Watercraft</controllingFieldValue>
+            <valueName>Sailboat</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Watercraft</controllingFieldValue>
+            <valueName>Powerboat</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Watercraft</controllingFieldValue>
+            <valueName>Powerboat/Yacht</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Watercraft</controllingFieldValue>
+            <valueName>Yacht</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Watercraft</controllingFieldValue>
+            <valueName>Personal Watercraft (Jet Ski)</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

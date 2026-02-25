@@ -1,0 +1,53 @@
+<template>
+    <!-- ============== LIST VIEW ============== -->
+    <template if:true={isListView}>
+        <!-- Page Header -->
+        <div class="myvehicles-header">
+            <div class="myvehicles-header-left">
+                <h1 class="myvehicles-title">My Quotes</h1>
+                <p class="myvehicles-subtitle">View Your Insurance Quotes</p>
+            </div>
+        </div>
+
+        <!-- Quick Stats Summary -->
+        <h3 class="myvehicles-section-heading">Quick Stats Summary</h3>
+        <div class="myvehicles-stats-grid">
+            <div class="myvehicles-stat-card">
+                <div class="myvehicles-stat-icon accent">
+                    <img src={quoteIconUrl} alt="Quotes" class="icon-img" />
+                </div>
+                <h2 class="myvehicles-stat-value">{totalQuotesFormatted}</h2>
+                <p class="myvehicles-stat-label">Total Quotes</p>
+            </div>
+        </div>
+
+        <!-- Quotes List -->
+        <h3 class="myvehicles-section-heading">Quotes</h3>
+        <div class="myvehicles-grid">
+            <template for:each={quotes} for:item="qt">
+                <c-buhodb_quotecard
+                    key={qt.id}
+                    quote-id={qt.id}
+                    quote-number={qt.quoteNumber}
+                    quote-status={qt.quoteStatus}
+                    quote-value={qt.quoteValue}
+                    policy-type={qt.policyType}
+                    coverage={qt.coverage}
+                    term-days={qt.termDays}
+                    net-premium={qt.netPremium}
+                    vehicle-info={qt.vehicleInfo}
+                    territory={qt.territory}
+                    onviewquote={handleViewQuote}>
+                </c-buhodb_quotecard>
+            </template>
+        </div>
+    </template>
+
+    <!-- ============== DETAIL VIEW ============== -->
+    <template if:false={isListView}>
+        <c-buhodb_quotedetail
+            quote-id={selectedQuoteId}
+            onbacktoquotes={handleBackToList}>
+        </c-buhodb_quotedetail>
+    </template>
+</template>

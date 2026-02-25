@@ -17,16 +17,16 @@
                     </h1>
 
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input
-                            type="email"
-                            id="email"
+                        <c-buho_input
+                            type="input"
+                            input-type="email"
                             name="Email"
+                            label="Email"
                             value={inputValues.Email}
                             placeholder="Enter Your Email Address"
-                            oninput={handleInputChange}
-                            required
-                        />
+                            onchange={handleInputChange}
+                            required>
+                        </c-buho_input>
                         <template if:true={showActiveCustomerMessage}>
                             <p class="info-message success">
                                 Active Customer (email found, account active)
@@ -70,7 +70,9 @@
             <!-- Right Section - Detailed Form -->
             <div class="form-section">
                 <div class="form-header">
-                    <img src={logoUrl} alt="BÚHO Logo" class="logo">
+                    <a href="/">
+                        <img src={logoUrl} alt="BÚHO Logo" class="logo">
+                    </a>
                     
                     <!-- Progress Bar Component -->
                     <c-buho_progress-bar
@@ -83,79 +85,81 @@
                 <div class="form-content">
                     <h1>
                         Join thousands <br/>
-                        <span class="highlight">protected by BuHo</span>
+                        <span class="highlight">protected by BUHO</span>
                     </h1>
 
                     <!-- First Name -->
                     <div class="form-group">
-                        <label for="firstName">First Name</label>
-                        <input
-                            type="text"
-                            id="firstName"
+                        <c-buho_input
+                            type="input"
+                            input-type="text"
                             name="FirstName"
+                            label="First Name"
                             value={inputValues.FirstName}
                             placeholder="Enter Your First Name"
-                            oninput={handleInputChange}
                             pattern="^[A-Za-zÀ-ÿ\s]+$"
-                            required
-                        />
+                            message-when-pattern-mismatch="Please enter a valid name (letters only)"
+                            oninput={handleInputChange}
+                            required disabled={disableInput}>
+                        </c-buho_input>
                     </div>
 
                     <!-- Last Name -->
                     <div class="form-group">
-                        <label for="lastName">Last Name</label>
-                        <input
-                            type="text"
-                            id="lastName"
+                        <c-buho_input
+                            type="input"
+                            input-type="text"
                             name="LastName"
+                            label="Last Name"
                             value={inputValues.LastName}
                             placeholder="Enter Your Last Name"
-                            oninput={handleInputChange}
                             pattern="^[A-Za-zÀ-ÿ\s]+$"
-                            required
-                        />
+                            message-when-pattern-mismatch="Please enter a valid name (letters only)"
+                            oninput={handleInputChange}
+                            required disabled={disableInput}>
+                        </c-buho_input>
                     </div>
 
                     <!-- Email Address -->
                     <div class="form-group">
-                        <label for="email-detail">Email Address</label>
-                        <input
-                            type="email"
-                            id="email-detail"
+                        <c-buho_input
+                            type="input"
+                            input-type="email"
                             name="Email"
+                            label="Email Address"
                             value={inputValues.Email}
                             placeholder="Enter Your Email Address"
                             oninput={handleInputChange}
-                            required
-                            readonly
-                        />
+                            disabled
+                            required>
+                        </c-buho_input>
                     </div>
 
                     <!-- Phone Number with Country Code -->
                     <div class="form-group">
                         <label for="phone">Phone Number</label>
                         <div class="phone-input-wrapper">
-                            <select
+                            <c-buho_input
+                                type="combobox"
                                 name="countryCode"
-                                class="country-code-select"
-                                onchange={handleInputChange}>
-                                <template for:each={countryCodes} for:item="code">
-                                    <option key={code.value} value={code.value} selected={code.selected}>
-                                        {code.label}
-                                    </option>
-                                </template>
-                            </select>
-                            <input
-                                type="tel"
-                                id="phone"
+                                options={countryCodesOptions}
+                                value={inputValues.countryCode}
+                                container-class="country-code-wrapper"
+                                dropdown-class="country-code-select"
+                                onchange={handleInputChange} disabled={disableInput}>
+                            </c-buho_input>
+                            <c-buho_input
+                                type="input"
+                                input-type="tel"
                                 name="Phone"
-                                class="phone-input"
                                 value={inputValues.Phone}
                                 placeholder="(123) 456-7890"
+                                input-class="phone-input"
+                                max-length="14"
                                 oninput={handleInputChange}
-                                maxlength="14"
                                 required
-                            />
+                                disabled={disableInput}>
+                            </c-buho_input>
                         </div>
                     </div>
 

@@ -1,0 +1,52 @@
+<template>
+    <!-- Page Header -->
+    <div class="myvehicles-header">
+        <div class="myvehicles-header-left">
+            <h1 class="myvehicles-title">My Transactions</h1>
+            <p class="myvehicles-subtitle">View Your Payment History</p>
+        </div>
+    </div>
+
+    <!-- Quick Stats Summary -->
+    <h3 class="myvehicles-section-heading">Quick Stats Summary</h3>
+    <div class="myvehicles-stats-grid">
+        <div class="myvehicles-stat-card">
+            <div class="myvehicles-stat-icon accent">
+                <img src={transactionIconUrl} alt="Transactions" class="icon-img" />
+            </div>
+            <h2 class="myvehicles-stat-value">{totalTransactionsFormatted}</h2>
+            <p class="myvehicles-stat-label">Total Transactions</p>
+        </div>
+        <div class="myvehicles-stat-card">
+            <div class="myvehicles-stat-icon primary">
+                <img src={transactionIconUrl} alt="Total Amount" class="icon-img" />
+            </div>
+            <h2 class="myvehicles-stat-value">{totalAmountFormatted}</h2>
+            <p class="myvehicles-stat-label">Total Amount</p>
+        </div>
+    </div>
+
+    <!-- Transactions List -->
+    <h3 class="myvehicles-section-heading">Transactions</h3>
+    <div class="myvehicles-grid">
+        <template for:each={transactions} for:item="txn">
+            <c-buhodb_transactioncard
+                key={txn.id}
+                transaction-id={txn.id}
+                transaction-name={txn.transactionName}
+                transaction-type={txn.transactionType}
+                amount={txn.amount}
+                premium-amount={txn.premiumAmount}
+                tax-iva={txn.taxIva}
+                payment-type={txn.paymentType}
+                mode={txn.mode}
+                policy-ref={txn.policyRef}
+                cc-mask={txn.ccMask}
+                gateway-source={txn.gatewaySource}
+                term-days={txn.termDays}
+                created-at={txn.createdAt}
+                description={txn.description}>
+            </c-buhodb_transactioncard>
+        </template>
+    </div>
+</template>

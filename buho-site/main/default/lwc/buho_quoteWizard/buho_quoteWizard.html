@@ -1,16 +1,18 @@
 <template>
     <div class="wrapper">
-        <!-- Header -->
-        <header class="wizard-header">
-            <div class="container-fluid px-4">
-                <div class="d-flex justify-content-between align-items-center py-3">
-                    <a href="javascript:void(0)" class="header-logo">
-                        <img src={logoUrl} alt="BÚHO" class="logo-icon">
-                    </a>
-                    <button class="btn btn-contact">Contact Us</button>
+        <template if:true={displayHeader}>
+            <!-- Header -->
+            <header class="wizard-header">
+                <div class="container-fluid px-4">
+                    <div class="d-flex justify-content-between align-items-center py-3">
+                        <a href="/" class="header-logo">
+                            <img src={logoUrl} alt="BÚHO" class="logo-icon">
+                        </a>
+                        <button class="btn btn-contact">Contact Us</button>
+                    </div>
                 </div>
-            </div>
-        </header>
+            </header>
+        </template>
 
         <!-- Main Content -->
         <main class="wizard-main">
@@ -43,10 +45,11 @@
                             onstepchange={handleStepChange}
                             total-steps={totalSteps}
                             path-prefix={pathPrefix}
-                            base-url={currentSiteData.baseUrl}
+                            base-url={baseUrl}
                             start-url={startUrl}
                             is-user-logged-in={isUserLoggedIn}
                             agency-id={agencyId}
+                            agent-id={agentId}
                             >
                         </lwc:component>
                     </template>

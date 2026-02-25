@@ -22,7 +22,9 @@ export default class Buho_input extends LightningElement {
     @api messageWhenPatternMismatch = ''; // error message when pattern doesn't match
     @api textareaStyle = ''; // custom style for textarea (e.g., "height: 180px;")
     @api required = false; // whether the field is required
+    @api tooltipText = ''; // tooltip text to display on hover of info icon
 
+    showPatternError = false;
 
     get computedContainerClass() {
         return `${this.containerClass}`;
@@ -68,6 +70,10 @@ export default class Buho_input extends LightningElement {
         return this.icon && this.isInput;
     }
 
+    get hasTooltip() {
+        return this.tooltipText && this.tooltipText.trim() !== '';
+    }
+
     get computedInputClass() {
         return this.inputClass;
     }
@@ -105,8 +111,6 @@ export default class Buho_input extends LightningElement {
         return mappedOptions;
     }
 
-    @track showPatternError = false;
-
     handleInvalid(event) {
         if (this.pattern && this.messageWhenPatternMismatch) {
             const input = event.target;
@@ -119,8 +123,9 @@ export default class Buho_input extends LightningElement {
     }
 
     handleInputChange(event) {
+        event.stopPropagation();
         const value = event.target.value;
-        /*
+        
         // Validate pattern if provided
         if (this.pattern && this.messageWhenPatternMismatch) {
             const regex = new RegExp(this.pattern);
@@ -130,7 +135,7 @@ export default class Buho_input extends LightningElement {
             } else {
                 this.showPatternError = false;
             }
-        }*/
+        }
         
         this.dispatchEvent(new CustomEvent('change', {
             detail: {
@@ -142,8 +147,8 @@ export default class Buho_input extends LightningElement {
     }
 
     handleComboboxChange(event) {
+        event.stopPropagation();
         const value = event.target.value;
-        console.log('value on change',value)
         this.dispatchEvent(new CustomEvent('change', {
             detail: {
                 name: this.name,
@@ -151,11 +156,12 @@ export default class Buho_input extends LightningElement {
                 type: this.type
             }
         }));
+        
     }
 
     handleCheckboxChange(event) {
+        event.stopPropagation();
         const checked = event.target.checked;
-        console.log('input checked'+checked);
         this.dispatchEvent(new CustomEvent('change', {
             detail: {
                 name: this.name,
@@ -167,6 +173,7 @@ export default class Buho_input extends LightningElement {
     }
 
     handleKeyUp(event) {
+        event.stopPropagation();
         this.dispatchEvent(new CustomEvent('keyup', {
             detail: {
                 name: this.name,
@@ -178,6 +185,7 @@ export default class Buho_input extends LightningElement {
     }
 
     handleInput(event) {
+        event.stopPropagation();
         const value = event.target.value;
         
         // Validate pattern on input if provided
@@ -190,14 +198,16 @@ export default class Buho_input extends LightningElement {
                 this.showPatternError = false;
             }
         }
-        
-        this.dispatchEvent(new CustomEvent('input', {
+        const inputevent = new CustomEvent('input', {
             detail: {
                 name: this.name,
                 value: value,
-                type: this.type
+                type: this.type,
+                hasError: this.showPatternError
             }
-        }));
+        })
+        this.dispatchEvent(inputevent);
+        this.inputValue = value;
     }
 
     /**
@@ -208,6 +218,9 @@ export default class Buho_input extends LightningElement {
     @api
     reportValidity() {
         let inputElement;
+        if(this.showPatternError == true) {
+            return false;
+        }
         
         // Get the appropriate input element based on type
         if (this.isInput || this.isTextarea) {
@@ -221,7 +234,7 @@ export default class Buho_input extends LightningElement {
         if (inputElement) {
             // Check native HTML5 validation
             const isValid = inputElement.reportValidity();
-            
+            console.log(inputElement,'html 5 validation@@@',isValid);
             // Additional pattern validation for custom error messages
             if (this.pattern && this.messageWhenPatternMismatch) {
                 const regex = new RegExp(this.pattern);
@@ -260,11 +273,11 @@ export default class Buho_input extends LightningElement {
         } else if (this.isCheckbox || this.isRadio) {
             inputElement = this.template.querySelector('input[type="checkbox"], input[type="radio"]');
         }
-
+        console.log('@@@checking validity',inputElement);
         if (inputElement) {
             // Check native HTML5 validation
             const isValid = inputElement.checkValidity();
-            
+            console.log(inputElement,'html2 5 validation@@@',isValid);
             // Additional pattern validation
             if (this.pattern) {
                 const regex = new RegExp(this.pattern);

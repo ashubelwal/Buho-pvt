@@ -1,0 +1,38 @@
+<template>
+    <div class="policy-card">
+        <div class="policy-card-header">
+            <div class="policy-card-icon">
+                <img src={transactionIconUrl} alt="Transaction" class="icon-img" />
+            </div>
+            <div class="policy-card-header-info">
+                <h4 class="policy-card-title">{transactionName}</h4>
+                <template if:true={transactionType}>
+                    <p class="policy-card-subtitle">Type: {transactionType}</p>
+                </template>
+            </div>
+        </div>
+
+        <div class="policy-card-body">
+            <ul class="policy-card-details-left">
+                <li>Amount: {amount}</li>
+                <li>Premium: {premiumAmount}</li>
+                <li>Tax (IVA): {taxIva}</li>
+                <li>Payment Type: {paymentType}</li>
+                <li>Mode: {mode}</li>
+            </ul>
+            <ul class="policy-card-details-right">
+                <li>Policy: {policyRef}</li>
+                <li>CC Mask: {ccMask}</li>
+                <li>Gateway: {gatewaySource}</li>
+                <li>Term Days: {termDays}</li>
+                <li>Date: {createdAt}</li>
+            </ul>
+        </div>
+
+        <template if:true={description}>
+            <div class="policy-card-footer">
+                <p class="transaction-description">Description: {description}</p>
+            </div>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,33 @@
+<template>
+    <div class="doc-card">
+        <div class="doc-card-header">
+            <h4 class="doc-card-title">{title}</h4>
+            <div class="doc-card-action-wrapper">
+                <button class={actionBtnClass} onclick={handleActionToggle}>
+                    {actionLabel}
+                    <img src={chevronDownIconUrl} alt="" class="icon-chevron" />
+                </button>
+                <template if:true={isActionOpen}>
+                    <div class="doc-card-action-menu">
+                        <button class="doc-card-action-item" onclick={handleDownload}>Download</button>
+                        <button class="doc-card-action-item" onclick={handleView}>View</button>
+                        <button class="doc-card-action-item" onclick={handleEmail}>Email</button>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <div class="doc-card-body">
+            <ul class="doc-card-details-left">
+                <template for:each={leftDetails} for:item="item">
+                    <li key={item.id}>{item.text}</li>
+                </template>
+            </ul>
+            <ul class="doc-card-details-right">
+                <template for:each={rightDetails} for:item="item">
+                    <li key={item.id}>{item.text}</li>
+                </template>
+            </ul>
+        </div>
+    </div>
+</template>

@@ -71,10 +71,16 @@ public without sharing class AgentAppController {
                 if(loggedInUserId != null){
                     getUserInfo = [Select Id,User_Type__c,Email FROM User WHERE Id =: loggedInUserId LIMIT 1];
                     
-                    if(getUserInfo.User_Type__c == 'Customer' || getUserInfo.User_Type__c == null){agentId = [Select id from contact where email =: getUserInfo.email  Limit 1].Id;
+                    if(getUserInfo.User_Type__c == 'Customer' || getUserInfo.User_Type__c == null){
+                        List<Contact> lstCon = [SELECT Id FROM Contact WHERE Email =: getUserInfo.email LIMIT 1];
+                        if(lstCon.size() > 0){
+                            agentId = lstCon[0].Id;
+                        }
                     }else if(loggedInUserId != null){
                         List<User> userdata =  [Select id,ContactId  from user WHERE Id =: loggedInUserId LIMIT 1];
-                        if(userdata[0].ContactId != null){ agentId = [Select id,ContactId  from user WHERE Id =: loggedInUserId LIMIT 1].ContactId; }
+                        if(userdata[0].ContactId != null){ 
+                            agentId = [SELECT Id,ContactId  FROM user WHERE Id =: loggedInUserId LIMIT 1].ContactId; 
+                        }
                     }
                 }
                 
@@ -93,13 +99,16 @@ public without sharing class AgentAppController {
                 }else{
                     getLeadData.Vehicle_Details__c = vehicleJSON;
                 }
-                
-                if(agentContact.Agency__c != null){
-                    getLeadData.Agency__c = agentContact.Agency__c;
-                }else{
-                    getLeadData.Agency__c = agentContact.Id;
+                if(String.isBlank(getLeadData.Agency__c)) {
+                    if(agentContact.Agency__c != null){
+                        getLeadData.Agency__c = agentContact.Agency__c;
+                    }else{
+                        getLeadData.Agency__c = agentContact.Id;
+                    }
                 }
-                getLeadData.Agent__c = agentContact.Id;
+                if(String.isBlank(getLeadData.Agent__c)) {
+                    getLeadData.Agent__c = agentContact.Id;
+                }
                 
                 getLeadData.Towing__c = towedlistJSON;
                 System.debug('Lead Before Saving'+getLeadData);
@@ -108,7 +117,7 @@ public without sharing class AgentAppController {
                 return JSON.serialize(getLeadData);
             }
         } catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
+            throw new AuraHandledException(e.getMessage()+e.getStackTraceString());
         }
         return null;
     }

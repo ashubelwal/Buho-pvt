@@ -14,7 +14,7 @@
                 <!-- Action Buttons Section -->
                 <div class="action-buttons-vertical">
                     <button class="other-companies-btn" onclick={toggleOtherCompanies}>
-                        Other Companies
+                        More Options
                     </button>
 
                     <!-- Other Companies Dropdown -->
@@ -137,19 +137,21 @@
                     <!-- Checkboxes Section -->
                     <div class="checkbox-options-container">
                         <template if:true={quotePreviewData.Gold}>
-                            <c-buho_input label="Gold:" label-class="coverage-label" container-class="custom-checkbox"
+                            <c-buho_input label="Gold" label-class="coverage-label" container-class="custom-checkbox"
                                 type="checkbox" name="Gold__c" checked={checkedData.Gold__c}
-                                onchange={handleInputChange}></c-buho_input>
+                                onchange={handleInputChange} tooltip-text="GOLD Package lowers deductible for Damage to your car to $500 (from $1,000) and provides Gap coverage if you are making payments on your vehicle, or are leasing your vehicle it will provide an extra payout of 15% over Actual Cash Value toward your loan balance.">
+                            </c-buho_input>
                         </template>
 
                         <template if:true={quotePreviewData.Max}>
-                            <c-buho_input label="Gold" label-class="coverage-label" container-class="custom-checkbox"
+                            <c-buho_input label="Max" label-class="coverage-label" container-class="custom-checkbox"
                                 type="checkbox" name="Max__c" checked={checkedData.Max__c}
-                                onchange={handleInputChange}></c-buho_input>
+                                onchange={handleInputChange} tooltip-text="The Mapfre Max package sets fixed deductibles of damage to $500 and theft to $1,000 and provides for Air Evacuation if medically necessary, and Zero Deductible on Uninsured Motorist coverage">
+                            </c-buho_input>
                         </template>
 
                         <template if:true={quotePreviewData.Platinum}>
-                            <c-buho_input label="Platinum" label-class="coverage-label"
+                            <c-buho_input label="Platinum" label-class="coverage-label" checked
                                 container-class="custom-checkbox" type="checkbox" name="Platinum__c" disabled="true"
                                 onchange={handleInputChange}></c-buho_input>
                         </template>

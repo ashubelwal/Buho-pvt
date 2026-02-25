@@ -3,61 +3,7 @@
         <div class="step-header">
             <h2>Online Insurance <span class="highlight">Final Details</span></h2>
         </div>
-         <!-- Trip Details Section -->
-         <div class="row g-4" style="margin-top: 24px;">
-            <div class="col-md-6">   
-                <c-buho_input 
-                    type="combobox" 
-                    name="What_is_your_trip_destination_in_US__c"
-                    placeholder={label.WhatisyourTripDestination} 
-                    label={label.WhatisyourTripDestination} 
-                    value={tripDestination}
-                    options={usDestinations} 
-                    onchange={handleChange}
-                    required="true">
-                </c-buho_input>
-            </div>
-            <div class="col-md-6">
-                <c-buho_input 
-                    type="combobox" 
-                    name="What_is_the_purpose_of_trip__c"
-                    placeholder={label.Whatisthetrippurposetrip} 
-                    label={label.Whatisthetrippurposetrip} 
-                    value={tripPurpose}
-                    options={tripPurposes} 
-                    onchange={handleChange}
-                    required="true">
-                </c-buho_input>
-            </div>
-            <div class="col-md-6">
-                <c-buho_input 
-                    type="combobox" 
-                    name="How_did_you_hear_about_us__c"
-                    placeholder={label.Howdidyouhearaboutus} 
-                    label={label.Howdidyouhearaboutus} 
-                    value={hearAboutUs}
-                    options={aboutusOption} 
-                    onchange={handleChange}
-                    required="true">
-                </c-buho_input>
-            </div>
-             <!-- Other Option Textarea -->
-            <template if:true={showOtherOptioForHearus}>
-                <div class="col-md-6">
-                    <c-buho_input 
-                        type="textarea"
-                        name="How_did_you_hear_about_us_Other__c" 
-                        placeholder={label.Howdidyouhearaboutus}
-                        value={hearAboutUsOther}
-                        textarea-style="height: 180px;"
-                        max-length="350"
-                        onchange={handleChange}
-                        required="true">
-                    </c-buho_input>
-                </div>
-            </template>
-        </div>
-
+        
         <!-- Policy Summary Section -->
         <div class="row g-4">
             <div class="col-md-6">
@@ -252,6 +198,60 @@
             <span class="total-amount">{premiumAndFeesValue}</span>
         </div>
 
+         <!-- Trip Details Section -->
+         <div class="row g-4" style="margin-top: 24px;">
+            <div class="col-md-6">   
+                <c-buho_input 
+                    type="combobox" 
+                    name="What_is_your_trip_destination_in_US__c"
+                    placeholder={label.WhatisyourTripDestination} 
+                    label={label.WhatisyourTripDestination} 
+                    value={tripDestination}
+                    options={usDestinations} 
+                    onchange={handleChange}>
+                </c-buho_input>
+            </div>
+            <div class="col-md-6">
+                <c-buho_input 
+                    type="combobox" 
+                    name="What_is_the_purpose_of_trip__c"
+                    placeholder={label.Whatisthetrippurposetrip} 
+                    label={label.Whatisthetrippurposetrip} 
+                    value={tripPurpose}
+                    options={tripPurposes} 
+                    onchange={handleChange}>
+                </c-buho_input>
+            </div>
+            <!--div class="col-md-6">
+                <c-buho_input 
+                    type="combobox" 
+                    name="How_did_you_hear_about_us__c"
+                    placeholder={label.Howdidyouhearaboutus} 
+                    label={label.Howdidyouhearaboutus} 
+                    value={hearAboutUs}
+                    options={aboutusOption} 
+                    onchange={handleChange}
+                    required="true">
+                </c-buho_input>
+            </div-->
+             <!-- Other Option Textarea -->
+            <!--template if:true={showOtherOptioForHearus}>
+                <div class="col-md-6">
+                    <c-buho_input 
+                        type="textarea"
+                        name="How_did_you_hear_about_us_Other__c" 
+                        placeholder={label.Howdidyouhearaboutus}
+                        value={hearAboutUsOther}
+                        textarea-style="height: 180px;"
+                        max-length="350"
+                        onchange={handleChange}
+                        required="true">
+                    </c-buho_input>
+                </div>
+            </template-->
+        </div>
+
+
         <!-- Terms and Agreements Section -->
         <div class="section-title" style="margin-top: 32px; margin-bottom: 16px;">
             {label.Ireadandagreewiththefollowing}:
@@ -268,6 +268,9 @@
                 <label class="terms-link" onclick={handleTermsOfPurchaseClick}>
                     {label.Termsofpurchase}
                 </label>
+                <div class="hint-text">
+                    By checking this box, I authorize BUHO Inscurance Brokerage to charge my selected payment method for the policy premium and any selected services.
+                </div>
             </div>
             <div class="terms-checkbox-wrapper">
                 <c-buho_input 
@@ -275,11 +278,15 @@
                     name="Terms_of_Cancellation_Confirmed__c"
                     checked={TermsOfPurchaseCancellation}
                     onchange={handleChange}
-                    required="true">
+                    required="true"
+                    oncheckboxlabelclick={handleTermsOfCancellationClick}>
                 </c-buho_input>
                 <label class="terms-link" onclick={handleTermsOfCancellationClick}>
                     {label.Termsofcancellation}
                 </label>
+                <div class="hint-text">
+                    By checking this box, I authorize BUHO Inscurance Brokerage to charge my selected payment method for the policy premium and any selected services.
+                </div>
             </div>
         </div>
 

@@ -202,7 +202,6 @@ public without sharing class BuhoLoginController {
         siteDetails.put('siteType', (Site.getSiteType() != null) ? String.valueOf(Site.getSiteType()) : null);
         siteDetails.put('pathPrefix', Site.getPathPrefix());
         siteDetails.put('baseUrl', Site.getBaseSecureUrl() );
-
         return siteDetails;
     }
 
@@ -213,13 +212,13 @@ public without sharing class BuhoLoginController {
         }
     }
 
-    @AuraEnabled(cacheable=true)
-    public static Id getAgencyId(){
-        Contact objContact = [
-                            SELECT  Id 
-                            FROM Contact 
-                            WHERE Name = 'Buho Insurance' AND RecordType.Name = 'Agency RT' 
-                            LIMIT 1];
-        return objContact.Id;
+    @AuraEnabled
+    public static void updateAgency(){
+        Id buhoAgencyId = Label.Buho_AgencyId;
+        User currentUser = [SELECT  Id, ContactId, Contact.Agency__c  FROM User WHERE Id =: UserInfo.getUserId()];
+        if(currentUser.Contact.Agency__c != buhoAgencyId ) {
+            update new Contact(Id = currentUser.ContactId, Agency__c = buhoAgencyId);
+        }
     }
+
 }

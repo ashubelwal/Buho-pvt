@@ -6,19 +6,19 @@ import updateQuoteRecordData from '@salesforce/apex/NcExistingCustomerFlow.updat
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { loadScript, loadStyle } from 'lightning/platformResourceLoader';
 import BUHO_ASSETS from '@salesforce/resourceUrl/buhoAssets';
+import { log } from 'c/buho_utils';
 export default class Buho_driverDetails extends LightningElement {
     @api payload;
     ISDEBUG = true;
-
     @track driver = {
-        First_Name__c: '',
-        Last_Name__c: '',
+        First_Name__c:  '',
+        Last_Name__c:  '',
         License_Country__c: 'United States',
         License_state__c: '',
         license_number__c: '',
         Dob__c: '',
         Driver_Type__c: false // Drivers are not owners
-    };
+    }
     @track selectedDriverId = '';
 
     @track flag = {
@@ -33,6 +33,7 @@ export default class Buho_driverDetails extends LightningElement {
     @track countryOptions = [];
     @track stateOptions = [];
     flatpickrInstance;
+    __currentUserDetails;
 
     // Getters
     get currentUserType() {
@@ -349,7 +350,8 @@ export default class Buho_driverDetails extends LightningElement {
             const driverPayload = this.payload.find(item => item?.driverDetails)?.driverDetails;
             const existingDrivers = driverPayload?.driverList || [];
             const addedDrivers = driverPayload?.drivers || [];
-
+            this.__currentUserDetails = this.payload.find(item => item?.userDetails)?.userDetails;
+            
             // Load all drivers (owner will be selected in next step)
             if ((!this.drivers || this.drivers.length === 0) && addedDrivers.length > 0) {
                 this.drivers = addedDrivers.map(d => {
@@ -370,6 +372,11 @@ export default class Buho_driverDetails extends LightningElement {
                 { label: '-- Select a Driver --', value: '' },
                 ...this.existingDriversList
             ];
+            if(this.drivers.length == 0 && this.__currentUserDetails) {
+                log('populating values');
+                this.driver.First_Name__c = this.__currentUserDetails.FirstName;
+                this.driver.Last_Name__c = this.__currentUserDetails.LastName;
+            }
         }
 
         if (!this.driver.Dob__c) {
@@ -393,23 +400,22 @@ export default class Buho_driverDetails extends LightningElement {
             });
 
         }
-
-
     }
+
     initializeFlatpickr() {
         const dobInput = this.template.querySelector('.dobDate');
-    
+
         if (!dobInput || typeof flatpickr === 'undefined') {
             return;
         }
-    
+
         try {
             const maxDate = new Date();
-            maxDate.setFullYear(maxDate.getFullYear() - 16);
-    
+            maxDate.setFullYear(maxDate.getFullYear() - 46);
+
             // Fixed: Proper date parsing that handles Salesforce date format
             let dobObj = maxDate; // Default to maxDate
-            
+
             if (this.driver.Dob__c) {
                 // Parse the date string correctly (assuming format: YYYY-MM-DD from Salesforce)
                 const parts = this.driver.Dob__c.split('-');
@@ -422,22 +428,25 @@ export default class Buho_driverDetails extends LightningElement {
                     );
                 }
             }
-            
+
             console.log('dobObj', dobObj);
             console.log('Original Dob__c', this.driver.Dob__c);
-    
+
             this.flatpickrInstance = flatpickr(dobInput, {
                 dateFormat: 'm/d/Y',
-                maxDate: maxDate,
-                defaultDate: dobObj,
-                onChange: (selectedDates, dateStr, instance) => {
-                    if (selectedDates[0]) {
+                maxDate: new Date(),
+                minDate: new Date(1900, 0, 1), // Jan 1, 1900 (month is 0-based)
+                allowInput: true,
+                clickOpens: true,
+                defaultDate: dobObj || null,
+                onChange: (selectedDates) => {
+                    if (selectedDates.length) {
                         const dob = selectedDates[0];
                         this.driver.Dob__c = this.formatDateForApi(dob);
                     }
                 }
             });
-    
+
             this.flag.flatpickrInitialized = true;
         } catch (error) {
             console.error('DD Error initializing Flatpickr:', error);
@@ -549,9 +558,16 @@ export default class Buho_driverDetails extends LightningElement {
     // Public API Methods (called from wizard)
     @api
     validate() {
-        console.log('DD validate() called');
+        let allValid = true;
+        const hasAtLeastOneDriver = this.drivers.length > 0;
         // Validation is optional - drivers can be empty
-        return true;
+        if (!hasAtLeastOneDriver) {
+            this.dispatchEvent(new CustomEvent('toastevent', {
+                detail: { variant: 'error', title: 'Error', message: '⚠️ Please add at least one driver for company-registered vehicle.' }
+            }));
+            allValid = false;
+        }
+        return allValid;
     }
 
     @api

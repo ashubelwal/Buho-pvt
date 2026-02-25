@@ -64,9 +64,7 @@ export default class Buho_ownerDetails extends LightningElement {
     }
 
     get driverOptions() {
-        const options = [
-            { label: '-- Select Owner --', value: '' }
-        ];
+        const options = [];
 
         this.driversFromPreviousStep.forEach(driver => {
             options.push({

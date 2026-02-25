@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Policy_Expiration__c</fullName>
+    <description>From the Policy object, should be updated whenever a new policy, policy edit or renewal is done. If the policy.expiration changes, automatically this field should also change.</description>
+    <label>Policy Expiration</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

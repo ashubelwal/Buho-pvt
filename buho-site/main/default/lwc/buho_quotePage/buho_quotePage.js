@@ -8,7 +8,7 @@ import saveQuoteRecord from '@salesforce/apex/QuoteOptionFlow.saveQuoteRecord';
 import saveQuoteRecordData from '@salesforce/apex/NcExistingCustomerFlow.saveQuoteRecordData';
 import sendEmailQuoteDetails from '@salesforce/apex/Mex_NewLeadProcess.sendEmailQuoteDetails';
 import { NavigationMixin } from 'lightning/navigation';
-import RESOURCE_PATH from '@salesforce/resourceUrl/buhoAssets';
+import RESOURCE_PATH from '@salesforce/resourceUrl/BuhoAssets';
 
 
 export default class Buho_quotePage extends NavigationMixin(LightningElement) {
@@ -23,8 +23,8 @@ export default class Buho_quotePage extends NavigationMixin(LightningElement) {
     @track parentPayloadData;
     @track selectedQuote;
     @track checkedData = {
-        "Gold__c": true,
-        "Max__c": true,
+        "Gold__c": false,
+        "Max__c": false,
         "Platinum__c": true
     }
     @track vendorDataList;
@@ -47,7 +47,7 @@ export default class Buho_quotePage extends NavigationMixin(LightningElement) {
 
     // Liability Options
     liabilityOptions = ['100,000', '200,000', '300,000', '500,000', '1,000,000'];
-    @track combinedLiabilityValue = this.liabilityOptions[0]; // Default first value
+    @track combinedLiabilityValue = this.liabilityOptions[2]; // Default first value
 
     // Medical Options
     medicalValues = ['2,000/10,000', '3,000/15,000', '4,000/16,000', '5,000/25,000', '10,000/50,000', '15,000/75,000', '20,000/100,000'];
@@ -135,17 +135,17 @@ export default class Buho_quotePage extends NavigationMixin(LightningElement) {
     }
 
     get showSingleDayTrip() {
-        // Show upsell options if the term is "Daily" (Single Trip)
-        const termOption = this.payload?.find(item => item.termOption)?.termOption;
-        return termOption?.Term__c === 'Daily' && this.dailyPreviewTotal > 0;
+        // Show Daily card: always show when Daily is selected OR show as option when it has a price
+        return this.dailyPreviewTotal > 0;
     }
 
     get showSemiAnnualTrip() {
-        const termOption = this.payload?.find(item => item.termOption)?.termOption;
-        return termOption?.Term__c == 'Daily' && this.semiAnnualPreviewTotal > 0;
+        // Show Semi-Annual card: always show when Semi-Annual is selected OR show as upsell option
+        return this.semiAnnualPreviewTotal > 0;
     }
 
     get showAnnualTrip() {
+        // Show Annual card: always show when Annual is selected OR show as upsell option
         return this.annualPreviewTotal > 0;
     }
 
@@ -201,6 +201,7 @@ export default class Buho_quotePage extends NavigationMixin(LightningElement) {
     }
 
     get dailyPreviewTotal() {
+        console.log(this.activeTab + 'dailyPreviewTotal@@@', this.vendorVsTermVsTotals[this.activeTab]);
         return this.vendorVsTermVsTotals[this.activeTab]?.['Daily']?.total || 0;
     }
 
@@ -1002,9 +1003,9 @@ export default class Buho_quotePage extends NavigationMixin(LightningElement) {
                 const updatedJson = JSON.stringify(clonedPayload);
 
                 console.log(`▶ Calling Apex for term: ${termKey}`);
-                console.log('JSON String', updatedJson);
+                console.log(termKey + ' JSON String', updatedJson);
                 const res = await calculateTotalCoverage({ jsonString: updatedJson });
-                console.log('Response from apex', res);
+                console.log(termKey + ' Response from apex', res);
                 // **FIX APPLIED HERE**
                 // The result from Apex is a read-only Proxy. We convert it to a
                 // plain JavaScript object to prevent errors in other functions.
@@ -1016,7 +1017,7 @@ export default class Buho_quotePage extends NavigationMixin(LightningElement) {
             console.log('All results after calculation', this.results);
             Object.keys(this.results).forEach(term => {
                 const companies = this.results[term];
-            
+
                 Object.keys(companies).forEach(company => {
                     companies[company].Calculated_On_Term__c = term;
                 });
@@ -1201,7 +1202,7 @@ export default class Buho_quotePage extends NavigationMixin(LightningElement) {
             if (this.isEmailSent == true) {
                 let sendEmailOfQuoteDetail = await sendEmailQuoteDetails({ 'quoteId': this.selectedQuote.QuoteData.Id });
 
-                console.log('isEmail Send Already :: ' + sendEmailOfQuoteDetail.status);
+                console.log('isEmail Send Already :: ' , sendEmailOfQuoteDetail);
                 if (sendEmailOfQuoteDetail.status == 'success') {
                     console.log('Email Sccessfully Send to User');
                     this.dispatchEvent(new CustomEvent('toastevent', { detail: { variant: 'success', title: 'Success', message: 'Email Sccessfully Send' } }));
@@ -1216,7 +1217,7 @@ export default class Buho_quotePage extends NavigationMixin(LightningElement) {
                 //window.open(`/apex/selectedQuoteNewRate?Id=${this.selectedQuote.QuoteData.Id}`, "_blank");
                 console.log('this.selectedQuote.QuoteData :: ' + this.selectedQuote.QuoteData.Id);
                 this.isDownloadQuote == false;
-                window.open( `${this.baseUrl}vforcesite/apex/selectedQuoteNewRate?Id=${this.selectedQuote.QuoteData.Id}`, "_blank");
+                window.open(`${this.baseUrl}vforcesite/apex/selectedQuoteNewRate?Id=${this.selectedQuote.QuoteData.Id}`, "_blank");
                 this.dispatchEvent(new CustomEvent('loadingstatuschange', { detail: true }));
                 return;
 
@@ -1312,6 +1313,9 @@ export default class Buho_quotePage extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('Final JSON after converted to the dataMap', dataMap);
 
         const calculateDaysWithNewDate = (startDateStr, endDateStr) => {
+            if(startDateStr == endDateStr){
+                return 1;
+            }
             const startDate = new Date(startDateStr);
             const endDate = new Date(endDateStr);
             const diffMs = endDate - startDate;
@@ -1322,7 +1326,7 @@ export default class Buho_quotePage extends NavigationMixin(LightningElement) {
             dataMap?.termOption?.Start_Date_for_Coverage__c,
             dataMap?.termOption?.End_Date_for_Coverage__c
         );
-
+        console.log('termDays calculated',termDays);
         const selectedQuote = this.selectedQuote || {}; // Use selectedQuote from component context
         const agentFee = this.agentFee || 0;
         const underwriter = this.selectedQuote?.Vendor != null ? this.selectedQuote?.Vendor : 'Error Vendor';

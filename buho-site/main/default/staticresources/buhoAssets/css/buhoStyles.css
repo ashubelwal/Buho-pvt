@@ -4376,6 +4376,1858 @@ lightning-input[type="checkbox"] .slds-checkbox [type="checkbox"]:checked + .sld
 }
 
 /* =============================================================================
+   Dashboard Components Styles
+   ============================================================================= */
+
+/* Dashboard Container */
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--buho-background);
+    width: 100%;
+}
+.dashboard-container .wizard-main {
+    background-color: #fff !important;
+}
+
+/* Dashboard Header */
+.dashboard-header {
+    background-color: var(--white);
+    border-bottom: 1px solid var(--input-border);
+    padding: 1.2rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    width: 100%;
+    min-height: 65px;
+    box-sizing: border-box;
+}
+
+.dashboard-header-left {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex: .4;
+}
+
+.menu-toggle-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    color: var(--primary-blue);
+    transition: color 0.3s ease;
+}
+
+.menu-toggle-btn:hover {
+    color: var(--accent-pink);
+}
+
+.menu-toggle-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+.dashboard-logo {
+    display: flex;
+    align-items: center;
+}
+
+.dashboard-logo img {
+    height: 40px;
+    width: auto;
+}
+
+.dashboard-search-wrapper {
+    flex: 1;
+    max-width: 800px;
+    position: relative;
+}
+
+.dashboard-search-input {
+    width: 100%;
+    padding: 0.625rem 1rem 0.625rem 2.5rem;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    color: var(--primary-blue);
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.dashboard-search-input:focus {
+    outline: none;
+    border-color: var(--accent-pink);
+    box-shadow: 0 0 0 3px rgba(229, 60, 123, 0.1);
+    background-color: var(--white);
+}
+
+.dashboard-search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.dashboard-search-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+.dashboard-search-shortcut {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.dashboard-search-shortcut svg {
+    width: 15px;
+    height: 15px;
+}
+
+.dashboard-header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.dashboard-user-profile {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.dashboard-user-profile:hover {
+    background-color: var(--input-bg);
+}
+
+.dashboard-user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--input-border);
+}
+
+.dashboard-user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-user-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary-blue);
+    line-height: 1.2;
+}
+
+.dashboard-user-role {
+    font-size: 12px;
+    color: var(--gray-text);
+    line-height: 1.2;
+}
+
+.dashboard-user-dropdown-icon {
+    color: var(--gray-text);
+    font-size: 12px;
+}
+
+/* Dashboard Sidebar/Menu */
+.dashboard-sidebar {
+    background-color: var(--white);
+    border-right: 1px solid var(--input-border);
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    transition: width 0.3s ease, transform 0.3s ease;
+}
+
+.dashboard-sidebar.collapsed {
+    width: 80px;
+}
+
+.dashboard-sidebar.collapsed .dashboard-nav-text {
+    display: none;
+}
+
+.dashboard-sidebar.collapsed .dashboard-nav-list {
+    width: auto !important;
+}
+
+.dashboard-sidebar.collapsed .dashboard-sidebar-logo img {
+    height: 32px;
+}
+
+.dashboard-sidebar-header {
+    padding: 1rem;
+    border-bottom: 1px solid var(--input-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 65px;
+    box-sizing: border-box;
+}
+
+
+.collapsed .dashboard-sidebar-header {
+    padding: 1rem .5rem !important;
+}
+
+.dashboard-sidebar-logo {
+    flex: 1;
+}
+
+.dashboard-sidebar-logo img {
+    height: 36px;
+    width: auto;
+}
+
+.sidebar-collapse-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    color: var(--primary-blue);
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar-collapse-btn:hover {
+    color: var(--accent-pink);
+}
+
+.sidebar-collapse-btn i {
+    font-size: 18px;
+}
+
+.dashboard-nav {
+    flex: 1;
+    padding: 1rem 0;
+}
+
+.dashboard-nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    min-width: 240px;
+}
+
+.dashboard-nav-item {
+    margin-bottom: 0.25rem;
+}
+
+.dashboard-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    margin: 0 0.5rem;
+    color: var(--gray-text);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.dashboard-nav-link:hover {
+    background-color: var(--input-bg);
+    color: var(--primary-blue);
+}
+
+.dashboard-nav-link.active,.dashboard-nav-link.active:hover {
+    background-color: var(--primary-blue);
+    color: var(--white);
+}
+
+.dashboard-nav-link.active .dashboard-nav-icon svg path {
+    fill: var(--white);
+    stroke: var(--white);
+}
+
+.dashboard-nav-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard-nav-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.dashboard-nav-text {
+    flex: 1;
+}
+
+/* Dashboard Main Content */
+.dashboard-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+.dashboard-content {
+    flex: 1;
+    padding: 2rem;
+}
+
+.dashboard-content-no-padding {
+    padding: 0 !important;
+}
+
+/* Dashboard Stats Cards */
+.dashboard-welcome {
+    margin-bottom: 2rem;
+}
+
+.dashboard-welcome h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin: 0 0 0.5rem 0;
+}
+
+.dashboard-welcome p {
+    font-size: 14px;
+    color: var(--gray-text);
+    margin: 0;
+}
+
+.dashboard-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.dashboard-stat-card {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--buho-shadow-sm);
+    border: 1px solid var(--input-border);
+    transition: box-shadow 0.3s ease;
+}
+
+.dashboard-stat-card:hover {
+    box-shadow: var(--buho-shadow-md);
+}
+
+.dashboard-stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.dashboard-stat-icon.primary {
+    background-color: rgba(19, 32, 61, 0.1);
+    color: var(--primary-blue);
+}
+
+.dashboard-stat-icon.accent {
+    background-color: rgba(229, 60, 123, 0.1);
+    color: var(--accent-pink);
+}
+
+.dashboard-stat-icon.info {
+    background-color: rgba(137, 219, 239, 0.2);
+    color: var(--light-blue);
+}
+
+.dashboard-stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin: 0 0 0.25rem 0;
+}
+
+.dashboard-stat-label {
+    font-size: 14px;
+    color: var(--gray-text);
+    margin: 0;
+}
+
+/* Dashboard Sections */
+.dashboard-section {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--buho-shadow-sm);
+    border: 1px solid var(--input-border);
+}
+
+.dashboard-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.dashboard-section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--primary-blue);
+    margin: 0;
+}
+
+.dashboard-section-action {
+    font-size: 14px;
+    color: var(--accent-pink);
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.dashboard-section-action:hover {
+    opacity: 0.8;
+}
+.dashboard-section .bi::before {
+    color: #000 !important;
+}
+
+/* Mobile Overlay — hidden & non-interactive by default */
+.dashboard-sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 98;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+/* When sidebar is open: show the overlay and allow clicks (to close) */
+.dashboard-sidebar-overlay.active {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Mobile Responsive */
+@media (max-width: 1024px) {
+    .dashboard-header {
+        padding: 1rem 1.5rem;
+    }
+
+    .dashboard-content {
+        padding: 1.5rem;
+    }
+
+    .dashboard-stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+    }
+
+    .dashboard-user-dropdown-icon {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .menu-toggle-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Hide the collapse arrow on mobile — sidebar is toggled via hamburger */
+    .sidebar-collapse-btn {
+        display: none;
+    }
+
+    .dashboard-sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: 100;
+        transform: translateX(-100%);
+    }
+
+    .dashboard-sidebar.mobile-open {
+        transform: translateX(0);
+    }
+
+    .dashboard-header {
+        padding: 1rem;
+    }
+
+    .dashboard-search-wrapper {
+        max-width: 300px;
+    }
+
+    /* Keep user name visible but compact */
+    .dashboard-user-name {
+        font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 150px;
+    }
+
+    .dashboard-content {
+        padding: 1rem;
+    }
+
+    .dashboard-welcome h1 {
+        font-size: 24px;
+    }
+
+    .dashboard-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-section {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-logo {
+        display: none;
+    }
+
+    .dashboard-search-wrapper {
+        max-width: 100%;
+    }
+
+    .dashboard-search-shortcut {
+        display: none;
+    }
+
+    .dashboard-header-left {
+        gap: 0.75rem;
+        flex: 1;
+    }
+
+    .dashboard-welcome h1 {
+        font-size: 20px;
+    }
+
+    .dashboard-stat-value {
+        font-size: 24px;
+    }
+}
+
+/* Dashboard Card Styles */
+.dashboard-policy-card,
+.dashboard-vehicle-card {
+    padding: 1.5rem;
+    background-color: var(--input-bg);
+    border-radius: 12px;
+    border: 1px solid var(--input-border);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.dashboard-policy-card .dashboard-card-content,
+.dashboard-vehicle-card .dashboard-card-content {
+    flex: 1;
+}
+
+/* Make policy and vehicle sections equal height */
+.dashboard-section.policy-vehicle-section {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.dashboard-section.policy-vehicle-section .dashboard-policy-card,
+.dashboard-section.policy-vehicle-section .dashboard-vehicle-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.dashboard-card-content {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.dashboard-card-icon {
+    margin-top: 0.25rem;
+}
+
+.dashboard-card-details {
+    flex: 1;
+}
+
+.dashboard-card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--primary-blue);
+    margin: 0 0 0.5rem 0;
+}
+
+.dashboard-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.75rem;
+}
+
+.dashboard-card-field-label {
+    font-size: 13px;
+    color: var(--gray-text);
+    margin: 0 0 0.25rem 0;
+}
+
+.dashboard-card-field-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--primary-blue);
+    margin: 0;
+}
+
+.dashboard-card-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: nowrap;
+    margin-top: 1rem;
+}
+
+/* Ensure Bootstrap columns stretch to equal height */
+.row.g-3.mb-4 > .col-lg-6 {
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width: 768px) {
+    .dashboard-card-actions {
+        flex-wrap: wrap;
+    }
+    
+    .dashboard-policy-grid,
+    .dashboard-vehicle-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.icon-img {
+    width: 24px;
+    height: 24px;
+}
+
+/* Carousel Navigation */
+.carousel-controls {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.carousel-counter {
+    font-size: 14px;
+    color: var(--gray-text);
+    font-weight: 500;
+}
+
+.carousel-btn {
+    background: none;
+    border: 1px solid var(--input-border);
+    border-radius: 6px;
+    padding: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: var(--primary-blue);
+}
+
+.carousel-btn:hover:not(:disabled) {
+    background-color: var(--input-bg);
+    border-color: var(--primary-blue);
+}
+
+.carousel-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.carousel-btn i {
+    font-size: 16px;
+}
+
+/* Document Item */
+.dashboard-document-item {
+    padding: 1rem;
+    background-color: var(--input-bg);
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dashboard-document-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--primary-blue);
+    margin: 0 0 0.25rem 0;
+}
+
+.dashboard-document-meta {
+    font-size: 13px;
+    color: var(--gray-text);
+    margin: 0;
+}
+
+/* Resource Card */
+.dashboard-resource-card {
+    padding: 1.25rem;
+    background-color: var(--input-bg);
+    border-radius: 12px;
+    border: 1px solid var(--input-border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.dashboard-resource-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--primary-blue);
+    margin: 0;
+}
+
+.dashboard-resource-description {
+    font-size: 13px;
+    color: var(--gray-text);
+    margin: 0;
+    flex: 1;
+}
+
+/* Vehicles Grid */
+.dashboard-vehicles-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
+}
+
+.btn-edit-sm {
+    padding: 0.5rem 1.25rem;
+    width: auto;
+    font-size: 14px;
+}
+
+/* Special Dashboard Cards */
+.dashboard-action-card {
+    height: 100%;
+    margin-bottom: 0;
+}
+
+.dashboard-action-card-renew {
+    background: linear-gradient(135deg, #FFF5F8 0%, #F0F9FF 100%);
+}
+
+.dashboard-action-card-claim {
+    border-left: 4px solid var(--accent-pink);
+}
+
+.dashboard-action-card-title {
+    font-size: 16px;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-action-card-text {
+    color: var(--gray-text);
+    margin: 0;
+    font-size: 13px;
+}
+
+.dashboard-action-card-text-lg {
+    color: var(--gray-text);
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Policy Card Specific */
+.dashboard-policy-title {
+    font-size: 18px;
+}
+
+.dashboard-policy-grid {
+    grid-template-columns: repeat(2, 1fr);
+    margin-bottom: 1rem;
+}
+
+.dashboard-vehicle-grid {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+/* Button Variants */
+.btn-view-details {
+    padding: 0.625rem 1.5rem;
+    width: auto;
+}
+
+.btn-renew {
+    background-color: var(--light-blue);
+    color: var(--primary-blue);
+}
+
+.btn-resource {
+    padding: 0.5rem 1rem;
+    width: auto;
+    font-size: 13px;
+    background-color: var(--primary-blue);
+}
+
+/* Document List */
+.dashboard-documents-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Resources Grid */
+.dashboard-resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+/* Section Full Height */
+.dashboard-section-full {
+    height: 100%;
+    margin-bottom: 0;
+}
+
+/* =============================================================================
+   Reusable Policy Card Component (buhodb_policycard)
+   ============================================================================= */
+
+.policy-card {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--input-border);
+    box-shadow: var(--buho-shadow-sm);
+    transition: box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.policy-card:hover {
+    box-shadow: var(--buho-shadow-md);
+}
+
+.policy-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.policy-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: rgba(229, 60, 123, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.policy-card-icon .icon-img {
+    width: 24px;
+    height: 24px;
+}
+
+.policy-card-header-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.policy-card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--primary-blue);
+    margin: 0 0 0.125rem 0;
+}
+
+.policy-card-subtitle {
+    font-size: 13px;
+    color: var(--gray-text);
+    margin: 0;
+}
+
+.policy-card-body {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1.25rem;
+    flex: 1;
+}
+
+.policy-card-details-left,
+.policy-card-details-right {
+    list-style: disc;
+    padding-left: 1.25rem;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.policy-card-details-left li,
+.policy-card-details-right li {
+    font-size: 13px;
+    color: var(--primary-blue);
+    line-height: 1.5;
+}
+
+.policy-card-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    padding-top: 1rem;
+    border-top: 1px solid var(--input-border);
+}
+
+.policy-card-actions .btn-outline {
+    padding: 0.5rem 1rem;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    color: var(--primary-blue);
+    background-color: var(--white);
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.policy-card-actions .btn-outline:hover {
+    border-color: var(--primary-blue);
+    background-color: var(--input-bg);
+}
+
+@media (max-width: 768px) {
+    .policy-card-body {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .policy-card-actions {
+        flex-direction: column;
+    }
+
+    .policy-card-actions .btn-outline {
+        text-align: center;
+    }
+}
+
+/* =============================================================================
+   My Policies Page (buhodb_mypolicy)
+   ============================================================================= */
+
+.mypolicy-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.mypolicy-header-left {
+    flex: 1;
+    min-width: 0;
+}
+
+.mypolicy-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin: 0 0 0.25rem 0;
+}
+
+.mypolicy-subtitle {
+    font-size: 14px;
+    color: var(--gray-text);
+    margin: 0;
+}
+
+.mypolicy-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+/* Dropdown */
+.mypolicy-dropdown {
+    position: relative;
+}
+
+.btn-dropdown {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    color: var(--accent-pink);
+    background-color: var(--white);
+    border: 1px solid var(--accent-pink);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn-dropdown:hover {
+    background-color: rgba(229, 60, 123, 0.05);
+}
+
+.btn-dropdown svg {
+    color: var(--accent-pink);
+}
+
+.mypolicy-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    background-color: var(--white);
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    box-shadow: var(--buho-shadow-md);
+    z-index: 100;
+    min-width: 180px;
+    padding: 0.5rem 0;
+}
+
+.mypolicy-dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    color: var(--primary-blue);
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.mypolicy-dropdown-item:hover {
+    background-color: var(--input-bg);
+}
+
+/* Filter Button */
+.btn-filter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    color: var(--primary-blue);
+    background-color: var(--white);
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn-filter:hover {
+    border-color: var(--primary-blue);
+    background-color: var(--input-bg);
+}
+
+/* Add Policy Button */
+.btn-add-policy {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.25rem;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    color: var(--white);
+    background-color: var(--primary-blue);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn-add-policy:hover {
+    background-color: #1a2d52;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(19, 32, 61, 0.3);
+}
+
+.btn-add-policy svg {
+    color: var(--white);
+}
+
+/* Policies Grid */
+.mypolicy-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+@media (max-width: 992px) {
+    .mypolicy-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .mypolicy-header {
+        flex-direction: column;
+    }
+
+    .mypolicy-header-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .mypolicy-title {
+        font-size: 20px;
+    }
+}
+
+/* Empty State */
+.mypolicy-empty {
+    text-align: center;
+    padding: 3rem;
+    background-color: var(--white);
+    border-radius: 12px;
+    border: 1px solid var(--input-border);
+    color: var(--gray-text);
+    font-size: 15px;
+}
+
+/* =============================================================================
+   Reusable Vehicle Card Component (buhodb_vehiclecard)
+   ============================================================================= */
+
+.vehicle-card {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--input-border);
+    box-shadow: var(--buho-shadow-sm);
+    transition: box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.vehicle-card:hover {
+    box-shadow: var(--buho-shadow-md);
+}
+
+.vehicle-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.vehicle-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: rgba(229, 60, 123, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.vehicle-card-icon .icon-img {
+    width: 24px;
+    height: 24px;
+}
+
+.vehicle-card-header-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.vehicle-card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--primary-blue);
+    margin: 0;
+}
+
+.vehicle-card-body {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1.25rem;
+    flex: 1;
+}
+
+.vehicle-card-details-left,
+.vehicle-card-details-right {
+    list-style: disc;
+    padding-left: 1.25rem;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.vehicle-card-details-left li,
+.vehicle-card-details-right li {
+    font-size: 13px;
+    color: var(--primary-blue);
+    line-height: 1.5;
+}
+
+.vehicle-card-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    padding-top: 1rem;
+    border-top: 1px solid var(--input-border);
+}
+
+.vehicle-card-actions .btn-outline {
+    flex: 1;
+    padding: 0.5rem 1rem;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    color: var(--primary-blue);
+    background-color: var(--white);
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.vehicle-card-actions .btn-outline:hover {
+    border-color: var(--primary-blue);
+    background-color: var(--input-bg);
+}
+
+@media (max-width: 768px) {
+    .vehicle-card-body {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+}
+
+/* =============================================================================
+   My Vehicles Page (buhodb_myvehicles)
+   ============================================================================= */
+
+.myvehicles-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.myvehicles-header-left {
+    flex: 1;
+    min-width: 0;
+}
+
+.myvehicles-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin: 0 0 0.25rem 0;
+}
+
+.myvehicles-subtitle {
+    font-size: 14px;
+    color: var(--gray-text);
+    margin: 0;
+}
+
+.myvehicles-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.btn-add-vehicle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.25rem;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    color: var(--white);
+    background-color: var(--primary-blue);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn-add-vehicle:hover {
+    background-color: #1a2d52;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(19, 32, 61, 0.3);
+}
+
+.btn-add-vehicle svg {
+    color: var(--white);
+}
+
+.myvehicles-section-heading {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin: 0 0 1rem 0;
+}
+
+/* Stats Grid */
+.myvehicles-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.myvehicles-stat-card {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--buho-shadow-sm);
+    border: 1px solid var(--input-border);
+    transition: box-shadow 0.3s ease;
+}
+
+.myvehicles-stat-card:hover {
+    box-shadow: var(--buho-shadow-md);
+}
+
+.myvehicles-stat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+}
+
+.myvehicles-stat-icon.accent {
+    background-color: rgba(229, 60, 123, 0.1);
+}
+
+.myvehicles-stat-icon.primary {
+    background-color: rgba(19, 32, 61, 0.1);
+}
+
+.myvehicles-stat-icon .icon-img {
+    width: 20px;
+    height: 20px;
+}
+
+.myvehicles-stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin: 0 0 0.25rem 0;
+}
+
+.myvehicles-stat-label {
+    font-size: 14px;
+    color: var(--gray-text);
+    margin: 0;
+}
+
+/* Vehicle Cards Grid */
+.myvehicles-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+@media (max-width: 992px) {
+    .myvehicles-stats-grid,
+    .myvehicles-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .myvehicles-header {
+        flex-direction: column;
+    }
+
+    .myvehicles-title {
+        font-size: 20px;
+    }
+}
+
+/* =============================================================================
+   Driver Card Styles (buhodb_drivercard)
+   ============================================================================= */
+
+.driver-card {
+    background-color: var(--white);
+    border-radius: 12px;
+    border: 1px solid var(--input-border);
+    box-shadow: var(--buho-shadow-sm);
+    overflow: hidden;
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.driver-card:hover {
+    box-shadow: var(--buho-shadow-md);
+    transform: translateY(-2px);
+}
+
+.driver-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 1.25rem 0.75rem;
+}
+
+.driver-card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background-color: rgba(19, 32, 61, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.driver-card-icon .icon-img {
+    width: 22px;
+    height: 22px;
+}
+
+.driver-card-header-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.driver-card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin: 0;
+}
+
+.driver-badge-primary {
+    display: inline-block;
+    padding: 2px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #059669;
+    background-color: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    border-radius: 12px;
+    width: fit-content;
+}
+
+.driver-card-body {
+    display: flex;
+    gap: 1.5rem;
+    padding: 0.75rem 1.25rem;
+}
+
+.driver-card-details-left,
+.driver-card-details-right {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+}
+
+.driver-card-details-left li,
+.driver-card-details-right li {
+    font-size: 13px;
+    color: var(--gray-text);
+    padding: 3px 0;
+    line-height: 1.5;
+}
+
+.driver-card-actions {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.75rem 1.25rem 1.25rem;
+    border-top: 1px solid var(--input-border);
+}
+
+.driver-card-actions .btn-outline {
+    flex: 1;
+    padding: 0.5rem 1rem;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    color: var(--primary-blue);
+    background-color: var(--white);
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.driver-card-actions .btn-outline:hover {
+    border-color: var(--primary-blue);
+    background-color: var(--input-bg);
+}
+
+@media (max-width: 768px) {
+    .driver-card-body {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+}
+
+/* =============================================================================
+   Vehicle Edit/Detail Form (buhodb_vehicleeditform)
+   ============================================================================= */
+
+/* Back Navigation */
+.vform-back-nav {
+    margin-bottom: 1rem;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    color: var(--accent-pink);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.btn-back:hover {
+    opacity: 0.8;
+}
+
+.btn-back svg {
+    color: var(--accent-pink);
+}
+
+/* Form Header */
+.vform-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.vform-header-left {
+    flex: 1;
+    min-width: 0;
+}
+
+.vform-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin: 0 0 0.25rem 0;
+}
+
+.vform-subtitle {
+    font-size: 14px;
+    color: var(--gray-text);
+    margin: 0;
+}
+
+.vform-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.vform-dropdown {
+    position: relative;
+}
+
+.btn-dropdown-danger {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    color: var(--accent-pink);
+    background-color: var(--white);
+    border: 1px solid var(--accent-pink);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn-dropdown-danger:hover {
+    background-color: rgba(229, 60, 123, 0.05);
+}
+
+.btn-dropdown-danger svg {
+    color: var(--accent-pink);
+}
+
+/* Form Sections */
+.vform-section {
+    margin-bottom: 2rem;
+}
+
+.vform-section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin: 0 0 1rem 0;
+}
+
+/* Form Grid - 2 columns */
+.vform-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+}
+
+.vform-grid-single {
+    grid-template-columns: 1fr;
+    max-width: 50%;
+}
+
+.vform-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.vform-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary-blue);
+    margin: 0;
+}
+
+.vform-value-box {
+    padding: 0.75rem 1rem;
+    font-size: 14px;
+    color: var(--primary-blue);
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+}
+
+/* Authorized Drivers */
+.vform-driver-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    font-size: 14px;
+    color: var(--primary-blue);
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    min-height: 44px;
+}
+
+.vform-driver-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background-color: var(--primary-blue);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.vform-driver-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Radio Group (Vehicle Identification) */
+.vform-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.vform-radio-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+}
+
+.vform-radio-indicator {
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    border: 2px solid var(--input-border);
+    background-color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.vform-radio-indicator.checked {
+    background-color: var(--primary-blue);
+    border-color: var(--primary-blue);
+}
+
+.vform-radio-indicator.checked::after {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background-color: var(--white);
+}
+
+.vform-radio-label {
+    font-size: 14px;
+    color: var(--primary-blue);
+}
+
+/* Checkbox Group (Special Features) */
+.vform-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.vform-checkbox-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+}
+
+.vform-checkbox-indicator {
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    border: 2px solid var(--input-border);
+    background-color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.vform-checkbox-indicator.checked {
+    background-color: var(--primary-blue);
+    border-color: var(--primary-blue);
+}
+
+.vform-checkbox-indicator.checked::after {
+    content: '✓';
+    color: var(--white);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.vform-checkbox-label {
+    font-size: 14px;
+    color: var(--primary-blue);
+}
+
+@media (max-width: 768px) {
+    .vform-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .vform-grid-single {
+        max-width: 100%;
+    }
+
+    .vform-header {
+        flex-direction: column;
+    }
+
+    .vform-title {
+        font-size: 20px;
+    }
+}
+
+/* =============================================================================
    Buho Lookup Component Styles (for buho.html template)
    ============================================================================= */
 
@@ -4658,3 +6510,1023 @@ lightning-input[type="checkbox"] .slds-checkbox [type="checkbox"]:checked + .sld
     }
 }
 
+/* =============================================================================
+   Icon Utility Classes (for SVG static-resource <img> replacements)
+   ============================================================================= */
+
+.icon-chevron {
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 4px;
+    flex-shrink: 0;
+}
+
+.icon-btn {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+.icon-menu {
+    width: 24px;
+    height: 24px;
+    display: block;
+}
+
+.icon-back {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+.icon-person {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
+
+.icon-white {
+    filter: brightness(0) invert(1);
+}
+
+/* =============================================================================
+   My Documents Page Styles (buhodb_mydocuments)
+   ============================================================================= */
+
+.mydocs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.mydocs-header-left {
+    flex: 1;
+}
+
+.mydocs-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-bottom: 0.25rem;
+}
+
+.mydocs-subtitle {
+    font-size: 16px;
+    color: var(--gray-text);
+}
+
+.mydocs-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding-top: 0.5rem;
+}
+
+.mydocs-filter-text {
+    font-size: 14px;
+    color: var(--gray-text);
+}
+
+.btn-link-filter {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--accent-pink);
+    text-decoration: underline;
+    padding: 0;
+    font-weight: 500;
+}
+
+.btn-link-filter:hover {
+    color: var(--primary-blue);
+}
+
+.mydocs-filter-divider {
+    color: var(--gray-text);
+    font-size: 14px;
+    margin: 0 2px;
+}
+
+.mydocs-section-heading {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-bottom: 1.25rem;
+    margin-top: 1rem;
+}
+
+.mydocs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 900px) {
+    .mydocs-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .mydocs-header {
+        flex-direction: column;
+    }
+}
+
+/* =============================================================================
+   Document Card Styles (buhodb_documentcard)
+   ============================================================================= */
+
+.doc-card {
+    background-color: var(--white);
+    border: 1px solid var(--input-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--buho-shadow-sm, 0 1px 2px rgba(0,0,0,0.05));
+    transition: box-shadow 0.2s ease;
+}
+
+.doc-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.doc-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    gap: 0.75rem;
+}
+
+.doc-card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary-blue);
+    line-height: 1.4;
+    flex: 1;
+}
+
+/* Action / Download button */
+.doc-card-action-wrapper {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.btn-doc-action {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--accent-pink);
+    border-radius: 8px;
+    background-color: var(--white);
+    color: var(--accent-pink);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s ease;
+}
+
+.btn-doc-action:hover {
+    background-color: #fdf2f6;
+}
+
+.doc-card-action-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    background: var(--white);
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    z-index: 20;
+    min-width: 140px;
+    overflow: hidden;
+}
+
+.doc-card-action-item {
+    display: block;
+    width: 100%;
+    padding: 0.6rem 1rem;
+    border: none;
+    background: none;
+    text-align: left;
+    font-size: 13px;
+    color: var(--primary-blue);
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.doc-card-action-item:hover {
+    background-color: #f5f7fa;
+}
+
+.doc-card-body {
+    display: flex;
+    gap: 2rem;
+}
+
+.doc-card-details-left,
+.doc-card-details-right {
+    list-style: disc;
+    padding-left: 1.1rem;
+    margin: 0;
+    flex: 1;
+}
+
+.doc-card-details-left li,
+.doc-card-details-right li {
+    font-size: 13px;
+    color: var(--primary-blue);
+    line-height: 1.8;
+}
+
+@media (max-width: 480px) {
+    .doc-card-body {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .doc-card-header {
+        flex-direction: column;
+    }
+
+    .doc-card-action-wrapper {
+        align-self: flex-end;
+    }
+}
+
+/* =============================================================================
+   Settings & Account Management Styles (buhodb_settings)
+   ============================================================================= */
+
+.settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.settings-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-blue);
+}
+
+.btn-settings-edit {
+    padding: 0.65rem 2rem;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--primary-blue);
+    color: var(--white);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-settings-edit:hover {
+    background-color: #1c3058;
+}
+
+/* Sections */
+.settings-section {
+    margin-bottom: 2rem;
+}
+
+.settings-section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-bottom: 1rem;
+}
+
+/* Profile Photo */
+.settings-profile-photo {
+    margin-bottom: 1.5rem;
+}
+
+.settings-avatar-wrapper {
+    width: 140px;
+    height: 140px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+}
+
+.settings-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Grid & Fields */
+.settings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.settings-grid-single {
+    grid-template-columns: 1fr;
+    max-width: calc(50% - 0.625rem);
+}
+
+.settings-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.settings-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary-blue);
+    margin-bottom: 0.4rem;
+}
+
+.settings-value-box {
+    padding: 0.75rem 1rem;
+    background-color: var(--white);
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--primary-blue);
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+}
+
+/* View-only value (no input box) */
+.settings-view-value {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--primary-blue);
+    padding: 0.5rem 0;
+    min-height: 28px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--input-border);
+}
+
+/* Date of Birth with icon */
+.settings-dob-box {
+    gap: 0.75rem;
+}
+
+.settings-dob-icon {
+    width: 36px;
+    height: 36px;
+    padding: 6px;
+    background-color: var(--primary-blue);
+    border-radius: 8px;
+    flex-shrink: 0;
+    filter: brightness(0) invert(1);
+}
+
+/* Checkboxes */
+.settings-checkboxes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-top: 1.25rem;
+}
+
+.settings-checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+}
+
+.settings-checkbox-indicator {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--input-border);
+    border-radius: 4px;
+    flex-shrink: 0;
+    position: relative;
+    transition: all 0.15s ease;
+    background-color: var(--white);
+}
+
+.settings-checkbox-indicator.checked {
+    background-color: var(--primary-blue);
+    border-color: var(--primary-blue);
+}
+
+.settings-checkbox-indicator.checked::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 7px;
+    width: 5px;
+    height: 10px;
+    border: solid var(--white);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.settings-checkbox-text {
+    font-size: 14px;
+    color: var(--primary-blue);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .settings-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .settings-grid-single {
+        max-width: none;
+    }
+
+    .settings-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* =============================================================================
+   Policy Detail View Styles (buhodb_policydetail)
+   ============================================================================= */
+
+/* ── Container ── */
+.pd-container {
+    max-width: 100%;
+    animation: pdFadeIn 0.3s ease;
+}
+
+@keyframes pdFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Back Navigation Bar ── */
+.pd-back-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.pd-btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    color: var(--primary-blue, #374151);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: var(--buho-radius-md, 8px);
+    transition: all 0.2s ease;
+}
+
+.pd-btn-back:hover {
+    background: var(--input-bg, #f3f4f6);
+    color: var(--primary-blue, #111827);
+}
+
+.pd-icon-back {
+    width: 18px;
+    height: 18px;
+}
+
+/* ── Status Badge ── */
+.pd-status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.pd-badge-active {
+    background: #ecfdf5;
+    color: #059669;
+    border: 1px solid #a7f3d0;
+}
+
+.pd-badge-expired {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+.pd-badge-updated {
+    background: #fffbeb;
+    color: #d97706;
+    border: 1px solid #fde68a;
+}
+
+.pd-badge-default {
+    background: var(--input-bg, #f3f4f6);
+    color: var(--gray-text, #6b7280);
+    border: 1px solid var(--input-border, #e5e7eb);
+}
+
+/* ── Loading ── */
+.pd-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+}
+
+/* ── (Legacy) Summary Card — now integrated into pd-hero-card ── */
+
+/* ── (Legacy) Action Buttons Card — replaced by pd-hero-card ── */
+
+/* ── Collapsible Section ── */
+.pd-section {
+    background: var(--white, #ffffff);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    border: 1px solid var(--input-border, #e5e7eb);
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.pd-section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 24px;
+    cursor: pointer;
+    user-select: none;
+    width: 100%;
+    background: none;
+    border: none;
+    border-bottom: 1px solid transparent;
+    transition: background 0.2s ease;
+    text-align: left;
+}
+
+.pd-section-header:hover {
+    background: var(--input-bg, #f9fafb);
+}
+
+.pd-section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--primary-blue, #111827);
+    margin: 0;
+}
+
+/* ── Chevron icon ── */
+.pd-chevron {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+    transform: rotate(-90deg);
+    flex-shrink: 0;
+    opacity: 0.5;
+}
+
+.pd-chevron-open {
+    transform: rotate(0deg);
+}
+
+/* ── Section Body ── */
+.pd-section-body {
+    padding: 4px 24px 16px;
+    animation: pdSlideDown 0.25s ease;
+}
+
+@keyframes pdSlideDown {
+    from { opacity: 0; max-height: 0; }
+    to   { opacity: 1; max-height: 2000px; }
+}
+
+/* ── Field Grid ── */
+.pd-field-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+}
+
+.pd-field {
+    padding: 8px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.pd-field:nth-child(odd) {
+    padding-right: 24px;
+}
+
+.pd-field:nth-child(even) {
+    padding-left: 24px;
+}
+
+.pd-field-empty {
+    padding: 8px 0;
+}
+
+.pd-field-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-text, #6b7280);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.pd-field-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--primary-blue, #111827);
+    min-height: 18px;
+    word-break: break-word;
+}
+
+.pd-field-currency {
+    font-variant-numeric: tabular-nums;
+}
+
+.pd-field-total {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--primary-blue, #13203d);
+}
+
+/* ── Status field colors ── */
+.pd-status-active {
+    color: #059669;
+    font-weight: 600;
+}
+
+.pd-status-expired {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+/* ── Checkbox visual ── */
+.pd-checkbox {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: var(--buho-radius-sm, 4px);
+    border: 2px solid var(--input-border, #d1d5db);
+    position: relative;
+    vertical-align: middle;
+}
+
+.pd-checkbox-checked {
+    background: #2563eb;
+    border-color: #2563eb;
+}
+
+.pd-checkbox-checked::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 6px;
+    width: 5px;
+    height: 10px;
+    border: solid var(--white, #ffffff);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.pd-checkbox-unchecked {
+    background: var(--white, #ffffff);
+}
+
+.pd-field-checkbox .pd-field-value {
+    display: flex;
+    align-items: center;
+}
+
+/* ── Error State ── */
+.pd-error {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--gray-text, #6b7280);
+}
+
+.pd-error p {
+    margin-bottom: 16px;
+    font-size: 15px;
+}
+
+.pd-btn-retry {
+    background: var(--primary-blue, #13203d);
+    color: var(--white, #ffffff);
+    border: none;
+    padding: 10px 24px;
+    border-radius: var(--buho-radius-md, 8px);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.pd-btn-retry:hover {
+    background: #1e3a5f;
+}
+
+/* ── Policy Detail Responsive ── */
+@media (max-width: 768px) {
+    .pd-field-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pd-field:nth-child(odd) {
+        padding-right: 0;
+    }
+
+    .pd-field:nth-child(even) {
+        padding-left: 0;
+    }
+
+    .pd-section-body {
+        padding: 4px 16px 12px;
+    }
+
+    .pd-section-header {
+        padding: 12px 16px;
+    }
+}
+
+/* =============================================================================
+   Policy Hero Card — Summary + Action Buttons (buhodb_policyCustomButtonComponent)
+   ============================================================================= */
+
+/* ── Hero Card container ── */
+.pd-hero-card {
+    background: linear-gradient(135deg, var(--primary-blue, #13203d) 0%, #1e3a5f 100%);
+    border-radius: var(--buho-radius-lg, 16px);
+    margin-bottom: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(19, 32, 61, 0.18);
+}
+
+.pd-hero-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 160px;
+}
+
+/* ── Top: Policy Summary ── */
+.pd-hero-top {
+    padding: 28px 32px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.pd-hero-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.pd-hero-icon {
+    width: 56px;
+    height: 56px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.pd-hero-car-icon {
+    width: 28px;
+    height: 28px;
+    filter: brightness(0) invert(1);
+}
+
+.pd-hero-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.pd-hero-policy-number {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.pd-hero-meta {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+}
+
+.pd-hero-dates {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+}
+
+.pd-hero-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.pd-hero-premium-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.pd-hero-premium-label {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 500;
+}
+
+.pd-hero-premium-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.2;
+}
+
+.pd-hero-badges {
+    display: flex;
+    gap: 8px;
+}
+
+.pd-hero-badge {
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* ── Bottom: Glass-morphism Action Toolbar ── */
+.pd-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 16px 32px 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.12);
+}
+
+/* ── Glass Buttons ── */
+.pd-hero-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 18px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    outline: none;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.pd-hero-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.35);
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.pd-hero-btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.pd-hero-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.pd-hero-btn:disabled:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.18);
+    color: rgba(255, 255, 255, 0.9);
+    transform: none;
+    box-shadow: none;
+}
+
+/* Button icon */
+.pd-hero-btn-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    opacity: 0.85;
+}
+
+.pd-hero-btn:hover .pd-hero-btn-icon {
+    opacity: 1;
+}
+
+/* ── Danger variant (Terminate) ── */
+.pd-hero-btn-danger {
+    border-color: rgba(239, 68, 68, 0.3);
+    background: rgba(239, 68, 68, 0.1);
+    color: #fca5a5;
+}
+
+.pd-hero-btn-danger:hover {
+    background: rgba(239, 68, 68, 0.25);
+    border-color: rgba(239, 68, 68, 0.5);
+    color: #fef2f2;
+}
+
+.pd-hero-btn-danger:disabled {
+    opacity: 0.35;
+}
+
+.pd-hero-btn-danger:disabled:hover {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
+}
+
+/* ── Accent variant (Yellow Card) ── */
+.pd-hero-btn-accent {
+    border-color: rgba(251, 191, 36, 0.35);
+    background: rgba(251, 191, 36, 0.1);
+    color: #fde68a;
+}
+
+.pd-hero-btn-accent:hover {
+    background: rgba(251, 191, 36, 0.25);
+    border-color: rgba(251, 191, 36, 0.55);
+    color: #fffbeb;
+}
+
+/* ── Hero Card Responsive ── */
+@media (max-width: 768px) {
+    .pd-hero-top {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px;
+    }
+
+    .pd-hero-right {
+        align-items: flex-start;
+    }
+
+    .pd-hero-premium-value {
+        font-size: 22px;
+    }
+
+    .pd-hero-policy-number {
+        font-size: 18px;
+    }
+
+    .pd-hero-actions {
+        padding: 12px 20px 20px;
+    }
+
+    .pd-hero-btn {
+        padding: 7px 14px;
+        font-size: 12px;
+    }
+}

@@ -1,0 +1,35 @@
+<template>
+    <div class="policy-card">
+        <div class="policy-card-header">
+            <div class="policy-card-icon">
+                <img src={quoteIconUrl} alt="Quote" class="icon-img" />
+            </div>
+            <div class="policy-card-header-info">
+                <h4 class="policy-card-title">{quoteNumber}</h4>
+                <template if:true={quoteStatus}>
+                    <p class="policy-card-subtitle">Status: {quoteStatus}</p>
+                </template>
+            </div>
+        </div>
+
+        <div class="policy-card-body">
+            <ul class="policy-card-details-left">
+                <li>Quote Value: {quoteValue}</li>
+                <li>Policy Type: {policyType}</li>
+                <li>Coverage: {coverage}</li>
+                <li>Term Days: {termDays}</li>
+            </ul>
+            <ul class="policy-card-details-right">
+                <li>Net Premium: {netPremium}</li>
+                <li>Vehicle: {vehicleInfo}</li>
+                <li>Territory: {territory}</li>
+            </ul>
+        </div>
+
+        <div class="policy-card-actions">
+            <button class="btn-outline" onclick={handleViewDetails}>
+                View Details
+            </button>
+        </div>
+    </div>
+</template>

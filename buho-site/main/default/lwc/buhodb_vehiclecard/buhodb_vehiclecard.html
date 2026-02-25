@@ -1,0 +1,33 @@
+<template>
+    <div class="vehicle-card">
+        <div class="vehicle-card-header">
+            <div class="vehicle-card-icon">
+                <img src={carIconUrl} alt="Vehicle" class="icon-img" />
+            </div>
+            <div class="vehicle-card-header-info">
+                <h4 class="vehicle-card-title">{vehicleName}</h4>
+            </div>
+        </div>
+
+        <div class="vehicle-card-body">
+            <ul class="vehicle-card-details-left">
+                <li>VIN: {vin}</li>
+                <li>Plate: {plate}</li>
+                <li>Primary Driver: {primaryDriver}</li>
+            </ul>
+            <ul class="vehicle-card-details-right">
+                <li>Value: {value}</li>
+                <li>Vehicle Type: {vehicleType}</li>
+            </ul>
+        </div>
+
+        <div class="vehicle-card-actions">
+            <button class="btn-outline" onclick={handleEdit}>
+                Edit
+            </button>
+            <!--button class="btn-outline" onclick={handleUpdateValue}>
+                Update Value
+            </button-->
+        </div>
+    </div>
+</template>

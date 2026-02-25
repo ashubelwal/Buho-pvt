@@ -1,0 +1,36 @@
+<template>
+    <div class="driver-card">
+        <div class="driver-card-header">
+            <div class="driver-card-icon">
+                <img src={driverIconUrl} alt="Driver" class="icon-img" />
+            </div>
+            <div class="driver-card-header-info">
+                <h4 class="driver-card-title">{driverName}</h4>
+                <template if:true={isPrimary}>
+                    <span class="driver-badge-primary">Primary</span>
+                </template>
+            </div>
+        </div>
+
+        <div class="driver-card-body">
+            <ul class="driver-card-details-left">
+                <li>License #: {licenseNumber}</li>
+                <li>License State: {licenseState}</li>
+                <li>DOB: {dob}</li>
+                <li>Type: {driverType}</li>
+            </ul>
+            <ul class="driver-card-details-right">
+                <li>Email: {email}</li>
+                <li>Phone: {phone}</li>
+                <li>City: {city}</li>
+                <li>License Exp: {licenseExpire}</li>
+            </ul>
+        </div>
+
+        <div class="driver-card-actions">
+            <button class="btn-outline" onclick={handleViewDetails}>
+                View Details
+            </button>
+        </div>
+    </div>
+</template>

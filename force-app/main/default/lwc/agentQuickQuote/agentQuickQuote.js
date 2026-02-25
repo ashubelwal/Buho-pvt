@@ -39,6 +39,8 @@ import sendEmailQuoteDetails from '@salesforce/apex/Mex_NewLeadProcess.sendEmail
 import popupModal from 'c/popupModal';
 import PolicyUtils from 'c/policyUtils';
 import USER_ID from '@salesforce/user/Id';
+import { getObjectInfo } from 'lightning/uiObjectInfoApi';
+import CONTACT_OBJECT from '@salesforce/schema/Contact';
 
 export default class AgentQuickQuote extends PolicyUtils {
     endpointUrl;
@@ -96,6 +98,10 @@ export default class AgentQuickQuote extends PolicyUtils {
     apextimedata;
     userInfo;
     vendorlist = [];
+    agency = '';
+    agent = '';
+    agencyRtId;
+    agentRtId;
 
     //Custom event 
     title = '';
@@ -141,12 +147,59 @@ export default class AgentQuickQuote extends PolicyUtils {
         }
     }
 
+    @wire(getObjectInfo, { objectApiName: CONTACT_OBJECT })
+    objectInfo({ data }) {
+        if (data) {
+            const rtInfos = data.recordTypeInfos;
+
+            Object.keys(rtInfos).forEach(rtId => {
+                const rt = rtInfos[rtId];
+
+                if (rt.name === 'Agency RT') {
+                    this.agencyRtId = rt.recordTypeId;
+                }
+
+                if (rt.name === 'Agent RT') {
+                    this.agentRtId = rt.recordTypeId;
+                }
+            });
+        }
+    }
+
 
 
     // Getter Setter......
 
     @track vehicleStateOption = [];
     @track driverStateOption = [];
+
+    get agencyFilter() {
+        return this.agencyRtId
+            ? {
+                criteria: [
+                    {
+                        fieldPath: 'RecordTypeId',
+                        operator: 'eq',
+                        value: this.agencyRtId
+                    }
+                ]
+            }
+            : null;
+    }
+
+    get agentFilter() {
+        return this.agentRtId
+            ? {
+                criteria: [
+                    {
+                        fieldPath: 'RecordTypeId',
+                        operator: 'eq',
+                        value: this.agentRtId
+                    }
+                ]
+            }
+            : null;
+    }
 
     get payeeName() {
         let payeename = `${this.trackVar.FirstName} ${this.trackVar.LastName}`.trim();
@@ -165,7 +218,18 @@ export default class AgentQuickQuote extends PolicyUtils {
     handlePolicyRestriction(event) {
         this.errorMessage = event.detail.message;
     }
-   get liablityType() {
+
+    handleAgencyChange(event) {
+        this.agency = event.detail.recordId;
+        console.log('@@@',this.agency);
+    }
+
+    handleAgentChange(event) {
+        this.agent = event.detail.recordId;
+        console.log('@@@',this.agent);
+    }
+
+    get liablityType() {
         return this.quoteDetails?.Coverage__c != undefined && this.quoteDetails?.Coverage__c == 'Liability' ? true : false;
     }
     get liabilityTheftCoverage() {
@@ -353,7 +417,7 @@ export default class AgentQuickQuote extends PolicyUtils {
             await fetchExistingLead({ 'email': '', 'leadId': this.paramdata.id })
                 .then(async (result) => {
                     if (result && result.length > 0) {
-                        console.log('Result for resume Lead',result);
+                        console.log('Result for resume Lead', result);
                         await this.getSystemTime();
                         this.existLeadDetails = JSON.parse(result);
 
@@ -406,7 +470,7 @@ export default class AgentQuickQuote extends PolicyUtils {
 
 
     processLeadDetails() {
-        
+
         if (this.existLeadDetails.Quote_Details__c) {
             this.existQuoteDetails = JSON.parse(this.existLeadDetails.Quote_Details__c);
         }
@@ -510,7 +574,7 @@ export default class AgentQuickQuote extends PolicyUtils {
     // }
 
     // new code 
-     async setCurrentTime() {
+    async setCurrentTime() {
         await this.getSystemTime();
         let today = new Date(this.systemTime.dtPST);
         let day = today.getDate();
@@ -1130,7 +1194,7 @@ export default class AgentQuickQuote extends PolicyUtils {
                 combobox.value = 'Other';
             }
         }
-        
+
         this.trackVar.FirstName = this.existLeadDetails?.FirstName;
         this.trackVar.LastName = this.existLeadDetails?.LastName;
         this.trackVar.Is_towing__c = this.existLeadDetails?.Is_towing__c;
@@ -1160,8 +1224,8 @@ export default class AgentQuickQuote extends PolicyUtils {
         this.trackVar.Registered_Plate__c = this.existVehicleDetails?.Registered_Plate__c ? this.existVehicleDetails.Registered_Plate__c : '';
         this.trackVar.Registered_State__c = this.existVehicleDetails?.Registered_State__c ? this.existVehicleDetails.Registered_State__c : '';
         this.trackVar.vehicleDob = this.existVehicleDetails?.Dob__c ? this.existVehicleDetails.Dob__c : '';
-        
-        
+
+
 
         this.customerData = { ...this.customerData, ['FirstName']: this.trackVar.FirstName };
         this.customerData = { ...this.customerData, ['LastName']: this.trackVar.LastName };
@@ -1194,7 +1258,7 @@ export default class AgentQuickQuote extends PolicyUtils {
         this.customerData = { ...this.customerData, ['Policy_Type__c']: this.existLeadDetails?.Policy_Type__c };
         this.customerData = { ...this.customerData, ['territory']: this.existQuoteDetails?.Territory__c ? this.existQuoteDetails.Territory__c : this.customerData.territory };
         this.customerData = { ...this.customerData, ['Dob__c']: this.existVehicleDetails?.Dob__c };
-        
+
         if (this.booleanVar.isNorthbound === false) {
             this.getVehicleMakes()
                 .then((result) => {
@@ -1761,7 +1825,7 @@ export default class AgentQuickQuote extends PolicyUtils {
                     || this.policyType.toLowerCase() == 'motorcycle/street legal atv')
                     && item.value != 'Watercraft') {
                     filterOption.push(item);
-                }else{
+                } else {
                     filterOption.push(item);
                 }
             });
@@ -1785,7 +1849,7 @@ export default class AgentQuickQuote extends PolicyUtils {
             // } else {
             //     vehicleType = 'Automobile-Van-Minivan'
             // }
-            if(vehicleType == null || vehicleType == ''){
+            if (vehicleType == null || vehicleType == '') {
                 vehicleType = 'Automobile-Van-Minivan';
             }
             let storeResponse = result;
@@ -2202,7 +2266,6 @@ export default class AgentQuickQuote extends PolicyUtils {
         // if (generateQuote.Policy_Type_picklist__c == 'Motorcycle') {
         //     generateQuote = { ...generateQuote, ['Medical__c']: '' };
         // }
-        console.log('generateQuote--->', JSON.stringify(generateQuote));
         if (this.actionType === 'newPolicyFromContact') {
             await purchaseSaveDetails({ 'quotes': JSON.stringify(generateQuote), leadId: this.contactId, 'PolicyFromLead': false })
                 .then((result) => {

@@ -1,0 +1,230 @@
+<template>
+    <!-- Back Navigation -->
+    <div class="vform-back-nav">
+        <button class="btn-back" onclick={handleBack}>
+            <img src={chevronLeftIconUrl} alt="" class="icon-back" />
+            Back
+        </button>
+    </div>
+
+    <!-- Page Header -->
+    <div class="vform-header">
+        <div class="vform-header-left">
+            <h1 class="vform-title">{pageTitle}</h1>
+            <p class="vform-subtitle">{pageSubtitle}</p>
+        </div>
+        <div class="vform-header-actions">
+            <!-- View Mode: Remove dropdown -->
+            <template if:true={isViewMode}>
+                <div class="vform-dropdown">
+                    <button class="btn-dropdown-danger" onclick={handleRemoveToggle}>
+                        Remove
+                        <img src={chevronDownIconUrl} alt="" class="icon-chevron" />
+                    </button>
+                </div>
+            </template>
+
+            <!-- Add Mode: Cancel dropdown -->
+            <template if:true={isAddMode}>
+                <div class="vform-dropdown">
+                    <button class="btn-dropdown-danger" onclick={handleCancel}>
+                        Cancel
+                        <img src={chevronDownIconUrl} alt="" class="icon-chevron" />
+                    </button>
+                </div>
+            </template>
+
+            <button class="btn-add-vehicle" onclick={handleAddNewVehicle}>
+                <img src={plusIconUrl} alt="" class="icon-btn icon-white" />
+                {addButtonLabel}
+            </button>
+        </div>
+    </div>
+
+    <!-- ============== VIEW MODE ============== -->
+    <template if:true={isViewMode}>
+        <!-- Basic Information -->
+        <div class="vform-section">
+            <h3 class="vform-section-title">Basic Information</h3>
+            <div class="vform-grid">
+                <div class="vform-field">
+                    <label class="vform-label">VIN</label>
+                    <div class="vform-value-box">{vehicle.vin}</div>
+                </div>
+                <div class="vform-field">
+                    <label class="vform-label">Year/Make/Model</label>
+                    <div class="vform-value-box">{vehicle.yearMakeModel}</div>
+                </div>
+                <div class="vform-field">
+                    <label class="vform-label">Current Value</label>
+                    <div class="vform-value-box">{vehicle.currentValue}</div>
+                </div>
+                <div class="vform-field">
+                    <label class="vform-label">License Plate</label>
+                    <div class="vform-value-box">{vehicle.licensePlate}</div>
+                </div>
+                <div class="vform-field">
+                    <label class="vform-label">Vehicle Type</label>
+                    <div class="vform-value-box">{vehicle.vehicleType}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coverage Details -->
+        <div class="vform-section">
+            <h3 class="vform-section-title">Coverage Details</h3>
+            <div class="vform-grid">
+                <div class="vform-field">
+                    <label class="vform-label">Policy</label>
+                    <div class="vform-value-box">{vehicle.policy}</div>
+                </div>
+                <div class="vform-field">
+                    <label class="vform-label">Coverage Level</label>
+                    <div class="vform-value-box">{vehicle.coverageLevel}</div>
+                </div>
+                <div class="vform-field">
+                    <label class="vform-label">Deductible</label>
+                    <div class="vform-value-box">{vehicle.deductible}</div>
+                </div>
+                <div class="vform-field">
+                    <label class="vform-label">Special Features</label>
+                    <div class="vform-value-box">{vehicle.specialFeatures}</div>
+                </div>
+                <div class="vform-field">
+                    <label class="vform-label">Battery Coverage</label>
+                    <div class="vform-value-box">{vehicle.batteryCoverage}</div>
+                </div>
+                <div class="vform-field">
+                    <label class="vform-label">Complete Equipment</label>
+                    <div class="vform-value-box">{vehicle.completeEquipment}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Usage & History -->
+        <div class="vform-section">
+            <h3 class="vform-section-title">Usage &amp; History</h3>
+            <div class="vform-grid">
+                <div class="vform-field">
+                    <label class="vform-label">Claims History</label>
+                    <div class="vform-value-box">{vehicle.claimsHistory}</div>
+                </div>
+                <div class="vform-field">
+                    <label class="vform-label">Last Trip to Mexico</label>
+                    <div class="vform-value-box">{vehicle.lastTrip}</div>
+                </div>
+                <div class="vform-field">
+                    <label class="vform-label">Next Recommended Service</label>
+                    <div class="vform-value-box">{vehicle.nextService}</div>
+                </div>
+                <div class="vform-field">
+                    <label class="vform-label">Average Trip Duration</label>
+                    <div class="vform-value-box">{vehicle.avgTripDuration}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Authorized Drivers -->
+        <div class="vform-section">
+            <h3 class="vform-section-title">Authorized Drivers</h3>
+            <div class="vform-grid">
+                <div class="vform-field">
+                    <label class="vform-label">Primary</label>
+                    <div class="vform-driver-box">
+                        <div class="vform-driver-icon">
+                            <img src={personIconUrl} alt="" class="icon-person" />
+                        </div>
+                        <span>{vehicle.primaryDriver}</span>
+                    </div>
+                </div>
+                <div class="vform-field">
+                    <label class="vform-label">Secondary</label>
+                    <div class="vform-driver-box">
+                        <div class="vform-driver-icon">
+                            <img src={personIconUrl} alt="" class="icon-person" />
+                        </div>
+                        <span>{vehicle.secondaryDriver}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- ============== ADD MODE ============== -->
+    <template if:true={isAddMode}>
+        <!-- Vehicle Identification -->
+        <div class="vform-section">
+            <h3 class="vform-section-title">Vehicle Identification</h3>
+            <div class="vform-radio-group">
+                <label class="vform-radio-option">
+                    <span class={vinOptionClass} onclick={handleSelectVinEntry}></span>
+                    <span class="vform-radio-label">Use VIN (Recommended) - Automatic details</span>
+                </label>
+                <label class="vform-radio-option">
+                    <span class={manualOptionClass} onclick={handleSelectManualEntry}></span>
+                    <span class="vform-radio-label">Manual entry - Enter details yourself</span>
+                </label>
+            </div>
+
+            <div class="vform-grid vform-grid-single">
+                <div class="vform-field">
+                    <label class="vform-label">VIN</label>
+                    <input type="text" class="vform-input" value={formVin} onchange={handleVinChange} placeholder="Enter VIN number" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Vehicle Detail -->
+        <div class="vform-section">
+            <h3 class="vform-section-title">Vehicle Detail</h3>
+            <div class="vform-grid">
+                <div class="vform-field">
+                    <label class="vform-label">Year</label>
+                    <input type="text" class="vform-input" value={formYear} onchange={handleYearChange} placeholder="e.g. 2023" />
+                </div>
+                <div class="vform-field">
+                    <label class="vform-label">Make</label>
+                    <input type="text" class="vform-input" value={formMake} onchange={handleMakeChange} placeholder="e.g. Tesla" />
+                </div>
+                <div class="vform-field">
+                    <label class="vform-label">Model</label>
+                    <input type="text" class="vform-input" value={formModel} onchange={handleModelChange} placeholder="e.g. Model Y" />
+                </div>
+                <div class="vform-field">
+                    <label class="vform-label">Current Value ($)</label>
+                    <input type="number" class="vform-input" value={formValue} onchange={handleValueChange} placeholder="e.g. 58500" />
+                </div>
+                <div class="vform-field">
+                    <label class="vform-label">License Plate</label>
+                    <input type="text" class="vform-input" value={formPlate} onchange={handlePlateChange} placeholder="e.g. TESLA23" />
+                </div>
+                <div class="vform-field">
+                    <label class="vform-label">Registered State</label>
+                    <input type="text" class="vform-input" value={formState} onchange={handleStateChange} placeholder="e.g. California" />
+                </div>
+                <div class="vform-field">
+                    <label class="vform-label">Vehicle Type</label>
+                    <select class="vform-input" onchange={handleVehicleTypeChange}>
+                        <option value="">-- Select --</option>
+                        <template for:each={vehicleTypeOptions} for:item="opt">
+                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                        </template>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Special Features -->
+        <div class="vform-section">
+            <h3 class="vform-section-title">Special Features</h3>
+            <div class="vform-checkbox-group">
+                <template for:each={specialFeatureOptions} for:item="feature">
+                    <label key={feature.id} class="vform-checkbox-option">
+                        <span class={feature.checkboxClass} data-id={feature.id} onclick={handleFeatureToggle}></span>
+                        <span class="vform-checkbox-label">{feature.label}</span>
+                    </label>
+                </template>
+            </div>
+        </div>
+    </template>
+</template>

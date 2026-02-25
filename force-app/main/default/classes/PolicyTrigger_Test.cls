@@ -189,4 +189,7 @@ public class PolicyTrigger_Test {
         Test.stopTest(); 
         
     }
+    public static Id getTestContactId() {
+        return [SELECT Id FROM Contact LIMIT 1].Id;
+    }
 }

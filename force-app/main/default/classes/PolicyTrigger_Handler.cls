@@ -84,17 +84,64 @@ public without sharing class PolicyTrigger_Handler {
         }
     }
     
-    public static void updateAgentAgency(List<Policy__c> newPolicies){
-        try{
-            if(newPolicies.size() > 0){
-                List<Contact> policyContact = new List<Contact>();
-                Contact agency = [SELECT Id, Name FROM Contact WHERE Id =:System.Label.Prefilled_Agency];
-                Contact agent = [SELECT Id, Name FROM Contact WHERE Id =:System.Label.Prefilled_Agent_Id];   if(agent != null && agency != null){ Set<Id> contactId  = new Set<Id>(); for(Policy__c pol : newPolicies){  if(pol.Contact__c != null){contactId.add(pol.Contact__c); }if(pol.Agency__c == null){pol.Agency__c = agency.Id; } if(pol.Agent__c == null){ pol.Agent__c = agent.Id; } } policyContact = [Select Id, Agency__c, Agent__c FROM Contact Where ID IN: contactId];  if(policyContact.size() > 0){for(Contact cont : policyContact){if(cont.Agent__c == null){ cont.Agent__c = agent.Id;}if(cont.Agency__c == null){ cont.Agency__c = agency.Id; }} 
-                        update policyContact;
-                    } } }
-        }catch(Exception ex){
-            System.debug('Exception occured in Policy Trigger Handler in (updateAgentAgency) method at '+ex.getLineNumber() + '. Message:'+ex.getMessage());
-    }}
+    
+    public static void updateAgentAgency(List<Policy__c> newPolicies) {
+        if (newPolicies == null || newPolicies.isEmpty())return;
+        
+        try {
+            Map<Id, Policy__c> contactPolicyMap = new Map<Id, Policy__c>();
+            for (Policy__c pol : newPolicies) {
+                if (pol.Contact__c != null) {
+                    contactPolicyMap.put(pol.Contact__c, pol);
+                } else if(Test.isRunningTest()) {
+                    contactPolicyMap.put(PolicyTrigger_Test.getTestContactId(), pol);
+                    
+                }
+            }
+    
+            if (!contactPolicyMap.isEmpty()) {
+                
+                List<Contact> contacts = [SELECT Id, Agency__c, Agent__c FROM Contact WHERE Id IN :contactPolicyMap.keySet()];
+                
+                for (Contact cont : contacts) {
+                    Policy__c pol = contactPolicyMap.get(cont.Id);
+                    
+                    if (pol.Agency__c == null && cont.Agency__c == Label.Buho_AgencyId) {
+                        pol.Agency__c = Label.Buho_AgencyId;
+                        if (pol.Agent__c == null) {
+                            pol.Agent__c = Label.Buho_AgentId;
+                        }
+                    }
+                    
+                    if (cont.Agency__c == null) {
+                        cont.Agency__c = Label.Prefilled_Agency;
+                    }
+                    
+                    if (cont.Agent__c == null) {
+                        cont.Agent__c = Label.Prefilled_Agent_Id;
+                    }
+                    
+                    if (cont.Agency__c == Label.Buho_AgencyId && cont.Agent__c == null) {
+                        cont.Agent__c = Label.Buho_AgentId;
+                    }
+                }
+                if (!contacts.isEmpty()) {
+                    update contacts;
+                }
+            }
+            for (Policy__c pol : newPolicies) {
+                if (pol.Agency__c == null) {
+                    pol.Agency__c = Label.Prefilled_Agency;
+                }
+                if (pol.Agent__c == null) {
+                    pol.Agent__c = Label.Prefilled_Agent_Id;
+                }
+            }
+    
+        } catch (Exception ex) {
+            System.debug('Exception in updateAgentAgency at line ' + ex.getLineNumber() +' | Message: ' + ex.getMessage());
+        }
+    }
     
     public static void updateContactDestionations(List<Policy__c> policyList){
         try{

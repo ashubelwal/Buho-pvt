@@ -1,0 +1,301 @@
+<template>
+    <div class="pd-container">
+        <!-- Back Navigation Bar -->
+        <div class="pd-back-bar">
+            <button class="pd-btn-back" onclick={handleBackToList}>
+                <img src={chevronLeftIconUrl} alt="" class="pd-icon-back" />
+                Back to Policies
+            </button>
+            <template if:true={policyDetail}>
+                <span class={policyStatusBadgeClass}>{policyDetailStatus}</span>
+            </template>
+        </div>
+
+        <!-- Loading State -->
+        <template if:true={isLoadingDetail}>
+            <div class="pd-loading">
+                <lightning-spinner alternative-text="Loading policy details..." size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:false={isLoadingDetail}>
+            <template if:true={policyDetail}>
+                <!-- Policy Hero Card (Summary + Action Buttons) -->
+                <c-buhodb_policy-custom-button-component
+                    record-id={policyId}
+                    policy-number={formattedPolicy.policyNumber}
+                    vehicle-label={policyDetailVehicleLabel}
+                    policy-type={formattedPolicy.policyType}
+                    date-range={policyDateRange}
+                    total-premium={formattedPolicy.totalPremiumAmount}
+                    package-name={formattedPolicy.package}
+                    term-name={formattedPolicy.term}>
+                </c-buhodb_policy-custom-button-component>
+
+                <!-- ── Information Section ── -->
+                <div class="pd-section">
+                    <button class="pd-section-header" onclick={toggleInformation}>
+                        <img src={chevronDownIconUrl} alt="" class={infoChevronClass} />
+                        <h2 class="pd-section-title">Information</h2>
+                    </button>
+                    <template if:true={showInformationSection}>
+                        <div class="pd-section-body">
+                            <div class="pd-field-grid">
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Policy Number</span>
+                                    <span class="pd-field-value">{formattedPolicy.policyNumber}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Status</span>
+                                    <span class={policyStatusFieldClass}>{formattedPolicy.status}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Policy Type</span>
+                                    <span class="pd-field-value">{formattedPolicy.policyType}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Vehicle Type</span>
+                                    <span class="pd-field-value">{formattedPolicy.vehicleType}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Underwriter</span>
+                                    <span class="pd-field-value">{formattedPolicy.underwriter}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Start Date</span>
+                                    <span class="pd-field-value">{formattedPolicy.startDate}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Package</span>
+                                    <span class="pd-field-value">{formattedPolicy.package}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Start Time</span>
+                                    <span class="pd-field-value">{formattedPolicy.startTime}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">End Date</span>
+                                    <span class="pd-field-value">{formattedPolicy.endDate}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">End Time</span>
+                                    <span class="pd-field-value">{formattedPolicy.endTime}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Quote (c)</span>
+                                    <span class="pd-field-value">{formattedPolicy.quoteName}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Term Days</span>
+                                    <span class="pd-field-value">{formattedPolicy.termDays}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">New Policy</span>
+                                    <span class="pd-field-value">{formattedPolicy.newPolicyName}</span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+                            </div>
+
+                            <div class="pd-field-grid">
+                                <div class="pd-field pd-field-checkbox">
+                                    <span class="pd-field-label">Fully Earned</span>
+                                    <span class="pd-field-value">
+                                        <span class={fullyEarnedCheckClass}></span>
+                                    </span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Issued At</span>
+                                    <span class="pd-field-value">{formattedPolicy.issuedAt}</span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Agent</span>
+                                    <span class="pd-field-value">{formattedPolicy.agentName}</span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Agency</span>
+                                    <span class="pd-field-value">{formattedPolicy.agencyName}</span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+                            </div>
+
+                            <div class="pd-field-grid">
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Source</span>
+                                    <span class="pd-field-value">{formattedPolicy.source}</span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Why Terminate Policy</span>
+                                    <span class="pd-field-value">{formattedPolicy.whyTerminate}</span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+                            </div>
+
+                            <div class="pd-field-grid">
+                                <div class="pd-field pd-field-checkbox">
+                                    <span class="pd-field-label">Gold</span>
+                                    <span class="pd-field-value">
+                                        <span class={goldCheckClass}></span>
+                                    </span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+
+                                <div class="pd-field pd-field-checkbox">
+                                    <span class="pd-field-label">Max</span>
+                                    <span class="pd-field-value">
+                                        <span class={maxCheckClass}></span>
+                                    </span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+
+                                <div class="pd-field pd-field-checkbox">
+                                    <span class="pd-field-label">Platinum</span>
+                                    <span class="pd-field-value">
+                                        <span class={platinumCheckClass}></span>
+                                    </span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- ── Coverage Details Section ── -->
+                <div class="pd-section">
+                    <button class="pd-section-header" onclick={toggleCoverage}>
+                        <img src={chevronDownIconUrl} alt="" class={coverageChevronClass} />
+                        <h2 class="pd-section-title">Coverage Details</h2>
+                    </button>
+                    <template if:true={showCoverageSection}>
+                        <div class="pd-section-body">
+                            <div class="pd-field-grid">
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Medical</span>
+                                    <span class="pd-field-value">{formattedPolicy.medical}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Stated Value</span>
+                                    <span class="pd-field-value">{formattedPolicy.statedValue}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Liability</span>
+                                    <span class="pd-field-value">{formattedPolicy.liability}</span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Territory</span>
+                                    <span class="pd-field-value">{formattedPolicy.territory}</span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- ── Policy Fees Section ── -->
+                <div class="pd-section">
+                    <button class="pd-section-header" onclick={toggleFees}>
+                        <img src={chevronDownIconUrl} alt="" class={feesChevronClass} />
+                        <h2 class="pd-section-title">Policy Fees</h2>
+                    </button>
+                    <template if:true={showFeesSection}>
+                        <div class="pd-section-body">
+                            <div class="pd-field-grid">
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Net Premium</span>
+                                    <span class="pd-field-value pd-field-currency">{formattedPolicy.netPremium}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Physical Damage</span>
+                                    <span class="pd-field-value pd-field-currency">{formattedPolicy.physicalDamage}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Broker/Policy Fee</span>
+                                    <span class="pd-field-value pd-field-currency">{formattedPolicy.brokerPolicyFee}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Total Theft Payment</span>
+                                    <span class="pd-field-value pd-field-currency">{formattedPolicy.totalTheftPayment}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">I.V.A. / Mex. Tax</span>
+                                    <span class="pd-field-value pd-field-currency">{formattedPolicy.ivaMexTax}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Liability Payment</span>
+                                    <span class="pd-field-value pd-field-currency">{formattedPolicy.liabilityPayment}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Surcharge</span>
+                                    <span class="pd-field-value pd-field-currency">{formattedPolicy.surcharge}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Medical Payment</span>
+                                    <span class="pd-field-value pd-field-currency">{formattedPolicy.medicalPayment}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Total Premium Amount</span>
+                                    <span class="pd-field-value pd-field-currency pd-field-total">{formattedPolicy.totalPremiumAmount}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Platinum Endorsement Payment</span>
+                                    <span class="pd-field-value pd-field-currency">{formattedPolicy.platinumEndorsement}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- ── Trip Details Section ── -->
+                <div class="pd-section">
+                    <button class="pd-section-header" onclick={toggleTrip}>
+                        <img src={chevronDownIconUrl} alt="" class={tripChevronClass} />
+                        <h2 class="pd-section-title">Trip Details</h2>
+                    </button>
+                    <template if:true={showTripSection}>
+                        <div class="pd-section-body">
+                            <div class="pd-field-grid">
+                                <div class="pd-field">
+                                    <span class="pd-field-label">What is your trip destination?</span>
+                                    <span class="pd-field-value">{formattedPolicy.tripDestination}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">What is the purpose of trip?</span>
+                                    <span class="pd-field-value">{formattedPolicy.tripPurpose}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+            </template>
+
+            <!-- Error State -->
+            <template if:false={policyDetail}>
+                <div class="pd-error">
+                    <p>Unable to load policy details. Please try again.</p>
+                    <button class="pd-btn-retry" onclick={handleBackToList}>Return to Policies</button>
+                </div>
+            </template>
+        </template>
+    </div>
+</template>

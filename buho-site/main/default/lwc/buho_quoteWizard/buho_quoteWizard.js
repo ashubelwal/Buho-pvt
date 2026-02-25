@@ -5,11 +5,15 @@ import { createTransformedData } from 'c/buho_utils';
 import checkalreadyExistUserAction from '@salesforce/apex/CustomerQuoteFlow.checkalreadyExistUserAction';
 import checkCommunityUserAndFetchDetails from '@salesforce/apex/NcExistingCustomerFlow.checkCommunityUserAndFetchDetails';
 import getCurrentSiteDetails from '@salesforce/apex/BuhoLoginController.getCurrentSiteDetails';
+import updateAgency from '@salesforce/apex/BuhoLoginController.updateAgency';
 import updateLeadStep from '@salesforce/apex/BuhoLoginController.updateLeadStep';
-import getAgencyId from '@salesforce/apex/BuhoLoginController.getAgencyId';
+import agencyIdLabel from "@salesforce/label/c.Buho_AgencyId";
+import agentIdLabel from "@salesforce/label/c.Buho_AgentId";
 import USER_ID from '@salesforce/user/Id';
-
+import { log } from 'c/buho_utils';
 export default class Buho_quoteWizard extends LightningElement {
+    @track displayHeader = true;
+    
     @track componentConstructor; // Holds the current component
     @track currentStep = 1; // Tracks the current step (1-indexed for display)
     @track payload = []; // Shared payload to store form data
@@ -19,7 +23,8 @@ export default class Buho_quoteWizard extends LightningElement {
         hideNavigation: true // Navigation is inside each step component
     };
     @track currentSiteData;
-    @track agencyId;
+    @track agentId = agentIdLabel;
+    @track agencyId = agencyIdLabel;
     leadId;
     stylesLoaded = false; // Flag to prevent multiple CSS loads
 
@@ -42,6 +47,13 @@ export default class Buho_quoteWizard extends LightningElement {
         { component: "c/buho_confirmation", name: "confirmation" },
         { component: "c/buho_feedback", name: "feedback" },
     ];
+    @api set showHeader(value) {
+        // Attribute strings like "false" must be coerced to a real boolean
+        this.displayHeader = value !== false && value !== 'false';
+    }
+    get showHeader() {
+        return this.displayHeader;
+    }
     // Total steps in the wizard
     get totalSteps() {
         return this.steps.length;
@@ -57,7 +69,12 @@ export default class Buho_quoteWizard extends LightningElement {
     }
 
     get pathPrefix() {
-        this.currentSiteData?.pathPrefix || '';
+        return this.currentSiteData?.pathPrefix || '';
+    }
+
+    get baseUrl() {
+        const { baseUrl, pathPrefix } = this.currentSiteData || {};
+        return baseUrl ? (pathPrefix ? baseUrl : `${baseUrl}/`) : '';
     }
 
     // Computed properties for button states
@@ -104,24 +121,8 @@ export default class Buho_quoteWizard extends LightningElement {
             console.error('Error:', error);
         }
     }
-
-    @wire(getAgencyId)
-    wiredAgencyId({ data, error }) {
-        if (data) {
-            this.agencyId = data;
-            this.error = undefined;
-            console.log('agencyId', JSON.stringify(data));
-        } else if (error) {
-            this.error = error;
-            this.currentSiteData = undefined;
-            console.error('Error:', error);
-        }
-    }
-
-
     // Lifecycle hook: triggered when component is inserted into the DOM
     async connectedCallback() {
-        console.log('connected callback of wizard called');
         const urlParams = new URLSearchParams(window.location.search);
         const quoteId = urlParams.has('quote') ?? '';
         try {
@@ -139,7 +140,8 @@ export default class Buho_quoteWizard extends LightningElement {
                         'UserType', 'driverDetails', 'termOption',
                         'quotePage', 'finalizeVehicleDetails', 'territory',
                         'lienholderInformation', 'finalDetails']);
-
+                this.currentStep = 2; // Skip user details for existing customers
+                console.log('redirecting to step 2');
                 console.log('BQW Payload after data copy', this.payload);
 
             } else if (urlParams.has('email')) {
@@ -170,6 +172,13 @@ export default class Buho_quoteWizard extends LightningElement {
             console.error('BQW Error in connectedCallback:', err.message);
         }
         console.log('is user already loggedin', USER_ID);
+        if(USER_ID) {
+            try {
+                updateAgency();
+            } catch(err) {
+                console.error('BQW Error in updating agency:', err);
+            }
+        }
     }
 
 
@@ -329,6 +338,9 @@ export default class Buho_quoteWizard extends LightningElement {
             } else if (direction === 'previous' && !this.isFirstStep) {
                 this.currentStep--;
                 this.isSkipComponent(false);
+                if(USER_ID && this.currentStep < 3){
+                    this.currentStep = 2;
+                }
                 await this.loadComponent();
             }
             console.log('@@@payload ', this.payload);
@@ -354,7 +366,7 @@ export default class Buho_quoteWizard extends LightningElement {
     async updateUrlStep() {
         const url = new URL(window.location.href);
         url.searchParams.set('step', this.currentStep);
-        window.history.replaceState({}, '', url);
+        window.history.pushState(null, '', url);;
         console.log('before updating step', this.leadId);
         if (this.leadId) {
             try {
@@ -362,7 +374,6 @@ export default class Buho_quoteWizard extends LightningElement {
                     leadId: this.leadId,
                     step: this.currentStep
                 });
-                console.log('@@@updateResult', updateResult);
             } catch (err) {
                 console.error('Error updating step:', err);
             }
@@ -379,6 +390,7 @@ export default class Buho_quoteWizard extends LightningElement {
                 console.error('2BQW Error capturing payload:', err.message);
                 return;
             }
+           
             this.currentStep = step;
             await this.loadComponent();
         } catch (err) {

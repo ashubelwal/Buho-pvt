@@ -1,1 +1,17 @@
 /* All styles consolidated in buhoAssets/css/buhoStyles.css */
+
+/* Phone Input Wrapper - for side-by-side country code and phone number */
+.phone-input-wrapper {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+}
+
+.phone-input-wrapper .country-code-wrapper {
+    flex: 0 0 140px;
+    min-width: 140px;
+}
+
+.phone-input-wrapper c-buho_input:last-child {
+    flex: 1;
+}

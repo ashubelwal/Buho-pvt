@@ -1,0 +1,65 @@
+<template>
+    <!-- Page Header -->
+    <div class="settings-header">
+        <h1 class="settings-title">Settings &amp; Account Management</h1>
+    </div>
+
+    <!-- Account Overview -->
+    <div class="settings-section">
+        <h3 class="settings-section-title">Account Overview</h3>
+
+        <!-- Name / Email -->
+        <div class="settings-grid">
+            <div class="settings-field">
+                <span class="settings-label">Name</span>
+                <span class="settings-view-value">{userData.name}</span>
+            </div>
+            <div class="settings-field">
+                <span class="settings-label">Email</span>
+                <span class="settings-view-value">{userData.email}</span>
+            </div>
+        </div>
+
+        <!-- Phone / Address -->
+        <div class="settings-grid">
+            <div class="settings-field">
+                <span class="settings-label">Phone</span>
+                <span class="settings-view-value">{userData.phone}</span>
+            </div>
+            <div class="settings-field">
+                <span class="settings-label">Address</span>
+                <span class="settings-view-value">{userData.address}</span>
+            </div>
+        </div>
+
+        <!-- Date Of Birth -->
+        <div class="settings-grid settings-grid-single">
+            <div class="settings-field">
+                <span class="settings-label">Date Of Birth</span>
+                <span class="settings-view-value">{userData.dateOfBirth}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Setting -->
+    <div class="settings-section">
+        <h3 class="settings-section-title">Account Setting</h3>
+
+        <!-- Password / Payment Method -->
+        <div class="settings-grid">
+            <div class="settings-field">
+                <span class="settings-label">Password</span>
+                <span class="settings-view-value">••••••••</span>
+            </div>
+            <div class="settings-field">
+                <span class="settings-label">Payment Method</span>
+                <span class="settings-view-value">{userData.paymentMethod}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Management -->
+    <div class="settings-section">
+        <c-payment-management></c-payment-management>
+    </div>
+</template>

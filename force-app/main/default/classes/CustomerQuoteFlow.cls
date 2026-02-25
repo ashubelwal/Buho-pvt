@@ -73,7 +73,7 @@ public without sharing class CustomerQuoteFlow {
             list<User> userList = new list<User>();
             map<string, object> insertedNewLead = new map<string, object>();
             userList = [
-                    SELECT Id, UserName, Email, Isactive 
+                    SELECT Id,FirstName, LastName, UserName, Email, Isactive 
                     FROM User 
                     WHERE Email =: getLeadData.Email limit 1];
             returnMap.put('isExistUser', false);
@@ -103,7 +103,7 @@ public without sharing class CustomerQuoteFlow {
                 } else if (getLeadData.Email != null && !String.isEmpty(getLeadData.Email)) {
                     query += ' Email=\'' + getLeadData.Email + '\'';
                 }
-                System.debug('####'+query);
+                System.debug('####new'+query);
                 leadData = Database.query(query);
 				System.debug('leadData---leadData'+leadData);
                 
@@ -143,7 +143,8 @@ public without sharing class CustomerQuoteFlow {
                 returnMap.put('Message','No lead and user exists');
             }
 
-        }catch(Exception ex){
+        } catch(Exception ex) {
+            System.debug('@@@error in checkexsitng user'+ex.getMessage()+ex.getStackTraceString());
             returnMap.put('status', 'Error');
             returnMap.put('message ', ex.getMessage());
             CustomErrorExceptionHandlerException.data = 'From parameter: '+leadDataItem+'\n leadData on query: '+JSON.serialize(leadData);
