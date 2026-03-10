@@ -11,7 +11,7 @@
 * 1.0 | April 30, 2025 |   | Initial Version
 **/
 
-public class NcExistingCustomerFlow {
+public without sharing class NcExistingCustomerFlow {
 
     @AuraEnabled
     public static String checkCommunityUserAndFetchDetails() {
@@ -42,6 +42,7 @@ public class NcExistingCustomerFlow {
                         responseMap.put('drivers', driversList);
                     }
                     vehicleList = getVehicles(loginUserList[0].contactId);
+                    System.debug('vehicleList@@@@'+vehicleList);
                     if (vehicleList != null && !vehicleList.isEmpty()) {
                         responseMap.put('vehicles', vehicleList);
                     }
@@ -122,6 +123,7 @@ public class NcExistingCustomerFlow {
     private static List<Vehicle__c> getVehicles(String contactId) {
         String query = getQueryWithAllFields(Vehicle__c.getSObjectType().getDescribe().getName());
         query += ' WHERE Contact__c = :contactId';
+        System.debug('@@@@query'+query);
         return Database.query(query);
     }
     

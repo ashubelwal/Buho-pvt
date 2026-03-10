@@ -105,6 +105,24 @@
                         name="getAQuote">
                         <div class="accordionDiv">
                            <div class="card slds-p-around_small slds-m-bottom_large slds-m-top_medium">
+
+                              <h2 class="sectionTitle">Agency Detail</h2>
+                              <div class="slds-grid slds-wrap">
+                                 <div class="slds-col slds-p-around_small">
+                                    <lightning-record-picker label="Agency" placeholder="Search Agency"
+                                       object-api-name="Contact" value={agency} filter={agencyFilter}
+                                       onchange={handleAgencyChange}>
+                                    </lightning-record-picker>
+                                 </div>
+                                 <div class="slds-col slds-p-around_small">
+                                    <lightning-record-picker label="Agent" placeholder="Search Agent"
+                                       object-api-name="Contact" value={agent} filter={agentFilter}
+                                       onchange={handleAgentChange}>
+                                    </lightning-record-picker>
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="card slds-p-around_small slds-m-bottom_large slds-m-top_medium">
                               <h2 class="sectionTitle">User details</h2>
                               <div class="slds-grid slds-wrap">
                                  <div class="slds-col slds-p-around_small">

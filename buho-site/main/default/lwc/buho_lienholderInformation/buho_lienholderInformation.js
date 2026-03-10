@@ -3,12 +3,23 @@ import getLienholderData from '@salesforce/apex/Mex_existingCustomerFlowControll
 import saveLienholderDetails from '@salesforce/apex/LienholderDetailFlow.saveLienholderDetails';
 import updateQuoteRecordData from '@salesforce/apex/NcExistingCustomerFlow.updateQuoteRecordData';
 
+const requiredFields = {
+    'Lienholder_Country__cmbx': 'Country',
+    'Lienholder_name__c': 'Name',
+    'Lienholder_Postal_Code__c': 'Postal Code',
+    'Lienholder_State__c': 'State',
+    'Lienholder_City__c': 'City',
+    'Lienholder_Street__c': 'Address',
+    'Lienholder_Phone__c': 'Phone'
+};
+
 export default class Buho_lienholderInformation extends LightningElement {
     @api payload;
     @track lienholderData = {
         Lienholder_Country__cmbx: 'United States',
     };
     @api lienholderdetails;
+    addNewLienHolder = false;
 
     ISDEBUG = true;
 
@@ -33,10 +44,7 @@ export default class Buho_lienholderInformation extends LightningElement {
     get filterValue() {
         return this.lienholderData.Lienholder_Country__cmbx || this.lienholderData.Lienholder_Country__c;
     }
-    
-    get addNewLienHolder() {
-        return this.lienHolderValue.length > 0 ? true : false;
-    }
+
 
     get lineHolderCountry() {
         return this.lienholderData.Lienholder_Country__c ? this.lienholderData.Lienholder_Country__c : '';
@@ -70,7 +78,6 @@ export default class Buho_lienholderInformation extends LightningElement {
 
     lienHolderhandleChange(e) {
         this.lienHolderValue = e.detail.value;
-        console.log(this.lienHolderValue);
     }
 
     otherCountry = false;
@@ -303,23 +310,23 @@ export default class Buho_lienholderInformation extends LightningElement {
         }
 
         this.lienholderData = {};
-        
+
         if (value != 'Other') {
             this.otherCountry = false;
-            this.lienholderData = { 
-                ...this.lienholderData, 
+            this.lienholderData = {
+                ...this.lienholderData,
                 ['Lienholder_Country__c']: value,
-                ['Lienholder_Country__cmbx']: value 
+                ['Lienholder_Country__cmbx']: value
             };
         } else {
             this.otherCountry = true;
-            this.lienholderData = { 
-                ...this.lienholderData, 
+            this.lienholderData = {
+                ...this.lienholderData,
                 ['Lienholder_Country__c']: '',
-                ['Lienholder_Country__cmbx']: value 
+                ['Lienholder_Country__cmbx']: value
             };
         }
-        
+
         console.log('this.lienholderData after country change::::', this.lienholderData);
     }
 
@@ -356,7 +363,7 @@ export default class Buho_lienholderInformation extends LightningElement {
         }
 
         this.lienholderData = { ...this.lienholderData, ['Lienholder_Phone__c']: processedValue };
-        
+
         // Dispatch event for lienholder details
         const lienholderDetailsEvent = new CustomEvent('lienholderdetails', {
             detail: this.lienholderData
@@ -366,11 +373,10 @@ export default class Buho_lienholderInformation extends LightningElement {
 
     // Handle postal code input with uppercase
     handlePostalCodeChange(event) {
-        const { value } = event.detail;
+        const { value, hasError } = event.detail;
         let processedValue = value ? value.toUpperCase() : '';
 
         this.lienholderData = { ...this.lienholderData, ['Lienholder_Postal_Code__c']: processedValue };
-        
         // Dispatch event for lienholder details
         const lienholderDetailsEvent = new CustomEvent('lienholderdetails', {
             detail: this.lienholderData
@@ -387,15 +393,7 @@ export default class Buho_lienholderInformation extends LightningElement {
         let isValid = true;
 
         // Validate required fields
-        const requiredFields = {
-            'Lienholder_Country__cmbx': 'Country',
-            'Lienholder_name__c': 'Name',
-            'Lienholder_Postal_Code__c': 'Postal Code',
-            'Lienholder_State__c': 'State',
-            'Lienholder_City__c': 'City',
-            'Lienholder_Street__c': 'Address',
-            'Lienholder_Phone__c': 'Phone'
-        };
+        
 
         // Check country
         if (!this.lienholderData.Lienholder_Country__cmbx || this.lienholderData.Lienholder_Country__cmbx.trim() === '') {
@@ -455,9 +453,14 @@ export default class Buho_lienholderInformation extends LightningElement {
                 }
             }
         }
-
+        console.log('@@@',this.lienholderData);
         // Check other required fields
-        const fieldsToCheck = ['Lienholder_Postal_Code__c', 'Lienholder_State__c', 'Lienholder_City__c', 'Lienholder_Street__c', 'Lienholder_Phone__c'];
+        const fieldsToCheck = [
+            'Lienholder_Postal_Code__c',
+            'Lienholder_State__c',
+            'Lienholder_City__c',
+            'Lienholder_Street__c',
+            'Lienholder_Phone__c'];
         for (let field of fieldsToCheck) {
             if (!this.lienholderData[field] || this.lienholderData[field].toString().trim() === '') {
                 this.dispatchEvent(new CustomEvent('toastevent', {
@@ -490,7 +493,7 @@ export default class Buho_lienholderInformation extends LightningElement {
         if (!this.validate()) {
             return;
         }
-        
+
         this.dispatchEvent(new CustomEvent('changescreen', {
             detail: { direction: 'next' },
             bubbles: true,
@@ -499,7 +502,7 @@ export default class Buho_lienholderInformation extends LightningElement {
     }
 
 
-    
+
 
     @api async getData() {
         console.log('lienholder information - getData: ', this.lienholderData);
@@ -602,5 +605,13 @@ export default class Buho_lienholderInformation extends LightningElement {
         }
 
         return processedData;
+    }
+
+    handleManualEntry(event) {
+        this.addNewLienHolder = true;
+        Object.keys(requiredFields).forEach(key => {
+            console.log('updating key key',key)
+            this.lienholderData[key] = '';
+        });
     }
 }

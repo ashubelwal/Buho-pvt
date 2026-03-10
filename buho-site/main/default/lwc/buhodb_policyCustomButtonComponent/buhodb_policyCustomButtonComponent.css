@@ -1,0 +1,6 @@
+/* Button styles now use pd-action-btn from buhoAssets/css/buhoStyles.css */
+/* Component-level overrides only */
+
+.maindiv {
+    width: 100%;
+}

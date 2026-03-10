@@ -13,7 +13,7 @@ public without sharing class AgencyController {
                 agentId = getUserInfo.ContactId;
                 
             }else{
-                List<Contact> getContact = [Select id from contact where email =: getUserInfo.Email Limit 1];
+                List<Contact> getContact = [SELECT Id FROM Contact WHERE Email =: getUserInfo.Email Limit 1];
                 if(getContact.size() > 0){
                     agentId = getContact[0].Id;
                 }else{

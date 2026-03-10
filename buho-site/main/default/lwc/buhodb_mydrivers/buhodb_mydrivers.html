@@ -1,0 +1,61 @@
+<template>
+    <!-- ============== LIST VIEW ============== -->
+    <template if:true={isListView}>
+        <!-- Page Header -->
+        <div class="myvehicles-header">
+            <div class="myvehicles-header-left">
+                <h1 class="myvehicles-title">My Drivers</h1>
+                <p class="myvehicles-subtitle">Manage Your Drivers</p>
+            </div>
+        </div>
+
+        <!-- Quick Stats Summary -->
+        <h3 class="myvehicles-section-heading">Quick Stats Summary</h3>
+        <div class="myvehicles-stats-grid">
+            <div class="myvehicles-stat-card">
+                <div class="myvehicles-stat-icon accent">
+                    <img src={driverIconUrl} alt="Drivers" class="icon-img" />
+                </div>
+                <h2 class="myvehicles-stat-value">{totalDriversFormatted}</h2>
+                <p class="myvehicles-stat-label">Total Drivers</p>
+            </div>
+            <div class="myvehicles-stat-card">
+                <div class="myvehicles-stat-icon primary">
+                    <img src={policyIconUrl} alt="Policies" class="icon-img" />
+                </div>
+                <h2 class="myvehicles-stat-value">{activePoliciesFormatted}</h2>
+                <p class="myvehicles-stat-label">Active Policies</p>
+            </div>
+        </div>
+
+        <!-- Drivers List -->
+        <h3 class="myvehicles-section-heading">Drivers</h3>
+        <div class="myvehicles-grid">
+            <template for:each={drivers} for:item="drv">
+                <c-buhodb_drivercard
+                    key={drv.id}
+                    driver-id={drv.id}
+                    driver-name={drv.driverName}
+                    license-number={drv.licenseNumber}
+                    license-state={drv.licenseState}
+                    dob={drv.dob}
+                    driver-type={drv.driverType}
+                    email={drv.email}
+                    phone={drv.phone}
+                    city={drv.city}
+                    license-expire={drv.licenseExpire}
+                    is-primary={drv.isPrimary}
+                    onviewdriver={handleViewDriver}>
+                </c-buhodb_drivercard>
+            </template>
+        </div>
+    </template>
+
+    <!-- ============== DETAIL VIEW ============== -->
+    <template if:false={isListView}>
+        <c-buhodb_driverdetail
+            driver-id={selectedDriverId}
+            onbacktodrivers={handleBackToList}>
+        </c-buhodb_driverdetail>
+    </template>
+</template>

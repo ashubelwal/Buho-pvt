@@ -80,31 +80,119 @@ export default class Nc_termOption extends LightningElement {
     }
 
     /**
-    * Resets the start time to 12:00 AM if the start date is in the future.
+     * Add minutes to a time string (HH:mm format)
+     * Returns {time: "HH:mm", crossesMidnight: boolean}
+     */
+    addMinutesToTime(timeString, minutesToAdd) {
+        const [hours, minutes] = timeString.split(':').map(Number);
+        let totalMinutes = hours * 60 + minutes + minutesToAdd;
+        let dayOffset = 0;
+        
+        // Handle overflow past midnight
+        while (totalMinutes >= 24 * 60) {
+            totalMinutes -= 24 * 60;
+            dayOffset++;
+        }
+        
+        const newHours = Math.floor(totalMinutes / 60);
+        const newMinutes = totalMinutes % 60;
+        
+        return {
+            time: `${String(newHours).padStart(2, '0')}:${String(newMinutes).padStart(2, '0')}`,
+            crossesMidnight: dayOffset > 0,
+            daysToAdd: dayOffset
+        };
+    }
+
+    /**
+     * Parse date string as local date to avoid timezone issues
+     */
+    parseDateAsLocal(dateString) {
+        if (!dateString) return null;
+        if (typeof dateString === 'string' && dateString.includes('-')) {
+            const [year, month, day] = dateString.split('-').map(num => parseInt(num, 10));
+            return new Date(year, month - 1, day); // month is 0-indexed
+        }
+        return new Date(dateString);
+    }
+
+    /**
+     * Format date for API (YYYY-MM-DD)
+     */
+    formatDateForApi(date) {
+        if (!date) return '';
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    /**
+     * Calculate start time based on whether date is today or future
+     * For today: start time = system time + 30 mins
+     * For future: start time = 00:01
+     */
+    calculatePolicyTimes(selectedDate) {
+        if (!selectedDate || !this.defaultDate || !this.displayPstTime) {
+            return {
+                startTime: '00:01',
+                isFutureDate: false
+            };
+        }
+
+        const start = this.parseDateAsLocal(selectedDate);
+        const today = this.parseDateAsLocal(this.defaultDate);
+        
+        // Reset time parts for comparison
+        start.setHours(0, 0, 0, 0);
+        today.setHours(0, 0, 0, 0);
+
+        if (start > today) {
+            // Future date: use default time
+            console.log('NC_TO Future date selected:', start);
+            return {
+                startTime: '00:01',
+                isFutureDate: true
+            };
+        } else {
+            // Today's date: calculate based on system time
+            console.log('NC_TO Today date selected, system time:', this.displayPstTime);
+            
+            // Add 30 minutes to system time for start time
+            const startTimeResult = this.addMinutesToTime(this.displayPstTime, 30);
+            const startTime = startTimeResult.time;
+            
+            console.log('NC_TO Calculated start time:', {
+                systemTime: this.displayPstTime,
+                startTime: startTime
+            });
+            
+            return {
+                startTime: startTime,
+                isFutureDate: false
+            };
+        }
+    }
+
+    /**
+    * Resets the start time based on whether the date is today or future
     */
     resetStartTimeIfFuture() {
         if (!this.startDate || !this.defaultDate) return null;
 
-        const start = new Date(this.startDate);        
-        const today = new Date(this.defaultDate);        
+        const timeCalculation = this.calculatePolicyTimes(this.startDate);
+        
+        this.flags.isFutureDate = timeCalculation.isFutureDate;
+        this.inputValues['Start_Time__c'] = timeCalculation.startTime;
+        
+        console.log('NC_TO resetStartTimeIfFuture - Final values:', {
+            startDate: this.startDate,
+            endDate: this.endDate,
+            startTime: this.inputValues.Start_Time__c,
+            isFutureDate: this.flags.isFutureDate
+        });
 
-
-        // return start > today ? '00:00:00' : start.toTimeString().split(' ')[0];
-
-        if(start > today) {
-            console.log('OUTPUTif : start date',start);
-            console.log('OUTPUT if: today date',today);
-            //  this.inputValues.Start_Time__c            
-            this.flags.isFutureDate = true;
-            this.inputValues['Start_Time__c'] = '00:00:00.000'
-        } else {
-            console.log('OUTPUT else: start date',start);
-            console.log('OUTPUT else: today date',today);
-            this.flags.isFutureDate = false;            
-            // this.inputValues.Start_Time__c = start.toTimeString().split(' ')[0]
-        }
         this.validateTimeRange(this.inputValues.Start_Time__c, this.displayPstTime)
-
     }
 
     validateTimeRange(timeValue, displayPstTime) {
@@ -283,10 +371,20 @@ export default class Nc_termOption extends LightningElement {
                 this.systemTime = timeData;
 
                 this.displayPstTime = timeData.timePst; 
-                this.inputValues['Start_Time__c'] = timeData.nextMin.substring(0, 5);
-
+                
                 this.startDate = timeData.dPST;
                 this.defaultDate = timeData.dPST;
+                
+                // Calculate start time based on policy time logic (system time + 30 mins)
+                const timeCalculation = this.calculatePolicyTimes(this.startDate);
+                this.inputValues['Start_Time__c'] = timeCalculation.startTime;
+                this.flags.isFutureDate = timeCalculation.isFutureDate;
+                
+                console.log('NC_TO getSystemTime - Initialized with:', {
+                    systemTime: this.displayPstTime,
+                    startTime: this.inputValues['Start_Time__c'],
+                    isFutureDate: this.flags.isFutureDate
+                });
             } else {
                 console.log('OUTPUT : Getting error while calling getTimeZone');
             }

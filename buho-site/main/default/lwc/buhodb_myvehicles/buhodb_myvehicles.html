@@ -1,0 +1,71 @@
+<template>
+    <!-- ============== LIST VIEW ============== -->
+    <template if:true={isListView}>
+        <!-- Page Header -->
+        <div class="myvehicles-header">
+            <div class="myvehicles-header-left">
+                <h1 class="myvehicles-title">My Vehicles</h1>
+                <p class="myvehicles-subtitle">Manage Your Covered Vehicles</p>
+            </div>
+            <!--div class="myvehicles-header-actions">
+                <button class="btn-add-vehicle" onclick={handleAddNewVehicle}>
+                    <img src={plusIconUrl} alt="" class="icon-btn icon-white" />
+                    Add New Vehicle
+                </button>
+            </div-->
+        </div>
+
+        <!-- Quick Stats Summary -->
+        <h3 class="myvehicles-section-heading">Quick Stats Summary</h3>
+        <div class="myvehicles-stats-grid">
+            <div class="myvehicles-stat-card">
+                <div class="myvehicles-stat-icon accent">
+                    <img src={carIconUrl} alt="Vehicles" class="icon-img" />
+                </div>
+                <h2 class="myvehicles-stat-value">{totalVehiclesFormatted}</h2>
+                <p class="myvehicles-stat-label">Total vehicles</p>
+            </div>
+            <div class="myvehicles-stat-card">
+                <div class="myvehicles-stat-icon primary">
+                    <img src={policyIconUrl} alt="Policies" class="icon-img" />
+                </div>
+                <h2 class="myvehicles-stat-value">{activePoliciesFormatted}</h2>
+                <p class="myvehicles-stat-label">Active Policies</p>
+            </div>
+        </div>
+
+        <!-- Covered Vehicles -->
+        <h3 class="myvehicles-section-heading">Covered Vehicles</h3>
+        <div class="myvehicles-grid">
+            <template for:each={vehicles} for:item="veh">
+                <c-buhodb_vehiclecard
+                    key={veh.id}
+                    vehicle-id={veh.id}
+                    vehicle-name={veh.vehicleName}
+                    vin={veh.vin}
+                    plate={veh.plate}
+                    value={veh.value}
+                    surcharge={veh.surcharge}
+                    surcharge-type={veh.surchargeType}
+                    primary-driver={veh.primaryDriver}
+                    added={veh.added}
+                    usage-stats={veh.usageStats}
+                    premium={veh.premium}
+                    oneditvehicle={handleEditVehicle}
+                    onupdatevalue={handleUpdateValue}>
+                </c-buhodb_vehiclecard>
+            </template>
+        </div>
+    </template>
+
+    <!-- ============== DETAIL / ADD VIEW ============== -->
+    <template if:false={isListView}>
+        <c-buhodb_vehicleeditform
+            mode={formMode}
+            vehicle-id={selectedVehicleId}
+            onback={handleBackToList}
+            onaddnew={handleAddNewVehicle}
+            onaddvehicle={handleVehicleAdded}>
+        </c-buhodb_vehicleeditform>
+    </template>
+</template>

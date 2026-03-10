@@ -27,7 +27,7 @@ trigger Policy_Trigger on Policy__c (after insert, after update, after delete, a
             Id currentUserId = UserInfo.getUserId();
             User currentUser = [SELECT Id, Profile.Name FROM User WHERE Id = :currentUserId LIMIT 1];
             String profileName = currentUser.Profile.Name;
-            if(profileName == 'Mex Insurance Customer Community Plus Login User' || profileName == 'MexInsurance Profile' || profileName == 'Mexinsurance Customer community Profile' ) {
+            if(profileName == 'Mexinsurance Community Profile' || profileName == 'Buho Customer Community Plus Login User' || profileName == 'Mex Insurance Customer Community Plus Login User' || profileName == 'MexInsurance Profile' || profileName == 'Mexinsurance Customer community Profile' ) {
                 PolicyTrigger_Handler.updateAgentAgency(trigger.new);
             }
 

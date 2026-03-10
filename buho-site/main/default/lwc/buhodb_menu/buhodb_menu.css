@@ -1,0 +1,7 @@
+/* The host element sits inside dashboard-container (display:flex).
+   display:contents lets the inner <aside> participate directly
+   in the flex layout without an extra wrapper layer. */
+:host {
+    display: contents;
+}
+

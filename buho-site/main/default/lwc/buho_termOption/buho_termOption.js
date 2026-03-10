@@ -4,6 +4,8 @@ import saveLeadPolicyTerms from '@salesforce/apex/TermOptionFlow.saveLeadPolicyT
 import getCalculatedTermEndTime from '@salesforce/apex/TermOptionFlow.getCalculatedTermEndTime';
 import getTimeZone from '@salesforce/apex/Mex_NewLeadProcess.getTimeZone';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { loadScript, loadStyle } from 'lightning/platformResourceLoader';
+import BUHO_ASSETS from '@salesforce/resourceUrl/buhoAssets';
 
 export default class Buho_termOption extends LightningElement {
     @api payload;
@@ -46,7 +48,7 @@ export default class Buho_termOption extends LightningElement {
     @track inputValues = {
         "Gold__c": false,
         'Start_Time__c': '00:01', // Default start time (12:01 AM)
-        'End_Time__c': '23:59'    // Default end time (11:59 PM)
+        'End_Time__c': '00:01'    // Default end time (start time + 24 hours = same clock time)
     };
     //selectedTimeSlot = ''; // Holds the selected time slot
     termType = 'Daily';
@@ -109,6 +111,29 @@ export default class Buho_termOption extends LightningElement {
         }
     }
 
+    // Format 24h time (HH:mm) to 12h time (hh:mm AM/PM)
+    formatTimeForDisplay(timeString) {
+        if (!timeString) return '';
+        const [hourStr, minuteStr] = timeString.split(':');
+        let hour = parseInt(hourStr, 10);
+        const minute = minuteStr || '00';
+        const ampm = hour >= 12 ? 'PM' : 'AM';
+        hour = hour % 12 || 12;
+        return `${hour}:${minute} ${ampm}`;
+    }
+
+    // Coverage summary text shown above the Continue button
+    get coverageSummaryText() {
+        const sDate = this.formattedStartDate;
+        const eDate = this.formattedEndDate;
+        const sTime = this.formatTimeForDisplay(this.inputValues.Start_Time__c);
+        const eTime = this.formatTimeForDisplay(this.inputValues.End_Time__c);
+        if (sDate && eDate && sTime && eTime) {
+            return `Your coverage starts at ${sDate} ${sTime} and ends at ${eDate} ${eTime}`;
+        }
+        return '';
+    }
+
     // Get term options with computed classes
     get termOptionsWithClass() {
         return this.termOptions.map(option => ({
@@ -119,7 +144,7 @@ export default class Buho_termOption extends LightningElement {
 
     // Handle term button click
     handleTermClick(event) {
-        event.preventDefault();
+        event?.preventDefault?.();
         const selectedTerm = event.target.dataset.term;
         if (selectedTerm) {
             const previousTerm = this.selectedTerm;
@@ -133,24 +158,25 @@ export default class Buho_termOption extends LightningElement {
             if (this.startDate) {
                 const startDate = this.parseDateAsLocal(this.startDate);
                 
+                // Calculate times based on whether date is today or future
+                // Pass the newly selected term explicitly
+                const timeCalculation = this.calculatePolicyTimes(this.startDate, selectedTerm);
+                this.inputValues.Start_Time__c = timeCalculation.startTime;
+                this.inputValues.End_Time__c = timeCalculation.endTime;
+                this.flags.isFutureDate = timeCalculation.isFutureDate;
+                
                 if (selectedTerm === 'Daily') {
-                    // For Daily, set end date same as start date and reset times to default
-                    this.endDate = this.startDate;
-                    this.inputValues.Start_Time__c = '00:01';
-                    this.inputValues.End_Time__c = '23:59';
+                    // For Daily: end date = start date + offset (minimum 1 day, end date must be > start date)
+                    const endDateOffset = timeCalculation.endDateOffset || 1;
+                    const endDate = new Date(startDate);
+                    endDate.setDate(endDate.getDate() + endDateOffset);
+                    this.endDate = this.formatDateForApi(endDate);
                 } else {
-                    // For Annual/Semi-Annual, auto-calculate end date
+                    // For Annual/Semi-Annual, auto-calculate end date based on term duration
                     const daysOffset = this.termDaysMap[selectedTerm] || 365;
                     const endDate = new Date(startDate);
                     endDate.setDate(endDate.getDate() + daysOffset);
                     this.endDate = this.formatDateForApi(endDate);
-                    // Keep current times or set to default
-                    if (!this.inputValues.Start_Time__c) {
-                        this.inputValues.Start_Time__c = '00:01';
-                    }
-                    if (!this.inputValues.End_Time__c) {
-                        this.inputValues.End_Time__c = '23:59';
-                    }
                 }
                 
                 // Update date range display
@@ -171,7 +197,8 @@ export default class Buho_termOption extends LightningElement {
                     startDate: this.startDate,
                     endDate: this.endDate,
                     startTime: this.inputValues.Start_Time__c,
-                    endTime: this.inputValues.End_Time__c
+                    endTime: this.inputValues.End_Time__c,
+                    isFutureDate: timeCalculation.isFutureDate
                 });
             }
             
@@ -191,6 +218,24 @@ export default class Buho_termOption extends LightningElement {
             bubbles: true,
             composed: true
         }));
+    }
+
+    /**
+     * Handle time input click to show time picker
+     * This allows the time picker to open when clicking anywhere on the input, not just the icon
+     */
+    handleTimeInputClick(event) {
+        try {
+            const inputElement = event.target;
+            // Check if showPicker method is available (modern browsers)
+            if (inputElement && typeof inputElement.showPicker === 'function') {
+                inputElement.showPicker();
+            }
+        } catch (error) {
+            // Silently fail if showPicker is not supported
+            // The user can still use the input normally
+            if (this.DEBUG_MODE) console.log('BTO showPicker not supported:', error);
+        }
     }
 
     // Fetches term options from the Apex method and updates the termOptions array.
@@ -237,31 +282,137 @@ export default class Buho_termOption extends LightningElement {
     }
 
     /**
-    * Resets the start time to 12:00 AM if the start date is in the future.
+     * Add minutes to a time string (HH:mm format)
+     * Returns {time: "HH:mm", crossesMidnight: boolean}
+     */
+    addMinutesToTime(timeString, minutesToAdd) {
+        const [hours, minutes] = timeString.split(':').map(Number);
+        let totalMinutes = hours * 60 + minutes + minutesToAdd;
+        let dayOffset = 0;
+        
+        // Handle overflow past midnight
+        while (totalMinutes >= 24 * 60) {
+            totalMinutes -= 24 * 60;
+            dayOffset++;
+        }
+        
+        const newHours = Math.floor(totalMinutes / 60);
+        const newMinutes = totalMinutes % 60;
+        
+        return {
+            time: `${String(newHours).padStart(2, '0')}:${String(newMinutes).padStart(2, '0')}`,
+            crossesMidnight: dayOffset > 0,
+            daysToAdd: dayOffset
+        };
+    }
+
+    /**
+     * Calculate start and end times based on whether date is today or future
+     * RULE: End time = Start time (start time + 24 hours = same clock time) for ALL policy types
+     * For today: start time = system time + 30 mins
+     * For future dates: start time = 00:01
+     * @param {string} selectedDate - The selected date
+     * @param {string} termType - The term type (Daily, Annual, Semi-Annual)
+     */
+    calculatePolicyTimes(selectedDate, termType = null) {
+        // Use component's term type if not provided
+        const currentTermType = termType || this.selectedTerm;
+        
+        if (!selectedDate || !this.defaultDate || !this.displayPstTime) {
+            return {
+                startTime: '00:01',
+                endTime: '00:01', // Same as start time (+24 hours)
+                isFutureDate: false,
+                endDateOffset: 1
+            };
+        }
+
+        const start = this.parseDateAsLocal(selectedDate);
+        const today = this.parseDateAsLocal(this.defaultDate);
+        
+        // Reset time parts for comparison
+        start.setHours(0, 0, 0, 0);
+        today.setHours(0, 0, 0, 0);
+
+        if (start > today) {
+            // Future date: start at 00:01, end = same as start (+24h)
+            console.log('BTO Future date selected:', start);
+            return {
+                startTime: '00:01',
+                endTime: '00:01', // Same clock time = +24 hours
+                isFutureDate: true,
+                endDateOffset: 1
+            };
+        } else {
+            // Today's date: start = system time + 30 mins, end = same as start (+24h)
+            console.log('BTO Today date selected, system time:', this.displayPstTime, 'Term:', currentTermType);
+            
+            // Add 30 minutes to system time for start time
+            const startTimeResult = this.addMinutesToTime(this.displayPstTime, 30);
+            const startTime = startTimeResult.time;
+            
+            // End time = start time (same clock time = +24 hours) for ALL policy types
+            const endTime = startTime;
+            const endDateOffset = 1; // Always next day since end time = start time + 24h
+            
+            console.log('BTO Calculated times:', {
+                systemTime: this.displayPstTime,
+                termType: currentTermType,
+                startTime: startTime,
+                endTime: endTime,
+                endDateOffset: endDateOffset
+            });
+            
+            return {
+                startTime: startTime,
+                endTime: endTime,
+                isFutureDate: false,
+                endDateOffset: endDateOffset
+            };
+        }
+    }
+
+    /**
+    * Resets the start time based on whether the date is today or future
+    * Also adjusts end date if the 24-hour period crosses midnight
     */
     resetStartTimeIfFuture() {
         if (!this.startDate || !this.defaultDate) return null;
 
-        const start = new Date(this.startDate);
-        const today = new Date(this.defaultDate);
-
-
-        // return start > today ? '00:00:00' : start.toTimeString().split(' ')[0];
-
-        if (start > today) {
-            console.log('OUTPUTif : start date', start);
-            console.log('OUTPUT if: today date', today);
-            //  this.inputValues.Start_Time__c            
-            this.flags.isFutureDate = true;
-            this.inputValues['Start_Time__c'] = '00:00:00.000'
-        } else {
-            console.log('OUTPUT else: start date', start);
-            console.log('OUTPUT else: today date', today);
-            this.flags.isFutureDate = false;
-            // this.inputValues.Start_Time__c = start.toTimeString().split(' ')[0]
+        const timeCalculation = this.calculatePolicyTimes(this.startDate);
+        
+        this.flags.isFutureDate = timeCalculation.isFutureDate;
+        this.inputValues['Start_Time__c'] = timeCalculation.startTime;
+        this.inputValues['End_Time__c'] = timeCalculation.endTime;
+        
+        // For Daily term, ensure end date is always > start date
+        if (this.isDailyTerm) {
+            const endDateOffset = timeCalculation.endDateOffset || 1;
+            const startDateObj = this.parseDateAsLocal(this.startDate);
+            const newEndDate = new Date(startDateObj);
+            newEndDate.setDate(newEndDate.getDate() + endDateOffset);
+            this.endDate = this.formatDateForApi(newEndDate);
+            
+            // Update input values
+            this.inputValues.End_Date_for_Coverage__c = this.endDate;
+            this.inputValues.EndDate = this.endDate;
+            
+            // Update date range
+            this.dateRange = `${this.formatDateForDisplay(this.startDate)} to ${this.formatDateForDisplay(this.endDate)}`;
+            this.inputValues.DateRange = this.dateRange;
+            
+            console.log('BTO End date set for Daily term:', this.endDate);
         }
-        this.validateTimeRange(this.inputValues.Start_Time__c, this.displayPstTime)
+        
+        console.log('BTO resetStartTimeIfFuture - Final values:', {
+            startDate: this.startDate,
+            endDate: this.endDate,
+            startTime: this.inputValues.Start_Time__c,
+            endTime: this.inputValues.End_Time__c,
+            isFutureDate: this.flags.isFutureDate
+        });
 
+        this.validateTimeRange(this.inputValues.Start_Time__c, this.displayPstTime)
     }
 
 
@@ -374,13 +525,28 @@ export default class Buho_termOption extends LightningElement {
                 
                 // Recalculate end date if start date exists
                 if (this.startDate) {
-                    const daysOffset = this.termDaysMap[value] || 365;
                     const startDate = this.parseDateAsLocal(this.startDate);
                     
-                    // Recalculate end date with new term
-                    const endDate = new Date(startDate);
-                    endDate.setDate(endDate.getDate() + daysOffset);
-                    this.endDate = this.formatDateForApi(endDate);
+                    // Calculate times based on whether date is today or future
+                    // Pass the newly selected term explicitly
+                    const timeCalculation = this.calculatePolicyTimes(this.startDate, value);
+                    this.inputValues.Start_Time__c = timeCalculation.startTime;
+                    this.inputValues.End_Time__c = timeCalculation.endTime;
+                    this.flags.isFutureDate = timeCalculation.isFutureDate;
+                    
+                    if (value === 'Daily') {
+                        // For Daily: end date = start date + offset (minimum 1 day, end date must be > start date)
+                        const endDateOffset = timeCalculation.endDateOffset || 1;
+                        const endDate = new Date(startDate);
+                        endDate.setDate(endDate.getDate() + endDateOffset);
+                        this.endDate = this.formatDateForApi(endDate);
+                    } else {
+                        // For Annual/Semi-Annual, auto-calculate end date
+                        const daysOffset = this.termDaysMap[value] || 365;
+                        const endDate = new Date(startDate);
+                        endDate.setDate(endDate.getDate() + daysOffset);
+                        this.endDate = this.formatDateForApi(endDate);
+                    }
                     
                     // Update date range display
                     this.dateRange = `${this.formatDateForDisplay(this.startDate)} to ${this.formatDateForDisplay(this.endDate)}`;
@@ -394,37 +560,28 @@ export default class Buho_termOption extends LightningElement {
                     
                     if (this.DEBUG_MODE) console.log('BTO Recalculated dates for term change:', {
                         term: value,
-                        daysOffset: daysOffset,
-                        startDate: this.startDFate,
-                        endDate: this.endDate
+                        startDate: this.startDate,
+                        endDate: this.endDate,
+                        startTime: this.inputValues.Start_Time__c,
+                        endTime: this.inputValues.End_Time__c,
+                        isFutureDate: timeCalculation.isFutureDate
                     });
                 }
             }
 
-            // Handle Time Change
+            // Handle Start Time Change — end time always = start time (+24 hours = same clock time)
             if (name === 'Start_Time__c') {
-                //this.validateTimeRange(value, this.displayPstTime);
+                // Auto-set end time to match start time (start + 24h = same clock time)
+                this.inputValues['End_Time__c'] = value;
                 
-                // Validate start time vs end time
-                if (this.inputValues.End_Time__c) {
-                    this.validateStartEndTime(value, this.inputValues.End_Time__c);
+                // Update the end time input field in the UI
+                const endTimeInput = this.template.querySelector('input[name="End_Time__c"]');
+                if (endTimeInput) {
+                    endTimeInput.value = value;
                 }
                 
-                if (this.DEBUG_MODE) console.log('BTO Start time changed:', {
+                if (this.DEBUG_MODE) console.log('BTO Start time changed, end time auto-set:', {
                     startTime: value,
-                    endTime: this.inputValues['End_Time__c']
-                });
-            }
-
-            // Handle End Time Change
-            if (name === 'End_Time__c') {
-                // Validate end time vs start time
-                if (this.inputValues.Start_Time__c) {
-                    this.validateStartEndTime(this.inputValues.Start_Time__c, value);
-                }
-                
-                if (this.DEBUG_MODE) console.log('BTO End time changed:', {
-                    startTime: this.inputValues.Start_Time__c,
                     endTime: value
                 });
             }
@@ -433,6 +590,99 @@ export default class Buho_termOption extends LightningElement {
         } catch (err) {
             console.error('BTO Error in handleInputChange:', err.message);
         }
+    }
+
+    /**
+     * Validates policy time restrictions for today's date
+     * For ALL terms (today): start time >= PST + 30 min
+     * For Daily only (today): end time <= start + 24 hours
+     */
+    validatePolicyTimeRestrictions() {
+        // Only validate if start date is today
+        if (!this.startDate || !this.defaultDate) {
+            return true;
+        }
+
+        const startDateObj = this.parseDateAsLocal(this.startDate);
+        const todayObj = this.parseDateAsLocal(this.defaultDate);
+        startDateObj.setHours(0, 0, 0, 0);
+        todayObj.setHours(0, 0, 0, 0);
+
+        // Only validate for today's date (not future dates)
+        if (startDateObj > todayObj) {
+            return true;
+        }
+
+        // Validate start time for ALL term types (Daily, Annual, Semi-Annual)
+        // Start time must be at least PST + 30 minutes when start date is today
+        if (this.inputValues.Start_Time__c && this.displayPstTime) {
+            const minimumStartTime = this.addMinutesToTime(this.displayPstTime, 30).time;
+            const [minHour, minMin] = minimumStartTime.split(':').map(Number);
+            const [startHour, startMin] = this.inputValues.Start_Time__c.split(':').map(Number);
+            
+            const minTotalMinutes = minHour * 60 + minMin;
+            const startTotalMinutes = startHour * 60 + startMin;
+
+            if (startTotalMinutes < minTotalMinutes) {
+                this.errorMessage = `For today's date, start time must be at least ${minimumStartTime} (current system time + 30 minutes). Please select a valid start time.`;
+                this.dispatchEvent(new CustomEvent('toastevent', {
+                    detail: { variant: 'error', title: 'Validation Error', message: this.errorMessage },
+                    bubbles: true,
+                    composed: true
+                }));
+                return false;
+            }
+        }
+
+        // Validate end time ONLY for Daily policies
+        // End time must not exceed start time + 24 hours
+        if (this.selectedTerm === 'Daily' && this.inputValues.Start_Time__c && this.inputValues.End_Time__c) {
+            const startDateObj = this.parseDateAsLocal(this.startDate);
+            const endDateObj = this.parseDateAsLocal(this.endDate);
+            const todayObj = this.parseDateAsLocal(this.defaultDate);
+            
+            // Reset time parts for date comparison
+            startDateObj.setHours(0, 0, 0, 0);
+            endDateObj.setHours(0, 0, 0, 0);
+            todayObj.setHours(0, 0, 0, 0);
+            // Calculate day difference between start and end date
+            const dayDifference = Math.round((endDateObj.getTime() - startDateObj.getTime()) / (1000 * 60 * 60 * 24));
+            const maxEndTime = this.addMinutesToTime(this.inputValues.Start_Time__c, 24 * 60);
+            const [maxHour, maxMin] = maxEndTime.time.split(':').map(Number);
+            const [endHour, endMin] = this.inputValues.End_Time__c.split(':').map(Number);
+            
+            const maxTotalMinutes = maxHour * 60 + maxMin;
+            const endTotalMinutes = endHour * 60 + endMin;
+
+            // If end time crosses midnight, we need to add 24 hours to compare
+            let adjustedEndMinutes = endTotalMinutes;
+            if (maxEndTime.daysToAdd > 0) {
+                // End time should cross midnight
+                if ( dayDifference === 1 && endTotalMinutes > (this.inputValues.Start_Time__c.split(':').map(Number)[0] * 60 + this.inputValues.Start_Time__c.split(':').map(Number)[1])) {
+                    // End time is on same day as start but shouldn't be
+                    this.errorMessage = `For Daily policies starting today, end time cannot exceed start time + 24 hours. Maximum allowed end time is ${maxEndTime.time} (next day).`;
+                    this.dispatchEvent(new CustomEvent('toastevent', {
+                        detail: { variant: 'error', title: 'Validation Error', message: this.errorMessage },
+                        bubbles: true,
+                        composed: true
+                    }));
+                    return false;
+                }
+            } else {
+                // End time should be on same day
+                if (endTotalMinutes > maxTotalMinutes && dayDifference === 1) {
+                    this.errorMessage = `For Daily policies starting today, end time cannot exceed start time + 24 hours. Maximum allowed end time is ${maxEndTime.time}.`;
+                    this.dispatchEvent(new CustomEvent('toastevent', {
+                        detail: { variant: 'error', title: 'Validation Error', message: this.errorMessage },
+                        bubbles: true,
+                        composed: true
+                    }));
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -462,6 +712,13 @@ export default class Buho_termOption extends LightningElement {
                 bubbles: true,
                 composed: true
             }));
+            return false;
+        }
+
+        // Validate policy time restrictions
+        // For all terms (today): start time >= PST + 30 min
+        // For Daily only (today): end time <= start + 24 hours
+        if (!this.validatePolicyTimeRestrictions()) {
             return false;
         }
 
@@ -544,9 +801,9 @@ export default class Buho_termOption extends LightningElement {
                 this.systemTime = timeData;
 
                 this.displayPstTime = timeData.timePst;
-                // Set default times: 12:01 AM for start, 11:59 PM for end
+                // Set default times: start = 00:01, end = same as start (start + 24h)
                 this.inputValues['Start_Time__c'] = '00:01';
-                this.inputValues['End_Time__c'] = '23:59';
+                this.inputValues['End_Time__c'] = '00:01';
 
                 this.startDate = timeData.dPST;
                 this.defaultDate = timeData.dPST;
@@ -787,8 +1044,8 @@ export default class Buho_termOption extends LightningElement {
         
         const startDateInput = this.template.querySelector('.startDate');
         const endDateInput = this.template.querySelector('.endDate');
-        
-        if (!startDateInput || !endDateInput || typeof flatpickr === 'undefined') {
+        console.log('flatpickr===>',window.flatpickr);
+        if (!startDateInput || !endDateInput || typeof window.flatpickr === 'undefined') {
             if (this.DEBUG_MODE) console.log('BTO Flatpickr not ready yet');
             return;
         }
@@ -810,7 +1067,7 @@ export default class Buho_termOption extends LightningElement {
             });
             
             // Initialize Start Date Picker
-            this.flatpickrInstance = flatpickr(startDateInput, {
+            this.flatpickrInstance = window.flatpickr(startDateInput, {
                 dateFormat: 'm/d/Y',
                 minDate: minDateObj,
                 defaultDate: startDateObj,
@@ -822,9 +1079,13 @@ export default class Buho_termOption extends LightningElement {
 
             // Initialize End Date Picker (for Daily term only)
             if (this.isDailyTerm) {
-                this.endDateFlatpickrInstance = flatpickr(endDateInput, {
+                // End date must be strictly after start date (dates <= start date are disabled)
+                const minEndDate = startDateObj ? new Date(startDateObj) : new Date(minDateObj);
+                minEndDate.setDate(minEndDate.getDate() + 1);
+
+                this.endDateFlatpickrInstance = window.flatpickr(endDateInput, {
                     dateFormat: 'm/d/Y',
-                    minDate: startDateObj || minDateObj, // End date must be >= start date
+                    minDate: minEndDate,
                     defaultDate: endDateObj,
                     onChange: (selectedDates, dateStr, instance) => {
                         this.handleEndDateChange(selectedDates[0]);
@@ -855,37 +1116,39 @@ export default class Buho_termOption extends LightningElement {
         // Format start date
         const startDate = new Date(selectedDate);
         this.startDate = this.formatDateForApi(startDate);
-        
+
+        // Calculate times based on whether date is today or future and term type
+        const timeCalculation = this.calculatePolicyTimes(this.startDate);
+        this.inputValues.Start_Time__c = timeCalculation.startTime;
+        this.inputValues.End_Time__c = timeCalculation.endTime;
+        this.flags.isFutureDate = timeCalculation.isFutureDate;
+
         // Calculate end date based on term type
         if (this.isDailyTerm) {
-            // For Daily, keep existing end date or set to same as start date if not set
-            if (!this.endDate) {
-                this.endDate = this.startDate;
-            }
-            
-            // Update end date picker minDate to be >= start date
+            // For Daily: end date = start date + offset (minimum 1 day, end date must be > start date)
+            const endDateOffset = timeCalculation.endDateOffset || 1;
+            const endDate = new Date(startDate);
+            endDate.setDate(endDate.getDate() + endDateOffset);
+            this.endDate = this.formatDateForApi(endDate);
+
+            // Update end date picker: dates <= start date are disabled
             if (this.endDateFlatpickrInstance) {
-                this.endDateFlatpickrInstance.set('minDate', startDate);
-                
-                // If current end date is before new start date, update it
-                const endDateObj = this.parseDateAsLocal(this.endDate);
-                if (endDateObj < startDate) {
-                    this.endDate = this.startDate;
-                    this.endDateFlatpickrInstance.setDate(startDate);
-                }
+                const minEndDate = new Date(startDate);
+                minEndDate.setDate(minEndDate.getDate() + 1);
+                this.endDateFlatpickrInstance.set('minDate', minEndDate);
+                this.endDateFlatpickrInstance.setDate(this.parseDateAsLocal(this.endDate));
             }
         } else {
-            // For Annual/Semi-Annual, auto-calculate end date
+            // For Annual/Semi-Annual, auto-calculate end date based on term duration
             const daysOffset = this.termDaysMap[this.selectedTerm] || 365;
-            const endDate = new Date(selectedDate);
+            const endDate = new Date(startDate);
             endDate.setDate(endDate.getDate() + daysOffset);
             this.endDate = this.formatDateForApi(endDate);
         }
-        
-        // Format for display
+
+        // Format for display and update input values
         this.dateRange = `${this.formatDateForDisplay(this.startDate)} to ${this.formatDateForDisplay(this.endDate)}`;
-        
-        // Update input values
+
         this.inputValues = {
             ...this.inputValues,
             Start_Date_for_Coverage__c: this.startDate,
@@ -894,16 +1157,19 @@ export default class Buho_termOption extends LightningElement {
             EndDate: this.endDate,
             DateRange: this.dateRange
         };
-        
+
         if (this.DEBUG_MODE) console.log('BTO Start date changed:', {
             startDate: this.startDate,
             endDate: this.endDate,
-            dateRange: this.dateRange
+            startTime: this.inputValues.Start_Time__c,
+            endTime: this.inputValues.End_Time__c,
+            dateRange: this.dateRange,
+            isFutureDate: timeCalculation.isFutureDate
         });
-        
-        // Check if start date is future date
-        this.resetStartTimeIfFuture();
-        
+
+        // Validate time range
+        this.validateTimeRange(this.inputValues.Start_Time__c, this.displayPstTime);
+
         // Trigger input change event
         this.handleInputChange({
             target: {
@@ -922,10 +1188,13 @@ export default class Buho_termOption extends LightningElement {
         // Format end date
         const endDate = new Date(selectedDate);
         this.endDate = this.formatDateForApi(endDate);
-        
-        // Format for display
+
+        // End time remains as auto-calculated (always disabled/greyed out)
+        // End time = start time + 24 hours (same clock time as start time)
+
+        // Update date range display
         this.dateRange = `${this.formatDateForDisplay(this.startDate)} to ${this.formatDateForDisplay(this.endDate)}`;
-        
+
         // Update input values
         this.inputValues = {
             ...this.inputValues,
@@ -933,19 +1202,40 @@ export default class Buho_termOption extends LightningElement {
             EndDate: this.endDate,
             DateRange: this.dateRange
         };
-        
+
         if (this.DEBUG_MODE) console.log('BTO End date changed:', {
+            startDate: this.startDate,
             endDate: this.endDate,
+            startTime: this.inputValues.Start_Time__c,
+            endTime: this.inputValues.End_Time__c,
             dateRange: this.dateRange
         });
+    }
+
+    /**
+     * Sets the end date to the next day after the given date and end time to 00:01.
+     * Also updates the UI end time input and Flatpickr instance.
+     * @param {Date} baseDate - The date to add 1 day to
+     */
+    setEndDateToNextDay(baseDate) {
+        const nextDay = new Date(baseDate);
+        nextDay.setDate(nextDay.getDate() + 1);
+        this.endDate = this.formatDateForApi(nextDay);
         
-        // Trigger input change event
-        this.handleInputChange({
-            target: {
-                name: 'End_Date_for_Coverage__c',
-                value: this.endDate
-            }
-        });
+        // End time = start time (start + 24h = same clock time)
+        const endTimeValue = this.inputValues.Start_Time__c || '00:01';
+        this.inputValues.End_Time__c = endTimeValue;
+
+        const endTimeInput = this.template.querySelector('input[name="End_Time__c"]');
+        if (endTimeInput) {
+            endTimeInput.value = endTimeValue;
+        }
+
+        if (this.endDateFlatpickrInstance) {
+            this.endDateFlatpickrInstance.setDate(nextDay);
+        }
+
+        if (this.DEBUG_MODE) console.log('BTO End date set to next day, end time matches start time:', this.endDate, endTimeValue);
     }
 
     /**
@@ -1001,7 +1291,17 @@ export default class Buho_termOption extends LightningElement {
     renderedCallback() {
         // Initialize Flatpickr if not already done
         if (this.flags.isDateLoaded && !this.flags.flatpickrInitialized) {
-            this.initializeFlatpickr();
+            Promise.all([
+                loadScript(this, BUHO_ASSETS + '/js/flatpickr.js')
+            ])
+            .then(() => {
+                console.log('script loaded initializing js');
+                this.initializeFlatpickr();
+            })
+            .catch(error => {
+                console.error('Flatpickr failed to load', error);
+            });
+            
         }
 
         // Populate input fields from termOption data (if returning to step)
@@ -1009,6 +1309,7 @@ export default class Buho_termOption extends LightningElement {
             this.populateInputFields();
             this.flags.isRendered = true;
         }
+        
     }
 
     /**

@@ -59,7 +59,7 @@ public without sharing class Declaration_Page_Insurance_Controller {
                           Vehicle_Policy__c, Vehicle_Policy__r.Lienholder_name__c, Vehicle_Policy__r.Year__c, Vehicle_Policy__r.Vin__c,
                           Vehicle_Policy__r.Make__c,Vehicle_Policy__r.Registered_Plate__c, Vehicle_Policy__r.Model__c,Vehicle_Policy__r.Registered_State__c,Vehicle_Policy__r.Value__c,
                           Vehicle_Policy__r.Domestic_Insurance_Name__c,Vehicle_Policy__r.Domestic_Insurance_Phone__c,Vehicle_Policy__r.Domestic_Insurance_Policy__c,
-                          Medical_picklist__c,I_V_A_Mex_Tax__c, Term_days__c, Start_Date__c,Agency__c,Agency__r.Email FROM Policy__c
+                          Medical_picklist__c,I_V_A_Mex_Tax__c, Term_days__c, Start_Date__c,Agency__c,Agency__r.Email, Agency__r.Name FROM Policy__c
                           WHERE Id = :policyId  limit 1];
             system.debug('policyList' + policyList);
             if( (policyList != null && !policyList.isEmpty())){

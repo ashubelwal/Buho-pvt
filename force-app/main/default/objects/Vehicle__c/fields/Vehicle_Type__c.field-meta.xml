@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Vehicle_Type__c</fullName>
+    <label>Vehicle Type</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Automobile/Sedan</fullName>
+                <default>false</default>
+                <label>Automobile/Sedan</label>
+            </value>
+            <value>
+                <fullName>Pickup Truck w or w/o Camper Shell</fullName>
+                <default>false</default>
+                <label>Pickup Truck w or w/o Camper Shell</label>
+            </value>
+            <value>
+                <fullName>SUV</fullName>
+                <default>false</default>
+                <label>SUV</label>
+            </value>
+            <value>
+                <fullName>Van</fullName>
+                <default>false</default>
+                <label>Van</label>
+            </value>
+            <value>
+                <fullName>Motorcycle</fullName>
+                <default>false</default>
+                <label>Motorcycle</label>
+            </value>
+            <value>
+                <fullName>Street Legal ATV</fullName>
+                <default>false</default>
+                <label>Street Legal ATV</label>
+            </value>
+            <value>
+                <fullName>Motor Home / RV</fullName>
+                <default>false</default>
+                <label>Motor Home / RV</label>
+            </value>
+            <value>
+                <fullName>ATV</fullName>
+                <default>false</default>
+                <label>ATV</label>
+            </value>
+            <value>
+                <fullName>Boat</fullName>
+                <default>false</default>
+                <label>Boat</label>
+            </value>
+            <value>
+                <fullName>Car/Truck/Auto</fullName>
+                <default>false</default>
+                <label>Car/Truck/Auto</label>
+            </value>
+            <value>
+                <fullName>Automobile-Van-Minivan</fullName>
+                <default>false</default>
+                <label>Automobile-Van-Minivan</label>
+            </value>
+            <value>
+                <fullName>Pick Up</fullName>
+                <default>false</default>
+                <label>Pick Up</label>
+            </value>
+            <value>
+                <fullName>SUV-Crossover</fullName>
+                <default>false</default>
+                <label>SUV-Crossover</label>
+            </value>
+            <value>
+                <fullName>ATV-UTV-Quads-Buggie</fullName>
+                <default>false</default>
+                <label>ATV-UTV-Quads-Buggie</label>
+            </value>
+            <value>
+                <fullName>Motorhome</fullName>
+                <default>false</default>
+                <label>Motorhome</label>
+            </value>
+            <value>
+                <fullName>Pickup</fullName>
+                <default>false</default>
+                <label>Pickup</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

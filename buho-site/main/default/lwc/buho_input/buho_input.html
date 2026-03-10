@@ -3,7 +3,15 @@
         <!-- Input Type -->
         <template if:true={isInput}>
             <template if:true={label}>
-                <label for={name} class={computedLabelClass}>{label}</label>
+                <div class="label-with-tooltip">
+                    <label for={name} class={computedLabelClass}>{label}</label>
+                    <template if:true={hasTooltip}>
+                        <span class="tooltip-icon-wrapper">
+                            <i class="bi bi-info-circle tooltip-icon"></i>
+                            <span class="tooltip-text">{tooltipText}</span>
+                        </span>
+                    </template>
+                </div>
             </template>
 
             <!-- Input with Icon -->
@@ -18,6 +26,7 @@
                         placeholder={placeholder}
                         class={computedInputClass} 
                         disabled={disabled} 
+                        required={required}
                         maxlength={maxLength}
                         pattern={pattern}
                         onchange={handleInputChange}
@@ -40,6 +49,7 @@
                     placeholder={placeholder}
                     class={computedInputClass} 
                     disabled={disabled} 
+                    required={required}
                     maxlength={maxLength}
                     pattern={pattern}
                     onchange={handleInputChange} 
@@ -55,10 +65,19 @@
         <!-- Combobox Type -->
         <template if:true={isCombobox}>
             <template if:true={label}>
-                <label for={name} class={computedLabelClass}>{label}</label>
+                <div class="label-with-tooltip">
+                    <label for={name} class={computedLabelClass}>{label}</label>
+                    <template if:true={hasTooltip}>
+                        <span class="tooltip-icon-wrapper">
+                            <i class="bi bi-info-circle tooltip-icon"></i>
+                            <span class="tooltip-text">{tooltipText}</span>
+                        </span>
+                    </template>
+                </div>
             </template>
             <div class="dropdown-container">
                 <select id={name} name={name} class={computedDropdownClass} disabled={disabled}
+                    required={required}
                     onchange={handleComboboxChange}>
                     <template for:each={comboboxOptions} for:item="option">
                         <option key={option.value} value={option.value} selected={option.isSelected}>
@@ -70,28 +89,75 @@
         </template>
 
         <!-- Checkbox Type -->
+         
         <template if:true={isCheckbox}>
-            <input type="checkbox" id={name} name={name} checked={checked} disabled={disabled}
-                onchange={handleCheckboxChange} />
-            <template if:true={label}>
-                <label for={name}>
-                    <span class={computedLabelTitleClass}>{label}</span>
-                    <template if:true={hint}>
-                        <span class="checkbox-hint">{hint}</span>
+            <div class="custom-checkbox">
+                <input type="checkbox" id={name} name={name} checked={checked} disabled={disabled}
+                    required={required}
+                    onchange={handleCheckboxChange} />
+                <template if:true={label}>
+                    <label for={name}>
+                        <span class={computedLabelTitleClass}>{label}</span>
+                        
+                        <template if:true={hint}>
+                            <span class="checkbox-hint">{hint}</span>
+                        </template>
+                    </label>
+                    <template if:true={hasTooltip}>
+                        <span class="tooltip-icon-wrapper">
+                            <i class="bi bi-info-circle tooltip-icon"></i>
+                            <span class="tooltip-text">{tooltipText}</span>
+                        </span>
                     </template>
-                </label>
-            </template>
+                </template>
+            </div>
         </template>
 
         <!-- Radio Type -->
         <template if:true={isRadio}>
             <div class="radio-container">
                 <input type="radio" id={name} name={name} value={value} checked={checked} disabled={disabled}
+                    required={required}
                     onchange={handleCheckboxChange} />
                 <template if:true={label}>
-                    <label for={name} class={computedLabelClass}>{label}</label>
+                    <div class="label-with-tooltip">
+                        <label for={name} class={computedLabelClass}>{label}</label>
+                        <template if:true={hasTooltip}>
+                            <span class="tooltip-icon-wrapper">
+                                <i class="bi bi-info-circle tooltip-icon"></i>
+                                <span class="tooltip-text">{tooltipText}</span>
+                            </span>
+                        </template>
+                    </div>
                 </template>
             </div>
+        </template>
+
+        <!-- Textarea Type -->
+        <template if:true={isTextarea}>
+            <template if:true={label}>
+                <div class="label-with-tooltip">
+                    <label for={name} class={computedLabelClass}>{label}</label>
+                    <template if:true={hasTooltip}>
+                        <span class="tooltip-icon-wrapper">
+                            <i class="bi bi-info-circle tooltip-icon"></i>
+                            <span class="tooltip-text">{tooltipText}</span>
+                        </span>
+                    </template>
+                </div>
+            </template>
+            <textarea 
+                id={name} 
+                name={name} 
+                placeholder={placeholder}
+                class={computedInputClass} 
+                disabled={disabled} 
+                required={required}
+                maxlength={maxLength}
+                style={textareaStyle}
+                onchange={handleInputChange}>
+                {value}
+            </textarea>
         </template>
     </div>
 </template>

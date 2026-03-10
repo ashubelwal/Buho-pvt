@@ -557,7 +557,12 @@ public class NcExistingCustomerFlow_test {
         newQuoteTowed.Quote_Vehicle__c = newQuoteVehicle.Id;
         newQuoteTowed.Towed_Unit__c = towunit.Id;
         Test.setMock(HttpCalloutMock.class, new Mex_Insurance_Mock());
+        String companyRecord ='{"Company_Name__c":"ankittcomp","Company_Phone__c":"(454) 645-656","Tax_ID__c":"23344","Company_Country__c":"United States","Company_Address__c":"4701 Great America Way","Company_Zip__c":"95054","Company_State__c":"California","Company_City__c":"Santa Clara"}';
+        String vehicleRecord ='{"Id":"a0GVD0000071zrr2AA","label":"Audi A4 2024 - 32432543","value":"a0GVD0000071zrr2AA","Coverage__c":"Complete","Electric_Hybrid__c":false,"Liability__c":"300,000","Medical__c":"10,000/50,000","Year__c":"2024","Vehicle_sub_type__c":"Automobile-Van-Minivan","Make":"Audi","Model":"A4","Value__c":"3456","Vin__c":"32432543","Registered_Country__c":"United States","Registered_State__c":"Arizona","licensePlate":"TEST","Is_the_vehicle_registered_to_a_business__c":true}';
+        String driversJson ='[{"Id":"a0LVD000007PZcr2AG","label":"shivam ten - 2009-11-10 - 98654KJJJ","value":"a0LVD000007PZcr2AG","First_Name__c":"shivam","Last_Name__c":"ten","License_Country__c":"United States","License_state__c":"Alabama","license_number__c":"98654KJJJ","Dob__c":"2009-11-10","Driver_Type__c":true,"Country__c":"United States","Country_Text__c":"United States","State_Province__c":"California","Postal_Code__c":"95054","City__c":"Santa Clara","Address__c":"4701 Great America Pkwy","diff":1762767973446},{"Id":"a0LVD000007PZcs2AG","label":"Testing Chauhan - 2001-11-10 - 98654K","value":"a0LVD000007PZcs2AG","First_Name__c":"Testing","Last_Name__c":"Chauhan","License_Country__c":"United States","License_state__c":"Arizona","license_number__c":"98654K","Dob__c":"2001-11-10","Driver_Type__c":false,"Country__c":"","Country_Text__c":"","State_Province__c":"","Postal_Code__c":"","City__c":"","Address__c":"","diff":1762767973446}]';
         Test.startTest();
+        NcExistingCustomerFlow.updateVehicleRecordData(vehicleRecord,companyRecord);
+        NcExistingCustomerFlow.updateVehicleWithOwnerDriver(vehicleRecord, driversJson);
         NcExistingCustomerFlow.updateQuoteRecordData(updatequoteRecord, vehicleReacord, towedUnitRecord, driversRecord);
         Mex_existingCustomerFlowController.createPolicyForExistingCustomer(quote.Id, vehicle.Id, termAgreement);
         Test.stopTest();

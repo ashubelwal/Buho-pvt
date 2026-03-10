@@ -42,11 +42,11 @@ public class CalculateCoverageTitleAndDescription {
                     Map<String,String> granchildNestedMap =  new Map<String,String>();
                     if(vendorData.Vendor__c == vendor){
                         if(!dataMap.containsKey('Gold__c')){
-                                dataMap.put('Gold__c','false');
-                            }
+                            dataMap.put('Gold__c','false');
+                        }
                         if(!dataMap.containsKey('Max__c')){
-                                dataMap.put('Max__c','false');
-                            }
+                            dataMap.put('Max__c','false');
+                        }
                         dataMap.put('Platinum__c','true');
                         if(vendorData.Coverage_Name__c == 'Liability (Damage You Cause)'){
                             if(dataMap.containsKey('Liability__c')) {
@@ -67,7 +67,7 @@ public class CalculateCoverageTitleAndDescription {
                                 String medicalValue = String.valueOf(dataMap.get('Medical__c'));
                                 dataMap.put('Medical__c', medicalValue.replace(',',''));
                             }
-                            string title =MedicalCoverageEvaluator.evaluateFormula(vendorData.Title_Formula__c,dataMap);
+                            string title = MedicalCoverageEvaluator.evaluateFormula(vendorData.Title_Formula__c,dataMap);
                             if(title != 'n/a'){
                                 String description = MedicalCoverageEvaluator.evaluateFormula(vendorData.Description_Formula__c,dataMap);
                                 granchildNestedMap.put('Title',title);
@@ -481,14 +481,10 @@ public class CalculateCoverageTitleAndDescription {
                             coverageMap.put('Legal Assistance Coverage',granchildNestedMap);
                             continue;
                         }
-                        
-                        
                     }
-                    
                 }
                 responseMap.put(vendor,coverageMap);
             }
-            
             
             System.debug('Data Map'+JSON.serialize(dataMap));
             System.debug('Response Map'+JSON.serialize(responseMap));

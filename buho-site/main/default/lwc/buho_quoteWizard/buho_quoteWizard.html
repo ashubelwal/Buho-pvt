@@ -1,22 +1,24 @@
 <template>
     <div class="wrapper">
-        <!-- Header -->
-        <header class="wizard-header">
-            <div class="container-fluid px-4">
-                <div class="d-flex justify-content-between align-items-center py-3">
-                    <a href="javascript:void(0)" class="header-logo">
-                        <img src={logoUrl} alt="BÚHO" class="logo-icon">
-                    </a>
-                    <button class="btn btn-contact">Contact Us</button>
+        <template if:true={displayHeader}>
+            <!-- Header -->
+            <header class="wizard-header">
+                <div class="container-fluid px-4">
+                    <div class="d-flex justify-content-between align-items-center py-3">
+                        <a href="/" class="header-logo">
+                            <img src={logoUrl} alt="BÚHO" class="logo-icon">
+                        </a>
+                        <button class="btn btn-contact">Contact Us</button>
+                    </div>
                 </div>
-            </div>
-        </header>
+            </header>
+        </template>
 
         <!-- Main Content -->
         <main class="wizard-main">
             <div class="wizard-container">
                 <!-- Progress Bar Component (Hidden on User Details Step) -->
-                <template if:false={isFirstStep}>
+                <template if:true={showPrgressBar}>
                     <c-buho_progress-bar
                         current-step={currentStep}
                         total-steps={totalSteps}
@@ -42,8 +44,12 @@
                             ontoastevent={handleToastEvent}
                             onstepchange={handleStepChange}
                             total-steps={totalSteps}
-                            path-prefix={currentSiteData.pathPrefix}
-                            base-url={currentSiteData.baseUrl}
+                            path-prefix={pathPrefix}
+                            base-url={baseUrl}
+                            start-url={startUrl}
+                            is-user-logged-in={isUserLoggedIn}
+                            agency-id={agencyId}
+                            agent-id={agentId}
                             >
                         </lwc:component>
                     </template>
@@ -73,9 +79,7 @@
                 <!-- Loading Spinner -->
                 <template if:false={childLoaded}>
                     <div class="loading-overlay">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
+                        <img src={loadingIconUrl} alt="Loading..." class="loading-icon">
                     </div>
                 </template>
             </div>

@@ -1,0 +1,175 @@
+<template>
+    <aside class={sidebarClass}>
+        <!-- Sidebar Header with Logo -->
+        <div class="dashboard-sidebar-header">
+            <div class="dashboard-sidebar-logo">
+                <img src={logoUrlSmall} alt="BÚHO Insurance" if:true={isCollapsed} />
+                <img src={logoUrl} alt="BÚHO Insurance" if:false={isCollapsed} />
+            </div>
+            <button class="sidebar-collapse-btn" onclick={handleCollapseToggle} aria-label="Toggle sidebar">
+                <i class={collapseIconClass}></i>
+            </button>
+        </div>
+
+        <!-- Navigation Menu -->
+        <nav class="dashboard-nav">
+            <ul class="dashboard-nav-list">
+                <!-- Dashboard -->
+                <li class="dashboard-nav-item">
+                    <a 
+                        class={dashboardClass}
+                        data-view="dashboard"
+                        onclick={handleNavClick}
+                        role="button"
+                        tabindex="0">
+                        <span class="dashboard-nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 3h6v8H3V3zm8 0h6v5h-6V3zM3 13h6v4H3v-4zm8-2h6v6h-6v-6z" fill="currentColor"/>
+                            </svg>
+                        </span>
+                        <span class="dashboard-nav-text">Dashboard</span>
+                    </a>
+                </li>
+
+                <!-- My Policies -->
+                <li class="dashboard-nav-item">
+                    <a 
+                        class={policiesClass}
+                        data-view="policies"
+                        onclick={handleNavClick}
+                        role="button"
+                        tabindex="0">
+                        <span class="dashboard-nav-icon">
+                            <img src={policiesIconUrl} alt="My Policies" />
+                        </span>
+                        <span class="dashboard-nav-text">My Policies</span>
+                    </a>
+                </li>
+
+                <!-- Vehicles -->
+                <li class="dashboard-nav-item">
+                    <a 
+                        class={vehiclesClass}
+                        data-view="vehicles"
+                        onclick={handleNavClick}
+                        role="button"
+                        tabindex="0">
+                        <span class="dashboard-nav-icon">
+                            <img src={vehiclesIconUrl} alt="Vehicles" />
+                        </span>
+                        <span class="dashboard-nav-text">Vehicles</span>
+                    </a>
+                </li>
+
+                <!-- Drivers -->
+                <li class="dashboard-nav-item">
+                    <a 
+                        class={driversClass}
+                        data-view="drivers"
+                        onclick={handleNavClick}
+                        role="button"
+                        tabindex="0">
+                        <span class="dashboard-nav-icon">
+                            <img src={driversIconUrl} alt="Drivers" />
+                        </span>
+                        <span class="dashboard-nav-text">Drivers</span>
+                    </a>
+                </li>
+
+                <!-- Quotes -->
+                <li class="dashboard-nav-item">
+                    <a 
+                        class={quotesClass}
+                        data-view="quotes"
+                        onclick={handleNavClick}
+                        role="button"
+                        tabindex="0">
+                        <span class="dashboard-nav-icon">
+                            <img src={policiesIconUrl} alt="Quotes" />
+                        </span>
+                        <span class="dashboard-nav-text">Quotes</span>
+                    </a>
+                </li>
+
+                <!-- Transactions -->
+                <li class="dashboard-nav-item">
+                    <a 
+                        class={transactionsClass}
+                        data-view="transactions"
+                        onclick={handleNavClick}
+                        role="button"
+                        tabindex="0">
+                        <span class="dashboard-nav-icon">
+                            <img src={policiesIconUrl} alt="Transactions" />
+                        </span>
+                        <span class="dashboard-nav-text">Transactions</span>
+                    </a>
+                </li>
+
+                <!-- Documents -->
+                <!--li class="dashboard-nav-item">
+                    <a 
+                        class={documentsClass}
+                        data-view="documents"
+                        onclick={handleNavClick}
+                        role="button"
+                        tabindex="0">
+                        <span class="dashboard-nav-icon">
+                            <img src={documentsIconUrl} alt="Documents" />
+                        </span>
+                        <span class="dashboard-nav-text">Documents</span>
+                    </a>
+                </li-->
+
+                <!-- Notifications -->
+                <!--li class="dashboard-nav-item">
+                    <a 
+                        class={notificationsClass}
+                        data-view="notifications"
+                        onclick={handleNavClick}
+                        role="button"
+                        tabindex="0">
+                        <span class="dashboard-nav-icon">
+                            <img src={notificationsIconUrl} alt="Notifications" />
+                        </span>
+                        <span class="dashboard-nav-text">Notifications</span>
+                    </a>
+                </li-->
+
+                <!-- Settings -->
+                <li class="dashboard-nav-item">
+                    <a 
+                        class={settingsClass}
+                        data-view="settings"
+                        onclick={handleNavClick}
+                        role="button"
+                        tabindex="0">
+                        <span class="dashboard-nav-icon">
+                            <img src={settingsIconUrl} alt="Settings" />
+                        </span>
+                        <span class="dashboard-nav-text">Settings</span>
+                    </a>
+                </li>
+
+                <!-- Logout -->
+                <li class="dashboard-nav-item">
+                    <a 
+                        class="dashboard-nav-link"
+                        href="/secur/logout.jsp"
+                        onclick={handleLogout}
+                        role="button"
+                        tabindex="0">
+                        <span class="dashboard-nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <polyline points="16 17 21 12 16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <span class="dashboard-nav-text">Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+</template>

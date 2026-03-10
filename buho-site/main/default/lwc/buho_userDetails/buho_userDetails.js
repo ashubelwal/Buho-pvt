@@ -1,7 +1,7 @@
 import { LightningElement, track, api } from 'lwc';
 import saveLeadUserDetails from '@salesforce/apex/CustomerQuoteFlow.saveLeadUserDetails';
 import checkalreadyExistUserAction from '@salesforce/apex/CustomerQuoteFlow.checkalreadyExistUserAction';
-import { createTransformedData } from 'c/buho_utils';
+import { createTransformedData, log } from 'c/buho_utils';
 import createNewUser from '@salesforce/apex/CustomerQuoteFlow.createNewUser';
 import login from '@salesforce/apex/BuhoLoginController.login';
 import buhoAssets from '@salesforce/resourceUrl/buhoAssets';
@@ -26,6 +26,10 @@ export default class Buho_userDetails extends LightningElement {
     @api payload;
     @api totalSteps;
     @api baseUrl;
+    @api startUrl;
+    @api isUserLoggedIn;
+    @api agencyId;
+    @api agentId;
     userDetails = {};
 
 
@@ -64,6 +68,7 @@ export default class Buho_userDetails extends LightningElement {
     @track isLoggingIn = false;
 
     isDebug = false;
+    disableInput = false;
 
     __formPopulated = false;
 
@@ -168,11 +173,14 @@ export default class Buho_userDetails extends LightningElement {
         return !(!this.flag.isCustomer || !this.flag.isInActiveCustomer);
     }
 
-    // Handle input changes
+    // Handle input changes (supports both native inputs and buho_input custom events)
     handleInputChange(event) {
-
-        const { name, value } = event.target;
+        // Check if it's a custom event from buho_input or a native event
+        const name = event.detail?.name || event.target?.name;
+        const value = event.detail?.value || event.target?.value;
+        
         let formattedValue = '';
+        
         // Reset customer flags if email changes
         if (name === 'Email') {
             if (this.inputValues?.Id) {
@@ -204,7 +212,7 @@ export default class Buho_userDetails extends LightningElement {
         this.flag.isInActiveCustomer = false;
         this.showActiveCustomerMessage = false;
         this.showPreviousInquiryModal = false;
-
+        
         try {
             let data = this.paramData?.Email ? this.paramData : this.inputValues;
             console.log('BUD OUTPUT : data', JSON.stringify(data));
@@ -236,6 +244,7 @@ export default class Buho_userDetails extends LightningElement {
 
             // Case 1: Lead exists (previous inquiry)
             if (this.returnLeadValue?.LeadInfo) {
+                
                 transformedData = createTransformedData?.(this.returnLeadValue) || [];
                 this.payload = JSON.parse(JSON.stringify(transformedData));
 
@@ -271,6 +280,7 @@ export default class Buho_userDetails extends LightningElement {
                 } else {
                     this.dispatchEvent(new CustomEvent('flagupdate', { detail: false }));
                 }
+                this.setUrlParam('email', this.inputValues.Email);
 
             }
             // Case 2: User exists (active or inactive)
@@ -286,8 +296,10 @@ export default class Buho_userDetails extends LightningElement {
                     bubbles: true,
                     composed: true
                 }));*/
-
+                
                 if (this.returnLeadValue?.userData.IsActive) {
+                    const userData = this.returnLeadValue?.userData;
+                    const contactData = this.returnLeadValue?.contactData
                     console.log('user is active');
                     this.flag = { ...this.flag, isCustomer: true };
                     // Pre-populate username with the email
@@ -310,6 +322,7 @@ export default class Buho_userDetails extends LightningElement {
             // Case 3: Contact exists without portal access
             // Keep dispatching event as is (per requirements)
             else if (this.returnLeadValue?.contactData) {
+                const contactData = this.returnLeadValue?.contactData
                 this.payload = {};
                 this.dispatchEvent(new CustomEvent('flagupdate', { detail: false }));
                 console.log('BUD OUTPUT Customer Data: ', JSON.stringify(this.returnLeadValue?.userData));
@@ -324,6 +337,7 @@ export default class Buho_userDetails extends LightningElement {
                 }));
                 this.flag = { ...this.flag, customerWithPortalAccess: true };
                 this.flag = { ...this.flag, isCustomer: true };
+              
             }
             // Case 4: New user
             else {
@@ -347,6 +361,7 @@ export default class Buho_userDetails extends LightningElement {
                 } else {
                     this.dispatchEvent(new CustomEvent('flagupdate', { detail: false }));
                 }
+                this.setUrlParam('email', this.inputValues.Email);
 
                 return;
             }
@@ -371,6 +386,12 @@ export default class Buho_userDetails extends LightningElement {
                 this.dispatchEvent(new CustomEvent('flagupdate', { detail: false }));
             }
         }
+    }
+
+    setUrlParam(key, value) {
+        const url = new URL(window.location.href);
+        url.searchParams.set(key, value);
+        window.history.pushState(null, '', url);;
     }
 
     // Alias for handleEmailInput to match the blur event
@@ -540,15 +561,15 @@ export default class Buho_userDetails extends LightningElement {
         this.loginError = '';
 
         try {
-            const startUrl = '/Buho';
+            
             const result = await login({
                 username: this.loginUsername,
                 password: this.loginPassword,
-                startUrl: startUrl
+                startUrl: this.startUrl
             });
 
             // Check if result is a URL (successful login) or error message
-            if (result && result.startsWith('/')) {
+            if (result && result.startsWith('https://')) {
                 // Success - redirect to the URL
                 window.location.href = result;
             } else {
@@ -678,11 +699,17 @@ export default class Buho_userDetails extends LightningElement {
         this.inputValues = {
             ...this.inputValues,
             Company: 'Vehicle Insurance',
+            Agency__c: this.agencyId,
+            Source__c: 'GoBuho Portal',
+            Agent__c: this.agentId
+        }
+        if(!this.inputValues.LeadSource){
+            this.inputValues.LeadSource = 'GoBuho';
         }
 
         // Add if there is some data validation 
         await this.checkData();
-
+        
         //Save data in the backend
         await saveLeadUserDetails({ strLeadDetails: JSON.stringify(this.inputValues) })
             .then((result) => {
@@ -767,188 +794,4 @@ export default class Buho_userDetails extends LightningElement {
             }
         });
     }
-    /*
-    //This method is moved to buho_utils
-    createTransformedData() {
-        const getVehicleDetails = () => {
-            try {
-                return this.returnLeadValue?.LeadInfo?.Vehicle_details__c
-                    ? JSON.parse(this.returnLeadValue.LeadInfo.Vehicle_details__c)
-                    : null;
-            } catch (e) {
-                console.error('Error parsing Vehicle_details__c:', e);
-                return null;
-            }
-        };
-        const getCompanyDetails = () => {
-            try {
-                return this.returnLeadValue?.LeadInfo?.Company_details__c
-                    ? JSON.parse(this.returnLeadValue.LeadInfo.Company_details__c)
-                    : null;
-            } catch (e) {
-                console.error('Error parsing Company Details:', e);
-                return null;
-            }
-        };
-        const getDriverDetails = () => {
-            try {
-                return this.returnLeadValue?.LeadInfo?.Driver_details__c
-                    ? JSON.parse(this.returnLeadValue.LeadInfo.Driver_details__c)
-                    : null;
-            } catch (e) {
-                console.error('Error parsing Driver Details:', e);
-                return null;
-            }
-        };
-        const getTowDetails = () => {
-            try {
-                return this.returnLeadValue?.LeadInfo?.Towing__c
-                    ? JSON.parse(this.returnLeadValue.LeadInfo.Towing__c)
-                    : null;
-            } catch (e) {
-                console.error('Error parsing Driver Details:', e);
-                return null;
-            }
-        };
-        const getLienholderDetails = () => {
-            try {
-                return this.returnLeadValue?.LeadInfo?.Lienholder_info__c
-                    ? JSON.parse(this.returnLeadValue.LeadInfo.Lienholder_info__c)
-                    : null;
-            } catch (e) {
-                console.error('Error parsing Driver Details:', e);
-                return null;
-            }
-        };
-        const getTermsAndAlerts = () => {
-            try {
-                return this.returnLeadValue?.LeadInfo?.Terms_Alert__c
-                    ? JSON.parse(this.returnLeadValue.LeadInfo.Terms_Alert__c)
-                    : null;
-            } catch (e) {
-                console.error('Error parsing Driver Details:', e);
-                return null;
-            }
-        };
-        const getTermsDetails = () => {
-            try {
-                return this.returnLeadValue?.LeadInfo?.Term_options__c
-                    ? JSON.parse(this.returnLeadValue.LeadInfo.Term_options__c)[0]
-                    : null;
-            } catch (e) {
-                console.error('Error parsing Term Details:', e);
-                return null;
-            }
-        };
-        // Updated transformTowedUnits method that takes an array parameter
-        const transformTowedUnits = (unitsArray) => {
-            if (!Array.isArray(unitsArray)) return [];
-
-            return unitsArray.map(towDetail => ({
-                Towed_Unit_Type__c: towDetail.Towed_Unit_Type__c || null,
-                Towed_Unit_Value__c: towDetail.Towed_Unit_Value__c || null,
-                Days_in_Tow__c: towDetail.Days_in_Tow__c || null,
-                count: towDetail.towedCount || null,
-                isDeleteButton: towDetail.isDeleteTowedButton !== false,
-                style: towDetail.selectedStyle || '',
-                Year__c: towDetail.Year__c || null,
-                Make__c: towDetail.Make__c || null,
-                Model__c: towDetail.Model__c || null,
-                VIN_Number__c: towDetail.VIN_Number__c || null,
-                Plate__c: towDetail.Plate__c || null
-            }));
-        };
-        const vehicleData = getVehicleDetails();
-        const quoteInfo = this.returnLeadValue?.QuoteInfo || {};
-        const driverDetails = getDriverDetails();
-        const companyDetails = getCompanyDetails();
-        const lienholderDetails = getLienholderDetails();
-        const rawTowDetails = getTowDetails();
-        const termsAndAlerts = getTermsAndAlerts();
-        const termDetails = getTermsDetails();
-        
-        // Transform the towed units data
-        const towData = rawTowDetails ? transformTowedUnits(rawTowDetails) : [];
-        return [
-            {
-                userDetails: {
-                    Company: this.returnLeadValue?.LeadInfo?.Company ?? null,
-                    Email: this.returnLeadValue?.LeadInfo?.Email ?? null,
-                    FirstName: this.returnLeadValue?.LeadInfo?.FirstName ?? null,
-                    Phone: this.returnLeadValue?.LeadInfo?.Phone ?? null,
-                    LastName: this.returnLeadValue?.LeadInfo?.LastName ?? null,
-                    Id: this.returnLeadValue?.LeadInfo?.Id ?? null
-                }
-            },
-            {
-                vehicleDetails: {
-                    is_the_vehicle_used_for_business_purpose__c: vehicleData?.Is_the_vehicle_used_for_business_purpose__c ?? false,
-                    is_there_a_driver_under_21__c: vehicleData?.Is_there_a_driver_under_21__c ?? false,
-                    Is_this_a_Rental_Vehicle__c: vehicleData?.Is_this_a_Rental_Vehicle__c ?? false,
-                    salvage_vehicle__c: vehicleData?.Salvage_Vehicle__c ?? false,
-                    Coverage__c: quoteInfo?.Coverage__c ?? 'Complete',
-                    isTowing: vehicleData?.isTowing ?? false,
-                    Electric_Hybrid__c: vehicleData?.Electric_Hybrid__c ?? false,
-                    towunits: towData?.length ? towData : (vehicleData?.towunits?.length ? vehicleData.towunits : []),
-                    Liability__c: quoteInfo.Liability__c != null ? quoteInfo.Liability__c : (vehicleData?.Liability != null ? parseInt(vehicleData.Liability) : '100,000'),
-                    Medical__c: quoteInfo.Medical__c != null ? quoteInfo.Medical__c : (vehicleData?.Medical ?? "10,000/50,000"),
-                    Year__c: vehicleData?.Year__c ? vehicleData.Year__c : '2025',
-                    Vehicle_sub_type__c: vehicleData?.Vehicle_sub_type__c ?? 'Automobile-Van-Minivan',
-                    Make: vehicleData?.Make__c ?? (vehicleData?.Make ?? null),
-                    Model: vehicleData?.Model__c ?? (vehicleData?.Model ?? null),
-                    Value__c: vehicleData?.Value__c ? vehicleData.Value__c : null,
-                }
-            },
-            {
-                territory: {
-                    region: this.returnLeadValue?.LeadInfo?.Territory_Options__c ?? null
-                }
-            },
-            {
-                finalizeVehicleDetails: {
-                    Is_Lienholder__c: vehicleData?.Is_Lienholder__c ?? false,
-                    is_the_vehicle_used_for_business_purpose__c: vehicleData?.Is_the_vehicle_used_for_business_purpose__c ?? false,
-                    is_there_a_driver_under_21__c: vehicleData?.Is_there_a_driver_under_21__c ?? false,
-                    Is_this_a_Rental_Vehicle__c: quoteInfo.Is_this_a_Rental_Vehicle__c ?? false,
-                    salvage_vehicle__c: vehicleData?.Salvage_Vehicle__c ?? false,
-                    Coverage__c: quoteInfo?.Coverage__c ?? 'Complete',
-                    isTowing: this.returnLeadValue?.LeadInfo?.Is_towing__c ?? false,
-                    Electric_Hybrid__c: vehicleData?.Electric_Hybrid__c ?? false,
-                    towunits: towData != null ? towData : [],
-                    Liability__c: quoteInfo.Liability__c ? parseInt(quoteInfo.Liability__c) : '100,000',
-                    Medical__c: quoteInfo.Medical__c ?? "10,000/50,000",
-                    Year__c: vehicleData?.Year__c ? vehicleData.Year__c :'2025',
-                    Vehicle_sub_type__c: vehicleData?.Vehicle_Type__c ?? null,
-                    Make: vehicleData?.Make__c ?? null,
-                    Model: vehicleData?.Model__c ?? null,
-                    Value__c: vehicleData?.Value__c ? vehicleData.Value__c : null,
-                    Vin__c: vehicleData?.Vin__c ?? null,
-                    Registered_Country__c: vehicleData?.Registered_Country__c ?? null,
-                    Registered_State__c: vehicleData?.Registered_State__c ?? null,
-                    licensePlate: vehicleData?.Registered_Plate__c ?? null,
-                    Is_the_vehicle_registered_to_a_business__c: vehicleData?.Is_the_vehicle_registered_to_a_business__c ?? null
-                }
-            },
-            {
-                lienholderInformation: {
-                    ...lienholderDetails
-                }
-            },
-            {
-                driverDetails: {
-                    drivers: driverDetails ?? [],
-                    companyInformation: { ...companyDetails }
-                }
-            }, {
-                finalDetails: {
-                    ...termsAndAlerts
-                }
-            },{
-                termOption: {
-                    ...termDetails
-                }
-            }
-        ];
-    }
-        */
 }

@@ -23,6 +23,7 @@ public class vechileTriggerAction_test {
         vechile.Rental__c = 'No';
         vechile.Value__c  = 10000;
         vechile.Policy__c = policyrecord.Id;
+        vechile.Is_the_vehicle_registered_to_a_business__c = true;
         insert vechile;
         
         

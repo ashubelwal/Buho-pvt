@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>The BÚHO Insurance customer account welcome and activation email.</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Buho_WelcomeEmailTemplate</name>
+    <style>none</style>
+    <subject>Welcome to BÚHO – Set Your Password</subject>
+    <textOnly>Welcome to BÚHO Insurance!
+
+Hi {!Receiving_User.FirstName},
+
+Congratulations – your account has been successfully set up with BÚHO Insurance!
+
+To get started, please click the link below to set your password and access your account:
+
+{!Community_Url}
+
+Welcome Aboard! We're excited to provide you with comprehensive insurance coverage for your Mexican adventures. Your journey to smart protection starts here.
+
+If you have any questions or need assistance, feel free to reach out. Our support team is here for you.
+
+Contact Support: support@gobuho.com
+
+BÚHO Insurance Brokerage
+Smart protection for your Mexican adventures
+
+Privacy Policy | Terms of Service | Contact Us
+
+📧 support@gobuho.com | 📞 1-800-BUHO-INS
+
+© 2024 BÚHO Insurance Brokerage. All rights reserved.
+You are receiving this email because you created an account with BÚHO.</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

@@ -508,7 +508,7 @@ export default class Nc_driverDetails extends LightningElement {
             console.log('OUTPUT : ', err.message);
         }
     }
-    
+
     get isStepCompanyDetails() { return this.currentStep === 'companyDetails'; }
     get isStepHumanOwner() { return this.currentStep === 'humanOwner'; }
 
@@ -941,7 +941,8 @@ export default class Nc_driverDetails extends LightningElement {
         if (!this.currentUserType) {
             try {
                 console.log(' I am in the current user type')
-                await saveDriverDetails({ strLeadDetails: JSON.stringify(this.payload) });
+                let saveResponse = await saveDriverDetails({ strLeadDetails: JSON.stringify(this.payload) });
+                console.log(saveResponse);
             } catch (err) {
                 console.log('DD ERROR: Getting error while saving the Driver Data: ', JSON.stringify(err));
                 this.dispatchEvent(new CustomEvent('toastevent', { detail: { variant: 'error', title: 'Error', message: JSON.stringify(err) } }));

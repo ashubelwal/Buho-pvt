@@ -1,0 +1,5 @@
+<messaging:emailTemplate subject="Your Policy Documents" recipientType="Contact" relatedToType="Contact">
+<messaging:htmlEmailBody >
+<c:EmailTemplateStyling policyType="southbound"/>
+</messaging:htmlEmailBody>
+</messaging:emailTemplate>

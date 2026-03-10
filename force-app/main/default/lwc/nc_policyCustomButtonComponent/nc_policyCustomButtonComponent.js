@@ -76,14 +76,6 @@ export default class Nc_policyCustomButtonComponent extends NavigationMixin(Ligh
                 if ((parseInt(new Date(rest.policyData?.Issued_At__c).getFullYear()) <= 2019) || (rest?.policyData?.Status_picklist__c == 'Updated' || rest?.policyData?.Status_picklist__c == 'Terminated' || new Date(rest?.policyData.Start_Date__c) > timeNow)) {
                     this.renewPolicyDisabled = true;
                 }
-
-                console.log('new Date(rest?.policyData.Start_Date__c)',new Date(rest?.policyData.Start_Date__c));
-                console.log('timeNow'); 
-                console.log(timeNow); 
-                console.log('timeNow'); 
-                console.log(rest.quoteData.Start_Date_for_Coverage__c); 
-                console.log(rest.quoteData.Start_Time__c); 
-
                 const hhours = Math.floor(rest.quoteData.Start_Time__c / 3600000);
                 const mminutes = Math.floor((rest.quoteData.Start_Time__c % 3600000) / 60000);
                 const sseconds = Math.floor(((rest.quoteData.Start_Time__c % 3600000) % 60000) / 1000);
@@ -104,23 +96,6 @@ export default class Nc_policyCustomButtonComponent extends NavigationMixin(Ligh
                     if(timeNow > endDatetime){
                         this.policyExpiredOrTerminated = 'Fully Earned';
                     }
-
-
-                    // if (new Date(rest.quoteData.Start_Date_for_Coverage__c) <= new Date(`${systemCurrentYear}-${systemCurrentMonth}-${systemCurrentDate}`)) {
-                    //     console.log('---rest.quoteData--', rest.quoteData);
-                    //     console.log('---rest.systemTime.myTime--',systemTime.myTime);
-                    //     console.log('---test---',(Math.abs(rest.quoteData.Start_Time__c - systemTime.myTime) / 60000));
-
-                    //     console.log('---rest.systemTime.myTime--',systemTime.myTime);
-                    //     console.log('---rest.systemTime.myTime--',rest.quoteData.Start_Time__c);
-                    //     console.log('---rest.systemTime.myTime--',(Math.abs(rest.quoteData.Start_Time__c - systemTime.myTime) / 60000) );
-
-                    //     console.log( (Math.abs(rest.quoteData.Start_Time__c - systemTime.myTime) / 60000) > 30);
-                    //     if ((Math.abs(rest.quoteData.Start_Time__c - systemTime.myTime) / 60000) > 30) {
-                    //         this.policyExpiredOrTerminated = 'Fully Earned';
-                    //     }   
-                    //     console.log( this.policyExpiredOrTerminated );
-                    // }
                 } else {
                     // for annual & semi-annual
                 }

@@ -1,0 +1,385 @@
+<template>
+    <div class="wizard-form notranslate">
+        <div class="step-header">
+            <h2>Online Insurance <span class="highlight">Final Details</span></h2>
+        </div>
+        
+        <!-- Policy Summary Section -->
+        <div class="row g-4">
+            <div class="col-md-6">
+                <c-buho_input 
+                    type="input"
+                    input-type="text"
+                    label="Term"
+                    name="Term"
+                    value={termDateRange}
+                    disabled
+                    required="true">
+                </c-buho_input>
+            </div>
+            <div class="col-md-6">
+                <c-buho_input 
+                    type="input"
+                    input-type="text"
+                    label="Coverage"
+                    name="Coverage"
+                    value={coverageValue}
+                    disabled
+                    required="true">
+                </c-buho_input>
+            </div>
+            <div class="col-md-6">
+                <c-buho_input 
+                    type="input"
+                    input-type="text"
+                    label="Territory"
+                    name="Territory"
+                    value={territoryValue}
+                    disabled
+                    required="true">
+                </c-buho_input>
+            </div>
+            <div class="col-md-6">
+                <c-buho_input 
+                    type="input"
+                    input-type="text"
+                    label="Company"
+                    name="Company"
+                    value={companyValue}
+                    disabled
+                    required="true">
+                </c-buho_input>
+            </div>
+            <div class="col-md-6">
+                <c-buho_input 
+                    type="input"
+                    input-type="text"
+                    label="Premium And Fees"
+                    name="Premium_And_Fees"
+                    value={premiumAndFeesValue}
+                    disabled
+                    required="true">
+                </c-buho_input>
+            </div>
+            <!--div class="col-md-6">
+                <c-buho_input 
+                    type="input"
+                    input-type="text"
+                    label="Policy Number"
+                    name="Policy_Number"
+                    value={policyNumberValue}
+                    disabled>
+                </c-buho_input>
+            </div-->
+        </div>
+
+       
+       
+
+        <!-- Preferences Section --
+        <div class="section-title" style="margin-top: 32px; margin-bottom: 16px;">
+            {label.YesIwanttoreceivethefollowing}:
+        </div>
+        <div class="checkbox-section">
+            <c-buho_input 
+                type="checkbox"
+                name="Newsletter__c"
+                label={label.Newsletter}
+                checked={Newsletter}
+                onchange={handleChange}>
+            </c-buho_input>
+            <template if:true={isNorthboundVehicle}>
+                <c-buho_input 
+                    type="checkbox"
+                    name="Yellow_Card__c"
+                    label={label.YellowCard}
+                    checked={yellowCard}
+                    onchange={handleChange}>
+                </c-buho_input>
+            </template>
+        </div-->
+
+        <!-- Interested in having VisitingMexico process your documentation Section --
+        <div class="section-title" style="margin-top: 32px; margin-bottom: 16px;">
+            Interested in having VisitingMexico process your documentation?
+        </div>
+        <div class="checkbox-section">
+            <c-buho_input 
+                type="checkbox"
+                name="Fishing_License"
+                label="Fishing License: Required for recreational fishing in Mexico"
+                checked={fishingLicense}
+                onchange={handleChange}>
+            </c-buho_input>
+            <c-buho_input 
+                type="checkbox"
+                name="FMM_Tourist_Permit"
+                label="FMM Tourist Permit: Required for stays over 72 hours or beyond border zone"
+                checked={fmmTouristPermit}
+                onchange={handleChange}>
+            </c-buho_input>
+            <c-buho_input 
+                type="checkbox"
+                name="TIP_Import_Permit"
+                label="TIP (Temporary Import Permit): Required for driving vehicles in Mexico beyond border zone"
+                checked={tipImportPermit}
+                onchange={handleChange}>
+            </c-buho_input>
+            <c-buho_input 
+                type="checkbox"
+                name="All_Three_Services"
+                label="All Three Services: Complete package for traveling to Mexico"
+                checked={allThreeServices}
+                onchange={handleChange}>
+            </c-buho_input>
+        </div-->
+
+        <!-- Adds On Section --
+        <div class="section-title" style="margin-top: 32px; margin-bottom: 16px;">
+            Adds On
+        </div>
+        <div class="section-subtitle" style="margin-bottom: 16px; font-size: 14px; color: #6B7280;">
+            Travel Insurance From Faye
+        </div>
+        <div class="checkbox-section">
+            <c-buho_input 
+                type="checkbox"
+                name="Standard_Protection"
+                label="Standard Protection"
+                checked={standardProtection}
+                onchange={handleChange}>
+            </c-buho_input>
+            <c-buho_input 
+                type="checkbox"
+                name="Vacation_Rental_Range"
+                label="Vacation Rental Range"
+                checked={vacationRentalRange}
+                onchange={handleChange}>
+            </c-buho_input>
+            <c-buho_input 
+                type="checkbox"
+                name="Pet_Care"
+                label="Pet Care"
+                checked={petCare}
+                onchange={handleChange}>
+            </c-buho_input>
+        </div>
+
+        <div class="section-subtitle" style="margin-top: 24px; margin-bottom: 16px; font-size: 14px; color: #6B7280;">
+            Document Preparation and File
+        </div>
+        <div class="checkbox-section">
+            <c-buho_input 
+                type="checkbox"
+                name="FMM"
+                label="FMM"
+                checked={fmm}
+                onchange={handleChange}>
+            </c-buho_input>
+            <c-buho_input 
+                type="checkbox"
+                name="Fishing_License_Doc"
+                label="Fishing License"
+                checked={fishingLicenseDoc}
+                onchange={handleChange}>
+            </c-buho_input>
+            <c-buho_input 
+                type="checkbox"
+                name="TIP"
+                label="TIP"
+                checked={tip}
+                onchange={handleChange}>
+            </c-buho_input>
+        </div-->
+
+        <!-- Total Section -->
+        <div class="total-section">
+            <span class="total-label">Total:</span>
+            <span class="total-amount">{premiumAndFeesValue}</span>
+        </div>
+
+         <!-- Trip Details Section -->
+         <div class="row g-4" style="margin-top: 24px;">
+            <div class="col-md-6">   
+                <c-buho_input 
+                    type="combobox" 
+                    name="What_is_your_trip_destination_in_US__c"
+                    placeholder={label.WhatisyourTripDestination} 
+                    label={label.WhatisyourTripDestination} 
+                    value={tripDestination}
+                    options={usDestinations} 
+                    onchange={handleChange}>
+                </c-buho_input>
+            </div>
+            <div class="col-md-6">
+                <c-buho_input 
+                    type="combobox" 
+                    name="What_is_the_purpose_of_trip__c"
+                    placeholder={label.Whatisthetrippurposetrip} 
+                    label={label.Whatisthetrippurposetrip} 
+                    value={tripPurpose}
+                    options={tripPurposes} 
+                    onchange={handleChange}>
+                </c-buho_input>
+            </div>
+            <!--div class="col-md-6">
+                <c-buho_input 
+                    type="combobox" 
+                    name="How_did_you_hear_about_us__c"
+                    placeholder={label.Howdidyouhearaboutus} 
+                    label={label.Howdidyouhearaboutus} 
+                    value={hearAboutUs}
+                    options={aboutusOption} 
+                    onchange={handleChange}
+                    required="true">
+                </c-buho_input>
+            </div-->
+             <!-- Other Option Textarea -->
+            <!--template if:true={showOtherOptioForHearus}>
+                <div class="col-md-6">
+                    <c-buho_input 
+                        type="textarea"
+                        name="How_did_you_hear_about_us_Other__c" 
+                        placeholder={label.Howdidyouhearaboutus}
+                        value={hearAboutUsOther}
+                        textarea-style="height: 180px;"
+                        max-length="350"
+                        onchange={handleChange}
+                        required="true">
+                    </c-buho_input>
+                </div>
+            </template-->
+        </div>
+
+
+        <!-- Terms and Agreements Section -->
+        <div class="section-title" style="margin-top: 32px; margin-bottom: 16px;">
+            {label.Ireadandagreewiththefollowing}:
+        </div>
+        <div class="checkbox-section">
+            <div class="terms-checkbox-wrapper">
+                <c-buho_input 
+                    type="checkbox"
+                    name="Terms_of_Purchase_Confirmed__c"
+                    checked={TermsOfPurchaseConfirmed}
+                    onchange={handleChange}
+                    required="true">
+                </c-buho_input>
+                <label class="terms-link" onclick={handleTermsOfPurchaseClick}>
+                    {label.Termsofpurchase}
+                </label>
+                <div class="hint-text">
+                    By checking this box, I authorize BUHO Inscurance Brokerage to charge my selected payment method for the policy premium and any selected services.
+                </div>
+            </div>
+            <div class="terms-checkbox-wrapper">
+                <c-buho_input 
+                    type="checkbox"
+                    name="Terms_of_Cancellation_Confirmed__c"
+                    checked={TermsOfPurchaseCancellation}
+                    onchange={handleChange}
+                    required="true"
+                    oncheckboxlabelclick={handleTermsOfCancellationClick}>
+                </c-buho_input>
+                <label class="terms-link" onclick={handleTermsOfCancellationClick}>
+                    {label.Termsofcancellation}
+                </label>
+                <div class="hint-text">
+                    By checking this box, I authorize BUHO Inscurance Brokerage to charge my selected payment method for the policy premium and any selected services.
+                </div>
+            </div>
+        </div>
+
+        <!-- Continue Button -->
+        <div class="form-actions">
+            <button type="button" class="btn btn-primary btn-continue" onclick={handleContinue}>Continue</button>
+        </div>
+
+        <!-- Terms of Purchase Modal -->
+        <template if:true={showTermsOfPurchaseModal}>
+            <div class="modal-overlay" onclick={handleModalOverlayClick}>
+                <div class="modal-content" onclick={handleModalContentClick}>
+                    <div class="modal-inner">
+                        <div class="modal-header">
+                            <h2 class="modal-title">{label.Termsofpurchase}</h2>
+                            <button class="modal-close-btn" onclick={closeTermsOfPurchaseModal}>
+                                <span class="close-icon">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <template if:true={isShowingOrgDataPurchaseAndUse}>
+                                <p>{legalTermRecord.Terms_of_Purchase_and_Use__c}</p>
+                            </template>
+                            <template if:false={isShowingOrgDataPurchaseAndUse}>
+                                <p>{label.Iagreetothefollowingwhen}</p>
+                                <p>{label.IhavereadunderstandandagreetotheTermsofAccessandUse} 
+                                    <a href="https://www.mexinsurance.com/legal/terms/" target="_blank">
+                                        {label.clickinghere}
+                                    </a>
+                                </p>
+                                <p>{label.Iunderstandandagreetotheinsurancepolicycontractofthe} 
+                                    <a href="https://www.mexinsurance.com/legal/terms/" target="_blank">
+                                        {label.clickinghere}
+                                    </a>
+                                </p>
+                                <p>{label.Iunderstandandagreethatcoverageappliesonlytothe}</p>
+                                <p>{label.IunderstandandagreethatIwillonlybeinsuredbetweenthe}</p>
+                                <p>{label.Iunderstand}</p>
+                                <p>{label.IunderstandandagreethatthelawsofMexicodonot}</p>
+                                <p>{label.IunderstandandagreethatthistouristNorthboundInsurance}</p>
+                                <p>{label.IunderstandandagreethatImustprintthe}</p>
+                                <p>{label.Iunderstandandagreethatthepolicydeclarationspage}</p>
+                                <p>{label.IunderstandandagreethatthepolicyNorthboundTermsandConditions}</p>
+                                <p>{label.IunderstandandagreethatImustreport}</p>
+                                <p>{label.Iunderstandandagreethatfailuretoreport}</p>
+                                <p>{label.Iunderstandandagreethatthistourist}</p>
+                            </template>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn-dark" onclick={closeTermsOfPurchaseModal}>Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Terms of Cancellation Modal -->
+        <template if:true={showTermsOfCancellationModal}>
+            <div class="modal-overlay" onclick={handleModalOverlayClick}>
+                <div class="modal-content" onclick={handleModalContentClick}>
+                    <div class="modal-inner">
+                        <div class="modal-header">
+                            <h2 class="modal-title">{label.Termsofcancellation}</h2>
+                            <button class="modal-close-btn" onclick={closeTermsOfCancellationModal}>
+                                <span class="close-icon">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <template if:true={isShowingOrgDataPurchaseAndUse}>
+                                <p>{legalTermRecord.Terms_of_Cancellation__c}</p>
+                                <p>{legalTermRecord.Daily_Policy_Cancellation__c}</p>
+                                <p>{legalTermRecord.Semi_Annual_and_Annual_Policy_Cancellati__c}</p>
+                            </template>
+                            <template if:false={isShowingOrgDataPurchaseAndUse}>
+                                <p>{label.ThefollowingareTermsofCancellation}</p>
+                                <p>{label.WhentheContractingPartyrequests}</p>
+                                <p>
+                                    <b>{label.DailyPolicyCancellation}</b>
+                                    {label.Dailytermpoliciesarefully}
+                                </p>
+                                <p>
+                                    <b>{label.SemiAnnualandAnnualPolicyCancellation}</b>
+                                    {label.SemiannualandAnnualpoliciesar}
+                                </p>
+                                <p>{label.Allcancellationswillbeassesseda}</p>
+                            </template>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn-dark" onclick={closeTermsOfCancellationModal}>Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

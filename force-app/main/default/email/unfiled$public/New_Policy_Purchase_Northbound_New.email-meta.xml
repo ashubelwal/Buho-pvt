@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>New_Policy_Purchase_Northbound_New</name>
+    <style>none</style>
+    <subject>Your MexInsurance® Policy/Poliza:  {!Policy__c.Underwriter__c}</subject>
+    <textOnly>Congratulations, you are covered in the United States and Canada!
+¡Felicitaciones por estar cubierto en los Estados Unidos y Canadá!
+
+I&apos;ve attached your policy to this email.  We recommend printing a copy and keeping it in the glove box.  Having the paperwork in your glove box allows for the retrieval of important information in case you cannot provide it electronically.
+
+Su políza se adjunta a este correo electrónico. Le recomendamos que imprima una copia y la guarde en la guantera. Tener el papeleo en la guantera permite la recuperación de información importante en caso de que usted no pueda proporcionarla electrónicamente.
+
+Thank you for your business.
+¡Gracias por su patrocinio!
+
+Charles Lundy
+License 0E02163
+
+
+© MEXICO INSURANCE SERVICES, INC.
+CALIFORNIA INSURANCE LICENSE: 0G35864
+MEXINSURANCE.COM
+T. 855 MEXICO.5</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

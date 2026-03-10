@@ -230,8 +230,38 @@ public without sharing class TowedPropertyDamageCalculation {
             Integer daysInTow = Integer.valueOf(String.valueOf(fieldValues.get('Days_in_Tow__c')));
 
 
-            if (daysInTow < 180) {
-                System.debug('Towed for less than 180 days');
+            // if (daysInTow < 180) {
+            //     System.debug('Towed for less than 180 days');
+            //     if (availableTermsList.contains('Term_Daily__c')) {
+            //         str += '_Term_Daily__c';
+            //         fieldList.add('Term_Daily__c');
+            //     } else {
+            //         str += '_Term_Daily__c';
+            //         fieldList.add('Term_Daily__c'); // fallback to Term_Daily__c
+            //     }
+
+            // } else if (daysInTow < 365) {
+            //     System.debug('Towed for between 180 and 364 days');
+            //     if (availableTermsList.contains('Term_180__c')) {
+            //         str += '_Term_180__c';
+            //         fieldList.add('Term_180__c');
+            //     } else {
+            //         str += '_Term_Daily__c';
+            //         fieldList.add('Term_Daily__c'); // fallback
+            //     }
+
+            // } else {
+            //     System.debug('Towed for 365 days or more');
+            //     if (availableTermsList.contains('Term_365__c')) {
+            //         str += '_Term_365__c';
+            //         fieldList.add('Term_365__c');
+            //     } else {
+            //         str += '_Term_Daily__c';
+            //         fieldList.add('Term_Daily__c'); // fallback
+            //     }
+            // }
+
+            if(daysInTow < 30){
                 if (availableTermsList.contains('Term_Daily__c')) {
                     str += '_Term_Daily__c';
                     fieldList.add('Term_Daily__c');
@@ -239,26 +269,44 @@ public without sharing class TowedPropertyDamageCalculation {
                     str += '_Term_Daily__c';
                     fieldList.add('Term_Daily__c'); // fallback to Term_Daily__c
                 }
-
-            } else if (daysInTow < 365) {
-                System.debug('Towed for between 180 and 364 days');
+            }else if(daysInTow < 90){
+                if (availableTermsList.contains('Term_30__c')) {
+                    str += '_Term_30__c';
+                    fieldList.add('Term_30__c');
+                } else {
+                    str += '_Term_Daily__c';
+                    fieldList.add('Term_Daily__c'); // fallback to Term_Daily__c
+                }
+            }else if(daysInTow < 180){
+                if (availableTermsList.contains('Term_90__c')) {
+                    str += '_Term_90__c';
+                    fieldList.add('Term_90__c');
+                } else {
+                    str += '_Term_Daily__c';
+                    fieldList.add('Term_Daily__c'); // fallback to Term_Daily__c
+                }
+            }else if(daysInTow < 365){
                 if (availableTermsList.contains('Term_180__c')) {
                     str += '_Term_180__c';
                     fieldList.add('Term_180__c');
                 } else {
                     str += '_Term_Daily__c';
-                    fieldList.add('Term_Daily__c'); // fallback
+                    fieldList.add('Term_Daily__c'); // fallback to Term_Daily__c
                 }
-
-            } else {
-                System.debug('Towed for 365 days or more');
+            }else if(daysInTow == 365){
                 if (availableTermsList.contains('Term_365__c')) {
                     str += '_Term_365__c';
                     fieldList.add('Term_365__c');
                 } else {
                     str += '_Term_Daily__c';
-                    fieldList.add('Term_Daily__c'); // fallback
+                    fieldList.add('Term_Daily__c'); // fallback to Term_Daily__c
                 }
+            }
+            else{
+
+                str += '_Term_Daily__c';
+                fieldList.add('Term_Daily__c'); // fallback to Term_Daily__c
+
             }
             
             // Use dynamic SOQL to query the field value

@@ -71,10 +71,16 @@ public without sharing class AgentAppController {
                 if(loggedInUserId != null){
                     getUserInfo = [Select Id,User_Type__c,Email FROM User WHERE Id =: loggedInUserId LIMIT 1];
                     
-                    if(getUserInfo.User_Type__c == 'Customer' || getUserInfo.User_Type__c == null){agentId = [Select id from contact where email =: getUserInfo.email  Limit 1].Id;
+                    if(getUserInfo.User_Type__c == 'Customer' || getUserInfo.User_Type__c == null){
+                        List<Contact> lstCon = [SELECT Id FROM Contact WHERE Email =: getUserInfo.email LIMIT 1];
+                        if(lstCon.size() > 0){
+                            agentId = lstCon[0].Id;
+                        }
                     }else if(loggedInUserId != null){
                         List<User> userdata =  [Select id,ContactId  from user WHERE Id =: loggedInUserId LIMIT 1];
-                        if(userdata[0].ContactId != null){ agentId = [Select id,ContactId  from user WHERE Id =: loggedInUserId LIMIT 1].ContactId; }
+                        if(userdata[0].ContactId != null){ 
+                            agentId = [SELECT Id,ContactId  FROM user WHERE Id =: loggedInUserId LIMIT 1].ContactId; 
+                        }
                     }
                 }
                 
@@ -93,13 +99,16 @@ public without sharing class AgentAppController {
                 }else{
                     getLeadData.Vehicle_Details__c = vehicleJSON;
                 }
-                
-                if(agentContact.Agency__c != null){
-                    getLeadData.Agency__c = agentContact.Agency__c;
-                }else{
-                    getLeadData.Agency__c = agentContact.Id;
+                if(String.isBlank(getLeadData.Agency__c)) {
+                    if(agentContact.Agency__c != null){
+                        getLeadData.Agency__c = agentContact.Agency__c;
+                    }else{
+                        getLeadData.Agency__c = agentContact.Id;
+                    }
                 }
-                getLeadData.Agent__c = agentContact.Id;
+                if(String.isBlank(getLeadData.Agent__c)) {
+                    getLeadData.Agent__c = agentContact.Id;
+                }
                 
                 getLeadData.Towing__c = towedlistJSON;
                 System.debug('Lead Before Saving'+getLeadData);
@@ -108,7 +117,7 @@ public without sharing class AgentAppController {
                 return JSON.serialize(getLeadData);
             }
         } catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
+            throw new AuraHandledException(e.getMessage()+e.getStackTraceString());
         }
         return null;
     }
@@ -121,8 +130,24 @@ public without sharing class AgentAppController {
             Quote__c quoteRecord = new Quote__c();
             
             Map<String, Object> jsonMap = (Map<String, Object>)JSON.deserializeUntyped(quotes);
-            String startTime = (String)jsonMap.get('Start_Time__c') + 'Z';
-            String endTime = (String)jsonMap.get('End_Time__c') + 'Z';
+            // String startTime = (String)jsonMap.get('Start_Time__c') + 'Z';
+            // String endTime = (String)jsonMap.get('End_Time__c') + 'Z';
+            String startTime = (String) jsonMap.get('Start_Time__c');
+            if (startTime != null && startTime != '') {
+                startTime = startTime.trim();
+                if (!startTime.endsWith('Z')) {
+                    startTime += 'Z';
+                }
+            }
+
+            // Safely format End_Time__c
+            String endTime = (String) jsonMap.get('End_Time__c');
+            if (endTime != null && endTime != '') {
+                endTime = endTime.trim();
+                if (!endTime.endsWith('Z')) {
+                    endTime += 'Z';
+                }
+            }
             jsonMap.put('Start_Time__c', startTime);
             jsonMap.put('End_Time__c', endTime);
             system.debug('jsonMap:---->'+jsonMap);quoteRecord = (Quote__c) JSON.deserialize(JSON.serialize(jsonMap), Quote__c.class);
@@ -1184,9 +1209,21 @@ public without sharing class AgentAppController {
             }
             
             if (!String.isEmpty(vehicleData)) {
+                system.debug('vehicleData@@####'+ vehicleData);
                 vehicleRecord = (Vehicle__c) JSON.deserialize(vehicleData, Vehicle__c.class);
-                
+                system.debug('vehicleRecord@@###'+vehicleRecord);
                 if (vehicleRecord != null) {
+                    if (!String.isEmpty(vehicleRecord.Company_Name__c) && vehicleRecord.Is_vehicle_owned_by_a_company_or_rented__c == true) {
+                        vehicleRecord.Vehicle_Owner_Name__c = '';
+                        vehicleRecord.Vehicle_Owner_Phone__c = '';
+                        vehicleRecord.Vehicle_Owner_Address__c = '';
+                        vehicleRecord.Vehicle_Owner_Driver_License__c = '';
+                        vehicleRecord.Vehicle_Owner_Driver_License_State__c = '';
+                        vehicleRecord.Vehicle_Owner_City__c = '';
+                        vehicleRecord.Vehicle_Owner_State__c = '';
+                        vehicleRecord.Vehicle_Owner_Postal_Code__c = '';
+                        vehicleRecord.Vehicle_Owner_Country__c = '';
+                    }
                     update vehicleRecord;
                 }
             }
@@ -1290,6 +1327,55 @@ public without sharing class AgentAppController {
                         }
                     }
                 }
+            }
+            try {
+                if (String.isNotBlank(vehicleData) && !String.isEmpty(DriverData)) {
+                    List<Driver__c> allDrivers = (List<Driver__c>) JSON.deserialize(DriverData, List<Driver__c>.class);
+
+                    System.debug('All drivers@@###' + allDrivers);
+
+                    // Filter drivers by Driver_Type__c values
+                    List<Driver__c> filteredDrivers = new List<Driver__c>();
+                    for (Driver__c d : allDrivers) {
+                        // You can adjust this condition as needed
+                        String driverType = d.Driver_Type__c.toLowerCase();
+                            if (driverType == 'true' || driverType == 'owner' || driverType == 'co-owner' || driverType == 'owner & driver') {
+                                filteredDrivers.add(d);
+                            }
+                    }
+
+                    System.debug('Filtered drivers@@###' + filteredDrivers);
+
+                    if (!filteredDrivers.isEmpty()) {
+                        Driver__c ownerDriver = filteredDrivers[0];
+                        vehicleRecord.Vehicle_Owner_Name__c = ownerDriver.First_Name__c + ' ' + ownerDriver.Last_Name__c;
+                        vehicleRecord.Vehicle_Owner_Phone__c = ownerDriver.Phone__c;
+                        vehicleRecord.Vehicle_Owner_Address__c = ownerDriver.Address__c;
+                        vehicleRecord.Vehicle_Owner_Driver_License__c = ownerDriver.license_number__c;
+                        vehicleRecord.Vehicle_Owner_Driver_License_State__c = ownerDriver.License_state__c;
+                        vehicleRecord.Vehicle_Owner_City__c = ownerDriver.City__c;
+                        vehicleRecord.Vehicle_Owner_State__c = ownerDriver.State_Province__c;
+                        vehicleRecord.Vehicle_Owner_Postal_Code__c = ownerDriver.Postal_Code__c;
+                        vehicleRecord.Vehicle_Owner_Country__c = ownerDriver.Country__c;
+                        vehicleRecord.Is_the_vehicle_registered_to_a_business__c = false;
+                        vehicleRecord.Company_Name__c = '';
+                        vehicleRecord.Company_Phone__c = '';
+                        vehicleRecord.Tax_ID__c = '';
+                        vehicleRecord.Company_Country__c = '';
+                        vehicleRecord.Company_Address__c = '';
+                        vehicleRecord.Company_Zip__c = '';
+                        vehicleRecord.Company_State__c = '';
+                        vehicleRecord.Company_City__c = '';
+                        update vehicleRecord;
+                        System.debug('vehicleRecord@@###' + vehicleRecord);
+
+                        responseMap.put('status', 'success');
+                        responseMap.put('vehicleData', vehicleRecord);
+                    } 
+                } 
+            } catch (Exception e) {
+                responseMap.put('status', 'error');
+                responseMap.put('message', e.getMessage());
             }
             
             if (!String.isEmpty(towedUnitData)) {
@@ -1433,8 +1519,20 @@ public without sharing class AgentAppController {
                     
                     // Update Vehicle Record
                     Vehicle__c vehicleRecord;
+                    system.debug('@@#vehicleData@@###+++'+vehicleData);
                     if (!String.isEmpty(vehicleData)) {
                         vehicleRecord = (Vehicle__c) JSON.deserialize(vehicleData, Vehicle__c.class);
+                        if (!String.isEmpty(vehicleRecord.Company_Name__c) && vehicleRecord.Is_vehicle_owned_by_a_company_or_rented__c == true) {
+                            vehicleRecord.Vehicle_Owner_Name__c = '';
+                            vehicleRecord.Vehicle_Owner_Phone__c = '';
+                            vehicleRecord.Vehicle_Owner_Address__c = '';
+                            vehicleRecord.Vehicle_Owner_Driver_License__c = '';
+                            vehicleRecord.Vehicle_Owner_Driver_License_State__c = '';
+                            vehicleRecord.Vehicle_Owner_City__c = '';
+                            vehicleRecord.Vehicle_Owner_State__c = '';
+                            vehicleRecord.Vehicle_Owner_Postal_Code__c = '';
+                            vehicleRecord.Vehicle_Owner_Country__c = '';
+                        }
                         upsert vehicleRecord;
                     } else {
                         // return error -> Vehicle record missing
@@ -1453,7 +1551,55 @@ public without sharing class AgentAppController {
                     } else {
                         // return error -> Driver record missing
                     }
-                    
+                    try {
+                        if (String.isNotBlank(vehicleData) && !String.isEmpty(DriverData)) {
+                            List<Driver__c> allDrivers = (List<Driver__c>) JSON.deserialize(DriverData, List<Driver__c>.class);
+
+                            System.debug('All drivers@@###' + allDrivers);
+
+                            // Filter drivers by Driver_Type__c values
+                            List<Driver__c> filteredDrivers = new List<Driver__c>();
+                            for (Driver__c d : allDrivers) {
+                                // You can adjust this condition as needed
+                                String driverType = d.Driver_Type__c.toLowerCase();
+                                    if (driverType == 'true' || driverType == 'owner' || driverType == 'co-owner' || driverType == 'owner & driver') {
+                                        filteredDrivers.add(d);
+                                    }
+                            }
+
+                            System.debug('Filtered drivers@@###' + filteredDrivers);
+
+                            if (!filteredDrivers.isEmpty()) {
+                                Driver__c ownerDriver = filteredDrivers[0];
+                                vehicleRecord.Vehicle_Owner_Name__c = ownerDriver.First_Name__c + ' ' + ownerDriver.Last_Name__c;
+                                vehicleRecord.Vehicle_Owner_Phone__c = ownerDriver.Phone__c;
+                                vehicleRecord.Vehicle_Owner_Address__c = ownerDriver.Address__c;
+                                vehicleRecord.Vehicle_Owner_Driver_License__c = ownerDriver.license_number__c;
+                                vehicleRecord.Vehicle_Owner_Driver_License_State__c = ownerDriver.License_state__c;
+                                vehicleRecord.Vehicle_Owner_City__c = ownerDriver.City__c;
+                                vehicleRecord.Vehicle_Owner_State__c = ownerDriver.State_Province__c;
+                                vehicleRecord.Vehicle_Owner_Postal_Code__c = ownerDriver.Postal_Code__c;
+                                vehicleRecord.Vehicle_Owner_Country__c = ownerDriver.Country__c;
+                                vehicleRecord.Is_the_vehicle_registered_to_a_business__c = false;
+                                vehicleRecord.Company_Name__c = '';
+                                vehicleRecord.Company_Phone__c = '';
+                                vehicleRecord.Tax_ID__c = '';
+                                vehicleRecord.Company_Country__c = '';
+                                vehicleRecord.Company_Address__c = '';
+                                vehicleRecord.Company_Zip__c = '';
+                                vehicleRecord.Company_State__c = '';
+                                vehicleRecord.Company_City__c = '';
+                                update vehicleRecord;
+                                System.debug('vehicleRecord@@###' + vehicleRecord);
+
+                                responseMap.put('status', 'success');
+                               // responseMap.put('vehicleData', vehicleRecord);
+                            } 
+                        } 
+                    } catch (Exception e) {
+                        responseMap.put('status', 'error');
+                        responseMap.put('message', e.getMessage());
+                    }
                     // Upsert the Towed Unit Record
                     List<Towed_Unit__c> towedUnitList;
                     if (!String.isEmpty(towedUnitData)) {
@@ -1801,7 +1947,7 @@ public without sharing class AgentAppController {
             'Quote_Value__c, Quote_Vehicle_Make__c, Quote_Vehicle_Model__c, Quote_Vehicle_Type__c, Quote_Vehicle_Value__c, Quote_Vehicle_Year__c,'+
             'Date_of_Birth__c, Vehicle_details__c, Term_days__c, Is_towing__c, Days_in_tow__c, Towing__c,'+
             'Underwriter_picklist__c, Review_vehicle__c, Company_details__c, Lienholder_info__c, Country__c, Driver_details__c, Terms_Alert__c,'+
-            'Vehicle_sub_type__c, Term_options__c, Quote_Details__c, Watercraft_Detail__c, Liability__c, (SELECT Id, OwnerId, Name, Vehicle_Type__c, Vehicle_Year__c, Vehicle_Make__c, Vehicle_Model__c,'+
+            'Vehicle_sub_type__c, Term_options__c, Quote_Details__c, Watercraft_Detail__c, Liability__c, Agency__c, Agent__c, (SELECT Id, OwnerId, Name, Vehicle_Type__c, Vehicle_Year__c, Vehicle_Make__c, Vehicle_Model__c,'+
             'Vehicle_Value__c, Coverage__c, Term__c, Term_Days__c, Quote_Value__c, Account__c, Lead__c, Annual_Term__c, Any_Boat_Operator_Under_22__c, Broker_Policy_Fee__c, Contact__c, Date_of_Birth__c, Driver_Age__c,'+
             'End_Date_for_Coverage__c, End_Time__c, I_V_A_Mex_Tax__c, Is_the_Maximum_Speed_more_than_50_mph__c, Is_the_owner_living_in_Mexico__c, Is_there_a_driver_over_75__c, Is_there_a_driver_under_21__c, '+
             'Is_this_a_Rental_Vehicle__c, Liability_Coverage__c, Liability__c, Medical_Coverage__c, Medical__c, Net_Premium__c, Policy_Type__c, Policy_Type_picklist__c, Policy__c, Property_Damage_Liability__c, '+
@@ -1823,6 +1969,7 @@ public without sharing class AgentAppController {
             
             if (!results.isEmpty()) {
                 existData = JSON.serialize(results[0]);
+                system.debug('existData@@###'+existData);
             }
             
             return existData;
@@ -1860,10 +2007,25 @@ public without sharing class AgentAppController {
             return 'Error';
         }
     }
+
+    @AuraEnabled
+    public static String updateContactRecord(Contact contactRecord) {
+        try{
+            System.debug('@@@@'+contactRecord);
+            update contactRecord;
+            return 'success';
+        } catch(Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
     
     // Update contact details by ID
+    // legacy method need to be removed after testing
     @AuraEnabled
-    public static String updateContactDetails(Boolean Istowing, String contactId, String termOptions, String driverDetails, String termsAlert, String towedlistJSON, String WatercraftDetails, String vehicledetails, String quoteDetails) {
+    public static String updateContactDetails(Boolean Istowing, String contactId,
+            String termOptions, String driverDetails, String termsAlert,
+            String towedlistJSON, String WatercraftDetails, String vehicledetails,
+            String quoteDetails) {
         if(contactId != null) {
             try{
                 Contact con = new Contact();

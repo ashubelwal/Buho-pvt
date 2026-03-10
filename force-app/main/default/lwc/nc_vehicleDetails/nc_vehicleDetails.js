@@ -37,7 +37,7 @@ export default class Nc_vehicleDetails extends LightningElement {
         { label: 'Sedan', value: 'sedan' },
         { label: 'SUV', value: 'suv' },
     ];
-    yearOptions = Array.from({ length: 30 }, (_, i) => ({
+    yearOptions = Array.from({ length: 66 }, (_, i) => ({
         label: `${new Date().getFullYear() - i}`,
         value: `${new Date().getFullYear() - i}`,
     }));

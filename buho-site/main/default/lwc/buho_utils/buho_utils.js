@@ -29,6 +29,7 @@ export function transformTowedUnits(unitsArray = []) {
 
 // ---------- Main reusable transformer ----------
 export function createTransformedData(returnLeadValue) {
+    console.log('@@@returnLeadValue',returnLeadValue);
     const leadInfo = returnLeadValue?.LeadInfo || {};
     const quoteInfo = returnLeadValue?.QuoteInfo || {};
 
@@ -39,7 +40,6 @@ export function createTransformedData(returnLeadValue) {
     const termsAndAlerts = safeParseJson(leadInfo.Terms_Alert__c, 'Terms_Alert__c');
     const termDetails = safeParseJson(leadInfo.Term_options__c, 'Term_options__c')?.[0];
     const rawTowDetails = safeParseJson(leadInfo.Towing__c, 'Towing__c');
-
     const towData = rawTowDetails
         ? transformTowedUnits(rawTowDetails)
         : [];
@@ -52,7 +52,8 @@ export function createTransformedData(returnLeadValue) {
                 FirstName: leadInfo.FirstName ?? null,
                 LastName: leadInfo.LastName ?? null,
                 Phone: leadInfo.Phone ?? null,
-                Id: leadInfo.Id ?? null
+                Id: leadInfo.Id ?? null,
+                LeadSource: leadInfo.LeadSource ?? null,
             }
         },
         {
@@ -85,7 +86,8 @@ export function createTransformedData(returnLeadValue) {
                 Registered_Plate__c: vehicleData?.Registered_Plate__c ?? null,
                 Vin__c: vehicleData?.Vin__c ?? null,
                 Registered_Country__c: vehicleData?.Registered_Country__c ?? null,
-                Registered_State__c: vehicleData?.Registered_State__c ?? null
+                Registered_State__c: vehicleData?.Registered_State__c ?? null,
+                isOtherModel: vehicleData?.isOtherModel ?? null,
                 
 
             }
@@ -115,6 +117,17 @@ export function createTransformedData(returnLeadValue) {
             termOption: {
                 ...termDetails
             }
+        },
+        {
+            quotePage: {
+                QuoteData : {
+                    ...quoteInfo
+                }
+            }
         }
     ];
+}
+
+export function log(...args) {
+    console.log(...args);
 }

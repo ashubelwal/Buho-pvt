@@ -35,8 +35,6 @@
                             placeholder="Enter VIN number"
                             input-type="text"
                             maxlength="17"
-                            pattern="^[A-Z0-9\-]+$"
-                            message-when-pattern-mismatch="Only letters, numbers, and dashes are allowed"
                             onchange={handleInputChange}
                             oninput={handleVINInput}>
                         </c-buho_input>
@@ -55,11 +53,11 @@
                             placeholder="Enter license plate"
                             input-type="text"
                             maxlength="17"
-                            pattern="^[A-Z0-9\-]+$"
-                            message-when-pattern-mismatch="Only letters, numbers, and dashes are allowed"
                             onchange={handleInputChange}
                             oninput={handleLicensePlateInput}>
                         </c-buho_input>
+                        <!-- pattern="^[A-Z0-9\-]+$"
+                            message-when-pattern-mismatch="Only letters, numbers, and dashes are allowed" -->
                         <small class="form-text text-muted">Only letters, numbers, and dashes are allowed.</small>
                     </div>
                 </div>

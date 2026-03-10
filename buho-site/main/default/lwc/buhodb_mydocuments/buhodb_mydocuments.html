@@ -1,0 +1,51 @@
+<template>
+    <!-- Page Header -->
+    <div class="mydocs-header">
+        <div class="mydocs-header-left">
+            <h1 class="mydocs-title">My Documents</h1>
+            <p class="mydocs-subtitle">Policy Center &amp; Records</p>
+        </div>
+        <div class="mydocs-header-actions">
+            <span class="mydocs-filter-text">Filter by</span>
+            <button class="btn-link-filter" onclick={handleFilterByDates}>dates</button>
+            <span class="mydocs-filter-divider">|</span>
+            <button class="btn-link-filter" onclick={handleFilterByStatus}>Status</button>
+        </div>
+    </div>
+
+    <!-- Active Policies Documents Section -->
+    <h3 class="mydocs-section-heading">Active Policies Document - {activePolicyNumber}</h3>
+    <div class="mydocs-grid">
+        <template for:each={policyDocuments} for:item="doc">
+            <c-buhodb_documentcard
+                key={doc.id}
+                document-id={doc.id}
+                title={doc.title}
+                variant="action"
+                left-details={doc.leftDetails}
+                right-details={doc.rightDetails}
+                ondownloaddoc={handleDownloadDoc}
+                onviewdoc={handleViewDoc}
+                onemaildoc={handleEmailDoc}>
+            </c-buhodb_documentcard>
+        </template>
+    </div>
+
+    <!-- Vehicle Specific Documents Section -->
+    <h3 class="mydocs-section-heading">Vehicle Specific Document</h3>
+    <div class="mydocs-grid">
+        <template for:each={vehicleDocuments} for:item="doc">
+            <c-buhodb_documentcard
+                key={doc.id}
+                document-id={doc.id}
+                title={doc.title}
+                variant="download"
+                left-details={doc.leftDetails}
+                right-details={doc.rightDetails}
+                ondownloaddoc={handleDownloadDoc}
+                onviewdoc={handleViewDoc}
+                onemaildoc={handleEmailDoc}>
+            </c-buhodb_documentcard>
+        </template>
+    </div>
+</template>

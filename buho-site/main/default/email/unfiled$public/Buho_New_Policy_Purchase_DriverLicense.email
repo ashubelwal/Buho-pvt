@@ -1,0 +1,5 @@
+<messaging:emailTemplate subject="Welcome to Buho" recipientType="Contact" relatedToType="Contact">
+<messaging:htmlEmailBody >
+<c:Boho_EmailTemplateStyling policyType="driverLicense" />
+</messaging:htmlEmailBody>
+</messaging:emailTemplate>

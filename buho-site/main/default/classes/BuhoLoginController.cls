@@ -202,7 +202,23 @@ public without sharing class BuhoLoginController {
         siteDetails.put('siteType', (Site.getSiteType() != null) ? String.valueOf(Site.getSiteType()) : null);
         siteDetails.put('pathPrefix', Site.getPathPrefix());
         siteDetails.put('baseUrl', Site.getBaseSecureUrl() );
-
         return siteDetails;
     }
+
+    @AuraEnabled
+    public static void updateLeadStep(Id leadId, Integer step) {
+        if(leadId != null) {
+            update new Lead(Id = leadId, Current_Step__c = step);
+        }
+    }
+
+    @AuraEnabled
+    public static void updateAgency(){
+        Id buhoAgencyId = Label.Buho_AgencyId;
+        User currentUser = [SELECT  Id, ContactId, Contact.Agency__c  FROM User WHERE Id =: UserInfo.getUserId()];
+        if(currentUser.Contact.Agency__c != buhoAgencyId ) {
+            update new Contact(Id = currentUser.ContactId, Agency__c = buhoAgencyId);
+        }
+    }
+
 }

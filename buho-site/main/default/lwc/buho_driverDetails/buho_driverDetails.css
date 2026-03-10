@@ -1,119 +1,12 @@
 /* Buho Driver Details Component */
-/* All styles inherited from buhoStyles.css */
+/* All global styles inherited from buhoStyles.css */
 
-/* Ownership Cards - Additional specific styles */
-.ownership-cards {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
-    margin-bottom: 32px;
+.buho-driver-details {
+    padding: 20px 0;
 }
 
-.ownership-card {
-    background-color: var(--white);
-    border: 2px solid var(--input-border);
-    border-radius: 12px;
-    padding: 32px 24px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.ownership-card:hover {
-    border-color: var(--primary-blue);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.ownership-card.selected {
-    border-color: var(--primary-blue);
-    background-color: var(--primary-blue);
-    color: var(--white);
-}
-
-.ownership-card.selected .ownership-title,
-.ownership-card.selected .ownership-subtitle {
-    color: var(--white);
-}
-
-.ownership-icon {
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.ownership-icon img {
-    width: 64px;
-    height: 64px;
-    object-fit: contain;
-}
-
-.ownership-card.selected .ownership-icon img {
-    filter: brightness(0) invert(1);
-}
-
-.ownership-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: #1F2937;
-    margin: 0 0 8px 0;
-}
-
-.ownership-subtitle {
+.step-subtitle {
+    color: var(--buho-text-light, #6B7280);
     font-size: 14px;
-    color: var(--gray-text);
-    margin: 0;
-}
-
-/* Uppercase input */
-.uppercase-input {
-    text-transform: uppercase;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .ownership-cards {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-    
-    .ownership-card {
-        padding: 24px 20px;
-    }
-    
-    .ownership-icon {
-        margin-bottom: 12px;
-    }
-    
-    .ownership-icon img {
-        width: 56px;
-        height: 56px;
-    }
-    
-    .ownership-title {
-        font-size: 16px;
-    }
-    
-    .ownership-subtitle {
-        font-size: 13px;
-    }
-}
-
-@media (max-width: 480px) {
-    .ownership-cards {
-        gap: 12px;
-    }
-    
-    .ownership-card {
-        padding: 20px 16px;
-    }
-    
-    .ownership-icon img {
-        width: 48px;
-        height: 48px;
-    }
+    margin-top: 8px;
 }

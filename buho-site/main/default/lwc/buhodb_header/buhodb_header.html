@@ -1,0 +1,38 @@
+<template>
+    <header class="dashboard-header">
+        <div class="dashboard-header-left">
+            <!-- Mobile Menu Toggle Button -->
+            <button class="menu-toggle-btn" onclick={handleMenuToggle} aria-label="Toggle menu">
+                <img src={hamburgerIconUrl} alt="Menu" class="icon-menu" />
+            </button>
+
+            <!-- Search Bar -->
+            <!--div class="dashboard-search-wrapper">
+                <div class="dashboard-search-icon">
+                    <img src={searchIconUrl} alt="Search" />
+                </div>
+                <c-buho_input
+                    type="input"
+                    input-type="text"
+                    input-class="dashboard-search-input"
+                    oninput={handleSearchInput}
+                    onkeyup={handleSearch}>
+                </c-buho_input>
+                <div class="dashboard-search-shortcut">
+                    <img src={commandIconUrl} alt="Command+F" />
+                </div>
+            </div-->
+        </div>
+
+        <div class="dashboard-header-right">
+            <!-- User Profile -->
+            <div class="dashboard-user-profile" onclick={handleUserProfileClick}>
+                <!--img src={userAvatar} alt={userName} class="dashboard-user-avatar" /-->
+                <div class="dashboard-user-info">
+                    <span class="dashboard-user-name">Welcome {userName}!</span>
+                </div>
+                <!--span class="dashboard-user-dropdown-icon">▼</span-->
+            </div>
+        </div>
+    </header>
+</template>

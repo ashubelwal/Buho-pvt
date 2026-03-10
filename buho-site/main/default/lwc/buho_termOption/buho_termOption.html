@@ -7,11 +7,11 @@
         </div>
 
         <!-- Display error message if present -->
-        <template if:true={errorMessage}>
+        <!--template if:true={errorMessage}>
             <div class="error-message visible">
                 {errorMessage}
             </div>
-        </template>
+        </template-->
 
         <template if:true={flags.isLoaded}>
             <form class="wizard-form">
@@ -32,6 +32,14 @@
                     </div>
                 </div>
 
+                <!-- System Time Display -->
+                <template if:true={displayPstTime}>
+                    <div class="system-time-info">
+                        <p><strong>System Time (PST):</strong> {displayPstTime}</p>
+                        <small class="form-text">This is our reference point for policy start times</small>
+                    </div>
+                </template>
+                
                 <!-- Start Date and End Date Row -->
                 <template if:true={flags.isDateLoaded}>
                     <div class="row g-4">
@@ -52,9 +60,9 @@
                                         readonly
                                         required>
                                 </div>
-                                <template if:false={isDailyTerm}>
-                                    <small class="form-text">Coverage begins at 12:01 AM on this date</small>
-                                </template>
+                                <!--template if:false={isDailyTerm}>
+                                    <small class="form-text">Coverage begins at {inputValues.Start_Time__c} AM on this date</small>
+                                </template-->
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -73,9 +81,9 @@
                                         readonly
                                         required>
                                 </div>
-                                <template if:false={isDailyTerm}>
-                                    <small class="form-text">Coverage ends at 11:59 Pm on this date</small>
-                                </template>
+                                <!--template if:false={isDailyTerm}>
+                                    <small class="form-text">Coverage ends at {inputValues.End_Time__c} Pm on this date</small>
+                                </template-->
                             </div>
                         </div>
                     </div>
@@ -96,6 +104,7 @@
                                         class="form-control timepicker" 
                                         value={inputValues.Start_Time__c}
                                         onchange={handleInputChange}
+                                        onclick={handleTimeInputClick}
                                         placeholder="00:00 Am">
                                 </div>
                             </div>
@@ -112,11 +121,18 @@
                                         class="form-control timepicker endTime" 
                                         value={inputValues.End_Time__c}
                                         onchange={handleInputChange}
+                                        onclick={handleTimeInputClick}
+                                        disabled
                                         placeholder="00:00 Am">
                                 </div>
                             </div>
                         </div>
                     </div>
+                </template>
+
+                <!-- Coverage Summary -->
+                <template if:true={coverageSummaryText}>
+                    <p class="coverage-summary-text">{coverageSummaryText}</p>
                 </template>
 
                 <!-- Continue Button -->

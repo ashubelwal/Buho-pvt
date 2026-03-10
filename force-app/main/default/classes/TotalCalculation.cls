@@ -1,7 +1,7 @@
 public without sharing class TotalCalculation {
     private static Map<String, Object> response = new Map<String, Object>(); // Keep as a class variable
 
-    public static Map<String, Object> calculateTotal(String jsonString, String vendorName, Vendor__c vendorData, List<Term_Mapping__mdt> termMetadataRecords,Map<String,String> quoteData) {
+    public static Map<String, Object> calculateTotal(String jsonString, String vendorName, Vendor__c vendorData, List<Term_Mapping__mdt> termMetadataRecords, Map<String,String> quoteData) {
         
         try {
             if (String.isNotBlank(jsonString)) {

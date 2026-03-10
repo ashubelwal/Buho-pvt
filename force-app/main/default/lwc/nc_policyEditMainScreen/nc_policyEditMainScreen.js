@@ -17,7 +17,7 @@ export default class Nc_policyEditMainScreen extends LightningElement {
     @api refundAmount;
     @api isEditPolicy = 'Yes';
     @api isCommunityUser = false;
-    @api DriverData;
+    @api driverData;
     @api towedUnitData;
     policyType;
     isShowCaseLog = false;
@@ -35,7 +35,7 @@ export default class Nc_policyEditMainScreen extends LightningElement {
         console.log(JSON.stringify(parsedData, null, 4));
         if (parsedData.status == 'success' && parsedData.userType == true) {
             this.isCommunityUser = parsedData.userType;
-            this.DriverData = parsedData.drivers && parsedData.drivers.length > 0 ? parsedData.drivers : [];
+            this.driverData = parsedData.drivers && parsedData.drivers.length > 0 ? parsedData.drivers : [];
             this.towedUnitData = parsedData.towedUnits && parsedData.towedUnits.length > 0 ? parsedData.towedUnits : [];
             await this.fetchPolicyData();
         }
@@ -390,7 +390,7 @@ export default class Nc_policyEditMainScreen extends LightningElement {
                 Tax_ID__c: getSafe(inputData, 'vehicleData.Tax_ID__c', ''),
                 Is_the_vehicle_registered_to_a_business__c: getSafe(inputData, 'vehicleData.Is_the_vehicle_registered_to_a_business__c', false)
             }, // Empty object as per example
-            driverList: (this.DriverData || []).map(driver => ({
+            driverList: (this.driverData || []).map(driver => ({
                 Id: getSafe(driver, 'Id', ''),
                 label: `${getSafe(driver, 'First_Name__c', '')} ${getSafe(driver, 'Last_Name__c', '')} - ${getSafe(driver, 'Dob__c', '')} - ${getSafe(driver, 'license_number__c', '')}`,
                 value: getSafe(driver, 'Id', ''),

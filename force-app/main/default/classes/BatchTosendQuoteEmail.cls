@@ -12,8 +12,10 @@ public class BatchTosendQuoteEmail implements Database.Batchable<sObject>, Datab
 
 
     public Database.QueryLocator start(Database.BatchableContext BC){
-        return Database.getQueryLocator([SELECT Id, Name, Contact__c, Yellow_Card__c, Underwriter_picklist__c, Contact__r.Email, Policy_Type_picklist__c FROM Policy__c 
-                                         WHERE (Id IN: policyIdset OR Test_Policy_Id__c IN: policyIdset) and  Contact__r.Email != null ]);
+        return Database.getQueryLocator([SELECT Id, Name, Contact__c, Yellow_Card__c, Underwriter_picklist__c, Contact__r.Email, Policy_Type_picklist__c 
+                                        FROM Policy__c 
+                                        WHERE (Id IN: policyIdset OR Test_Policy_Id__c IN: policyIdset) 
+                                        AND  Contact__r.Email != null ]);
     } 
    
     public void execute(Database.BatchableContext BC, List<Policy__c> scope){

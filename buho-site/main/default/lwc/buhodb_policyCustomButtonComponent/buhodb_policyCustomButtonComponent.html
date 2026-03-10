@@ -1,0 +1,92 @@
+<template>
+    <div class="notranslate">
+        <template if:false={isHomeownersPolicy}>
+            <!-- Loading State -->
+            <template if:true={spinner}>
+                <div class="pd-hero-card pd-hero-loading">
+                    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                </div>
+            </template>
+
+            <template if:false={spinner}>
+                <div class="pd-hero-card">
+                    <!-- ── Top: Policy Summary ── -->
+                    <template if:true={hasSummary}>
+                        <div class="pd-hero-top">
+                            <div class="pd-hero-left">
+                                <div class="pd-hero-icon">
+                                    <img src={carIconUrl} alt="" class="pd-hero-car-icon" />
+                                </div>
+                                <div class="pd-hero-info">
+                                    <h1 class="pd-hero-policy-number">{policyNumber}</h1>
+                                    <p class="pd-hero-meta">{summaryMetaLine}</p>
+                                    <p class="pd-hero-dates">{dateRange}</p>
+                                </div>
+                            </div>
+                            <div class="pd-hero-right">
+                                <div class="pd-hero-premium-block">
+                                    <span class="pd-hero-premium-label">Total Premium</span>
+                                    <span class="pd-hero-premium-value">{totalPremium}</span>
+                                </div>
+                                <div class="pd-hero-badges">
+                                    <span class="pd-hero-badge">{packageName}</span>
+                                    <span class="pd-hero-badge">{termName}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- ── Bottom: Action Buttons (glass toolbar) ── -->
+                    <div class="pd-hero-actions">
+                        <button title={label.Displaypolicy} onclick={handleDisplayClick} class="pd-hero-btn">
+                            <svg class="pd-hero-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            {label.Displaypolicy}
+                        </button>
+
+                        <template if:false={isHiddenRenewButton}>
+                            <button title={label.RenewPolicy} onclick={handleRenewClick} disabled={isRenewBtnDisabled} class="pd-hero-btn">
+                                <svg class="pd-hero-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="23 4 23 10 17 10"></polyline>
+                                    <polyline points="1 20 1 14 7 14"></polyline>
+                                    <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"></path>
+                                </svg>
+                                {label.RenewPolicy}
+                            </button>
+                        </template>
+
+                        <button title={label.Edit} disabled={isDisabled} onclick={handleEditClick} class="pd-hero-btn">
+                            <svg class="pd-hero-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                            {label.Edit}
+                        </button>
+
+                        <button title={label.Terminate} disabled={isDisabled} onclick={handleTerminateClick} class="pd-hero-btn pd-hero-btn-danger">
+                            <svg class="pd-hero-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="15" y1="9" x2="9" y2="15"></line>
+                                <line x1="9" y1="9" x2="15" y2="15"></line>
+                            </svg>
+                            {label.Terminate}
+                        </button>
+
+                        <template lwc:if={isDisableYellowCard}>
+                            <button title="Policy Yellow Card" onclick={generatePolicyGreenCard} class="pd-hero-btn pd-hero-btn-accent">
+                                <svg class="pd-hero-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                                </svg>
+                                Policy Yellow Card
+                            </button>
+                        </template>
+                    </div>
+                </div>
+            </template>
+        </template>
+    </div>
+</template>

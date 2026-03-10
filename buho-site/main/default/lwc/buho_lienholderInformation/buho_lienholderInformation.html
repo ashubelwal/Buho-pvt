@@ -73,7 +73,9 @@
                                 selectedname={lineHolderName}
                                 selectedid={lineHolderName} 
                                 buho-theme="true"
-                                onselection={handleSearch}>
+                                onselection={handleSearch}
+                                enable-record-creation="true"
+                                onenablemanualentry={handleManualEntry}>
                             </c-lookup>
                         </template>
                         <template if:true={addNewLienHolder}>
@@ -109,7 +111,7 @@
                         max-length="9"
                         pattern="^(([A-CEGHJKL-MNPR-STVXY]\d[A-Za-z])*(-\d[A-Za-z]\d)*|\d{5}|\d{5}-\d{4})$"
                         message-when-pattern-mismatch="Please enter a valid postal code"
-                        onblur={handlePostalCodeChange}>
+                        oninput={handlePostalCodeChange}>
                     </c-buho_input>
                 </div>
 
@@ -119,13 +121,11 @@
                         label="State"
                         label-class=""
                         container-class="form-group"
-                        type="input"
                         name="Lienholder_State__c"
                         value={lineHolderState}
                         placeholder="Enter state"
-                        input-type="text"
-                        pattern="^([a-zA-Z]+\s)*[a-zA-Z]+$"
-                        message-when-pattern-mismatch="Only letters and spaces are allowed"
+                        type="combobox"
+                        options={stateOption}
                         onchange={handleInputChange}>
                     </c-buho_input>
                 </div>
@@ -143,8 +143,6 @@
                         value={lineHolderCity}
                         placeholder="Enter city"
                         input-type="text"
-                        pattern="^([a-zA-Z]+\s)*[a-zA-Z]+$"
-                        message-when-pattern-mismatch="Only letters and spaces are allowed"
                         onchange={handleInputChange}>
                     </c-buho_input>
                 </div>
@@ -160,8 +158,6 @@
                         value={lineHolderStreet}
                         placeholder="Enter address"
                         input-type="text"
-                        pattern="^\S+(?: \S+)*$"
-                        message-when-pattern-mismatch="Please enter a valid address"
                         onchange={handleInputChange}>
                     </c-buho_input>
                 </div>
@@ -180,8 +176,6 @@
                         placeholder="(123) 456-7890"
                         input-type="text"
                         max-length="14"
-                        pattern="^\(\d{3}\)\s\d{3}-\d{4,7}$"
-                        message-when-pattern-mismatch="Please enter phone in format (123) 456-7890"
                         onchange={handlePhoneChange}>
                     </c-buho_input>
                 </div>

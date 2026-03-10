@@ -580,6 +580,13 @@ public class CalculateCoverage_Test {
         CalculateCoverage.calculateTotalCoverage(jsonString);
         
     }
+    
+    @isTest
+    public static void testCalculateCoverageMethodfive(){
+        String jsonString = '[{"userDetails":{"Email":"adarshkumar+test9911@cloudanalogy.com","FirstName":"Adarsh","Phone":"7979830325","LastName":"Kumar","Id":"003VD00000bSglPYAS"}},{"vehicleDetails":{"is_the_vehicle_used_for_business_purpose__c":true,"is_there_a_driver_under_21__c":true,"Is_this_a_Rental_Vehicle__c":true,"salvage_vehicle__c":false,"Coverage__c":"Complete","isTowing":true,"Electric_Hybrid__c":false,"towunits":[{"Towed_Unit_Type__c":"Utility/Misc Trailer","Towed_Unit_Value__c":"10000","Days_in_Tow__c":"181","uid":1762849983496.4407,"Year__c":"","Make__c":"","Model__c":"","VIN_Number__c":"","Plate__c":""}],"Liability__c":"100,000","Medical__c":"2,000/10,000","Year__c":"2025","Vehicle_sub_type__c":"Automobile","Make":"Audi","Model":"Q4 e-tron","Value__c":"10000","Vin__c":"WAUAUAF33L1080104","Registered_Country__c":"Canada","Registered_State__c":"Manitoba","licensePlate":"444444","Id":"a0GVD000004QqBz2AK","Make__c":"Audi","Model__c":"Q4 e-tron","Account_Vehicle__c":"001VD00000LlOlzYAF","Contact__c":"003VD00000bSglPYAS"}},{"termOption":{"Term__c":"Daily","Start_Date_for_Coverage__c":"2025-06-13","Start_Time__c":"05:30:00","End_Date_for_Coverage__c":"2025-06-14","End_Time__c":"05:30:00"}},{"territory":{"region":"Baja/Sonora"}}]';
+        CalculateCoverage.calculateTotalCoverage(jsonString);
+        
+    }
 
     @isTest
     public static void testCalculateCoverageMethodThree(){

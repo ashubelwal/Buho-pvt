@@ -1,0 +1,37 @@
+<template>
+    <div class="policy-card">
+        <div class="policy-card-header">
+            <div class="policy-card-icon">
+                <img src={carIconUrl} alt="Vehicle" class="icon-img" />
+            </div>
+            <div class="policy-card-header-info">
+                <h4 class="policy-card-title">{vehicleName}</h4>
+                <p class="policy-card-subtitle">Policy: {policyNumber}</p>
+            </div>
+        </div>
+
+        <div class="policy-card-body">
+            <ul class="policy-card-details-left">
+                <li>Active until {activeUntil}</li>
+                <li>Coverage: {coverage}</li>
+                <li>Premium: {premium}</li>
+            </ul>
+            <ul class="policy-card-details-right">
+                <li>Policy: {policyNumber}</li>
+                <li>{paymentType}</li>
+            </ul>
+        </div>
+
+        <div class="policy-card-actions">
+            <button class="btn-outline" onclick={handleViewDetails}>
+                View Details
+            </button>
+            <!--button class="btn-outline" onclick={handleDownloadDocuments}>
+                Download Documents
+            </button-->
+            <!--button class="btn-outline" onclick={handleRenew}>
+                Renew
+            </button-->
+        </div>
+    </div>
+</template>

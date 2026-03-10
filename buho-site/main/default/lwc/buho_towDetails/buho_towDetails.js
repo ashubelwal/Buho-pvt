@@ -1,6 +1,6 @@
 import { LightningElement, api, track } from 'lwc';
 import saveTowDetails from '@salesforce/apex/TowDetailsFlow.saveTowDetails';
-import BUHO_ASSETS from '@salesforce/resourceUrl/buhoAssets';
+import BUHO_ASSETS from '@salesforce/resourceUrl/BuhoAssets';
 
 const ICON_EDIT = BUHO_ASSETS + '/images/icon-edit.svg';
 

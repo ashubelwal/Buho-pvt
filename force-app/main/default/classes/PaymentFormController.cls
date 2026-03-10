@@ -233,36 +233,20 @@ public with sharing class PaymentFormController {
     @AuraEnabled
     public static String createPaymentProfile(String newCreditCard, List<String> quoteIds) {
         String paymentProfileId;
-        try {
+        
             ContactService.CreditCard creditCard = (ContactService.CreditCard) JSON.deserialize(newCreditCard, ContactService.CreditCard.class);
             paymentProfileId = ContactService.createProfile(creditCard, quoteIds);
-        } catch (Exception ex) {
-            //throw new AuraHandledException('An error occurred during payment process');
-            CustomErrorExceptionHandlerException.LogException(ex);
-            System.debug('--ex----'+ex+'-line--'+ex.getLineNumber());
-            String exceptionStr = '';
-            if( ex.getMessage().contains(':')){
-                exceptionStr = ex.getMessage().substringAfter(':');
-            }
-            if( exceptionStr != ''){
-                throw new AuraHandledException(exceptionStr);
-            }else{
-                throw new AuraHandledException(ex.getMessage());
-            }
-        }
+        
         return paymentProfileId;
     }
 
     @AuraEnabled
     public static String getPaymentInfo(List<String> quoteIds) {
         ContactService.PaymentInfo paymentInfo;
-        try {
+       
             paymentInfo = ContactService.getPaymentInfo(quoteIds);
             system.debug('paymentInfo : '+ paymentInfo);
-        } catch (Exception ex) {
-            CustomErrorExceptionHandlerException.LogException(ex);
-            throw new AuraHandledException('An error occurred during retrieving credit card information');
-        }
+        
         return JSON.serialize(paymentInfo);
     }
 

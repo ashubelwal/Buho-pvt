@@ -65,7 +65,7 @@ export default class Buho_finalizeVehicleDetails extends LightningElement {
     // Handle input changes from buho_input component
     handleInputChange(event) {
         const { name, value } = event.detail;
-        this.vehicleDetails = { ...this.vehicleDetails, [name]: value };
+        this.vehicleDetails = { ...this.vehicleDetails, [name]: value?.toUpperCase() };
         console.log('Vehicle Details', this.vehicleDetails);
     }
 
@@ -274,10 +274,10 @@ export default class Buho_finalizeVehicleDetails extends LightningElement {
     }
 
     /**
- * Processes vehicle details by removing unwanted fields and keeping only specified ones
- * @param {Object} vehicleDetails - The original vehicle details object
- * @returns {Object} - Processed vehicle details with only required fields
- */
+     * Processes vehicle details by removing unwanted fields and keeping only specified ones
+     * @param {Object} vehicleDetails - The original vehicle details object
+     * @returns {Object} - Processed vehicle details with only required fields
+     */
     processVehicleData(vehicleDetails) {
         if (!vehicleDetails || typeof vehicleDetails !== 'object') {
             return null;
@@ -347,6 +347,23 @@ export default class Buho_finalizeVehicleDetails extends LightningElement {
      * @returns {boolean} Always returns true.
      */
     @api validate() {
+        let isValid = true;
+        const buhoInputs = this.template.querySelectorAll('c-buho_input');
+            
+        buhoInputs.forEach(input => {
+            try {
+                if (input && input.reportValidity && typeof input.reportValidity === 'function') {
+                    if (!input.reportValidity()) {
+                        isValid = false;
+                    }
+                }
+            } catch (error) {
+                console.warn('CI Error validating input:', error);
+            }
+        });
+        if(!isValid)  {
+            return false;
+        }
         // Validate required fields
         const requiredFields = {
             'Vin__c': 'VIN Number',

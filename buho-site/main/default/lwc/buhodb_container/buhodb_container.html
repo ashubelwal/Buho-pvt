@@ -1,0 +1,75 @@
+<template>
+    <div class="dashboard-container">
+        <!-- Mobile Sidebar Overlay -->
+        <div class={overlayClass} onclick={handleOverlayClick}></div>
+
+        <!-- Sidebar Menu -->
+        <c-buhodb_menu 
+            current-view={currentView}
+            is-mobile-open={isMobileSidebarOpen}
+            onnavigate={handleNavigate}>
+        </c-buhodb_menu>
+
+        <!-- Main Content Area -->
+        <div class="dashboard-main">
+            <!-- Header -->
+            <c-buhodb_header 
+                onmenutoggle={handleMenuToggle}>
+            </c-buhodb_header>
+
+            <!-- Dynamic Content Area -->
+            <div class={dashboardContentClass} onloadingstatus={handleLoadingStatus}>
+                <template if:true={showDashboard}>
+                    <c-buhodb_dashboardlanding 
+                        onhashupdate={handleHashUpdate}>
+                    </c-buhodb_dashboardlanding>
+                </template>
+
+                <template if:true={showPolicies}>
+                    <c-buhodb_mypolicy
+                        sub-view={policySubView}
+                        onhashupdate={handleHashUpdate}>
+                    </c-buhodb_mypolicy>
+                </template>
+
+                <template if:true={showVehicles}>
+                    <c-buhodb_myvehicles></c-buhodb_myvehicles>
+                </template>
+
+                <template if:true={showDrivers}>
+                    <c-buhodb_mydrivers></c-buhodb_mydrivers>
+                </template>
+
+                <template if:true={showQuotes}>
+                    <c-buhodb_myquotes></c-buhodb_myquotes>
+                </template>
+
+                <template if:true={showTransactions}>
+                    <c-buhodb_mytransactions></c-buhodb_mytransactions>
+                </template>
+
+                <template if:true={showDocuments}>
+                    <c-buhodb_mydocuments></c-buhodb_mydocuments>
+                </template>
+
+                <template if:true={showNotifications}>
+                    <div class="dashboard-section">
+                        <h2 class="dashboard-section-title">Notifications</h2>
+                        <p>Notifications content coming soon...</p>
+                    </div>
+                </template>
+
+                <template if:true={showSettings}>
+                    <c-buhodb_settings></c-buhodb_settings>
+                </template>
+            </div>
+        </div>
+
+        <!-- Global Loading Overlay -->
+        <template if:true={isLoading}>
+            <div class="loading-overlay">
+                <img src={loadingIconUrl} alt="Loading..." class="loading-icon" />
+            </div>
+        </template>
+    </div>
+</template>

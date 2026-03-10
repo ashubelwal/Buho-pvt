@@ -39,6 +39,7 @@ public without sharing class PropertyDamageCalculation {
                                         }
                                     }
                                 }
+                                system.debug('propertyDamageData@@###'+ propertyDamageData);
                                 propertyDamageData = calculateVehicleAge(propertyDamageData);
                                 propertyDamageData = calculateDatesInBetween(propertyDamageData);
                                 System.debug('Property Damage Data'+propertyDamageData);
@@ -119,13 +120,12 @@ public without sharing class PropertyDamageCalculation {
                             // **Retrieve Field List Dynamically from Custom Metadata**
                             List<Term_Mapping__mdt> metadataRecords = termMetadataRecords;
                             List<String> fieldList = new List<String>();
-                            
+                           
                             for (Term_Mapping__mdt meta : metadataRecords) {
                                 if(meta.Term__c == fieldValues.get('Term__c')){
                                     if (availableTermsList.contains(meta.Value__c)) {
                                         str = str + '_' + meta.Value__c;
                                         fieldList.add(meta.Value__c);
-                                        
                                     } else {
                                         str = str + '_' + 'Term_Daily__c' ;  // This else case is redundant; it's the same as the if case
                                         fieldList.add('Term_Daily__c');
@@ -240,7 +240,7 @@ public without sharing class PropertyDamageCalculation {
         return mapData;
     }
     // Evaluating the expression to calculate the values
-    private static Decimal evaluateExpression(String expression) {
+    public static Decimal evaluateExpression(String expression) {
         try {
             // Remove spaces
             expression = expression.replace(' ', '');

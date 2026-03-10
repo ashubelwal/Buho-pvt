@@ -67,7 +67,7 @@ public without sharing class LiabilityCalculation {
             try{
                 Date startDate = Date.valueOf(mapData.get('Start_Date_for_Coverage__c'));
                 Date endDate = Date.valueOf(mapData.get('End_Date_for_Coverage__c'));
-                Integer daysBetween = startDate.daysBetween(endDate);
+                Integer daysBetween = startDate == endDate ? 1 : startDate.daysBetween(endDate);
                 mapData.put('Days_between_Start_and_End_Date',String.valueOf(daysBetween));
             }catch(Exception e){
                 // // Log the exception and return an error response

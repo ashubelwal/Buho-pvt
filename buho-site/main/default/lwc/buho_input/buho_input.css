@@ -1,0 +1,91 @@
+/* Tooltip styles for buho_input component */
+
+/* Label with tooltip wrapper */
+.label-with-tooltip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+}
+
+/* Tooltip icon wrapper */
+.tooltip-icon-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    cursor: help;
+}
+
+/* Info icon styling */
+.tooltip-icon {
+    color: #6B7280;
+    font-size: 14px;
+    transition: color 0.2s ease;
+}
+
+.tooltip-icon-wrapper:hover .tooltip-icon {
+    color: #0070d2;
+}
+
+/* Tooltip text (hidden by default) */
+.tooltip-text {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #1F2937;
+    color: #FFFFFF;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    line-height: 1.4;
+    white-space: nowrap;
+    z-index: 1000;
+    pointer-events: none;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    max-width: 300px;
+    white-space: normal;
+    width: max-content;
+}
+
+/* Tooltip arrow */
+.tooltip-text::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #1F2937;
+}
+
+/* Show tooltip on hover */
+.tooltip-icon-wrapper:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Checkbox-specific tooltip styling */
+.custom-checkbox .tooltip-icon-wrapper {
+    display: inline-flex;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+.custom-checkbox label {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+/* Adjust tooltip position for mobile */
+@media (max-width: 768px) {
+    .tooltip-text {
+        max-width: 250px;
+        font-size: 11px;
+    }
+}

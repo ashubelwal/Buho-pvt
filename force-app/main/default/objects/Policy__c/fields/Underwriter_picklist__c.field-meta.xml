@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Underwriter_picklist__c</fullName>
+    <label>Underwriter</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Chubb</fullName>
+                <default>false</default>
+                <label>Chubb</label>
+            </value>
+            <value>
+                <fullName>Mapfre</fullName>
+                <default>false</default>
+                <label>Mapfre</label>
+            </value>
+            <value>
+                <fullName>Qualitas</fullName>
+                <default>false</default>
+                <label>Qualitas</label>
+            </value>
+            <value>
+                <fullName>GNP</fullName>
+                <default>false</default>
+                <label>GNP</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

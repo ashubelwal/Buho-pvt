@@ -1,0 +1,189 @@
+<template>
+    <div class="pd-container">
+        <!-- Back Navigation Bar -->
+        <div class="pd-back-bar">
+            <button class="pd-btn-back" onclick={handleBackToList}>
+                <img src={chevronLeftIconUrl} alt="" class="pd-icon-back" />
+                Back to Drivers
+            </button>
+        </div>
+
+        <!-- Loading State -->
+        <template if:true={isLoading}>
+            <div class="pd-loading">
+                <lightning-spinner alternative-text="Loading driver details..." size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+            <template if:true={driverDetail}>
+                <!-- ── Personal Information Section ── -->
+                <div class="pd-section">
+                    <button class="pd-section-header" onclick={togglePersonal}>
+                        <img src={chevronDownIconUrl} alt="" class={personalChevronClass} />
+                        <h2 class="pd-section-title">Personal Information</h2>
+                    </button>
+                    <template if:true={showPersonalSection}>
+                        <div class="pd-section-body">
+                            <div class="pd-field-grid">
+                                <div class="pd-field">
+                                    <span class="pd-field-label">First Name</span>
+                                    <span class="pd-field-value">{formatted.firstName}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Last Name</span>
+                                    <span class="pd-field-value">{formatted.lastName}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Date of Birth</span>
+                                    <span class="pd-field-value">{formatted.dob}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Age Range</span>
+                                    <span class="pd-field-value">{formatted.ageRange}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Driver Type</span>
+                                    <span class="pd-field-value">{formatted.driverType}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Email</span>
+                                    <span class="pd-field-value">{formatted.email}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Phone</span>
+                                    <span class="pd-field-value">{formatted.phone}</span>
+                                </div>
+                                <div class="pd-field pd-field-checkbox">
+                                    <span class="pd-field-label">Primary Insured</span>
+                                    <span class="pd-field-value">
+                                        <span class={primaryInsuredCheckClass}></span>
+                                    </span>
+                                </div>
+
+                                <div class="pd-field pd-field-checkbox">
+                                    <span class="pd-field-label">Default</span>
+                                    <span class="pd-field-value">
+                                        <span class={defaultCheckClass}></span>
+                                    </span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- ── Address Section ── -->
+                <div class="pd-section">
+                    <button class="pd-section-header" onclick={toggleAddress}>
+                        <img src={chevronDownIconUrl} alt="" class={addressChevronClass} />
+                        <h2 class="pd-section-title">Address</h2>
+                    </button>
+                    <template if:true={showAddressSection}>
+                        <div class="pd-section-body">
+                            <div class="pd-field-grid">
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Address</span>
+                                    <span class="pd-field-value">{formatted.address}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Address Line 2</span>
+                                    <span class="pd-field-value">{formatted.addressLine2}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">City</span>
+                                    <span class="pd-field-value">{formatted.city}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">State / Province</span>
+                                    <span class="pd-field-value">{formatted.stateProvince}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Country</span>
+                                    <span class="pd-field-value">{formatted.country}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Postal Code</span>
+                                    <span class="pd-field-value">{formatted.postalCode}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- ── License Information Section ── -->
+                <div class="pd-section">
+                    <button class="pd-section-header" onclick={toggleLicense}>
+                        <img src={chevronDownIconUrl} alt="" class={licenseChevronClass} />
+                        <h2 class="pd-section-title">License Information</h2>
+                    </button>
+                    <template if:true={showLicenseSection}>
+                        <div class="pd-section-body">
+                            <div class="pd-field-grid">
+                                <div class="pd-field">
+                                    <span class="pd-field-label">License Number</span>
+                                    <span class="pd-field-value">{formatted.licenseNumber}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">License State</span>
+                                    <span class="pd-field-value">{formatted.licenseState}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">License Country</span>
+                                    <span class="pd-field-value">{formatted.licenseCountry}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">License Expiration</span>
+                                    <span class="pd-field-value">{formatted.licenseExpire}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- ── Related Records Section ── -->
+                <div class="pd-section">
+                    <button class="pd-section-header" onclick={toggleRelated}>
+                        <img src={chevronDownIconUrl} alt="" class={relatedChevronClass} />
+                        <h2 class="pd-section-title">Related Records</h2>
+                    </button>
+                    <template if:true={showRelatedSection}>
+                        <div class="pd-section-body">
+                            <div class="pd-field-grid">
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Policy</span>
+                                    <span class="pd-field-value">{formatted.policyName}</span>
+                                </div>
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Vehicle</span>
+                                    <span class="pd-field-value">{formatted.vehicleName}</span>
+                                </div>
+
+                                <div class="pd-field">
+                                    <span class="pd-field-label">Created At</span>
+                                    <span class="pd-field-value">{formatted.createdAt}</span>
+                                </div>
+                                <div class="pd-field pd-field-empty"></div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+            </template>
+
+            <!-- Error State -->
+            <template if:false={driverDetail}>
+                <div class="pd-error">
+                    <p>Unable to load driver details. Please try again.</p>
+                    <button class="pd-btn-retry" onclick={handleBackToList}>Return to Drivers</button>
+                </div>
+            </template>
+        </template>
+    </div>
+</template>
