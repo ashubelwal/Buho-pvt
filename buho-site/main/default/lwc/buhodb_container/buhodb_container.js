@@ -8,6 +8,8 @@ const VALID_VIEWS = [
     'newpolicy',
     'policydetail',
     'editpolicy',
+    'renewpolicy',
+    'terminatepolicy',
     'vehicles',
     'drivers',
     'quotes',
@@ -20,10 +22,15 @@ const VALID_VIEWS = [
 export default class Buhodb_container extends LightningElement {
     @track currentView = 'dashboard';
     @track isMobileSidebarOpen = false;
+    @track isLoading = false;
 
     // Asset URLs
     get logoUrl() {
         return `${buhoAssets}/images/Logo.png`;
+    }
+
+    get loadingIconUrl() {
+        return `${buhoAssets}/images/buho_loading_icon-botheye.gif`;
     }
 
     connectedCallback() {
@@ -112,6 +119,14 @@ export default class Buhodb_container extends LightningElement {
         }
     }
 
+    /**
+     * Fired by any child/grandchild component to show or hide the global loading overlay.
+     * Dispatch with: new CustomEvent('loadingstatus', { detail: { isLoading: true/false }, bubbles: true, composed: true })
+     */
+    handleLoadingStatus(event) {
+        this.isLoading = event.detail.isLoading;
+    }
+
     // ── View state getters ──
 
     get showDashboard() {
@@ -119,14 +134,16 @@ export default class Buhodb_container extends LightningElement {
     }
 
     get showPolicies() {
-        return this.currentView === 'policies' || this.currentView === 'newpolicy' || this.currentView === 'policydetail' || this.currentView === 'editpolicy';
+        return this.currentView === 'policies' || this.currentView === 'newpolicy' || this.currentView === 'policydetail' || this.currentView === 'editpolicy' || this.currentView === 'renewpolicy' || this.currentView === 'terminatepolicy';
     }
 
-    /** Sub-view for mypolicy: 'list', 'addPolicy', 'detail', or 'editPolicy' */
+    /** Sub-view for mypolicy: 'list', 'addPolicy', 'detail', 'editPolicy', 'renewPolicy', or 'terminatePolicy' */
     get policySubView() {
         if (this.currentView === 'newpolicy') return 'addPolicy';
         if (this.currentView === 'policydetail') return 'detail';
         if (this.currentView === 'editpolicy') return 'editPolicy';
+        if (this.currentView === 'renewpolicy') return 'renewPolicy';
+        if (this.currentView === 'terminatepolicy') return 'terminatePolicy';
         return 'list';
     }
 
@@ -164,9 +181,9 @@ export default class Buhodb_container extends LightningElement {
         return this.isMobileSidebarOpen ? 'dashboard-sidebar-overlay active' : 'dashboard-sidebar-overlay';
     }
 
-    /** Remove padding for new policy (quote wizard) and edit policy views */
+    /** Remove padding for new policy (quote wizard), edit policy, renew policy, and terminate policy views */
     get dashboardContentClass() {
-        return (this.currentView === 'newpolicy' || this.currentView === 'editpolicy')
+        return (this.currentView === 'newpolicy' || this.currentView === 'editpolicy' || this.currentView === 'renewpolicy' || this.currentView === 'terminatepolicy')
             ? 'dashboard-content dashboard-content-no-padding'
             : 'dashboard-content';
     }

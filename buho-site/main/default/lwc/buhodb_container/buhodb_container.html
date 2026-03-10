@@ -18,9 +18,11 @@
             </c-buhodb_header>
 
             <!-- Dynamic Content Area -->
-            <div class={dashboardContentClass}>
+            <div class={dashboardContentClass} onloadingstatus={handleLoadingStatus}>
                 <template if:true={showDashboard}>
-                    <c-buhodb_dashboardlanding></c-buhodb_dashboardlanding>
+                    <c-buhodb_dashboardlanding 
+                        onhashupdate={handleHashUpdate}>
+                    </c-buhodb_dashboardlanding>
                 </template>
 
                 <template if:true={showPolicies}>
@@ -62,5 +64,12 @@
                 </template>
             </div>
         </div>
+
+        <!-- Global Loading Overlay -->
+        <template if:true={isLoading}>
+            <div class="loading-overlay">
+                <img src={loadingIconUrl} alt="Loading..." class="loading-icon" />
+            </div>
+        </template>
     </div>
 </template>

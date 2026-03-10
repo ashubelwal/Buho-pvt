@@ -154,32 +154,50 @@ export default class Buhodb_policyCustomButtonComponent extends NavigationMixin(
         });
     }
 
-    handleEditClick = () => {
-        sessionStorage.setItem('recordId', this.recordId);
-        // Navigate inline within the dashboard instead of a full page redirect
+    /**
+     * Show or hide the global loading overlay.
+     */
+    showLoading(isLoading) {
         this.dispatchEvent(
-            new CustomEvent('hashupdate', {
-                detail: { hash: 'editpolicy' },
+            new CustomEvent('loadingstatus', {
+                detail: { isLoading },
                 bubbles: true,
                 composed: true
             })
         );
     }
 
-    handleRenewClick = () => {
+    /**
+     * Navigate inline within the dashboard by updating the URL hash.
+     */
+    navigateToHash(hash) {
         sessionStorage.setItem('recordId', this.recordId);
-        window.location.href = '/renew/';
+        this.showLoading(true);
+        this.dispatchEvent(
+            new CustomEvent('hashupdate', {
+                detail: { hash },
+                bubbles: true,
+                composed: true
+            })
+        );
+    }
+
+    handleEditClick = () => {
+        this.navigateToHash('editpolicy');
+    }
+
+    handleRenewClick = () => {
+        this.navigateToHash('renewpolicy');
     }
 
     handleTerminateClick = () => {
-        sessionStorage.setItem('recordId', this.recordId);
-        window.location.href = '/terminate';
+        this.navigateToHash('terminatepolicy');
     }
 
     async handleDisplayClick() {
         let actionData = await preViewPdfAction({ 'policyId': this.recordId });
         if (actionData != null) {
-            window.open('/customer' + actionData, "_blank");
+            window.open('/vforcesite' + actionData, "_blank");
         }
     }
 

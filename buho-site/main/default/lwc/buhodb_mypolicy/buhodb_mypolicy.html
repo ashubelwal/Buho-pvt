@@ -79,8 +79,28 @@
         <c-buho_quote-wizard show-header="false"></c-buho_quote-wizard>
     </template>
 
+    <!-- ============== BACK TO POLICY (shared for edit / renew / terminate) ============== -->
+    <template if:true={showBackToPolicy}>
+        <div class="pd-back-bar">
+            <button class="pd-btn-back" onclick={handleBackToDetail}>
+                <img src={chevronLeftIconUrl} alt="" class="pd-icon-back" />
+                Back to Policy
+            </button>
+        </div>
+    </template>
+
     <!-- ============== EDIT POLICY ============== -->
     <template if:true={isEditPolicyView}>
         <c-nc_policy-edit-main-screen is-buho-u-i="true"></c-nc_policy-edit-main-screen>
+    </template>
+
+    <!-- ============== RENEW POLICY ============== -->
+    <template if:true={isRenewPolicyView}>
+        <c-nc_policy-edit-main-screen is-buho-u-i="true"></c-nc_policy-edit-main-screen>
+    </template>
+
+    <!-- ============== TERMINATE POLICY ============== -->
+    <template if:true={isTerminatePolicyView}>
+        <c-terminate-policy-main-screen></c-terminate-policy-main-screen>
     </template>
 </template>

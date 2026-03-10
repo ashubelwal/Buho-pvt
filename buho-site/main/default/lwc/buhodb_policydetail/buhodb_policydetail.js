@@ -188,9 +188,11 @@ export default class Buhodb_policydetail extends LightningElement {
         // Clear stored policy
         localStorage.removeItem(STORAGE_KEY);
 
-        // Notify parent to switch back to list view
+        // Notify parent (buhodb_mypolicy) to switch back to list view.
+        // buhodb_mypolicy listens via onback={handleBackToList} and then
+        // dispatches 'hashupdate' to the container to update the URL hash.
         this.dispatchEvent(
-            new CustomEvent('backtopolicies', {
+            new CustomEvent('back', {
                 bubbles: true,
                 composed: true
             })

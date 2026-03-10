@@ -13,6 +13,7 @@ import purchaseSaveDetails from '@salesforce/apex/AgentAppController.purchaseSav
 import saveInfoBeforePayment from '@salesforce/apex/AgentAppController.saveInfoBeforePayment';
 import fetchContactDetails from '@salesforce/apex/AgentAppController.fetchContactDetails';
 import updateContactDetails from '@salesforce/apex/AgentAppController.updateContactDetails';
+import updateContactRecord from '@salesforce/apex/AgentAppController.updateContactRecord';
 import paymentThroughCard from '@salesforce/apex/AgentAppController.paymentThroughCard';
 import createPolicy from '@salesforce/apex/AgentAppController.createPolicy';
 import createPolicyFromContact from '@salesforce/apex/AgentAppController.createPolicyFromContact';
@@ -147,32 +148,12 @@ export default class AgentQuickQuote extends PolicyUtils {
         }
     }
 
-    @wire(getObjectInfo, { objectApiName: CONTACT_OBJECT })
-    objectInfo({ data }) {
-        if (data) {
-            const rtInfos = data.recordTypeInfos;
-
-            Object.keys(rtInfos).forEach(rtId => {
-                const rt = rtInfos[rtId];
-
-                if (rt.name === 'Agency RT') {
-                    this.agencyRtId = rt.recordTypeId;
-                }
-
-                if (rt.name === 'Agent RT') {
-                    this.agentRtId = rt.recordTypeId;
-                }
-            });
-        }
-    }
-
 
 
     // Getter Setter......
 
     @track vehicleStateOption = [];
     @track driverStateOption = [];
-
     get agencyFilter() {
         return this.agencyRtId
             ? {
@@ -201,6 +182,25 @@ export default class AgentQuickQuote extends PolicyUtils {
             : null;
     }
 
+    @wire(getObjectInfo, { objectApiName: CONTACT_OBJECT })
+    objectInfo({ data }) {
+        if (data) {
+            const rtInfos = data.recordTypeInfos;
+
+            Object.keys(rtInfos).forEach(rtId => {
+                const rt = rtInfos[rtId];
+
+                if (rt.name === 'Agency RT') {
+                    this.agencyRtId = rt.recordTypeId;
+                }
+
+                if (rt.name === 'Agent RT') {
+                    this.agentRtId = rt.recordTypeId;
+                }
+            });
+        }
+    }
+
     get payeeName() {
         let payeename = `${this.trackVar.FirstName} ${this.trackVar.LastName}`.trim();
         this.paymentDetails['name'] = payeename;
@@ -218,17 +218,6 @@ export default class AgentQuickQuote extends PolicyUtils {
     handlePolicyRestriction(event) {
         this.errorMessage = event.detail.message;
     }
-
-    handleAgencyChange(event) {
-        this.agency = event.detail.recordId;
-        console.log('@@@',this.agency);
-    }
-
-    handleAgentChange(event) {
-        this.agent = event.detail.recordId;
-        console.log('@@@',this.agent);
-    }
-
     get liablityType() {
         return this.quoteDetails?.Coverage__c != undefined && this.quoteDetails?.Coverage__c == 'Liability' ? true : false;
     }
@@ -281,6 +270,17 @@ export default class AgentQuickQuote extends PolicyUtils {
             });
         }
         return this.years;
+    }
+
+
+    handleAgencyChange(event) {
+        this.agency = event.detail.recordId;
+        console.log('@@@', this.agency);
+    }
+
+    handleAgentChange(event) {
+        this.agent = event.detail.recordId;
+        console.log('@@@', this.agent);
     }
 
     get maxDate() {
@@ -420,8 +420,15 @@ export default class AgentQuickQuote extends PolicyUtils {
                         console.log('Result for resume Lead', result);
                         await this.getSystemTime();
                         this.existLeadDetails = JSON.parse(result);
-
-                        if (this.cmpSource == 'comm') {
+                        if (this.existLeadDetails.Agency__c) {
+                            this.agency = this.existLeadDetails.Agency__c;
+                        }
+                        if (this.existLeadDetails.Agent__c) {
+                            this.agent = this.existLeadDetails.Agent__c;
+                        }
+                        console.log(this.existLeadDetails.Agency__c, '@@@agency', this.agency);
+                        console.log(this.existLeadDetails.Agent__c, 'agent', this.agent);
+                        if (this.cmpSource === 'comm') {
                             const requestOptions = this.getRequestOptions();
                             let emailToSearch = this.existLeadDetails.Email.replace(/\+/g, '%2B');
                             console.log('Query::', this.endpointUrl + "/query?q=SELECT+Id,FirstName,LastName,Email+FROM+Contact+WHERE+Email='" + emailToSearch + "' AND Agency__c !='" + this.contactAgencyId + "' AND Agent__c !='" + this.contactAgencyId + "'");
@@ -1005,11 +1012,11 @@ export default class AgentQuickQuote extends PolicyUtils {
 
         this.policyType = this.existLeadDetails?.Policy_Type__c;
 
-        if (this.existLeadDetails?.Policy_Type__c == 'Automobile' || this.existLeadDetails?.Policy_Type__c == 'Automobile-Van-Minivan' || this.existLeadDetails?.Policy_Type__c == 'RV') {
-            this.booleanVar.isTowingCheckbox = true;
-        } else {
+        if (this.existLeadDetails?.Policy_Type__c == 'Motorcycle') {
             this.booleanVar.isTowingCheckbox = false;
             this.booleanVar.isTowing = false;
+        } else {
+            this.booleanVar.isTowingCheckbox = true;
         }
 
         if (this.existLeadDetails?.Policy_Type__c != '') {
@@ -2266,6 +2273,7 @@ export default class AgentQuickQuote extends PolicyUtils {
         // if (generateQuote.Policy_Type_picklist__c == 'Motorcycle') {
         //     generateQuote = { ...generateQuote, ['Medical__c']: '' };
         // }
+        console.log('generateQuote--->', JSON.stringify(generateQuote));
         if (this.actionType === 'newPolicyFromContact') {
             await purchaseSaveDetails({ 'quotes': JSON.stringify(generateQuote), leadId: this.contactId, 'PolicyFromLead': false })
                 .then((result) => {
@@ -2338,7 +2346,11 @@ export default class AgentQuickQuote extends PolicyUtils {
             }
             else if (this.isDownloadQuote) {
                 //console.log(window.location.origin+`/s/quoterate?Id=${this.quoteId}`)
-                window.open(`/apex/selectedQuoteNewRate?Id=${this.quoteId}`, "_blank");
+                if (this.cmpSource == 'comm') {
+                    window.open(`/customer/apex/selectedQuoteNewRate?Id=${this.quoteId}`, "_blank");
+                } else {
+                    window.open(`/apex/selectedQuoteNewRate?Id=${this.quoteId}`, "_blank");
+                }
             }
 
 
@@ -2416,7 +2428,8 @@ export default class AgentQuickQuote extends PolicyUtils {
 
                 this.booleanVar.isLoading = true;
                 if (this.actionType === 'newPolicyFromContact') {
-                    await updateContactDetails({
+
+                    /*await updateContactDetails({
                         'Istowing': this.customerData?.Is_towing__c == 'Yes' ? true : false,
                         'contactId': this.contactId,
                         'termOptions': JSON.stringify(this.fetchTermOptions()),
@@ -2426,12 +2439,14 @@ export default class AgentQuickQuote extends PolicyUtils {
                         'WatercraftDetails': this.allQuote.Policy_Type_picklist == 'Watercraft' ? '' : '',    // update watercraftDeatils JSON ...................................................
                         'vehicledetails': this.allQuote.Policy_Type_picklist != 'Watercraft' ? JSON.stringify(this.fetchVehicleData()) : '',
                         'quoteDetails': JSON.stringify(this.fetchQuoteData())
-                    }).then((result) => {
-                        console.log('result', result);
-                        this.activeSectionName = 'payment';
-                        let openAccordion = this.template.querySelector('.agentDashboard');
-                        openAccordion.activeSectionName = this.activeSectionName;
-                    })
+                    })*/
+                    this.updateContactRecordDetails()
+                        .then((result) => {
+                            console.log('result', result);
+                            this.activeSectionName = 'payment';
+                            let openAccordion = this.template.querySelector('.agentDashboard');
+                            openAccordion.activeSectionName = this.activeSectionName;
+                        })
                 } else {
                     await saveInfoBeforePayment({
                         'leadId': this.leadId,
@@ -2477,6 +2492,29 @@ export default class AgentQuickQuote extends PolicyUtils {
                 else { this.showToastEvent('Details are not correct!', 'Please fill out all the required fields.', 'error'); }
             }
         }
+    }
+
+    async updateContactRecordDetails() {
+        const contactInstance = {
+            Id: this.contactId,
+            Is_towing__c: this.customerData?.Is_towing__c === 'Yes' ? true : false,
+            Term_options__c: JSON.stringify(this.fetchTermOptions()),
+            Driver_details__c: JSON.stringify(this.fetchDriverData()),
+            Terms_Alert__c: JSON.stringify(this.fetchTermAndAlert()),
+            Towing__c: JSON.stringify(this.addedTowed),
+            Watercraft_Detail__c: this.allQuote.Policy_Type_picklist === 'Watercraft' ? '' : '',
+            Vehicle_details__c: this.allQuote.Policy_Type_picklist !== 'Watercraft' ? JSON.stringify(this.fetchVehicleData()) : '',
+            Quote_Details__c: JSON.stringify(this.fetchQuoteData())
+        }
+        if (this.agency) {
+            contactInstance["Agency__c"] = this.agency;
+        }
+
+        if (this.agent) {
+            contactInstance["Agent__c"] = this.agent;
+        }
+        const response = await updateContactRecord({ contactRecord: contactInstance });
+        return response;
     }
 
     showToastmethod(variant, title, message) {
@@ -2872,23 +2910,14 @@ export default class AgentQuickQuote extends PolicyUtils {
 
         // update Contact details.....
         if (this.actionType === 'newPolicyFromContact') {
-            await updateContactDetails({
-                'Istowing': this.customerData?.Is_towing__c == 'Yes' ? true : false,
-                'contactId': this.contactId,
-                'termOptions': '',
-                'driverDetails': '',
-                'termsAlert': '',
-                'towedlistJSON': JSON.stringify(this.addedTowed),
-                'WatercraftDetails': this.allQuote.Policy_Type_picklist == 'Watercraft' ? '' : '',  // update watercraftDeatils JSON ...................................................
-                'vehicledetails': this.allQuote.Policy_Type_picklist != 'Watercraft' ? JSON.stringify(this.fetchVehicleData()) : '',
-                'quoteDetails': JSON.stringify(this.fetchQuoteData())
-            }).then((result) => {
-                console.log('result', result);
-                data = result;
-                this.booleanVar.isLoading = false;
-            })
+            await this.updateContactRecordDetails()
+                .then((result) => {
+                    console.log('result', result);
+                    data = result;
+                    this.booleanVar.isLoading = false;
+                })
         } else {
-            console.log('Calling saveLeadDetailsintodApex method');
+            console.log('Calling saveLeadDetailsintodApex method', this.fetchLeadData());
             // Saving Data in Lead......
             data = await this.saveLeadDetailsintoApex(JSON.stringify(this.fetchLeadData()), JSON.stringify(this.fetchQuoteData()), JSON.stringify(this.fetchVehicleData()), JSON.stringify(this.addedTowed));
             console.log('OUTPUT : 123fldskj', data);
@@ -3098,20 +3127,11 @@ export default class AgentQuickQuote extends PolicyUtils {
 
         // update Contact details.....
         if (this.actionType === 'newPolicyFromContact') {
-            await updateContactDetails({
-                'Istowing': this.customerData?.Is_towing__c == 'Yes' ? true : false,
-                'contactId': this.contactId,
-                'termOptions': '',
-                'driverDetails': '',
-                'termsAlert': '',
-                'towedlistJSON': JSON.stringify(this.addedTowed),
-                'WatercraftDetails': this.allQuote.Policy_Type_picklist == 'Watercraft' ? '' : '',  // update watercraftDeatils JSON ...................................................
-                'vehicledetails': this.allQuote.Policy_Type_picklist != 'Watercraft' ? JSON.stringify(this.fetchVehicleData()) : '',
-                'quoteDetails': JSON.stringify(this.fetchQuoteData())
-            }).then((result) => {
-                console.log('result', result);
-                this.booleanVar.isLoading = false;
-            })
+            await this.updateContactRecordDetails()
+                .then((result) => {
+                    console.log('result', result);
+                    this.booleanVar.isLoading = false;
+                })
         } else {
             // Saving Data in Lead......
             this.saveLeadDetailsintoApex(JSON.stringify(this.fetchLeadData()), JSON.stringify(this.fetchQuoteData()), JSON.stringify(this.fetchVehicleData()), JSON.stringify(this.addedTowed));

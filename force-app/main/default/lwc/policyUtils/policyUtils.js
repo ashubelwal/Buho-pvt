@@ -58,7 +58,7 @@ export default class PolicyUtils extends LightningElement {
         startDate: '', endDate: '', startTime: '', endTime: '', vehicleValue: '', qualitasRatevalue: '', qualitasDays: '', chubbDays: '', chubbRateValue: '', mapfreRatevalue: '',
         mapfreDays: '', Is_there_a_driver_under_21__c: '', Salvage_Vehicle__c: '', Is_the_vehicle_used_for_business_purpose__c: '', Is_this_a_Rental_Vehicle__c: '', MannualMake: '',
         vehicleType: '', FirstName: '', LastName: '', Is_towing__c: '', Liability__c: '', Policy_Type__c: '', Make__c: '', Model__c: '', Vehicle_Type__c: '', MannualModel: '',
-        Value__c: '', Year__c: '', Electric_Hybrid__c : false, Coverage__c: false, Territory__c: '', Vehicle_sub_type__c: '', Email: '', Phone: '', Vin__c: '', Registered_Country__c: '', Registered_State__c: '', Registered_Plate__c: '',
+        Value__c: '', Year__c: '', Electric_Hybrid__c: false, Coverage__c: false, Territory__c: '', Vehicle_sub_type__c: '', Email: '', Phone: '', Vin__c: '', Registered_Country__c: '', Registered_State__c: '', Registered_Plate__c: '',
         paymentZip: '', paymentCity: '', paymentState: '', paymentCountry: '', paymentStreet: '', vehicleDob: '', lienHolderCountrycmbx: '', companyCountrycmbx: ''
     }
 
@@ -660,8 +660,19 @@ export default class PolicyUtils extends LightningElement {
             }
         }
 
-        if(event.target?.name == 'Vehicle_sub_type__c'){
+        if (event.target?.name == 'Vehicle_sub_type__c') {
             this.policyType = event.target?.value;
+
+            if (this.policyType == 'Motorcycle') {
+                this.booleanVar.isTowingCheckbox = false;
+                this.booleanVar.isTowing = false;
+            } else {
+                this.booleanVar.isTowingCheckbox = true;
+                if (this.booleanVar?.isTowingChecked == true) {
+                    this.booleanVar.isTowing = true;
+                }
+            }
+
             this.customerData = { ...this.customerData, ['Policy_Type__c']: event.target?.value };
             this.customerData = { ...this.customerData, ['Vehicle_sub_type__c']: event.target?.value };
             this.customerData = { ...this.customerData, ['Vehicle_Type__c']: event.target?.value };
@@ -687,7 +698,7 @@ export default class PolicyUtils extends LightningElement {
         }
 
         if (event.target?.name === 'Electric_Hybrid__c') {
-            this.customerData = { ...this.customerData,  Electric_Hybrid__c: event.target.checked };
+            this.customerData = { ...this.customerData, Electric_Hybrid__c: event.target.checked };
             this.trackVar = { ...this.trackVar, Electric_Hybrid__c: event.target.checked };
         }
 
@@ -1128,7 +1139,7 @@ export default class PolicyUtils extends LightningElement {
             'Phone': this.customerData?.Phone,
             'Policy_Type__c': this.customerData?.Policy_Type__c,
             'Vehicle_Type__c': this.customerData?.Policy_Type__c,
-            'Vehicle_sub_type__c' : this.customerData?.Policy_Type__c,
+            'Vehicle_sub_type__c': this.customerData?.Policy_Type__c,
             'Liability__c': this.customerData?.Coverage__c == 'Complete' ? false : true,
             'Is_towing__c': this.customerData?.Is_towing__c == 'Yes' ? true : false,
         };
@@ -1143,11 +1154,10 @@ export default class PolicyUtils extends LightningElement {
             data['Id'] = this.leadId;
         }
 
-        if(this.agency) {
+        if (this.agency) {
             data['Agency__c'] = this.agency;
         }
-
-        if(this.agent) {
+        if (this.agent) {
             data['Agent__c'] = this.agent;
         }
 
@@ -1175,15 +1185,6 @@ export default class PolicyUtils extends LightningElement {
             'Territory__c': this.customerData?.territory,
         }
 
-        if(this.agency) {
-            data['Agency__c'] = this.agency;
-        }
-
-        if(this.agent) {
-            data['Agent__c'] = this.agent;
-        }
-
-
         if (this.booleanVar.isNorthbound === true) {
             data['Territory__c'] = 'Northbound';
         }
@@ -1191,7 +1192,8 @@ export default class PolicyUtils extends LightningElement {
         if (this.booleanVar.isNorthbound === false) {
             data['Vehicle_sub_type__c'] = this.customerData?.Vehicle_sub_type__c;
         }
-        console.log('Output customerData', JSON.stringify(this.customerData));        
+
+        console.log('Output customerData', JSON.stringify(this.customerData));
         console.log('Exist quote deta', JSON.stringify(this.existQuoteDetails));
         if (this.customerData?.QuoteId !== null && this.customerData?.QuoteId !== undefined) {
             data['Id'] = this.customerData?.QuoteId;
@@ -1337,15 +1339,15 @@ export default class PolicyUtils extends LightningElement {
         console.log('quoteJSON', quoteJSON);
         console.log('vechileJSON', vechileJSON);
         console.log('towedJSON', towedJSON);
-        
+
         try {
-            const result = await saveLeadDetails({ 
-                'leadJson': leadJSON, 
-                'quoteJSON': quoteJSON, 
-                'vehicleJSON': vechileJSON, 
-                'towedlistJSON': towedJSON 
+            const result = await saveLeadDetails({
+                'leadJson': leadJSON,
+                'quoteJSON': quoteJSON,
+                'vehicleJSON': vechileJSON,
+                'towedlistJSON': towedJSON
             });
-            
+
             if (result) {
                 console.log('Lead has been saved');
                 const data = JSON.parse(result);
@@ -1356,7 +1358,7 @@ export default class PolicyUtils extends LightningElement {
             }
             return null; // In case result is falsy
         } catch (error) {
-            console.log('Error in saving quote--->',error);
+            console.log('Error in saving quote--->', error.message);
             throw error; // Re-throw the error to be caught by the caller
         }
     }
@@ -1518,8 +1520,8 @@ export default class PolicyUtils extends LightningElement {
                     // );
                     console.log('item.Vehicle_Type__c.toLowerCase()', item.Vehicle_Type__c);
                     // if (valueExists) {
-                        let label = item.Make__c + ' ' + item.Model__c + ' ' + item.Year__c + ' - ' + (item.Vin__c != undefined ? item.Vin__c : '') + '';
-                        contactVehicles.push({ 'value': item.Id, 'label': label });
+                    let label = item.Make__c + ' ' + item.Model__c + ' ' + item.Year__c + ' - ' + (item.Vin__c != undefined ? item.Vin__c : '') + '';
+                    contactVehicles.push({ 'value': item.Id, 'label': label });
                     // }
 
                 });
@@ -1599,7 +1601,7 @@ export default class PolicyUtils extends LightningElement {
 
                 driver.showDeleteButton = false;
                 this.newDriver = { ...driver };
-                console.log('Selected Driver : ',this.newDriver);
+                console.log('Selected Driver : ', this.newDriver);
                 this.selectedDriverLicense = DriverId;
             }
         })

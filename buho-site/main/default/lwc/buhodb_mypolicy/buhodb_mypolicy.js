@@ -8,7 +8,7 @@ export default class Buhodb_mypolicy extends LightningElement {
     @track selectedFilter = 'All Policies';
     @track selectedFilterValue = 'all';
     @track isDropdownOpen = false;
-    @track currentSubView = 'list'; // 'list', 'detail', or 'addPolicy'
+    @track currentSubView = 'list'; // 'list', 'detail', 'addPolicy', 'editPolicy', 'renewPolicy', or 'terminatePolicy'
     @track allPolicies = [];
     @track error;
 
@@ -22,11 +22,40 @@ export default class Buhodb_mypolicy extends LightningElement {
     }
     set subView(value) {
         if (value) {
+            // Track pending loading-off for edit/renew/terminate (loader is shown by the button component)
+            if (value === 'editPolicy' || value === 'renewPolicy' || value === 'terminatePolicy') {
+                this._pendingLoadingOff = true;
+            }
             this.currentSubView = value;
             if (value === 'detail') {
                 this._restorePolicyFromStorage();
             }
         }
+    }
+
+    renderedCallback() {
+        // Once the child component for edit/renew/terminate is rendered, hide the global loader
+        if (this._pendingLoadingOff && (this.isEditPolicyView || this.isRenewPolicyView || this.isTerminatePolicyView)) {
+            // eslint-disable-next-line @lwc/lwc/no-async-operation
+            setTimeout(() => {
+                this._dispatchLoading(false);
+            }, 0);
+        }
+    }
+
+    /**
+     * Dispatch global loading status event (caught by buhodb_container).
+     * Any child component can reuse this pattern.
+     */
+    _dispatchLoading(isLoading) {
+        this._pendingLoadingOff = isLoading;
+        this.dispatchEvent(
+            new CustomEvent('loadingstatus', {
+                detail: { isLoading },
+                bubbles: true,
+                composed: true
+            })
+        );
     }
 
     // ── Wire: All policies (list view) ──
@@ -58,6 +87,10 @@ export default class Buhodb_mypolicy extends LightningElement {
         return `${buhoAssets}/images/plus-icon.svg`;
     }
 
+    get chevronLeftIconUrl() {
+        return `${buhoAssets}/images/chevron-left.svg`;
+    }
+
     // ──────────────────────────────────────
     //  View state helpers
     // ──────────────────────────────────────
@@ -76,6 +109,18 @@ export default class Buhodb_mypolicy extends LightningElement {
 
     get isEditPolicyView() {
         return this.currentSubView === 'editPolicy';
+    }
+
+    get isRenewPolicyView() {
+        return this.currentSubView === 'renewPolicy';
+    }
+
+    get isTerminatePolicyView() {
+        return this.currentSubView === 'terminatePolicy';
+    }
+
+    get showBackToPolicy() {
+        return this.isEditPolicyView || this.isRenewPolicyView || this.isTerminatePolicyView;
     }
 
     // ──────────────────────────────────────
@@ -218,6 +263,20 @@ export default class Buhodb_mypolicy extends LightningElement {
         this.dispatchEvent(
             new CustomEvent('hashupdate', {
                 detail: { hash: 'policies' },
+                bubbles: true,
+                composed: true
+            })
+        );
+    }
+
+    handleBackToDetail() {
+        // Restore policy detail from storage and navigate back
+        this._restorePolicyFromStorage();
+        this.currentSubView = 'detail';
+
+        this.dispatchEvent(
+            new CustomEvent('hashupdate', {
+                detail: { hash: 'policydetail' },
                 bubbles: true,
                 composed: true
             })

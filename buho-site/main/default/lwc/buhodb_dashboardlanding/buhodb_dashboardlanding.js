@@ -4,6 +4,8 @@ import getUserPolicies from '@salesforce/apex/BuhoDashboardController.getUserPol
 import getUserVehicles from '@salesforce/apex/BuhoDashboardController.getUserVehicles';
 import getUserName from '@salesforce/apex/BuhoDashboardController.getUserName';
 
+const STORAGE_KEY = 'buhoPolicyDetailId';
+
 export default class Buhodb_dashboardlanding extends LightningElement {
     @track userName = '';
     @track allPolicies = [];
@@ -251,8 +253,25 @@ export default class Buhodb_dashboardlanding extends LightningElement {
     }
 
     // ── Event handlers ──
-    handleViewDetails() {
-        console.log('View policy details');
+    handleViewDetails(event) {
+        const { policyId } = event.detail;
+        if (!policyId) return;
+
+        // Store in localStorage so we can restore on page reload
+        localStorage.setItem(STORAGE_KEY, policyId);
+
+        // Set the selected policy and switch to detail view
+        this.selectedPolicyId = policyId;
+        this.currentSubView = 'detail';
+
+        // Tell parent container to update URL hash
+        this.dispatchEvent(
+            new CustomEvent('hashupdate', {
+                detail: { hash: 'policydetail' },
+                bubbles: true,
+                composed: true
+            })
+        );
     }
 
     handleDownloadDocuments() {

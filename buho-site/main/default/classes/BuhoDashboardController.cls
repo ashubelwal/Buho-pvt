@@ -576,7 +576,7 @@ public without sharing class BuhoDashboardController {
     }
 
     // ───────────────────────────────────────────────
-    //  USER HELPER
+    //  USER / PROFILE METHODS
     // ───────────────────────────────────────────────
 
     /**
@@ -586,6 +586,33 @@ public without sharing class BuhoDashboardController {
     @AuraEnabled(cacheable=true)
     public static String getUserName() {
         return UserInfo.getFirstName();
+    }
+
+    /**
+     * @description Returns the logged-in User record with related Contact fields.
+     *              All formatting / display logic is handled in the LWC JS layer.
+     * @return User The current user with Contact relationship fields.
+     */
+    @AuraEnabled(cacheable=true)
+    public static User getUserProfile() {
+        Id userId = UserInfo.getUserId();
+
+        List<User> users = [
+            SELECT Id, FirstName, LastName, Email, Phone, ContactId,
+                   Contact.Birthdate,
+                   Contact.Date_of_Birth__c,
+                   Contact.Phone,
+                   Contact.MailingStreet,
+                   Contact.MailingCity,
+                   Contact.MailingState,
+                   Contact.MailingPostalCode,
+                   Contact.MailingCountry
+            FROM User
+            WHERE Id = :userId
+            LIMIT 1
+        ];
+
+        return users.isEmpty() ? null : users[0];
     }
 
     /**

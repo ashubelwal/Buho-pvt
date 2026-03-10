@@ -1947,7 +1947,7 @@ public without sharing class AgentAppController {
             'Quote_Value__c, Quote_Vehicle_Make__c, Quote_Vehicle_Model__c, Quote_Vehicle_Type__c, Quote_Vehicle_Value__c, Quote_Vehicle_Year__c,'+
             'Date_of_Birth__c, Vehicle_details__c, Term_days__c, Is_towing__c, Days_in_tow__c, Towing__c,'+
             'Underwriter_picklist__c, Review_vehicle__c, Company_details__c, Lienholder_info__c, Country__c, Driver_details__c, Terms_Alert__c,'+
-            'Vehicle_sub_type__c, Term_options__c, Quote_Details__c, Watercraft_Detail__c, Liability__c, (SELECT Id, OwnerId, Name, Vehicle_Type__c, Vehicle_Year__c, Vehicle_Make__c, Vehicle_Model__c,'+
+            'Vehicle_sub_type__c, Term_options__c, Quote_Details__c, Watercraft_Detail__c, Liability__c, Agency__c, Agent__c, (SELECT Id, OwnerId, Name, Vehicle_Type__c, Vehicle_Year__c, Vehicle_Make__c, Vehicle_Model__c,'+
             'Vehicle_Value__c, Coverage__c, Term__c, Term_Days__c, Quote_Value__c, Account__c, Lead__c, Annual_Term__c, Any_Boat_Operator_Under_22__c, Broker_Policy_Fee__c, Contact__c, Date_of_Birth__c, Driver_Age__c,'+
             'End_Date_for_Coverage__c, End_Time__c, I_V_A_Mex_Tax__c, Is_the_Maximum_Speed_more_than_50_mph__c, Is_the_owner_living_in_Mexico__c, Is_there_a_driver_over_75__c, Is_there_a_driver_under_21__c, '+
             'Is_this_a_Rental_Vehicle__c, Liability_Coverage__c, Liability__c, Medical_Coverage__c, Medical__c, Net_Premium__c, Policy_Type__c, Policy_Type_picklist__c, Policy__c, Property_Damage_Liability__c, '+
@@ -2007,10 +2007,25 @@ public without sharing class AgentAppController {
             return 'Error';
         }
     }
+
+    @AuraEnabled
+    public static String updateContactRecord(Contact contactRecord) {
+        try{
+            System.debug('@@@@'+contactRecord);
+            update contactRecord;
+            return 'success';
+        } catch(Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
     
     // Update contact details by ID
+    // legacy method need to be removed after testing
     @AuraEnabled
-    public static String updateContactDetails(Boolean Istowing, String contactId, String termOptions, String driverDetails, String termsAlert, String towedlistJSON, String WatercraftDetails, String vehicledetails, String quoteDetails) {
+    public static String updateContactDetails(Boolean Istowing, String contactId,
+            String termOptions, String driverDetails, String termsAlert,
+            String towedlistJSON, String WatercraftDetails, String vehicledetails,
+            String quoteDetails) {
         if(contactId != null) {
             try{
                 Contact con = new Contact();
