@@ -1,0 +1,146 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
+        <style type="text/css">
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+                background-color: #F5F5F5;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+            table {
+                border-collapse: collapse;
+                border-spacing: 0;
+            }
+            img {
+                border: 0;
+                display: block;
+                outline: none;
+                text-decoration: none;
+            }
+            .email-container {
+                max-width: 600px;
+                margin: 0 auto;
+                background-color: #ffffff;
+            }
+            @media only screen and (max-width: 600px) {
+                .email-content {
+                    padding: 30px 20px !important;
+                }
+                .email-header {
+                    padding: 30px 20px !important;
+                }
+                .header-title {
+                    font-size: 22px !important;
+                }
+                .message-text {
+                    font-size: 14px !important;
+                }
+                .btn-primary {
+                    display: block !important;
+                    width: 100% !important;
+                    box-sizing: border-box;
+                }
+            }
+        </style>
+    </head>
+    <body style="margin: 0; padding: 0; background-color: #F5F5F5;">
+        <table role="presentation" style="width: 100%; background-color: #F5F5F5;" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="padding: 20px 0;">
+                    <table role="presentation" class="email-container" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td class="email-header" style="background: linear-gradient(135deg, #13203D 0%, #13203D 100%); padding: 40px 30px; text-align: center;">
+                                <div>
+                                    <img src="https://gobuho.com/wp-content/uploads/portal-images/Owl_logo_blue_bg.png" alt="BÚHO Insurance" style="width: 200px; height: auto; margin: 0 auto;" />
+                                </div>
+                                <h1 class="header-title" style="color: #ffffff; font-size: 28px; font-weight: 700; margin: 0; line-height: 1.3; font-family: 'Poppins', Arial, sans-serif; margin-top: -16px;">
+                                    Policy renewal reminder
+                                </h1>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="email-content" style="padding: 40px 30px; background-color: #ffffff;">
+                                <p class="message-text" style="color: #6B7280; font-size: 15px; line-height: 1.6; margin: 0 0 20px 0; font-family: 'Poppins', Arial, sans-serif;">
+                                    This is a reminder that your policy below is about to expire.
+                                </p>
+
+                                <h2 style="color: #1F2937; font-size: 18px; font-weight: 700; margin: 20px 0 10px 0; font-family: 'Poppins', Arial, sans-serif;">
+                                    Policy renewal details
+                                </h2>
+
+                                <table role="presentation" cellpadding="0" cellspacing="0" style="width: 100%; border: 1px solid #E5E7EB; border-radius: 10px; overflow: hidden;">
+                                    <tr style="background-color: #F9FAFB;">
+                                        <th align="left" style="padding: 12px 14px; font-size: 13px; color: #374151; font-weight: 700; font-family: 'Poppins', Arial, sans-serif;">Policy</th>
+                                        <th align="left" style="padding: 12px 14px; font-size: 13px; color: #374151; font-weight: 700; font-family: 'Poppins', Arial, sans-serif;">Carrier</th>
+                                        <th align="left" style="padding: 12px 14px; font-size: 13px; color: #374151; font-weight: 700; font-family: 'Poppins', Arial, sans-serif;">Expiration date</th>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 12px 14px; font-size: 14px; color: #111827; font-family: 'Poppins', Arial, sans-serif;">{!Policy__c.Name}</td>
+                                        <td style="padding: 12px 14px; font-size: 14px; color: #111827; font-family: 'Poppins', Arial, sans-serif;">{!Policy__c.Underwriter_picklist__c}</td>
+                                        <td style="padding: 12px 14px; font-size: 14px; color: #111827; font-family: 'Poppins', Arial, sans-serif;">{!Policy__c.End_Date__c}</td>
+                                    </tr>
+                                </table>
+
+                                <div style="background-color: #FEF2F8; border-left: 4px solid #E53C7B; padding: 16px; margin: 20px 0; border-radius: 10px;">
+                                    <p style="color: #1F2937; font-size: 14px; line-height: 1.6; margin: 0; font-family: 'Poppins', Arial, sans-serif;">
+                                        <strong style="color: #E53C7B;">Heads up:</strong> If you have already renewed, please disregard this notice.
+                                    </p>
+                                </div>
+
+                                <h2 style="color: #1F2937; font-size: 18px; font-weight: 700; margin: 20px 0 10px 0; font-family: 'Poppins', Arial, sans-serif;">
+                                    Vehicle summary
+                                </h2>
+
+                                <table role="presentation" cellpadding="0" cellspacing="0" style="width: 100%; border: 1px solid #E5E7EB; border-radius: 10px; overflow: hidden;">
+                                    <tr style="background-color: #F9FAFB;">
+                                        <th align="left" style="padding: 12px 14px; font-size: 13px; color: #374151; font-weight: 700; font-family: 'Poppins', Arial, sans-serif;">Vehicle</th>
+                                        <th align="left" style="padding: 12px 14px; font-size: 13px; color: #374151; font-weight: 700; font-family: 'Poppins', Arial, sans-serif;">Stated value</th>
+                                        <th align="left" style="padding: 12px 14px; font-size: 13px; color: #374151; font-weight: 700; font-family: 'Poppins', Arial, sans-serif;">Liability</th>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 12px 14px; font-size: 14px; color: #111827; font-family: 'Poppins', Arial, sans-serif;">{!Policy__c.Vehicle_Year__c} {!Policy__c.Vehicle_Make__c} {!Policy__c.Vehicle_Model__c}</td>
+                                        <td style="padding: 12px 14px; font-size: 14px; color: #111827; font-family: 'Poppins', Arial, sans-serif;">{!Policy__c.Vehicle_Value__c}</td>
+                                        <td style="padding: 12px 14px; font-size: 14px; color: #111827; font-family: 'Poppins', Arial, sans-serif;">{!Policy__c.Liability_picklist__c}</td>
+                                    </tr>
+                                </table>
+
+                                <p class="message-text" style="color: #6B7280; font-size: 15px; line-height: 1.6; margin: 22px 0 0 0; font-family: 'Poppins', Arial, sans-serif;">
+                                    For your convenience, you can quickly renew your policy online using the button below. You can also call me at 858-663-6453 extension 101 to handle it over the phone.
+                                </p>
+
+                                <div style="text-align: center; margin: 26px 0 0 0;">
+                                    <a href="https://u.gobuho.com/login" class="btn-primary" style="display: inline-block; padding: 16px 40px; background-color: #13203D; color: #ffffff; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px; font-family: 'Poppins', Arial, sans-serif;">
+                                        Log in to renew
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="email-footer" style="background-color: #13203D; padding: 30px; text-align: center;">
+                                <p style="color: rgba(255, 255, 255, 0.8); font-size: 13px; line-height: 1.6; margin: 0 0 15px 0; font-family: 'Poppins', Arial, sans-serif;">
+                                    BÚHO Insurance Brokerage<br />
+                                    Smart protection for your Mexican adventures
+                                </p>
+
+                                <p style="color: rgba(255, 255, 255, 0.8); font-size: 13px; line-height: 1.6; margin: 15px 0; font-family: 'Poppins', Arial, sans-serif;">
+                                    support@gobuho.com | 📞 1800006870
+                                </p>
+
+                                <p style="color: rgba(255, 255, 255, 0.6); font-size: 12px; margin-top: 20px; font-family: 'Poppins', Arial, sans-serif;">
+                                    © 2026 BÚHO Insurance Brokerage. All rights reserved.
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

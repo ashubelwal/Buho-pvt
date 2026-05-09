@@ -1,7 +1,7 @@
 import { LightningElement, track, api, wire } from 'lwc';
 import { loadStyle } from 'lightning/platformResourceLoader';
 import buhoAssets from '@salesforce/resourceUrl/BuhoAssets';
-import { createTransformedData } from 'c/buho_utils';
+import { createTransformedData, getCustomerRecord } from 'c/buho_utils';
 import checkalreadyExistUserAction from '@salesforce/apex/CustomerQuoteFlow.checkalreadyExistUserAction';
 import checkCommunityUserAndFetchDetails from '@salesforce/apex/NcExistingCustomerFlow.checkCommunityUserAndFetchDetails';
 import getCurrentSiteDetails from '@salesforce/apex/BuhoLoginController.getCurrentSiteDetails';
@@ -10,10 +10,9 @@ import updateLeadStep from '@salesforce/apex/BuhoLoginController.updateLeadStep'
 import agencyIdLabel from "@salesforce/label/c.Buho_AgencyId";
 import agentIdLabel from "@salesforce/label/c.Buho_AgentId";
 import USER_ID from '@salesforce/user/Id';
-import { log } from 'c/buho_utils';
 export default class Buho_quoteWizard extends LightningElement {
     @track displayHeader = true;
-    
+
     @track componentConstructor; // Holds the current component
     @track currentStep = 1; // Tracks the current step (1-indexed for display)
     @track payload = []; // Shared payload to store form data
@@ -27,6 +26,7 @@ export default class Buho_quoteWizard extends LightningElement {
     @track agencyId = agencyIdLabel;
     leadId;
     stylesLoaded = false; // Flag to prevent multiple CSS loads
+    @track isCommunityUser = false;
 
 
 
@@ -62,6 +62,11 @@ export default class Buho_quoteWizard extends LightningElement {
     // Asset URLs
     get logoUrl() {
         return `${buhoAssets}/images/Logo.svg`;
+    }
+
+    get customerRecord() {
+        console.log('@@@getCustomerRecord(this.payload)',getCustomerRecord(this.payload));
+        return getCustomerRecord(this.payload);
     }
 
     get loadingIconUrl() {
@@ -106,7 +111,7 @@ export default class Buho_quoteWizard extends LightningElement {
     }
 
     get isUserLoggedIn() {
-        !!USER_ID;
+        return !!USER_ID;
     }
 
     @wire(getCurrentSiteDetails)
@@ -131,6 +136,7 @@ export default class Buho_quoteWizard extends LightningElement {
             const parseData = JSON.parse(data);
 
             if (parseData.status == 'success' && parseData.userType) {
+                this.isCommunityUser = true;
                 const cleanedData = this.transformData(parseData);
                 console.log('BQW Cleaned Data', cleanedData);
 
@@ -153,7 +159,6 @@ export default class Buho_quoteWizard extends LightningElement {
                 });
                 if (result?.LeadInfo) {
                     this.leadId = result?.LeadInfo?.Id;
-                    console.log('onload lead result', result);
                     const transformedData = createTransformedData?.(result) || [];
                     this.payload = JSON.parse(JSON.stringify(transformedData));
                     console.log('@@@payload wizard', this.payload);
@@ -172,10 +177,10 @@ export default class Buho_quoteWizard extends LightningElement {
             console.error('BQW Error in connectedCallback:', err.message);
         }
         console.log('is user already loggedin', USER_ID);
-        if(USER_ID) {
+        if (USER_ID) {
             try {
                 updateAgency();
-            } catch(err) {
+            } catch (err) {
                 console.error('BQW Error in updating agency:', err);
             }
         }
@@ -338,7 +343,7 @@ export default class Buho_quoteWizard extends LightningElement {
             } else if (direction === 'previous' && !this.isFirstStep) {
                 this.currentStep--;
                 this.isSkipComponent(false);
-                if(USER_ID && this.currentStep < 3){
+                if (USER_ID && this.currentStep < 3) {
                     this.currentStep = 2;
                 }
                 await this.loadComponent();
@@ -390,7 +395,7 @@ export default class Buho_quoteWizard extends LightningElement {
                 console.error('2BQW Error capturing payload:', err.message);
                 return;
             }
-           
+
             this.currentStep = step;
             await this.loadComponent();
         } catch (err) {

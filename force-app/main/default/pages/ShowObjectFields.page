@@ -1,0 +1,24 @@
+<apex:page controller="ShowObjectFieldsCtrl">
+    <apex:form>
+        <apex:pageBlock title="Show Object Fields">
+            <apex:pageMessages />
+
+            <apex:pageBlockSection columns="1">
+                <apex:inputText value="{!objectName}" label="Object API Name" />
+                <apex:commandButton value="Get Fields" action="{!loadFields}" rerender="fieldsPanel,msgPanel" />
+            </apex:pageBlockSection>
+
+            <apex:outputPanel id="msgPanel">
+                <apex:pageMessages />
+            </apex:outputPanel>
+
+            <apex:outputPanel id="fieldsPanel">
+                <apex:pageBlockSection title="Fields" columns="1" rendered="{!NOT(ISNULL(fields))}">
+                    <apex:repeat value="{!fields}" var="fieldName">
+                        <apex:outputText value="{!fieldName}" /><br />
+                    </apex:repeat>
+                </apex:pageBlockSection>
+            </apex:outputPanel>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

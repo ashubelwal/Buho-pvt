@@ -1,0 +1,110 @@
+<template>
+  <div class="auth-page" style={backgroundStyle}>
+    <!-- Top-right logo bar -->
+    <div class="auth-topbar">
+      <img class="auth-logo" src={logoUrl} alt="Mex Insurance Logo" />
+      <div class="topbar-divider"></div>
+    </div>
+
+    <!-- Glassmorphism sign-up card -->
+    <div class="auth-card-wrapper">
+      <div class="auth-card">
+        <!-- Card Header -->
+        <div class="auth-card-header">
+          <p class="auth-tagline">Welcome to <span>MexInsurance&#174;</span></p>
+          <h1>Sign up</h1>
+          <p class="auth-switch-link">
+            Have an Account?&nbsp;
+            <a href="#" onclick={handleGoToLogin}>Sign in</a>
+          </p>
+        </div>
+
+        <!-- Form -->
+        <form class="auth-form" onsubmit={handleSignup}>
+          <!-- Email -->
+          <div class="form-group">
+            <label class="form-label" for="signup-email">Enter email address</label>
+            <input
+              type="email"
+              id="signup-email"
+              class="form-control"
+              placeholder="email address"
+              autocomplete="email"
+            />
+          </div>
+
+          <!-- First Name + Last Name -->
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="form-group">
+                <label class="form-label" for="signup-firstname">First Name</label>
+                <input
+                  type="text"
+                  id="signup-firstname"
+                  class="form-control"
+                  placeholder="First name"
+                  autocomplete="given-name"
+                />
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label class="form-label" for="signup-lastname">Last Name</label>
+                <input
+                  type="text"
+                  id="signup-lastname"
+                  class="form-control"
+                  placeholder="Last Name"
+                  autocomplete="family-name"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Company + Telephone -->
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="form-group">
+                <label class="form-label" for="signup-company">Company</label>
+                <input
+                  type="text"
+                  id="signup-company"
+                  class="form-control"
+                  placeholder="Company name"
+                  autocomplete="organization"
+                />
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label class="form-label" for="signup-phone">Telephone</label>
+                <input
+                  type="tel"
+                  id="signup-phone"
+                  class="form-control"
+                  placeholder="Phone number"
+                  autocomplete="tel"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            <label class="form-label" for="signup-password">Password</label>
+            <input
+              type="password"
+              id="signup-password"
+              class="form-control"
+              placeholder="Create a password"
+              autocomplete="new-password"
+            />
+          </div>
+
+          <!-- CTA -->
+          <button type="submit" class="btn-auth-primary">Sign up</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</template>

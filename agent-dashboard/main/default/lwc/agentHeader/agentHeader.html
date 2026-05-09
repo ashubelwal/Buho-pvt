@@ -1,0 +1,25 @@
+<template>
+  <header class="topbar">
+    <div style="display: flex; align-items: center; gap: 12px">
+      <!-- Mobile hamburger menu button -->
+      <div class="mobile-menu-btn" title="Menu" onclick={handleMenuToggle}>
+        <i class="bi bi-list"></i>
+      </div>
+      <h1 class="topbar-title">{pageTitle}</h1>
+    </div>
+
+    <div class="topbar-right">
+      <!-- Notification bell -->
+      <div class="topbar-icon-btn" title="Notifications">
+        <i class="bi bi-bell"></i>
+        <span class="topbar-badge"></span>
+      </div>
+
+      <!-- User info -->
+      <div class="topbar-user">
+        <span class="topbar-user-name">{userName}</span>
+        <div class="topbar-avatar-placeholder">{userInitials}</div>
+      </div>
+    </div>
+  </header>
+</template>

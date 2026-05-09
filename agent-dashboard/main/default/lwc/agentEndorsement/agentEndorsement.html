@@ -1,0 +1,65 @@
+<template>
+  <div class="section-card">
+    <div class="section-card-header">
+      <span class="section-card-title">Active Policies (Endorsement)</span>
+      <div class="table-toolbar">
+        <div class="search-bar">
+          <i class="bi bi-search"></i>
+          <input type="text" placeholder="Search Policies..." onkeyup={handleSearch} />
+        </div>
+      </div>
+    </div>
+
+    <template if:true={isLoading}>
+      <div style="padding: 24px; text-align: center">Loading active policies...</div>
+    </template>
+
+    <template if:false={isLoading}>
+      <template if:true={hasPolicies}>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Policy Number</th>
+              <th>Client</th>
+              <th>Vehicle</th>
+              <th>Status</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Premium</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template for:each={filteredPolicies} for:item="p">
+              <tr key={p.Id}>
+                <td>{p.policyNumber}</td>
+                <td>{p.client}</td>
+                <td>{p.vehicle}</td>
+                <td><span class="badge-days safe">{p.status}</span></td>
+                <td>{p.startDate}</td>
+                <td>{p.endDate}</td>
+                <td>{p.premium}</td>
+                <td>
+                  <button
+                    class="action-icon-btn edit-i"
+                    type="button"
+                    data-id={p.Id}
+                    onclick={navigateToPolicyEdit}
+                    title="Edit Policy"
+                  >
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </template>
+      <template if:false={hasPolicies}>
+        <div style="padding: 24px; text-align: center; color: #64748b">
+          No active policies found.
+        </div>
+      </template>
+    </template>
+  </div>
+</template>

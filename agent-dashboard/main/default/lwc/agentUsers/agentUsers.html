@@ -1,0 +1,225 @@
+<template>
+  <!-- ── Stat Cards ────────────────────────────────────────────── -->
+  <div class="stats-grid stats-grid-3">
+    <div class="stat-card">
+      <div class="stat-card-left">
+        <p class="stat-card-label">Total Users</p>
+        <p class="stat-card-value">{totalUsers}</p>
+      </div>
+      <div class="stat-card-icon-wrap stat-icon-purple"><i class="bi bi-person-badge"></i></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-left">
+        <p class="stat-card-label">Showing</p>
+        <p class="stat-card-value">{filteredCount}</p>
+      </div>
+      <div class="stat-card-icon-wrap stat-icon-pink"><i class="bi bi-funnel"></i></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-left">
+        <p class="stat-card-label">Pages</p>
+        <p class="stat-card-value">{totalPages}</p>
+      </div>
+      <div class="stat-card-icon-wrap stat-icon-blue">
+        <i class="bi bi-file-earmark-person"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Users Table ─────────────────────────────────────────── -->
+  <div class="section-card">
+    <div class="section-card-header">
+      <span class="section-card-title">Agency Users</span>
+      <div class="table-toolbar">
+        <div class="search-bar">
+          <i class="bi bi-search"></i>
+          <input
+            type="text"
+            placeholder="Search by name, email, phone"
+            value={searchValue}
+            onchange={handleSearch}
+          />
+        </div>
+        <button class="btn-qa primary" type="button" onclick={openCreateModal}>
+          <i class="bi bi-person-plus me-1"></i> Add User
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <template lwc:if={isLoading}>
+      <div class="placeholder-page" style="min-height: 180px">
+        <div class="placeholder-icon"><i class="bi bi-hourglass-split"></i></div>
+        <p class="placeholder-subtitle">Loading users...</p>
+      </div>
+    </template>
+
+    <!-- Error -->
+    <template lwc:elseif={hasError}>
+      <div class="placeholder-page" style="min-height: 180px">
+        <div
+          class="placeholder-icon"
+          style="background: rgba(255, 75, 75, 0.1); color: var(--danger)"
+        >
+          <i class="bi bi-exclamation-triangle"></i>
+        </div>
+        <p class="placeholder-title" style="color: var(--danger)">Error loading users</p>
+        <p class="placeholder-subtitle">{errorMessage}</p>
+      </div>
+    </template>
+
+    <!-- Data table -->
+    <template lwc:elseif={hasUsers}>
+      <div class="table-scroll-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Email</th>
+              <th>Active</th>
+              <th>Created Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template for:each={paginatedUsers} for:item="user">
+              <tr key={user.Id}>
+                <td class="fw-bold">{user.Name}</td>
+                <td>{user.Phone}</td>
+                <td>
+                  <div class="contact-cell">
+                    <span class="contact-line"><i class="bi bi-envelope"></i> {user.Email}</span>
+                  </div>
+                </td>
+                <td>
+                  <template if:true={user.IsActive}>
+                    <i class="bi bi-check-square-fill"></i>
+                  </template>
+                  <template if:false={user.IsActive}>
+                    <i class="bi bi-square"></i>
+                  </template>
+                </td>
+                <td>{user.CreatedDate}</td>
+                <td>
+                  <button
+                    class="action-icon-btn"
+                    type="button"
+                    data-id={user.Id}
+                    onclick={openUserModal}
+                    title="View Details"
+                  >
+                    <i class="bi bi-eye"></i>
+                  </button>
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination-controls">
+        <button class="btn-qa" onclick={prevPage} disabled={isFirstPage}>Previous</button>
+        <div class="page-info">{pageInfo}</div>
+        <button class="btn-qa" onclick={nextPage} disabled={isLastPage}>Next</button>
+      </div>
+    </template>
+
+    <!-- Empty state -->
+    <template lwc:else>
+      <div class="placeholder-page" style="min-height: 180px">
+        <div class="placeholder-icon"><i class="bi bi-people"></i></div>
+        <p class="placeholder-title">No users found</p>
+        <p class="placeholder-subtitle">Agents associated with your agency will appear here.</p>
+      </div>
+    </template>
+  </div>
+
+  <!-- ── View Details Modal ────────────────────────────────────── -->
+  <template lwc:if={showUserModal}>
+    <div class="modal-overlay" onclick={closeUserModal}>
+      <div class="modal-card" onclick={stopPropagation}>
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-title">User Details</h2>
+            <p class="modal-subtitle">Full information for {selectedUser.Name}</p>
+          </div>
+          <button class="modal-close-btn" type="button" onclick={closeUserModal}>
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-fields-grid">
+            <div class="modal-field">
+              <span class="modal-field-label">Full Name</span>
+              <span class="modal-field-value">{selectedUser.Name}</span>
+            </div>
+            <div class="modal-field">
+              <span class="modal-field-label">Phone</span>
+              <span class="modal-field-value">{selectedUser.Phone}</span>
+            </div>
+            <div class="modal-field full-width">
+              <span class="modal-field-label">Email</span>
+              <span class="modal-field-value">{selectedUser.Email}</span>
+            </div>
+            <div class="modal-field">
+              <span class="modal-field-label">Created Date</span>
+              <span class="modal-field-value">{selectedUser.CreatedDate}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- ── Create User Modal ────────────────────────────────────── -->
+  <template lwc:if={showCreateModal}>
+    <div class="modal-overlay" onclick={closeCreateModal}>
+      <div class="modal-card" onclick={stopPropagation}>
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-title">Create New User</h2>
+            <p class="modal-subtitle">Add a new agent to your agency.</p>
+          </div>
+          <button class="modal-close-btn" type="button" onclick={closeCreateModal} disabled={isSaving}>
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        
+        <div class="modal-body">
+            <template lwc:if={isSaving}>
+              <div class="placeholder-page" style="min-height: 150px">
+                <div class="placeholder-icon spinner-border text-primary" role="status"></div>
+                <p class="placeholder-subtitle mt-3">Creating user... please wait.</p>
+              </div>
+            </template>
+            <template lwc:else>
+                <div class="modal-fields-grid">
+                    <div class="modal-field">
+                        <label class="modal-field-label">First Name</label>
+                        <input type="text" class="form-control" data-field="FirstName" value={newUser.FirstName} onchange={handleInputChange} />
+                    </div>
+                    <div class="modal-field">
+                        <label class="modal-field-label">Last Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" data-field="LastName" value={newUser.LastName} onchange={handleInputChange} required />
+                    </div>
+                    <div class="modal-field full-width">
+                        <label class="modal-field-label">Email <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control" data-field="Email" value={newUser.Email} onchange={handleInputChange} required />
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-qa secondary" onclick={closeCreateModal} disabled={isSaving}>Cancel</button>
+          <button class="btn-qa primary" onclick={handleSaveUser} disabled={isSaving}>Create User</button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- ── Custom Toast ────────────────────────────────────── -->
+  <c-agent-toast></c-agent-toast>
+</template>

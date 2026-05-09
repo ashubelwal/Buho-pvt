@@ -1,0 +1,6 @@
+<img width="200px" height="30px" src="https://mexinsurance--c.na22.content.force.com/servlet/servlet.ImageServer?id=01515000004uv8u&oid=00D15000000NeKA&lastMod=1455732738000"> 
+<h3>Thank you for generating your Mex-Insurance from Mex-Insurance.com. </h3> We are delighted to have you as a client. </br>  We believe in building our business by responding to input from clients like you.
+<br><br>
+ Please take 30 seconds to let us know how your first interaction with our company went. <br><br>
+
+Please Click on the <a href= "http://mexinsurance.force.com/survey/salesurvey?conid={!Contact.SFID__c}" >  Survey </a> to give the response. {!Contact.SFID__c}

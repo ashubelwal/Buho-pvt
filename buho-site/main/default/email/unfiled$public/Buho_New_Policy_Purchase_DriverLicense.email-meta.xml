@@ -5,7 +5,7 @@
     <encodingKey>ISO-8859-1</encodingKey>
     <name>Buho New Policy Purchase DriverLicense</name>
     <style>none</style>
-    <subject>Your BÚHO Driver's License Policy – Drive Safely!</subject>
+    <subject>Your BÚHO Driver&apos;s License Policy – Drive Safely!</subject>
     <type>visualforce</type>
     <uiType>Aloha</uiType>
 </EmailTemplate>

@@ -273,7 +273,6 @@ export default class Buho_input extends LightningElement {
         } else if (this.isCheckbox || this.isRadio) {
             inputElement = this.template.querySelector('input[type="checkbox"], input[type="radio"]');
         }
-        console.log('@@@checking validity',inputElement);
         if (inputElement) {
             // Check native HTML5 validation
             const isValid = inputElement.checkValidity();

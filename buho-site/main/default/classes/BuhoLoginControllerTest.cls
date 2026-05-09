@@ -290,6 +290,7 @@ private class BuhoLoginControllerTest {
         
         Test.startTest();
         String result = BuhoLoginController.forgotPassword(testContact.Email);
+        BuhoLoginController.activateUser(activeUser.Id);
         Test.stopTest();
         
         // Should return generic message for security

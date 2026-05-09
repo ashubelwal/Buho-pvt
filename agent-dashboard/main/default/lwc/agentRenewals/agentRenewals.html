@@ -1,0 +1,285 @@
+<template>
+  <!-- Stat Cards (4 columns) -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-card-left">
+        <p class="stat-card-label">Due This Month</p>
+        <p class="stat-card-value">{totalDueThisMonth}</p>
+      </div>
+      <div class="stat-card-icon-wrap stat-icon-blue"><i class="bi bi-calendar-check"></i></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-left">
+        <p class="stat-card-label">Critical (&#8804;7 days)</p>
+        <p class="stat-card-value">{criticalCount}</p>
+      </div>
+      <div class="stat-card-icon-wrap stat-icon-pink"><i class="bi bi-alarm"></i></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-left">
+        <p class="stat-card-label">Contacted</p>
+        <p class="stat-card-value">2</p>
+      </div>
+      <div class="stat-card-icon-wrap stat-icon-green">
+        <i class="bi bi-telephone-outbound"></i>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-left">
+        <p class="stat-card-label">Renewed</p>
+        <p class="stat-card-value">3</p>
+      </div>
+      <div class="stat-card-icon-wrap stat-icon-blue"><i class="bi bi-arrow-repeat"></i></div>
+    </div>
+  </div>
+
+  <!-- Alert Banner -->
+  <template lwc:if={criticalCount}>
+    <div class="alert-banner">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      <div>
+        <p class="alert-banner-title">{criticalCount} policies expiring within 7 days</p>
+        <p class="alert-banner-sub">Immediate action required to prevent lapse in coverage</p>
+      </div>
+    </div>
+  </template>
+
+  <!-- Up Coming Renewals Table -->
+  <div class="section-card">
+    <div class="section-card-header">
+      <span class="section-card-title">Up Coming Renewals</span>
+      <div class="table-toolbar">
+        <div class="search-bar">
+          <i class="bi bi-search"></i>
+          <input type="text" placeholder="Search Renewals" />
+        </div>
+      </div>
+    </div>
+
+    <template if:true={isLoadingRenewals}>
+      <div style="padding: 24px; text-align: center">Loading renewals...</div>
+    </template>
+
+    <template if:false={isLoadingRenewals}>
+      <template if:true={hasRenewals}>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Policy Id</th>
+              <th>Client</th>
+              <th>Vehicle</th>
+              <th>Expiry Date</th>
+              <th>Days Until</th>
+              <th>Current Premium</th>
+              <th>Renewal Premium</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template for:each={renewals} for:item="r">
+              <tr key={r.Id}>
+                <td>{r.policyNumber}</td>
+                <td>{r.client}</td>
+                <td>{r.vehicle}</td>
+                <td>{r.expiryDate}</td>
+                <td><span class={r.badgeClass}>{r.daysUntil} days</span></td>
+                <td>{r.premium}</td>
+                <td>{r.premium}</td>
+                <td>
+                  <button
+                    class="action-icon-btn"
+                    type="button"
+                    data-id={r.Id}
+                    onclick={openDetailsModal}
+                    title="View Details"
+                  >
+                    <i class="bi bi-eye"></i>
+                  </button>
+                  <!--button
+                    class="action-icon-btn"
+                    type="button"
+                    data-id={r.Id}
+                    onclick={openEditModal}
+                    title="Edit"
+                  >
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                  <button class="action-icon-btn email" type="button" title="Send Email">
+                    <i class="bi bi-envelope-at"></i>
+                  </button-->
+                  <button class="action-icon-btn renew-i" type="button" title="Process Renewal" data-id={r.Id} onclick={navigateToPolicyRenew}>
+                    <i class="bi bi-arrow-repeat"></i>
+                  </button>
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </template>
+      <template if:false={hasRenewals}>
+        <div style="padding: 24px; text-align: center; color: #64748b">
+          No upcoming renewals found.
+        </div>
+      </template>
+    </template>
+  </div>
+
+  <!-- Renewal Details Modal -->
+  <template lwc:if={showDetailsModal}>
+    <div class="modal-overlay" onclick={closeDetailsModal}>
+      <div class="modal-card" onclick={stopPropagation}>
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-title">Renewal Details</h2>
+            <p class="modal-subtitle">Complete information for {selectedRenewal.policyNumber}</p>
+          </div>
+          <button class="modal-close-btn" type="button" onclick={closeDetailsModal}>
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Policy + Client side by side -->
+          <div class="modal-sections-row">
+            <div class="modal-section">
+              <p class="modal-section-title">Policy Information</p>
+              <div class="modal-fields-grid" style="grid-template-columns: 1fr">
+                <div class="modal-field">
+                  <span class="modal-field-label">Policy Numbers</span
+                  ><span class="modal-field-value">{selectedRenewal.policyNumber}</span>
+                </div>
+                <div class="modal-field">
+                  <span class="modal-field-label">Expiry Date</span
+                  ><span class="modal-field-value">{selectedRenewal.expiryDate}</span>
+                </div>
+                <div class="modal-field">
+                  <span class="modal-field-label">Days Until Expiry</span
+                  ><span class="modal-field-value">{selectedRenewal.daysUntil}</span>
+                </div>
+              </div>
+            </div>
+            <div class="modal-section">
+              <p class="modal-section-title">Client Information</p>
+              <div class="modal-fields-grid" style="grid-template-columns: 1fr">
+                <div class="modal-field">
+                  <span class="modal-field-label">Client Name</span
+                  ><span class="modal-field-value">{selectedRenewal.client}</span>
+                </div>
+                <div class="modal-field">
+                  <span class="modal-field-label">Email</span
+                  ><span class="modal-field-value">{selectedRenewal.clientEmail}</span>
+                </div>
+                <div class="modal-field">
+                  <span class="modal-field-label">Phone</span
+                  ><span class="modal-field-value">{selectedRenewal.clientPhone}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Vehicle Information -->
+          <div class="modal-section">
+            <p class="modal-section-title">Vehicle Information</p>
+            <div class="modal-fields-grid">
+              <div class="modal-field">
+                <span class="modal-field-label">Year</span
+                ><span class="modal-field-value">{selectedRenewal.vehicleYear}</span>
+              </div>
+              <div class="modal-field">
+                <span class="modal-field-label">Make</span
+                ><span class="modal-field-value">{selectedRenewal.vehicleMake}</span>
+              </div>
+              <div class="modal-field">
+                <span class="modal-field-label">Model</span
+                ><span class="modal-field-value">{selectedRenewal.vehicleModel}</span>
+              </div>
+              <div class="modal-field">
+                <span class="modal-field-label">VIN</span><span class="modal-field-value">—</span>
+              </div>
+            </div>
+          </div>
+          <!-- Premium Comparison -->
+          <div class="premium-comparison-box">
+            <p class="modal-section-title">Premium Comparison</p>
+            <div class="modal-fields-grid">
+              <div class="modal-field">
+                <span class="modal-field-label">Current Premium</span
+                ><span class="modal-field-value">{selectedRenewal.premium}</span>
+              </div>
+              <div class="modal-field">
+                <span class="modal-field-label">Renewal Premium</span
+                ><span class="premium-renewal-value">{selectedRenewal.premium}</span>
+              </div>
+              <div class="modal-field">
+                <span class="modal-field-label">Territory</span
+                ><span class="modal-field-value">{selectedRenewal.territory}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-modal-outline" type="button" data-id={selectedRenewal.Id} onclick={navigateToPolicyRenew}>
+            <i class="bi bi-arrow-repeat"></i> Process Renewal
+          </button>
+          <!--button class="btn-modal-save" type="button">
+            <i class="bi bi-envelope-check"></i> Save Reminder
+          </button-->
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- Edit Renewal Modal -->
+  <template lwc:if={showEditModal}>
+    <div class="modal-overlay" onclick={closeEditModal}>
+      <div class="modal-card modal-sm" onclick={stopPropagation}>
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-title">Edit Renewal</h2>
+            <p class="modal-subtitle">Update information for {selectedRenewal.policyNumber}</p>
+          </div>
+          <button class="modal-close-btn" type="button" onclick={closeEditModal}>
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-form-row">
+            <div>
+              <label class="modal-form-label" for="edit-territory">Territory</label>
+              <input
+                class="modal-form-input"
+                id="edit-territory"
+                type="text"
+                value={selectedRenewal.territory}
+              />
+            </div>
+            <div>
+              <label class="modal-form-label" for="edit-expiry">Expiry Date</label>
+              <input
+                class="modal-form-input"
+                id="edit-expiry"
+                type="date"
+                value={selectedRenewal.endDateRaw}
+              />
+            </div>
+          </div>
+          <div class="modal-form-group">
+            <label class="modal-form-label" for="edit-renewal-premium">Renewal Premium</label>
+            <input
+              class="modal-form-input"
+              id="edit-renewal-premium"
+              type="text"
+              value={selectedRenewal.premium}
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-modal-cancel" type="button" onclick={closeEditModal}>
+            <i class="bi bi-x-circle"></i> Cancel
+          </button>
+          <button class="btn-modal-save" type="button">
+            <i class="bi bi-check-circle"></i> Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  </template>
+</template>

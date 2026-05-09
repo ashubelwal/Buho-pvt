@@ -14,6 +14,7 @@ export default class AgentTermAgreement extends LightningElement {
     usDestinations;
     tripPurposes;
     termsAndAgreement = {};
+    @api isAgentPortal = false;
     
     get tripDestination() {
         return this.termsAndAgreement?.What_is_your_trip_destination_in_US__c != undefined ? this.termsAndAgreement.What_is_your_trip_destination_in_US__c : '';

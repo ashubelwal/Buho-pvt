@@ -1,0 +1,148 @@
+<template>
+  <div class="modal-overlay" onclick={closeCreateModal}>
+    <div class="modal-card" style="max-width: 600px" onclick={stopPropagation}>
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title">Add New Client</h2>
+          <p class="modal-subtitle">Contact will be linked to your agency automatically</p>
+        </div>
+        <button class="modal-close-btn" type="button" onclick={closeCreateModal}>
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-fields-grid">
+          <!-- Name -->
+          <div class="modal-field">
+            <span class="modal-field-label"
+              >First Name <span style="color: var(--danger)">*</span></span
+            >
+            <input
+              class="form-control-qa"
+              type="text"
+              placeholder="First Name"
+              data-field="firstName"
+              value={newClient.firstName}
+              oninput={handleNewClientInput}
+            />
+          </div>
+          <div class="modal-field">
+            <span class="modal-field-label"
+              >Last Name <span style="color: var(--danger)">*</span></span
+            >
+            <input
+              class="form-control-qa"
+              type="text"
+              placeholder="Last Name"
+              data-field="lastName"
+              value={newClient.lastName}
+              oninput={handleNewClientInput}
+            />
+          </div>
+          <!-- Contact -->
+          <div class="modal-field">
+            <span class="modal-field-label">Phone</span>
+            <input
+              class="form-control-qa"
+              type="tel"
+              placeholder="Phone"
+              data-field="phone"
+              value={newClient.phone}
+              oninput={handleNewClientInput}
+            />
+          </div>
+          <div class="modal-field">
+            <span class="modal-field-label">Email</span>
+            <input
+              class="form-control-qa"
+              type="email"
+              placeholder="Email"
+              data-field="email"
+              value={newClient.email}
+              oninput={handleNewClientInput}
+            />
+          </div>
+          <!-- Address -->
+          <div class="modal-field full-width">
+            <span class="modal-field-label">Street</span>
+            <input
+              class="form-control-qa"
+              type="text"
+              placeholder="Street"
+              data-field="street"
+              value={newClient.street}
+              oninput={handleNewClientInput}
+            />
+          </div>
+          <div class="modal-field">
+            <span class="modal-field-label">City</span>
+            <input
+              class="form-control-qa"
+              type="text"
+              placeholder="City"
+              data-field="city"
+              value={newClient.city}
+              oninput={handleNewClientInput}
+            />
+          </div>
+          <div class="modal-field">
+            <span class="modal-field-label">State</span>
+            <input
+              class="form-control-qa"
+              type="text"
+              placeholder="State"
+              data-field="state"
+              value={newClient.state}
+              oninput={handleNewClientInput}
+            />
+          </div>
+          <div class="modal-field">
+            <span class="modal-field-label">Postal Code</span>
+            <input
+              class="form-control-qa"
+              type="text"
+              placeholder="Postal Code"
+              data-field="postalCode"
+              value={newClient.postalCode}
+              oninput={handleNewClientInput}
+            />
+          </div>
+          <div class="modal-field">
+            <span class="modal-field-label">Country</span>
+            <input
+              class="form-control-qa"
+              type="text"
+              placeholder="Country"
+              data-field="country"
+              value={newClient.country}
+              oninput={handleNewClientInput}
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="modal-footer"
+        style="
+          display: flex;
+          justify-content: flex-end;
+          gap: 12px;
+          padding: 16px 24px;
+          border-top: 1px solid var(--border);
+        "
+      >
+        <button class="btn-qa" type="button" onclick={closeCreateModal}>Cancel</button>
+        <button
+          class="btn-qa primary"
+          type="button"
+          onclick={handleCreateClient}
+          disabled={isCreateDisabled}
+        >
+          <template lwc:if={isCreating}>
+            <i class="bi bi-hourglass-split me-1"></i> Saving...
+          </template>
+          <template lwc:else> <i class="bi bi-person-check me-1"></i> Create Client </template>
+        </button>
+      </div>
+    </div>
+  </div>
+</template>

@@ -77,7 +77,7 @@ export default class Payment extends NavigationMixin(LightningElement) {
     spinner = false;
     @track isCardLoaded = false;
     newQuoteId;
-    paymentDetails = {};
+    @track paymentDetails = {};
     paymentInfo;
     EXPMonth = '';
     EXPYear = '';
@@ -290,7 +290,7 @@ export default class Payment extends NavigationMixin(LightningElement) {
     }
 
     get address() {
-        return this.paymentDetails?.address1;
+        return this.paymentDetails?.address1 || '';
     }
 
     get address2() {
@@ -310,22 +310,22 @@ export default class Payment extends NavigationMixin(LightningElement) {
     }
 
     get otherCountryValue() {
-        return this.paymentDetails?.country;
+        return this.paymentDetails?.country || '';
     }
 
     get otherStateValue() {
-        return this.paymentDetails?.state;
+        return this.paymentDetails?.state || '';
     }
 
     get stateValue() {
-        return this.paymentDetails?.state;
+        return this.paymentDetails?.state || '';
     }
 
     get CityValue() {
-        return this.paymentDetails?.city;
+        return this.paymentDetails?.city || '';
     }
     get postalCode() {
-        return this.paymentDetails?.zip;
+        return this.paymentDetails?.zip || '';
     }
     get CardName() {
         return this.paymentDetails?.name ? this.paymentDetails?.name : '';
@@ -468,7 +468,7 @@ export default class Payment extends NavigationMixin(LightningElement) {
     }
 
     get MM() {
-        this.months.push({'label': 'Select Month', 'value': ''});
+        this.months.push({ 'label': 'Select Month', 'value': '' });
         for (let i = this.startMonthNumber; i <= 12; i++) {
             let mon = i;
             if (i <= 9) {
@@ -483,7 +483,7 @@ export default class Payment extends NavigationMixin(LightningElement) {
         return this.months;
     }
     get YYYY() {
-        this.years.push({'label': 'Select Year', 'value': ''});
+        this.years.push({ 'label': 'Select Year', 'value': '' });
         for (this.startFrom; this.startFrom < (this.currentYear + 10); this.startFrom++) {
             this.years.push({
                 'label': this.startFrom.toString(),
@@ -656,10 +656,12 @@ export default class Payment extends NavigationMixin(LightningElement) {
 
     copyAddress = (event) => {
 
-        let checked = event.target.checked;
+        let checked = event.detail.checked;
         // let addressOfbussines
         // let addressOfCard;
-        this.bussinessAddress = this.dataMap?.finalizeVehicleDetails?.Is_the_vehicle_registered_to_a_business__c == true ? this.dataMap?.finalizeVehicleDetails?.BusinessAddress__c : '';
+        this.bussinessAddress = this.dataMap?.finalizeVehicleDetails?.Is_the_vehicle_registered_to_a_business__c == true
+            ? this.dataMap?.finalizeVehicleDetails?.BusinessAddress__c
+            : '';
         //this.compnayAddress = this.leaddata.companyInfo ? this.leaddata.companyInfo : '';
 
         console.log('--addressOfUserAccount--', this.bussinessAddress);
@@ -699,7 +701,7 @@ export default class Payment extends NavigationMixin(LightningElement) {
             }
         }
 
-
+        console.log('@@@this.paymentDetails', this.paymentDetails);
 
     }
     handlePrevClick() {
@@ -890,17 +892,21 @@ export default class Payment extends NavigationMixin(LightningElement) {
     }
 
     getIpAddress = async () => {
-        const urlString = window.location.href;
-        let baseURL = urlString.substring(0, urlString.indexOf('/s/'));
-        let xmlHttp = new XMLHttpRequest();
-        xmlHttp.open("GET", baseURL + '/apex/IPAddress', false);
-        xmlHttp.send(null);
-        const ip = JSON.parse(xmlHttp.responseText).ip;
+        try {
+            const urlString = window.location.href;
+            let baseURL = urlString.substring(0, urlString.indexOf('/s/'));
+            let xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("GET", baseURL + '/apex/IPAddress', false);
+            xmlHttp.send(null);
+            const ip = JSON.parse(xmlHttp.responseText).ip;
 
-        // Handle IPv6 addresses by truncating or using only the first 15 characters
-        const formattedIp = ip.length > 15 ? ip.substring(0, 15) : ip;
+            // Handle IPv6 addresses by truncating or using only the first 15 characters
+            const formattedIp = ip.length > 15 ? ip.substring(0, 15) : ip;
 
-        this.paymentInfo = { ...this.paymentInfo, ['ip']: formattedIp };
+            this.paymentInfo = { ...this.paymentInfo, ['ip']: formattedIp };
+        } catch (e) {
+            console.warn('Unable to fetch the IP ', e)
+        }
     }
 
     createPaymentProfileAction = async () => {
@@ -1524,7 +1530,7 @@ export default class Payment extends NavigationMixin(LightningElement) {
             }
         } else {
             console.log('Inside else section for createPolicy');
-            
+
             if (this.policyType == 'Watercraft') {
                 console.log('creating watercraft real newuser ');
                 policy = await createWaterCraftPolicy({ 'leadId': this.leaddata?.Id });
@@ -1537,14 +1543,14 @@ export default class Payment extends NavigationMixin(LightningElement) {
         let resParse = JSON.parse(policy);
         this.policyDetails = resParse;
         if (resParse.status == 'success') {
-           
+
 
             this.dispatchEvent(new CustomEvent('toastevent', { detail: { variant: 'success', title: this.label.Success, message: this.label.PolicyCreated } }));
 
             //this.changesnextscreen(resParse);
         } else {
             this.generateLogs();
-            
+
             this.dispatchEvent(new CustomEvent('toastevent', { detail: { variant: 'error', title: 'Error', message: this.label.Somethingwentwrongpleasetryagainlater } }));
         }
         console.log("--createPolicy---", resParse);

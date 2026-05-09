@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Survey Template</name>
+    <style>none</style>
+    <subject>Thank you for generating a quote from mexinsurance.com.</subject>
+    <textOnly>Thank you for generating your Mex-Insurance from Mex-Insurance.com.  We are delighted to have you as a client.  We believe in building our business by responding to input from clients like you.
+
+Please take 30 seconds to let us know how your first interaction with our company went.
+
+Please Click on the  Survey  to give the response.</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

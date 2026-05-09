@@ -56,6 +56,7 @@ export default class Nc_finalDetails extends LightningElement {
     @api policyType;
     @api communityUser;
     @api customerRecord;
+    @api isUserLoggedIn;
     yellowCard = false;
     termsAndAgreement = {};
     usDestinations;
@@ -374,6 +375,9 @@ export default class Nc_finalDetails extends LightningElement {
     }
 
     fetchData = async () => {
+        console.log('@@@fetch data in this.dataMap',this.dataMap);
+        console.log('@@@customerRecord',this.customerRecord);
+        console.log('@@@communityUser',this.communityUser);
         if (this.dataMap?.userDetails?.Id != undefined && !this.communityUser) {
             let quoteId;
             if (this.customerRecord !== null && this.communityUser) {

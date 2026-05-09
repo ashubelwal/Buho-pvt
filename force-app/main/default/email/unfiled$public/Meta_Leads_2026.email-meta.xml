@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Lead Nurture for Old Meta Leads</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Meta Leads 2026</name>
+    <style>none</style>
+    <subject>Have you seen the new BÚHO?</subject>
+    <textOnly>Dear {!Lead.FirstName}
+
+We still have your quote all setup and ready to go!  A now we have added new options and rates.  With just a couple of clicks you can customize your quote to include up to $1,000,000 Liability Coverage, Gap coverage, Air Ambulance service, or for those looking for the most economical rates available decrease the limits and uncheck the boxes.  With the MexInsurance rater you can get exactly the coverage you need at the price you can afford.
+
+We have new options that provide:
+
+Gap coverage from Qualitas (if you make payments for your vehicle
+Air Ambulance
+Towing across the border benefit from Chubb
+Territory discounts from Mapfre
+
+
+© MEXICO INSURANCE SERVICES, INC.
+
+California Insurance License: 0G35864
+
+MexInsurance.com
+
+T. 855 MEXICO.5</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

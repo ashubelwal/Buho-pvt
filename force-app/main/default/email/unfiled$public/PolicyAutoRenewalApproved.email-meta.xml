@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>false</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Policy Auto Renewal Approved</name>
+    <style>none</style>
+    <subject>Policy Auto-Renewal Approved</subject>
+    <textOnly>Hello {!Contact.Name},
+
+We are pleased to inform you that your policy auto-renewal has been approved.
+
+Auto-Renewal Status: Approved
+
+Renewal Date: {!EndDate}
+
+Term: Annual (One Year)</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <letterhead>EmailTemplate</letterhead>
+    <name>Communities: New Email - Change Email Verification w/Letterhead</name>
+    <style>freeForm</style>
+    <subject>Finish changing your {!Community.Name} account’s email address</subject>
+    <textOnly>Hi {!Receiving_User.FirstName},
+
+We received a request to change the email address for the username {!User.Username}. Please make sure the following changes are correct:
+
+Previous Email Address: {!ChgEmailVer.OldEmail}
+New Email Address: {!ChgEmailVer.NewEmail}
+
+To finish changing your email address go to the following link. This link expires in 72 hours.
+
+{!ChgEmailVer.URL}
+
+
+Thank you,
+{!Organization.Name}</textOnly>
+    <type>html</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

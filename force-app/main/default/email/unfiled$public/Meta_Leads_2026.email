@@ -1,0 +1,272 @@
+<html>
+<style type="text/css">
+    body {
+        background: #ededed;
+    }
+
+    .container {
+        margin: 10px auto;
+        width: 600px;
+    }
+
+    /*-- Email CSS --*/
+
+    .mexemeailtheme {
+        background-color: #fff;
+        font-family: Arial;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .mexemeailhead {
+        background-color: ##003a70;
+        padding: 3px 5px 5px 5px;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .mexemeaillogo {
+        padding-left: 35px;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .mexemeaillogo p {
+        font-family: Arial;
+        font-weight: 400;
+        font-size: 22px;
+        color: #fff;
+    }
+
+    .mexemeaillogo p>sup {
+        font-size: 15px;
+    }
+
+    .mexemeailphoto {
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .mexemeailphoto img {
+        max-width: 100%;
+    }
+
+    .mexemeailcontent {
+        background-color: #fff;
+        padding: 10px 30px;
+        overflow: hidden;
+        color: #5e5e5e;
+        width: 90%;
+    }
+
+    .mexemeailcontent p {
+        line-height: 26px;
+        font-size: 18px;
+        color: #5e5e5e;
+    }
+
+    .mexemeailbut {
+        background-color: #cdcdcd;
+        text-transform: uppercase;
+        text-decoration: none;
+        padding: 15px 35px;
+        border-radius: 30px;
+        width: max-content;
+        margin: 10px 0px;
+        font-weight: 600;
+        font-size: 18px;
+        display: block;
+        color: #fff;
+    }
+
+    .mexemeailbut:hover,
+    .mexemeailbut:focus {
+        opacity: 0.9;
+    }
+
+    .mexemeailsocial {
+        padding: 15px 35px 35px 35px;
+        background-color: #e2e2e2;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .mexemeailsocial h3 {
+        color: #5e5e5e;
+    }
+
+    .mexemico {
+        background-size: 100% !important;
+        margin-right: 10px;
+        overflow: hidden;
+        display: block;
+        float: left;
+    }
+
+    .mexemico:hover,
+    .mexemico:focus {
+        opacity: 0.8;
+    }
+
+    /*.mexemailfaceboock{
+                    background:url(https://www.mexinsurance.com/wp-content/uploads/emailfaceboock.png) no-repeat;
+                }
+                
+                .mexemailinstagram{
+                    background:url(https://www.mexinsurance.com/wp-content/uploads/emailinstagram.png) no-repeat;
+                }
+                
+                .mexemailtweeter{
+                    background:url(https://www.mexinsurance.com/wp-content/uploads/emailtweeter.png) no-repeat;
+                }*/
+
+    .mexemeailfooter {
+        background-color: #003a70;
+        padding: 25px 35px;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .mexemeailfooter p {
+        line-height: 26px;
+        font-size: 16px;
+        color: #e2e2e2;
+    }
+
+    .mexemeailfooter p>a {
+        text-decoration: none;
+        color: #ffffff;
+    }
+
+    .mexemeailfooter p>a:hover,
+    .mexemeailfooter p>a:focus {
+        opacity: 0.9;
+    }
+
+    .mexemeailfooter a {
+        text-decoration: none;
+        color: #ffffff;
+    }
+
+    .mexemeailfooter a:hover,
+    .mexemeailfooter a:focus {
+        opacity: 0.9;
+    }
+</style>
+
+<body>
+    <div style="background-color:#fff;font-family:Arial;overflow:hidden;width:100%;">
+        <div style="display:flex; background-color:#fff; padding:20px 0; ">
+            <p style="margin:Auto;"><img
+                    src="https://gobuho.com/wp-content/uploads/2026/01/Owl-Logo-Small.png"
+                    width="350" /></p>
+        </div>
+        
+        <div style="background-color:#fff;padding:30px;overflow:hidden;color:#5e5e5e;width:90%;"
+class="mexemeailcontent">
+
+            <p style="line-height:26px;font-size:18px;color:#5e5e5e;">
+
+            <p>Dear {!Lead.FirstName}</p>
+            <p style="line-height:26px;font-size:18px;color:#5e5e5e;">
+Check out the new BÚHO rating engine for the best rates from the top companies in Mexico.  Your data is secured in the cloud - never shared with Mexico unless a claim is filed.  (Only vehicle details and term of coverage are sent to Mexican mainframes).  
+</p>
+<!-- Bulletproof Button -->
+<center>
+  <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
+    <tr>
+      <td bgcolor="#16a34a" style="border-radius:6px; text-align:center;">
+        <!--[if mso]>
+        <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"
+          href="{!Lead.Quote_URL__c}"
+          style="height:48px; v-text-anchor:middle; width:260px;" arcsize="10%" stroke="f" fillcolor="#16a34a">
+          <w:anchorlock/>
+          <center style="color:#ffffff; font-family:Arial, sans-serif; font-size:16px; font-weight:bold;">
+            {!Lead.LastName} Mexico Insurance Quote
+          </center>
+        </v:roundrect>
+        <![endif]-->
+        <!--[if !mso]><!-- -->
+        <a href="{!Lead.Quote_URL__c}"
+           style="display:inline-block; padding:14px 24px; background:#16a34a; color:#ffffff; border-radius:6px; font-family:Arial, sans-serif; font-size:16px; font-weight:bold; text-decoration:none;">
+          {!Lead.LastName} Mexico Insurance Quote
+        </a>
+        <!--<![endif]-->
+      </td>
+    </tr>
+  </table>
+</center>
+<p style="line-height:26px;font-size:18px;color:#5e5e5e;">We have new options that provide:<br>
+<ul style="line-height:26px;font-size:18px;color:#5e5e5e;">
+<li>Gap coverage from Qualitas (if you make payments for your vehicle</li>
+<li>Air Ambulance</li>
+<li>Towing across the border benefit from Chubb</li>
+<li>Territory discounts from Mapfre</li>
+</ul>
+<center><a href="{!Lead.Quote_URL__c}"><img src="https://mexinsurance.net/wp-content/uploads/2025/09/working-with-quotes-1.png" alt="working with mexinsurance quotes" width="600" height="400"></a></center><br><p>
+
+<br>
+<p style="line-height:26px;font-size:18px;color:#5e5e5e;">
+<!-- Bulletproof Button -->
+<center>
+  <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
+    <tr>
+      <td bgcolor="#16a34a" style="border-radius:6px; text-align:center;">
+        <!--[if mso]>
+        <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"
+          href="{!Lead.Quote_URL__c}"
+          style="height:48px; v-text-anchor:middle; width:260px;" arcsize="10%" stroke="f" fillcolor="#16a34a">
+          <w:anchorlock/>
+          <center style="color:#ffffff; font-family:Arial, sans-serif; font-size:16px; font-weight:bold;">
+            {!Lead.LastName} Mexico Insurance Quote
+          </center>
+        </v:roundrect>
+        <![endif]-->
+        <!--[if !mso]><!-- -->
+        <a href="{!Lead.Quote_URL__c}"
+           style="display:inline-block; padding:14px 24px; background:#16a34a; color:#ffffff; border-radius:6px; font-family:Arial, sans-serif; font-size:16px; font-weight:bold; text-decoration:none;">
+          Give it a try!
+        </a>
+        <!--<![endif]-->
+      </td>
+    </tr>
+  </table>
+</center>
+
+
+          </br>
+
+         </div>
+            
+             
+                    <div style="background-color:#fff;padding:6px 0;overflow:hidden;width:100%;"
+                        class="mexemeailfooter">
+                        <div style="display:flex;">
+                            <p style="margin:Auto;"><img
+                                    src="https://gobuho.com/wp-content/uploads/2026/01/Owl-Logo-Small.png"
+                                    width="175" /></p>
+                        </div>
+
+                        <div style="display:flex">
+                            <p style="margin:Auto;color:#000; padding-top: 2px; font-size: 14px;">&copy; BÚHO Insurance</p>
+                        </div>
+
+                        <div style="display:flex">
+                            <p style="margin:Auto;color:#000; font-size: 14px;">California Insurance License: 0G35864</p>
+                        </div>
+                        <div style="display:flex">
+                            <p style="margin:Auto;color:#000; font-size: 11px"><a
+                                    style="text-decoration:none;color:#000;" target="_blank"
+                                    href="https://gobuho.com/">MexInsurance.com</a></p>
+                        </div>
+
+                        <div style="display:flex">
+                            <p style="margin:Auto;color:#000; font-size: 11px; padding-top: 2px;">T. 855 MEXICO.5</p>
+                        </div>
+
+                    </div>
+        </div>
+    
+</body>
+
+</html>

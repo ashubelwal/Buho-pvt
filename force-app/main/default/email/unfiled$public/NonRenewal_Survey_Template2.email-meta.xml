@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>NonRenewal Survey Template2</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <letterhead>EmailTemplate</letterhead>
+    <name>NonRenewal Survey Template2</name>
+    <style>freeForm</style>
+    <subject>Your Mex-Insurance Lapsed Please Respond</subject>
+    <textOnly>Dear {!Policy__c.Account_Policy__c},
+
+
+
+Our records indicate that you did not renew your MexInsurance
+policy{!Policy__c.Name}, which expired {!Policy__c.End_at__c}.
+Please take 60 seconds to let us know why by clicking here</textOnly>
+    <type>html</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

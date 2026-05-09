@@ -1,0 +1,37 @@
+<html>
+
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; padding: 20px; max-width: 600px; margin: auto; background-color: #f9f9f9;">
+  <table width="100%" style="background-color: #ffffff; padding: 20px; border: 1px solid #ddd;">
+    <tr>
+      <td>
+        <h2 style="color: #007B8F;">Complete Your Mexico Insurance Policy Before Our System Upgrade 🚗💨</h2>
+
+        <p>Hi <strong>{!Lead.Name}</strong>,</p>
+
+        <p>Thank you for your recent interest in securing Mexico Insurance through <strong>MexInsurance®</strong>. We noticed you started a quote but haven’t yet completed your purchase — and we’re here to help you finish it quickly and easily.</p>
+
+        <p>If you’re planning a trip next week, we strongly recommend completing your purchase <strong>today</strong> to avoid any interruptions.</p>
+
+        <p style="margin: 20px 0;">
+          <a href="{!Lead.Quote_URL__c}" style="background-color: #007B8F; color: #ffffff; padding: 12px 20px; text-decoration: none; border-radius: 4px; display: inline-block;">
+            👉 Resume Your Quote Now
+          </a>
+        </p>
+
+        <p><strong>Important:</strong> We’re upgrading our website starting <strong>Saturday night</strong>, and there may be temporary downtime. To ensure uninterrupted access and coverage, it’s best to complete your policy today.</p>
+
+        <p>If you have any questions or need help, feel free to reply directly — we’re always happy to assist.</p>
+
+        <p>Safe travels,</p>
+
+        <p>
+          <strong>Josh Duran</strong><br>
+          <a href="mailto:agent@mexinsurance.com">agency@mexinsurance.com</a><br>
+          <a href="https://www.mexinsurance.com">www.MexInsurance.com</a>
+        </p>
+      </td>
+    </tr>
+  </table>
+</body>
+
+</html>

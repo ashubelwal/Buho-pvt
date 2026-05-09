@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <letterhead>EmailTemplate</letterhead>
+    <name>Communities: User Lockout Email w/Letterhead</name>
+    <style>freeForm</style>
+    <subject>You&apos;ve been locked out of {!Community.Name}</subject>
+    <textOnly>Hello {!Receiving_User.Username},
+
+We received your request to reset your {!Community.Name} password. We can&apos;t reset your password right now. Your account is locked after too many login attempts.
+
+If you didn&apos;t request a password reset or haven&apos;t tried to log in to your account recently, contact your {!Community.Name} administrator or reply to this email.
+
+Thank you,
+{!Community.Name}</textOnly>
+    <type>html</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

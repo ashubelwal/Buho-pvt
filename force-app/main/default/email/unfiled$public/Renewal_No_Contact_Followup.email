@@ -1,0 +1,210 @@
+<html>
+<style type="text/css">
+    body {
+        background: #ededed;
+    }
+
+    .container {
+        margin: 10px auto;
+        width: 600px;
+    }
+
+    /*-- Email CSS --*/
+
+    .mexemeailtheme {
+        background-color: #fff;
+        font-family: Arial;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .mexemeailhead {
+        background-color: ##003a70;
+        padding: 3px 5px 5px 5px;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .mexemeaillogo {
+        padding-left: 35px;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .mexemeaillogo p {
+        font-family: Arial;
+        font-weight: 400;
+        font-size: 22px;
+        color: #fff;
+    }
+
+    .mexemeaillogo p>sup {
+        font-size: 15px;
+    }
+
+    .mexemeailphoto {
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .mexemeailphoto img {
+        max-width: 100%;
+    }
+
+    .mexemeailcontent {
+        background-color: #fff;
+        padding: 10px 30px;
+        overflow: hidden;
+        color: #5e5e5e;
+        width: 90%;
+    }
+
+    .mexemeailcontent p {
+        line-height: 26px;
+        font-size: 18px;
+        color: #5e5e5e;
+    }
+
+    .mexemeailbut {
+        background-color: #cdcdcd;
+        text-transform: uppercase;
+        text-decoration: none;
+        padding: 15px 35px;
+        border-radius: 30px;
+        width: max-content;
+        margin: 10px 0px;
+        font-weight: 600;
+        font-size: 18px;
+        display: block;
+        color: #fff;
+    }
+
+    .mexemeailbut:hover,
+    .mexemeailbut:focus {
+        opacity: 0.9;
+    }
+
+    .mexemeailsocial {
+        padding: 15px 35px 35px 35px;
+        background-color: #e2e2e2;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .mexemeailsocial h3 {
+        color: #5e5e5e;
+    }
+
+    .mexemico {
+        background-size: 100% !important;
+        margin-right: 10px;
+        overflow: hidden;
+        display: block;
+        float: left;
+    }
+
+    .mexemico:hover,
+    .mexemico:focus {
+        opacity: 0.8;
+    }
+
+    /*.mexemailfaceboock{
+                    background:url(https://www.mexinsurance.com/wp-content/uploads/emailfaceboock.png) no-repeat;
+                }
+                
+                .mexemailinstagram{
+                    background:url(https://www.mexinsurance.com/wp-content/uploads/emailinstagram.png) no-repeat;
+                }
+                
+                .mexemailtweeter{
+                    background:url(https://www.mexinsurance.com/wp-content/uploads/emailtweeter.png) no-repeat;
+                }*/
+
+    .mexemeailfooter {
+        background-color: #003a70;
+        padding: 25px 35px;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .mexemeailfooter p {
+        line-height: 26px;
+        font-size: 16px;
+        color: #e2e2e2;
+    }
+
+    .mexemeailfooter p>a {
+        text-decoration: none;
+        color: #ffffff;
+    }
+
+    .mexemeailfooter p>a:hover,
+    .mexemeailfooter p>a:focus {
+        opacity: 0.9;
+    }
+
+    .mexemeailfooter a {
+        text-decoration: none;
+        color: #ffffff;
+    }
+
+    .mexemeailfooter a:hover,
+    .mexemeailfooter a:focus {
+        opacity: 0.9;
+    }
+</style>
+
+<body>
+    <div style="background-color:#fff;font-family:Arial;overflow:hidden;width:100%;">
+        <div style="display:flex; background-color:#fff; padding:20px 0; ">
+            <p style="margin:Auto;"><img
+                    src="https://www.mexinsurance.com/wp-content/uploads/2023/11/cropped-Logo-1-2048x312.png"
+                    width="225" /></p>
+        </div>
+        
+        <div style="background-color:#fff;padding:30px;overflow:hidden;color:#5e5e5e;width:90%;"
+class="mexemeailcontent">
+
+<!--<h2 style="line-height:26px;font-size:18px;color:#5e5e5e;">Please tell us why you didnt renew.</h2>-->
+
+            <p style="line-height:26px;font-size:18px;color:#5e5e5e;">
+
+            <p>Hi {!Contact.FirstName},</p>
+            <p>
+I called you but didn't get a hold of you. I'm just following up because I think your policy has expired. I want to make sure you got our renewal notice. Sometimes, they can get lost in your email or end up in the wrong folder.</p>
+
+<p>
+If you need help, here's what you can do:
+<br>
+<ul><li>Call me at 619-691-7747</li>
+<li>Send me a WhatsApp message at 619-488-6500</li>
+<li>Send me an SMS text message at 619-691-7747</li>
+</ul>
+</p>
+<p>Or, if you want to renew on your own, I've included a step-by-step video walkthrough that can guide you through the process.  <ul>
+<li><a href="https://at.mexinsurance.com/s/article/How-to-Renew-a-Policy?language=en_US">Click here to watch the video walkthrough</a></li>
+<li><a href="https://at.mexinsurance.com/login">Click here to login (your email is your user id)</a></li></ul>
+</p>
+<p>
+Let me know if you have any questions!
+</p>
+<p>
+--<br>
+Mexico Insurance Services<br>
+License 0G35864<br>
+www.mexinsurance.com
+
+          </br>
+
+         </div>
+            
+             
+
+                        </div>
+
+                    </div>
+        </div>
+    
+</body>
+
+</html>

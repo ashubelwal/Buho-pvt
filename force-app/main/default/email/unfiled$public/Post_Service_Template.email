@@ -1,0 +1,7 @@
+<img width="200px" height="30px" src="https://mexinsurance--c.na22.content.force.com/servlet/servlet.ImageServer?id=01515000004uv8u&oid=00D15000000NeKA&lastMod=1455732738000"> 
+
+<h3> Dear {!Contact.Name} {!Lead.Name} :</h3>
+
+We want to provide the ultimate service experience for our clients. Can you help us achieve that goal?<br/></br/>
+
+Please take 60 seconds of your time to rate the service you received <a href  ="http://mexinsurance.force.com/survey/servicesurvey?conid={!Contact.Id}&leadid={!Lead.Id}"> here</a>.

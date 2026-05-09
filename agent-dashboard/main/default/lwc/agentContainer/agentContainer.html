@@ -1,0 +1,96 @@
+<template>
+  <template if:true={loadPage}>
+    <div class="dashboard-wrapper">
+      <!-- ── Mobile Sidebar Overlay ────────────────────────────────────── -->
+      <div class={overlayClass} onclick={closeMobileMenu}></div>
+
+      <!-- ── Sidebar (always visible on desktop, toggleable on mobile) ── -->
+      <c-agent-side-navigation
+        active-page={activePage}
+        logo-url={logoUrl}
+        is-mobile-open={isMobileMenuOpen}
+        is-agency-user={isAgencyUser}
+        onnavigate={handleNavigate}
+      >
+      </c-agent-side-navigation>
+
+      <!-- ── Main Content Area ────────────────────────────────────────── -->
+      <div class="main-content" ontoast={handleToast}>
+        <!-- Toast Notification -->
+        <c-agent-toast></c-agent-toast>
+
+        <!-- Header (always visible) -->
+        <c-agent-header page-title={pageTitle} ontogglemenu={handleMenuToggle}></c-agent-header>
+
+        <!-- Dynamic Page Body  -->
+        <div class="page-body">
+          <template lwc:if={isDashboard}>
+            <c-agent-dashboard-landing contact-id={contactId} agency-id={agencyId} onnavigate={handleNavigate}></c-agent-dashboard-landing>
+          </template>
+
+          <template lwc:elseif={isClients}>
+            <c-agent-clients contact-id={contactId}></c-agent-clients>
+          </template>
+
+          <template lwc:elseif={isQuotes}>
+            <c-agent-quotes></c-agent-quotes>
+          </template>
+
+          <template lwc:elseif={isRenewals}>
+            <c-agent-renewals onnavigate={handleNavigate}></c-agent-renewals>
+          </template>
+
+          <template lwc:elseif={isNewQuote}>
+            <c-agent-new-quote></c-agent-new-quote>
+          </template>
+
+          <template lwc:elseif={isLookUpPolicy}>
+            <c-agent-dashboard is-agent-portal="true" onnavigate={handleNavigate}></c-agent-dashboard>
+          </template>
+
+          <template lwc:elseif={isContactDetails}>
+            <c-agent-contact-details is-agent-portal></c-agent-contact-details>
+          </template>
+
+          <template lwc:elseif={isPolicyEditRenew}>
+            <c-policy-edit-renew is-agent-portal="true"></c-policy-edit-renew>
+          </template>
+
+          <template lwc:elseif={isAgentQuickQuote}>
+            <c-agent-quick-quote is-agent-portal="true" onnavigate={handleNavigate}></c-agent-quick-quote>
+          </template>
+
+          <template lwc:elseif={isEndorsement}>
+            <c-agent-endorsement onnavigate={handleNavigate}></c-agent-endorsement>
+          </template>
+
+          <template lwc:elseif={isCancelPolicy}>
+            <c-agent-cancel-policy onnavigate={handleNavigate}></c-agent-cancel-policy>
+          </template>
+
+          <template lwc:elseif={isTerminatePolicy}>
+            <c-terminate-policy-main-screen is-agent-portal record-id={targetRecordId}></c-terminate-policy-main-screen>
+          </template>
+
+          <template lwc:elseif={isReports}>
+            <c-agent-reports></c-agent-reports>
+          </template>
+
+          <template lwc:elseif={isUnderwriting}>
+            <c-agent-underwriting></c-agent-underwriting>
+          </template>
+
+          <template lwc:elseif={isUsers}>
+            <template lwc:if={isAgencyUser}>
+              <c-agent-users contact-id={contactId}></c-agent-users>
+            </template>
+          </template>
+
+          <template lwc:elseif={isProfile}>
+            <c-agent-profile></c-agent-profile>
+          </template>
+        </div>
+      </div>
+    </div>
+  </template>
+</template>

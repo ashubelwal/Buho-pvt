@@ -1,0 +1,6 @@
+<img width="200px" height="30px" src="https://mexinsurance--c.na22.content.force.com/servlet/servlet.ImageServer?id=01515000004uv8u&oid=00D15000000NeKA&lastMod=1455732738000"> 
+
+<h3>Dear {!Policy__c.Account_Policy__c},</h3><br/><br/>
+Our records indicate that you did not renew your MexInsurance
+policy {!Policy__c.Name},
+which expired {!Policy__c.End_at__c}. Please take 60 seconds to let us know why by clicking <a href="http://mexinsurance.force.com/survey/renewalsurvey?conid={!Policy__c.Account_PolicyId__c}">here</a>.

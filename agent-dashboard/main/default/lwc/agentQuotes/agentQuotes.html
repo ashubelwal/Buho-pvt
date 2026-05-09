@@ -1,0 +1,288 @@
+<template>
+  <!-- ── Stat Cards ──────────────────────────────────────────────────── -->
+  <div class="stats-grid stats-grid-3">
+    <div class="stat-card">
+      <div class="stat-card-left">
+        <p class="stat-card-label">Total Quotes</p>
+        <p class="stat-card-value">{totalQuotes}</p>
+      </div>
+      <div class="stat-card-icon-wrap stat-icon-blue"><i class="bi bi-file-earmark-text"></i></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-left">
+        <p class="stat-card-label">Total Sold</p>
+        <p class="stat-card-value">{totalSold}</p>
+      </div>
+      <div class="stat-card-icon-wrap stat-icon-green"><i class="bi bi-bag-check"></i></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-left">
+        <p class="stat-card-label">Policies Created</p>
+        <p class="stat-card-value">{totalSold}</p>
+      </div>
+      <div class="stat-card-icon-wrap stat-icon-pink"><i class="bi bi-shield-check"></i></div>
+    </div>
+  </div>
+
+  <!-- ── Quotes Table ─────────────────────────────────────────────────── -->
+  <div class="section-card">
+    <div class="section-card-header">
+      <span class="section-card-title">All Quotes</span>
+      <div class="table-toolbar">
+        <div class="search-bar">
+          <i class="bi bi-search"></i>
+          <input
+            type="text"
+            placeholder="Search by quote #, account, make..."
+            value={searchValue}
+            onchange={handleSearch}
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <template lwc:if={isLoading}>
+      <div class="placeholder-page" style="min-height: 180px">
+        <div class="placeholder-icon"><i class="bi bi-hourglass-split"></i></div>
+        <p class="placeholder-subtitle">Loading quotes...</p>
+      </div>
+    </template>
+
+    <!-- Error -->
+    <template lwc:elseif={hasError}>
+      <div class="placeholder-page" style="min-height: 180px">
+        <div
+          class="placeholder-icon"
+          style="background: rgba(255, 75, 75, 0.1); color: var(--danger)"
+        >
+          <i class="bi bi-exclamation-triangle"></i>
+        </div>
+        <p class="placeholder-title" style="color: var(--danger)">Error loading quotes</p>
+        <p class="placeholder-subtitle">{errorMessage}</p>
+      </div>
+    </template>
+
+    <!-- Data table -->
+    <template lwc:elseif={hasQuotes}>
+      <div class="table-scroll-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Quote Number</th>
+              <th>Created Date</th>
+              <th>Last Modified</th>
+              <th>Account</th>
+              <th>Vehicle Make</th>
+              <th>Vehicle Model</th>
+              <th>Vehicle Type</th>
+              <th>Term Days</th>
+              <th>Vehicle Value</th>
+              <th>Vehicle Year</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template for:each={paginatedQuotes} for:item="quote">
+              <tr key={quote.Id}>
+                <td>{quote.quoteNumber}</td>
+                <td>{quote.createdDate}</td>
+                <td>{quote.lastModified}</td>
+                <td>{quote.account}</td>
+                <td>{quote.vehicleMake}</td>
+                <td>{quote.vehicleModel}</td>
+                <td>{quote.vehicleType}</td>
+                <td>{quote.termDays}</td>
+                <td>{quote.vehicleValue}</td>
+                <td>{quote.vehicleYear}</td>
+                <td><span class={quote.statusClass}>{quote.statusLabel}</span></td>
+                <td>
+                  <button
+                    class="action-icon-btn"
+                    type="button"
+                    data-id={quote.Id}
+                    onclick={openDetailsModal}
+                    title="View Details"
+                  >
+                    <i class="bi bi-eye"></i>
+                  </button>
+                  <button
+                    class="action-icon-btn"
+                    type="button"
+                    data-id={quote.Id}
+                    onclick={openEditModal}
+                    title="Edit Quote"
+                  >
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Native Pagination Footer -->
+      <div class="pagination-controls">
+        <button class="btn-qa" onclick={prevPage} disabled={isFirstPage}>Previous</button>
+        <div class="page-info">{pageInfo}</div>
+        <button class="btn-qa" onclick={nextPage} disabled={isLastPage}>Next</button>
+      </div>
+    </template>
+
+    <!-- Empty -->
+    <template lwc:else>
+      <div class="placeholder-page" style="min-height: 180px">
+        <div class="placeholder-icon"><i class="bi bi-file-earmark-x"></i></div>
+        <p class="placeholder-title">No quotes found</p>
+        <p class="placeholder-subtitle">Try adjusting your search criteria.</p>
+      </div>
+    </template>
+  </div>
+
+  <!-- ── Quote Details Modal ─────────────────────────────────────────── -->
+  <template lwc:if={showDetailsModal}>
+    <div class="modal-overlay" onclick={closeDetailsModal}>
+      <div class="modal-card" onclick={stopPropagation}>
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-title">Quote Details</h2>
+            <p class="modal-subtitle">{selectedQuote.quoteNumber}</p>
+          </div>
+          <button class="modal-close-btn" type="button" onclick={closeDetailsModal}>
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-sections-row">
+            <!-- Quote Info -->
+            <div class="modal-section">
+              <p class="modal-section-title">Quote Information</p>
+              <div class="modal-fields-grid" style="grid-template-columns: 1fr">
+                <div class="modal-field">
+                  <span class="modal-field-label">Quote Number</span>
+                  <span class="modal-field-value">{selectedQuote.quoteNumber}</span>
+                </div>
+                <div class="modal-field">
+                  <span class="modal-field-label">Status</span>
+                  <span class="modal-field-value">{selectedQuote.statusLabel}</span>
+                </div>
+                <div class="modal-field">
+                  <span class="modal-field-label">Territory</span>
+                  <span class="modal-field-value">{selectedQuote.territory}</span>
+                </div>
+                <div class="modal-field">
+                  <span class="modal-field-label">Term</span>
+                  <span class="modal-field-value">{selectedQuote.term}</span>
+                </div>
+                <div class="modal-field">
+                  <span class="modal-field-label">Premium</span>
+                  <span class="modal-field-value">{selectedQuote.premium}</span>
+                </div>
+                <div class="modal-field">
+                  <span class="modal-field-label">Created Date</span>
+                  <span class="modal-field-value">{selectedQuote.createdDate}</span>
+                </div>
+                <div class="modal-field">
+                  <span class="modal-field-label">Last Modified</span>
+                  <span class="modal-field-value">{selectedQuote.lastModified}</span>
+                </div>
+              </div>
+            </div>
+            <!-- Vehicle Info -->
+            <div class="modal-section">
+              <p class="modal-section-title">Vehicle Information</p>
+              <div class="modal-fields-grid" style="grid-template-columns: 1fr">
+                <div class="modal-field">
+                  <span class="modal-field-label">Account</span>
+                  <span class="modal-field-value">{selectedQuote.account}</span>
+                </div>
+                <div class="modal-field">
+                  <span class="modal-field-label">Vehicle Make</span>
+                  <span class="modal-field-value">{selectedQuote.vehicleMake}</span>
+                </div>
+                <div class="modal-field">
+                  <span class="modal-field-label">Vehicle Model</span>
+                  <span class="modal-field-value">{selectedQuote.vehicleModel}</span>
+                </div>
+                <div class="modal-field">
+                  <span class="modal-field-label">Vehicle Type</span>
+                  <span class="modal-field-value">{selectedQuote.vehicleType}</span>
+                </div>
+                <div class="modal-field">
+                  <span class="modal-field-label">Vehicle Year</span>
+                  <span class="modal-field-value">{selectedQuote.vehicleYear}</span>
+                </div>
+                <div class="modal-field">
+                  <span class="modal-field-label">Vehicle Value</span>
+                  <span class="modal-field-value">{selectedQuote.vehicleValue}</span>
+                </div>
+                <div class="modal-field">
+                  <span class="modal-field-label">Term Days</span>
+                  <span class="modal-field-value">{selectedQuote.termDays}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-modal-cancel" type="button" onclick={closeDetailsModal}>
+            <i class="bi bi-x-circle"></i> Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- ── Edit Quote Modal ────────────────────────────────────────────── -->
+  <template lwc:if={showEditModal}>
+    <div class="modal-overlay" onclick={closeEditModal}>
+      <div class="modal-card modal-sm" onclick={stopPropagation}>
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-title">Edit Quote</h2>
+            <p class="modal-subtitle">{selectedQuote.quoteNumber}</p>
+          </div>
+          <button class="modal-close-btn" type="button" onclick={closeEditModal}>
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-form-row">
+            <div>
+              <label class="modal-form-label" for="eq-territory">Territory</label>
+              <input
+                class="modal-form-input"
+                id="eq-territory"
+                type="text"
+                value={selectedQuote.territory}
+              />
+            </div>
+            <div>
+              <label class="modal-form-label" for="eq-term">Term</label>
+              <input class="modal-form-input" id="eq-term" type="text" value={selectedQuote.term} />
+            </div>
+          </div>
+          <div class="modal-form-group">
+            <label class="modal-form-label" for="eq-premium">Premium</label>
+            <input
+              class="modal-form-input"
+              id="eq-premium"
+              type="text"
+              value={selectedQuote.premium}
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-modal-cancel" type="button" onclick={closeEditModal}>
+            <i class="bi bi-x-circle"></i> Cancel
+          </button>
+          <button class="btn-modal-save" type="button">
+            <i class="bi bi-check-circle"></i> Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  </template>
+</template>

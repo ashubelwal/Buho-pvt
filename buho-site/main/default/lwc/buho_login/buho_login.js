@@ -2,7 +2,7 @@ import { LightningElement, api, track } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 
 // Static Resources - All assets in one ZIP
-import buhoAssets from '@salesforce/resourceUrl/buhoAssets';
+import buhoAssets from '@salesforce/resourceUrl/BuhoAssets';
 
 // Apex Controller
 import login from '@salesforce/apex/BuhoLoginController.login';
@@ -31,31 +31,31 @@ export default class Buho_login extends NavigationMixin(LightningElement) {
         {
             id: 1,
             title: 'Smart protection for your Mexican adventures',
-            imageUrl: '',
+            imageUrl: `${buhoAssets}/images/slide1.png`,
             cssClass: 'buho-carousel-slide active'
         },
         {
             id: 2,
             title: 'Comprehensive coverage for every journey',
-            imageUrl: '',
+            imageUrl: `${buhoAssets}/images/slide2.png`,
             cssClass: 'buho-carousel-slide'
         },
         {
             id: 3,
             title: 'Fast and easy claims process',
-            imageUrl: '',
+            imageUrl: `${buhoAssets}/images/slide3.png`,
             cssClass: 'buho-carousel-slide'
         },
         {
             id: 4,
             title: '24/7 customer support',
-            imageUrl: '',
+            imageUrl: `${buhoAssets}/images/slide4.png`,
             cssClass: 'buho-carousel-slide'
         },
         {
             id: 5,
             title: 'Best rates for your peace of mind',
-            imageUrl: '',
+            imageUrl: `${buhoAssets}/images/silde5.png`,
             cssClass: 'buho-carousel-slide'
         }
     ];
@@ -102,7 +102,7 @@ export default class Buho_login extends NavigationMixin(LightningElement) {
         // Initialize carousel image URLs
         this.slides = this.slides.map(slide => ({
             ...slide,
-            imageUrl: this.carouselImageUrl
+            imageUrl: slide.imageUrl || this.carouselImageUrl
         }));
 
         // Start auto-advance
@@ -140,7 +140,7 @@ export default class Buho_login extends NavigationMixin(LightningElement) {
         // Call Apex controller
         login({ username: this.email, password: this.password, startUrl: this.startUrl })
             .then(result => {
-                console.log('@@@result',JSON.stringify(result));
+                console.log('@@@result', JSON.stringify(result));
                 if (result && result.startsWith('http')) {
                     // Successful login - redirect
                     window.location.href = result;
@@ -214,8 +214,8 @@ export default class Buho_login extends NavigationMixin(LightningElement) {
     updateSlideClasses() {
         this.slides = this.slides.map((slide, index) => ({
             ...slide,
-            cssClass: index === this.currentSlide 
-                ? 'buho-carousel-slide active' 
+            cssClass: index === this.currentSlide
+                ? 'buho-carousel-slide active'
                 : 'buho-carousel-slide'
         }));
     }
@@ -271,4 +271,3 @@ export default class Buho_login extends NavigationMixin(LightningElement) {
         return 'An unexpected error occurred. Please try again.';
     }
 }
-

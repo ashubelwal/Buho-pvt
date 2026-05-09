@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <letterhead>EmailTemplate</letterhead>
+    <name>Policy Documents - Automobile</name>
+    <style>freeForm</style>
+    <subject>Your MexInsurance® Documents</subject>
+    <textOnly>Hey {!Contact.FirstName},
+
+Congrats on getting insurance coverage in Mexico!
+
+We&apos;ve attached a copy of your policy to this email. It&apos;s a good idea to print it out and keep it in your glove compartment. That way, you&apos;ll have it handy if you need it, even if you don&apos;t have access to the internet. Some immigration stuff, like vehicle permits or visas, might also need you to show a paper copy of your insurance policy.
+
+Thanks for choosing Mexico Insurance Services at MexInsurance.com®. We appreciate your business!
+
+
+Your Mexinsurance® Team,
+
+
+Mexico Insurance Services, Inc.
+National Producer License: 12133134
+CA License 0G35864
+AZ License 1800006870
+NV License 641852
+TX License 2485907</textOnly>
+    <type>html</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

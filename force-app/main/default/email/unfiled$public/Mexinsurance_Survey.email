@@ -1,0 +1,9 @@
+<style>
+.im {
+    color: #000;
+	}
+</style>
+<img width="200px" height="30px" src="https://mexinsurance--c.na22.content.force.com/servlet/servlet.ImageServer?id=01515000004uv8u&oid=00D15000000NeKA&lastMod=1455732738000"> 
+<h3>Hello!  We want to thank you for stopping by at <a href="http://www.mexinsurance.com/">Mex-Insurance.com</a> to get a quote for your  {!Quote__c.Vehicle_Year__c} <vehicle Make> {!Quote__c.Vehicle_Make__c} {!Quote__c.Vehicle_Model__c}  for {!Quote__c.Term_Days__c}.</h3>
+<br>
+We notice that you did not complete the purchase.  Our goal is to make you a customer so we ask that you take 30 seconds to answer 4 questions by clicking<a href ="http://mexinsurance.force.com/survey/leadsurvey?leadid={!Lead.Id}" > here. !</a><br><br> Thank you!<br><br>

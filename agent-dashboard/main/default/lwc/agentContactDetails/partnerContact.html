@@ -1,0 +1,156 @@
+<template>
+  <div>
+    <template if:true={actionTypeDefault}>
+      <div class="section-card mb-4" style="margin-bottom: 24px;">
+        <div style="padding: 24px;">
+          <lightning-input name="enter-search" label="Enter Name or Email" type="search" onkeyup={handleKeyUpSearch}></lightning-input>
+        </div>
+      </div>
+    </template>
+
+    <template if:true={booleanVar.contactResult}>
+      <div class="section-card mb-4" style="margin-bottom: 24px;">
+        <div class="section-card-header">
+           <span class="section-card-title"><i class="bi bi-person-lines-fill me-2"></i> Contact Information</span>
+        </div>
+        <div style="padding: 24px;">
+           <div class="row">
+              <div class="col-md-6 mb-3">
+                 <p class="text-muted mb-1 small">Name</p>
+                 <p class="fw-bold mb-0">{contactDetails.Name}</p>
+              </div>
+              <div class="col-md-6 mb-3">
+                 <p class="text-muted mb-1 small">Phone</p>
+                 <p class="fw-bold mb-0">{contactDetails.Phone}</p>
+              </div>
+              <div class="col-md-6 mb-3">
+                 <p class="text-muted mb-1 small">Email</p>
+                 <p class="fw-bold mb-0">{contactDetails.Email}</p>
+              </div>
+              <div class="col-md-6 mb-3">
+                 <p class="text-muted mb-1 small">Created Date</p>
+                 <p class="fw-bold mb-0">{contactDetails.CreatedDate}</p>
+              </div>
+              <div class="col-12 mt-2">
+                 <p class="text-muted mb-1 small">Address</p>
+                 <lightning-formatted-address
+                    street={contactDetails.Street__c}
+                    city={contactDetails.City__c}
+                    country={contactDetails.Country__c}
+                    province={contactDetails.State__c}
+                    postal-code={contactDetails.Postal_Code__c}
+                 ></lightning-formatted-address>
+              </div>
+           </div>
+        </div>
+      </div>
+    </template>
+
+    <template if:true={actionTypeContactDetails}>
+       <!-- Policy Section -->
+       <template if:true={booleanVar.policyDataStatus}>
+         <div class="section-card mb-4" style="margin-bottom: 24px;">
+           <div class="section-card-header d-flex justify-content-between align-items-center">
+             <span class="section-card-title"><i class="bi bi-shield-check me-2"></i> Policies</span>
+           </div>
+           <table class="data-table">
+             <thead>
+               <tr>
+                 <th>Status</th>
+                 <th>Name</th>
+                 <th>Type</th>
+                 <th>Term</th>
+                 <th>Start Date</th>
+                 <th>Start Time</th>
+                 <th>Action</th>
+               </tr>
+             </thead>
+             <tbody>
+               <template for:each={contactDetails.Policies__r.records} for:item="policy">
+                 <tr key={policy.Id}>
+                   <td><span class="badge bg-primary text-white" style="padding: 6px 12px; border-radius: 4px;">{policy.Status_picklist__c}</span></td>
+                   <td class="fw-bold">{policy.Name}</td>
+                   <td>{policy.Policy_Type_picklist__c}</td>
+                   <td>{policy.Term_days__c}</td>
+                   <td>{policy.Start_Date__c}</td>
+                   <td>{policy.Start_Time__c}</td>
+                   <td>
+                     <template lwc:if={policy.EditBtn}>
+                       <button class="btn-tbl view me-2" data-id={policy.Id} data-actiontype="EDIT" data-obj="policy" onclick={navigateToPolicyEdit}>Edit</button>
+                     </template>
+                     <template lwc:if={policy.RenewBtn}>
+                       <button class="btn-tbl renew me-2" data-id={policy.Id} data-actiontype="RENEW" data-obj="policy" onclick={navigateToPolicyRenew}>Renew</button>
+                     </template>
+                     <template lwc:if={policy.TerminateBtn}>
+                       <button class="btn-tbl contact" data-id={policy.Id} data-actiontype="TERMINATE" data-obj="policy" onclick={handleOperations}>Terminate</button>
+                     </template>
+                   </td>
+                 </tr>
+               </template>
+             </tbody>
+           </table>
+         </div>
+       </template>
+
+       <!-- Quote Section -->
+       <template if:true={booleanVar.quoteDataStatus}>
+         <div class="section-card mb-4" style="margin-bottom: 24px;">
+           <div class="section-card-header">
+             <span class="section-card-title"><i class="bi bi-file-earmark-text me-2"></i> Quotes</span>
+           </div>
+           <table class="data-table">
+             <thead>
+               <tr>
+                 <th>Name</th>
+                 <th>Type</th>
+                 <th>Term</th>
+                 <th>Start Date</th>
+                 <th>End Date</th>
+               </tr>
+             </thead>
+             <tbody>
+               <template for:each={contactDetails.Quotes__r.records} for:item="quote">
+                 <tr key={quote.Id}>
+                   <td class="fw-bold">{quote.Name}</td>
+                   <td>{quote.Policy_Type_picklist__c}</td>
+                   <td>{quote.Term_Days__c}</td>
+                   <td>{quote.Start_Date_for_Coverage__c}</td>
+                   <td>{quote.End_Date_for_Coverage__c}</td>
+                 </tr>
+               </template>
+             </tbody>
+           </table>
+         </div>
+       </template>
+
+       <!-- Drivers Section -->
+       <template if:true={booleanVar.driverDataStatus}>
+         <div class="section-card mb-4" style="margin-bottom: 24px;">
+           <div class="section-card-header">
+             <span class="section-card-title"><i class="bi bi-person-vcard me-2"></i> Drivers</span>
+           </div>
+           <table class="data-table">
+             <thead>
+               <tr>
+                 <th>Driver Name</th>
+                 <th>Country</th>
+                 <th>State</th>
+                 <th>City</th>
+               </tr>
+             </thead>
+             <tbody>
+               <template for:each={contactDetails.Drivers__r.records} for:item="driver">
+                 <tr key={driver.Id}>
+                   <td class="fw-bold">{driver.Name}</td>
+                   <td>{driver.License_Country__c}</td>
+                   <td>{driver.License_state__c}</td>
+                   <td>{driver.City__c}</td>
+                 </tr>
+               </template>
+             </tbody>
+           </table>
+         </div>
+       </template>
+    </template>
+  </div>
+</template>

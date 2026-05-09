@@ -1,0 +1,12 @@
+<html>
+            <body>
+                <p>Hello {!Contact.Name},</p>
+                
+                <ul>
+                    <!--  <li><b>Policy Number:</b> {!relatedTo.PolicyNumber}</li> -->
+                </ul>
+<p>{!mailType}</p>
+                <p>To set auto-renewal your policy and preview details, click the following link:</p>
+                <p><a href="at.mexinsurance.com/s/renew-setup?policyId={!Policy__c.Id}">Renew Policy</a></p>
+            </body>
+ </html>

@@ -1,128 +1,156 @@
 <template>
-    <!-- Welcome Section -->
-    <div class="dashboard-welcome">
+  <!-- Welcome Section -->
+  <div class="dashboard-welcome">
+    <div class="row align-items-center">
+      <div class="col-md-8">
         <h1>Welcome back, {userName}!</h1>
         <p>You have {activePolicies} active policies</p>
+      </div>
+      <div class="col-md-4 text-end">
+        <button class="btn-add-policy ms-auto" onclick={handleAddPolicy}>
+          <img src={plusIconUrl} alt="" class="icon-btn icon-white" />
+          Add Policy
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Stats Summary and Actions -->
+  <div class="row g-3 mb-4">
+    <!-- Active Policies Card -->
+    <div class="col-lg-3 col-md-6">
+      <div class="dashboard-stat-card">
+        <div class="dashboard-stat-icon primary">
+          <img src={policyIconUrl} alt="Policies" class="icon-img" />
+        </div>
+        <h2 class="dashboard-stat-value">{activePolicies}</h2>
+        <p class="dashboard-stat-label">Active Policies</p>
+      </div>
     </div>
 
-    <!-- Quick Stats Summary and Actions -->
-    <div class="row g-3 mb-4">
-            <!-- Active Policies Card -->
-            <div class="col-lg-3 col-md-6">
-                <div class="dashboard-stat-card">
-                    <div class="dashboard-stat-icon primary">
-                        <img src={policyIconUrl} alt="Policies" class="icon-img" />
-                    </div>
-                    <h2 class="dashboard-stat-value">{activePolicies}</h2>
-                    <p class="dashboard-stat-label">Active Policies</p>
-                </div>
-            </div>
-
-            <!-- Days Remaining Card -->
-            <div class="col-lg-3 col-md-6">
-                <div class="dashboard-stat-card">
-                    <div class="dashboard-stat-icon accent">
-                        <img src={clockIconUrl} alt="Clock" class="icon-img" />
-                    </div>
-                    <h2 class="dashboard-stat-value">{daysRemaining}</h2>
-                    <p class="dashboard-stat-label">Days Remaining</p>
-                </div>
-            </div>
-
-            <!-- Renew Ahead of Time Section -->
-            <div class="col-lg-3 col-md-6">
-                <div class="dashboard-section dashboard-action-card dashboard-action-card-renew">
-                    <h3 class="dashboard-section-title dashboard-action-card-title">Renew Ahead of Time</h3>
-                    <p class="dashboard-action-card-text">
-                        Quickly renew your coverage before it expires.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Need to File a Claim Section -->
-            <div class="col-lg-3 col-md-6">
-                <div class="dashboard-section dashboard-action-card dashboard-action-card-claim">
-                    <h3 class="dashboard-section-title dashboard-action-card-title">Need to File a Claim?</h3>
-                    <p class="dashboard-action-card-text-lg">
-                        All claims must be reported while you are still in Mexico.
-                    </p>
-                </div>
-            </div>
+    <!-- Days Remaining Card -->
+    <div class="col-lg-3 col-md-6">
+      <div class="dashboard-stat-card">
+        <div class="dashboard-stat-icon accent">
+          <img src={clockIconUrl} alt="Clock" class="icon-img" />
+        </div>
+        <h2 class="dashboard-stat-value">{daysRemaining}</h2>
+        <p class="dashboard-stat-label">Days Remaining</p>
+      </div>
     </div>
 
-    <!-- Active Policies and Covered Vehicles Row -->
+    <!-- Renew Ahead of Time Section -->
+    <div class="col-lg-3 col-md-6">
+      <div class="dashboard-section dashboard-action-card dashboard-action-card-renew">
+        <h3 class="dashboard-section-title dashboard-action-card-title">Renew Ahead of Time</h3>
+        <p class="dashboard-action-card-text">Quickly renew your coverage before it expires.</p>
+      </div>
+    </div>
+
+    <!-- Need to File a Claim Section -->
+    <div class="col-lg-3 col-md-6">
+      <div class="dashboard-section dashboard-action-card dashboard-action-card-claim">
+        <h3 class="dashboard-section-title dashboard-action-card-title">Need to File a Claim?</h3>
+        <p class="dashboard-action-card-text-lg">
+          All claims must be reported while you are still in Mexico.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Active Policies and Covered Vehicles Row -->
+  <div class="row g-3 mb-4">
+    <!-- Active Policies Section -->
+    <div class="col-lg-6">
+      <div class="dashboard-section policy-vehicle-section">
+        <div class="dashboard-section-header">
+          <h3 class="dashboard-section-title">Active Policies ({totalPolicies})</h3>
+        </div>
+
+        <c-buhodb_policycard
+          policy-id={policyData.id}
+          vehicle-name={policyData.vehicleType}
+          policy-number={policyData.policyNumber}
+          active-until={policyData.activeUntil}
+          coverage={policyData.coverage}
+          premium={policyData.premium}
+          payment-type={policyData.paymentType}
+          onviewdetails={handleViewDetails}
+          ondownloaddocuments={handleDownloadDocuments}
+          onrenew={handleRenew}
+        >
+        </c-buhodb_policycard>
+
+        <!-- Carousel Controls -->
+        <div class="carousel-controls">
+          <span class="carousel-counter">{policyCounter}</span>
+          <button
+            class="carousel-btn"
+            onclick={handlePreviousPolicy}
+            disabled={isFirstPolicy}
+            aria-label="Previous policy"
+          >
+            <i class="bi bi-chevron-left"></i>
+          </button>
+          <button
+            class="carousel-btn"
+            onclick={handleNextPolicy}
+            disabled={isLastPolicy}
+            aria-label="Next policy"
+          >
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Covered Vehicles Section -->
+    <div class="col-lg-6">
+      <div class="dashboard-section policy-vehicle-section">
+        <div class="dashboard-section-header">
+          <h3 class="dashboard-section-title">Vehicles ({totalVehicles})</h3>
+        </div>
+
+        <c-buhodb_vehiclecard
+          vehicle-id={vehicleData.id}
+          vehicle-name={vehicleData.name}
+          vin={vehicleData.vin}
+          plate={vehicleData.plate}
+          value={vehicleData.value}
+          surcharge={vehicleData.surcharge}
+          primary-driver={vehicleData.primaryDriver}
+          added={vehicleData.added}
+          oneditvehicle={handleEditVehicle}
+          onupdatevalue={handleEditVehicle}
+        >
+        </c-buhodb_vehiclecard>
+
+        <!-- Carousel Controls -->
+        <div class="carousel-controls">
+          <span class="carousel-counter">{vehicleCounter}</span>
+          <button
+            class="carousel-btn"
+            onclick={handlePreviousVehicle}
+            disabled={isFirstVehicle}
+            aria-label="Previous vehicle"
+          >
+            <i class="bi bi-chevron-left"></i>
+          </button>
+          <button
+            class="carousel-btn"
+            onclick={handleNextVehicle}
+            disabled={isLastVehicle}
+            aria-label="Next vehicle"
+          >
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Documents and Helpful Resources Row -->
     <div class="row g-3 mb-4">
-        <!-- Active Policies Section -->
-        <div class="col-lg-6">
-            <div class="dashboard-section policy-vehicle-section">
-                <div class="dashboard-section-header">
-                    <h3 class="dashboard-section-title">Active Policies ({totalPolicies})</h3>
-                </div>
-
-                <c-buhodb_policycard
-                    policy-id={policyData.id}
-                    vehicle-name={policyData.vehicleType}
-                    policy-number={policyData.policyNumber}
-                    active-until={policyData.activeUntil}
-                    coverage={policyData.coverage}
-                    premium={policyData.premium}
-                    payment-type={policyData.paymentType}
-                    onviewdetails={handleViewDetails}
-                    ondownloaddocuments={handleDownloadDocuments}
-                    onrenew={handleRenew}>
-                </c-buhodb_policycard>
-
-                <!-- Carousel Controls -->
-                <div class="carousel-controls">
-                    <span class="carousel-counter">{policyCounter}</span>
-                    <button class="carousel-btn" onclick={handlePreviousPolicy} disabled={isFirstPolicy} aria-label="Previous policy">
-                        <i class="bi bi-chevron-left"></i>
-                    </button>
-                    <button class="carousel-btn" onclick={handleNextPolicy} disabled={isLastPolicy} aria-label="Next policy">
-                        <i class="bi bi-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <!-- Covered Vehicles Section -->
-        <div class="col-lg-6">
-            <div class="dashboard-section policy-vehicle-section">
-                <div class="dashboard-section-header">
-                    <h3 class="dashboard-section-title">Covered Vehicles ({totalVehicles})</h3>
-                </div>
-
-                <c-buhodb_vehiclecard
-                    vehicle-id={vehicleData.id}
-                    vehicle-name={vehicleData.name}
-                    vin={vehicleData.vin}
-                    plate={vehicleData.plate}
-                    value={vehicleData.value}
-                    surcharge={vehicleData.surcharge}
-                    primary-driver={vehicleData.primaryDriver}
-                    added={vehicleData.added}
-                    oneditvehicle={handleEditVehicle}
-                    onupdatevalue={handleEditVehicle}>
-                </c-buhodb_vehiclecard>
-
-                <!-- Carousel Controls -->
-                <div class="carousel-controls">
-                    <span class="carousel-counter">{vehicleCounter}</span>
-                    <button class="carousel-btn" onclick={handlePreviousVehicle} disabled={isFirstVehicle} aria-label="Previous vehicle">
-                        <i class="bi bi-chevron-left"></i>
-                    </button>
-                    <button class="carousel-btn" onclick={handleNextVehicle} disabled={isLastVehicle} aria-label="Next vehicle">
-                        <i class="bi bi-chevron-right"></i>
-                    </button>
-                </div>
-
-                
-            </div>
-        </div>
-
-        <!-- Recent Documents and Helpful Resources Row -->
-        <div class="row g-3 mb-4">
-            <!-- Recent Document & Activity Section -->
-            <!--div class="col-lg-6">
+      <!-- Recent Document & Activity Section -->
+      <!--div class="col-lg-6">
                 <div class="dashboard-section dashboard-section-full">
                     <div class="dashboard-section-header">
                         <h3 class="dashboard-section-title">Recent Document & Activity</h3>
@@ -151,8 +179,8 @@
                 </div>
             </div-->
 
-            <!-- Helpful Resources Section -->
-            <!--div class="col-lg-6">
+      <!-- Helpful Resources Section -->
+      <!--div class="col-lg-6">
                 <div class="dashboard-section dashboard-section-full">
                     <div class="dashboard-section-header">
                         <h3 class="dashboard-section-title">Helpful Resources for Your Trip to Mexico</h3>
@@ -173,6 +201,6 @@
                     </div>
                 </div>
             </div-->
-        </div>
     </div>
+  </div>
 </template>

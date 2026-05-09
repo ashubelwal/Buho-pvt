@@ -520,7 +520,7 @@ public without sharing class Mex_NewLeadProcess {
                 }
     
     @AuraEnabled
-    public static map<string, object> fetchDataFromLead(string LeadId, string screenName){
+    public static map<string, object> fetchDataFromLead(String LeadId, String screenName){
         map<string, object> responseMap = new map<string, object>();
         try{
             List<Lead> fetchLeadData = new List<Lead>(); 
@@ -856,8 +856,8 @@ public without sharing class Mex_NewLeadProcess {
             
             if (leadObj != null && !leadObj.IsConverted) {
 
-                List<Account> existingAccountlist = [Select Id from Account Where Email__c = :leadObj.Email];
-                List<Contact> existingContacts = [Select Id, FirstName,LastName, Name, Email from Contact Where Email = :leadObj.Email];
+                List<Account> existingAccountlist = [SELECT Id from Account WHERE Email__c = :leadObj.Email];
+                List<Contact> existingContacts = [SELECT Id, FirstName,LastName, Name, Email FROM Contact WHERE Email = :leadObj.Email];
                 System.debug('Contact exisitng Data' + JSON.serialize(existingContacts));
                 System.debug('existingAccountlist' + JSON.serialize(existingAccountlist));
                 Database.LeadConvert leadConvertInst = new Database.LeadConvert();

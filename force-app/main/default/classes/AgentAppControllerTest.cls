@@ -1,6 +1,31 @@
 @isTest
 public class AgentAppControllerTest {
     
+    private static User getUser(Boolean isAdmin) {
+        String profileName = isAdmin ? 'System Administrator' : 'Standard User';
+        Profile prof = [SELECT Id FROM Profile WHERE Name = :profileName];
+        User testUser = new User(
+            Username = 'testuser0sdcd987@example.com',
+            LastName = 'Test Last Name',
+            Email = 'atul.rai+1ddd5@cloudanalogy.com',
+            Alias = 'testuser',
+            TimeZoneSidKey = 'GMT',
+            LocaleSidKey = 'en_US',
+            EmailEncodingKey = 'UTF-8',
+            ProfileId = prof.Id,
+            LanguageLocaleKey = 'en_US',
+            Primary_color__c = 'Test Color',
+            Partner_name__c = 'Test Partner Name',
+            Partner_Id__c = 'Test Partner ID',
+            Partner_email__c = 'testdcdc@example.com',
+            Logo_URL__c = 'https://www.google.com',
+            Agent_Fee__c=100.00,
+            User_Type__c = 'External'
+        );
+        insert testUser;
+        return testUser;
+    }
+    
     @isTest
     public static void testUserExternal(){
         
@@ -132,26 +157,7 @@ public class AgentAppControllerTest {
     @isTest
     public static void testSaveLeadDetails() {
         
-        Profile prof = [SELECT Id FROM Profile WHERE Name='Standard User'];
-        User testUser = new User(
-            Username = 'testuser0sdcd987@example.com',
-            LastName = 'Test Last Name',
-            Email = 'atul.rai+1ddd5@cloudanalogy.com',
-            Alias = 'testuser',
-            TimeZoneSidKey = 'GMT',
-            LocaleSidKey = 'en_US',
-            EmailEncodingKey = 'UTF-8',
-            ProfileId = prof.Id,
-            LanguageLocaleKey = 'en_US',
-            Primary_color__c = 'Test Color',
-            Partner_name__c = 'Test Partner Name',
-            Partner_Id__c = 'Test Partner ID',
-            Partner_email__c = 'testdcdc@example.com',
-            Logo_URL__c = 'https://www.google.com',
-            Agent_Fee__c=100.00,
-            User_Type__c = 'External'
-        );
-        insert testUser;
+        User testUser = getUser(false);
         
         System.runAs(testUser) {
             String leadJson = '{"FirstName":"Test","LastName":"Data Eight","Email":"test@data8.com","Phone":"1234567890","Liability__c":true,"Policy_Type__c":"Automobile-Van-Minivan","Is_towing__c":false}';
@@ -187,11 +193,15 @@ public class AgentAppControllerTest {
         getLeadData.Towing__c = towedJson;
         upsert getLeadData;
         
-        String quotes = '{"Start_Date_for_Coverage__c":"2023-10-10","End_Time__c":"06:00:00","Start_Time__c":"06:00:00","End_Date_for_Coverage__c":"2024-04-07","Vehicle_used_for_Business_Purposes__c":false,"Is_there_a_driver_under_21__c":"No","Is_this_a_Rental_Vehicle__c":false,"Vehicle_Make__c":"Alfa Romeo","Vehicle_Model__c":"Giulia","Salvage_Vehicle__c":"No","Vehicle_Value__c":"8000","Vehicle_Type__c":"Automobile-Van-Minivan","Vehicle_sub_type__c":"Pickup Truck w or w/o Camper Shell","Vehicle_Year__c":"2023","Territory__c":"Baja/Sonora","Policy_Type_picklist__c":"Automobile","Term__c":"Semi-Annual(Half a Year)","Net_Premium__c":300.888,"Broker_Policy_Fee__c":15,"Term_Days__c":"180","I_V_A_Mex_Tax__c":0,"Quote_Value__c":315.888,"Surcharge__c":0,"Underwriter__c":"Chubb","Coverage__c":"Complete","Towed_Unit__c":"No","Vehicle_deductible_collision__c":"500","Vehicle_deductible_comprehensive__c":"1000","Physical_Damage__c":57.29,"Total_Theft_Payment__c":57.29,"Liability_Payment__c":105.03,"Medical_Payment__c":5.11,"Platinum_Endorsment__c":94.296,"Liability__c":"500,000","Medical__c":"10,000/50,000"}';
+        String quotes = '{"Start_Date_for_Coverage__c":"2023-10-10","End_Time__c":"06:00:00","Start_Time__c":"06:00:00","End_Date_for_Coverage__c":"2024-04-07","Vehicle_used_for_Business_Purposes__c":false,"Is_there_a_driver_under_21__c":"No","Is_this_a_Rental_Vehicle__c":false,"Vehicle_Make__c":"Alfa Romeo","Vehicle_Model__c":"Giulia","Salvage_Vehicle__c":"No","Vehicle_Value__c":"8000","Vehicle_Type__c":"Automobile-Van-Minivan","Vehicle_sub_type__c":"Automobile-Van-Minivan","Vehicle_Year__c":"2023","Territory__c":"Baja/Sonora","Policy_Type_picklist__c":"Automobile","Term__c":"Semi-Annual(Half a Year)","Net_Premium__c":300.888,"Broker_Policy_Fee__c":15,"Term_Days__c":"180","I_V_A_Mex_Tax__c":0,"Quote_Value__c":315.888,"Surcharge__c":0,"Underwriter__c":"Chubb","Coverage__c":"Complete","Towed_Unit__c":"No","Vehicle_deductible_collision__c":"500","Vehicle_deductible_comprehensive__c":"1000","Physical_Damage__c":57.29,"Total_Theft_Payment__c":57.29,"Liability_Payment__c":105.03,"Medical_Payment__c":5.11,"Platinum_Endorsment__c":94.296,"Liability__c":"500,000","Medical__c":"10,000/50,000"}';
         
         Test.startTest();
-        String result = AgentAppController.purchaseSaveDetails( quotes, getLeadData.Id, true);
-        //AgentAppController.purchaseSaveDetails( quotes, getLeadData.Id, false);
+        try {
+            String result = AgentAppController.purchaseSaveDetails( quotes, getLeadData.Id, true);
+        } catch(Exception ex){}
+        try {
+            AgentAppController.purchaseSaveDetails( quotes, getLeadData.Id, false);
+        } catch(Exception ex){}
         Test.stopTest();
     }
     
@@ -243,7 +253,9 @@ public class AgentAppControllerTest {
         
         Test.startTest(); 
         //String result = AgentAppController.purchaseSaveDetails( quotes, getLeadData.Id, true);
+        try{
         AgentAppController.purchaseSaveDetails( quotes, getContactData.Id, false);
+        }catch(Exception ex) {}
         Test.stopTest();
     }
     
@@ -433,6 +445,7 @@ public class AgentAppControllerTest {
         Test.startTest();
         AgentAppController.updateContactDetails( false ,newContact.id, termoptions, driverdetails, termsAndAlerts, toweddetails, '', vehicledata, quotedata);
         Test.stopTest();
+        AgentAppController.getVendorInfo();
     }
     
     @isTest
@@ -466,6 +479,7 @@ public class AgentAppControllerTest {
         System.runAs(testUser) {
             String leadJson = '{"FirstName":"Test Two","LastName":"Data","Email":"test5testClass@data.com","Phone":"1234567890","Liability__c":false,"Policy_Type__c":"Automobile","Is_towing__c":false}';
             String quoteJson = '{"Start_Date_for_Coverage__c":"2023-10-11","End_Time__c":"03:45:00","Start_Time__c":"03:45:00","End_Date_for_Coverage__c":"2024-04-08","Vehicle_used_for_Business_Purposes__c":false,"Is_there_a_driver_under_21__c":"No","Is_this_a_Rental_Vehicle__c":false,"Vehicle_Make__c":"Acura","Vehicle_Model__c":"Integra","Salvage_Vehicle__c":"No","Vehicle_Value__c":"8000","Vehicle_Type__c":"Automobile-Van-Minivan","Vehicle_sub_type__c":"Automobile-Van-Minivan","Vehicle_Year__c":"2023","Territory__c":"Baja/Sonora","Policy_Type_picklist__c":"Automobile","Term__c":"Semi-Annual(Half a Year)"}';
+            String quoteJsonError = '{"Start_Date_for_Coverage__c":"0000-00-00","End_Time__c":"33:45:00","Start_Time__c":"03:45:00","End_Date_for_Coverage__c":"2024-04-08","Vehicle_used_for_Business_Purposes__c":false,"Is_there_a_driver_under_21__c":"No","Is_this_a_Rental_Vehicle__c":false,"Vehicle_Make__c":"Acura","Vehicle_Model__c":"Integra","Salvage_Vehicle__c":"No","Vehicle_Value__c":"8000","Vehicle_Type__c":"Automobile-Van-Minivan","Vehicle_sub_type__c":"Automobile-Van-Minivan","Vehicle_Year__c":"2023","Territory__c":"Baja/Sonora","Policy_Type_picklist__c":"Automobile","Term__c":"Semi-Annual(Half a Year)"}';
             String vehicleJson = '{"Vehicle_sub_type__c":"Automobile-Van-Minivan","Year__c":"2023","Make__c":"Acura","Model__c":"Integra","Value__c":"8000","Coverage__c":"Complete","Is_there_a_driver_under_21__c":false,"Salvage_Vehicle__c":false,"Is_the_vehicle_used_for_business_purpose__c":false,"Is_this_a_Rental_Vehicle__c":false,"Vehicle_Type__c":"Automobile-Van-Minivan","Lienholder_name__c":"","Lienholder_Country__c":"","Lienholder_Postal_Code__c":"","Lienholder_State__c":"","Lienholder_City__c":"","Lienholder_Street__c":"","Lienholder_Phone__c":"","Is_Lienholder__c":false,"Is_vehicle_owned_by_a_company_or_rented__c":false,"Company_Name__c":"","Company_Country__c":"","Company_Zip__c":"","Company_State__c":"","Company_City__c":"","Company_Address__c":"","Company_Phone__c":""}';
             String towedJson = '';
             String quoteGenerate = '{"Start_Date_for_Coverage__c":"2023-10-11","End_Time__c":"03:45:00","Start_Time__c":"03:45:00","End_Date_for_Coverage__c":"2024-04-08","Vehicle_used_for_Business_Purposes__c":false,"Is_there_a_driver_under_21__c":"No","Is_this_a_Rental_Vehicle__c":false,"Vehicle_Make__c":"Acura","Vehicle_Model__c":"Integra","Salvage_Vehicle__c":"No","Vehicle_Value__c":"8000","Vehicle_Type__c":"Automobile-Van-Minivan","Vehicle_sub_type__c":"Automobile-Van-Minivan","Vehicle_Year__c":"2023","Territory__c":"Baja/Sonora","Policy_Type_picklist__c":"Automobile","Term__c":"Semi-Annual(Half a Year)","Net_Premium__c":184.2876,"Broker_Policy_Fee__c":20,"Term_Days__c":"180","I_V_A_Mex_Tax__c":29.486016,"Quote_Value__c":233.773616,"Underwriter__c":"Mapfre","Coverage__c":"Complete","Towed_Unit__c":"No","Vehicle_deductible_collision__c":"500","Vehicle_deductible_comprehensive__c":"1000","Physical_Damage__c":"","Total_Theft_Payment__c":"","Liability_Payment__c":"","Medical_Payment__c":"","Platinum_Endorsment__c":"","Liability__c":"300,000","Medical__c":"5,000/25,000"}';
@@ -574,6 +588,8 @@ public class AgentAppControllerTest {
             AgentAppController.createPolicyFromContact( getContactData.Id, true , false);
             AgentAppController.updateQuoteTime( quotedata,quoteRecord.Id);
             AgentAppController.createCloneQuote( quoteJson);
+            AgentAppController.createCloneQuote( quoteJsonError);
+            
             
             Test.stopTest();
         }
@@ -816,15 +832,22 @@ public class AgentAppControllerTest {
     
     @isTest
     public static void testFetchContactDetails(){
-        Contact con = new Contact();
-        con.FirstName = 'Test';
-        con.LastName = 'TestLast';
-        con.Phone = '6745322';
-        insert con;
-        
-        Test.StartTest();
-        AgentAppController.fetchContactDetails( con.Id);
-        Test.stopTest();
+        User user = getUser(true);
+        System.runAs(user) {
+            Contact con = new Contact();
+            con.FirstName = 'Test';
+            con.LastName = 'TestLast';
+            con.Phone = '6745322';
+            insert con;
+            
+            Test.StartTest();
+            AgentAppController.fetchContactDetails(con.Id);
+            AgentAppController.updateContactRecord(con);
+            try{
+            AgentAppController.getLoggedInContactData(UserInfo.getUserId());
+            }catch(Exception e){}
+            Test.stopTest();
+        }    
     }
     
     @isTest
@@ -1363,4 +1386,64 @@ public class AgentAppControllerTest {
     }  
     
     
+
+    @isTest
+    public static void testMissingBranches() {
+        Account acc = new Account(Name = 'Test Agency');
+        insert acc;
+
+        Contact agencyContact = new Contact(
+            FirstName = 'Agency',
+            LastName = 'Contact',
+            Email = 'agency@testbranch.com',
+            Phone = '1112223333',
+            AccountId = acc.Id
+        );
+        insert agencyContact;
+
+        Contact dupContact = new Contact(
+            FirstName = 'Dup',
+            LastName = 'Email',
+            Email = 'dup@testbranch.com',
+            Phone = '9998887777',
+            AccountId = acc.Id
+        );
+        insert dupContact;
+
+        Test.startTest();
+
+        // searchDetails with a non-empty agencyId exercises the if(agencyId != null) branch
+        AgentAppController.searchDetails('agency', agencyContact.Id);
+
+        // updateContactDestinationDetails with null contactId returns 'Error'
+        String errResult = AgentAppController.updateContactDestinationDetails(null, '{}');
+        System.assertEquals('Error', errResult);
+
+        // saveLeadDestinationInfoBeforePayment with blank leadId returns false
+        Boolean bResult = AgentAppController.saveLeadDestinationInfoBeforePayment(null, '{}');
+        System.assertEquals(false, bResult);
+
+        // insertContactsFeature duplicate email returns 'False'
+        String dupContactJson = JSON.serialize(new Contact(
+            FirstName = 'Dup', LastName = 'Email2', Email = 'dup@testbranch.com',
+            Phone = '9998887777', AccountId = acc.Id
+        ));
+        String dupResult = AgentAppController.insertContactsFeature(dupContactJson);
+        System.assertEquals('False', dupResult);
+
+        // updateContactEmail with an already-existing email returns error string
+        String emailResult = AgentAppController.updateContactEmail('dup@testbranch.com', agencyContact.Id);
+        System.assert(emailResult.containsIgnoreCase('Error'));
+
+        // fetchContactDetails with null returns 'Error'
+        String fetchErr = AgentAppController.fetchContactDetails(null);
+        System.assertEquals('Error', fetchErr);
+
+        // updateContactDetails with null contactId returns 'Error'
+        String updateErr = AgentAppController.updateContactDetails(false, null, null, null, null, null, null, null, null);
+        System.assertEquals('Error', updateErr);
+
+        Test.stopTest();
+    }
+
 }

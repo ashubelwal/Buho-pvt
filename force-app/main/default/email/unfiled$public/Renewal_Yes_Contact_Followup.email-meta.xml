@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>This will be used for the renewal retention efforts after speaking to a client about the lapsed policy.  They are not ready to renew right now, but this follow up with provide them links.</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Renewal Yes Contact Followup</name>
+    <style>none</style>
+    <subject>Regarding Your MexInsurance® Non-Renewal</subject>
+    <textOnly>Hey {!Contact.FirstName},
+
+Hope you&apos;re doing great! So, I thought it would be a good idea to follow up on our chat and send you some info that&apos;ll make you a mexnsurance pro in no time. I&apos;ve included a few links and even made a cool video to help you out.
+
+Here&apos;s the link to the video: Link
+
+You can log in using your email address as your username right here: Link
+
+If you need to talk to a real person, our office is open during regular business hours. Here&apos;s how you can reach us:
+
+Give us a call at 619-691-7747
+Send a WhatsApp message to 619-488-6500
+Shoot us an SMS text message to 619-691-7747
+
+
+Thanks for reading, and hope this helps!
+
+Cheers,
+
+--
+Mexico Insurance Services
+License 0G35864
+www.mexinsurance.com</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

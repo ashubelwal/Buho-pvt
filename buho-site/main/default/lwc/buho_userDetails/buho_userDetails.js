@@ -1,9 +1,11 @@
 import { LightningElement, track, api } from 'lwc';
+import { NavigationMixin } from 'lightning/navigation';
 import saveLeadUserDetails from '@salesforce/apex/CustomerQuoteFlow.saveLeadUserDetails';
 import checkalreadyExistUserAction from '@salesforce/apex/CustomerQuoteFlow.checkalreadyExistUserAction';
 import { createTransformedData, log } from 'c/buho_utils';
 import createNewUser from '@salesforce/apex/CustomerQuoteFlow.createNewUser';
 import login from '@salesforce/apex/BuhoLoginController.login';
+import activateUser from '@salesforce/apex/BuhoLoginController.activateUser';
 import buhoAssets from '@salesforce/resourceUrl/buhoAssets';
 import userdetails from '@salesforce/label/c.TR_User_Detail';
 import enteryourname from '@salesforce/label/c.TR_Kindly_enter_your_name_and_email_below_so_we_can_securely_store_the_quote_for';
@@ -18,7 +20,7 @@ import youraccountisalready from '@salesforce/label/c.TR_Your_account_already_ex
 import youraccountisalreadybut from '@salesforce/label/c.TR_Your_account_already_exist_s_but_is_inactive_0_to_activate_your_account';
 import Clickhere from '@salesforce/label/c.TR_Click_here';
 
-export default class Buho_userDetails extends LightningElement {
+export default class Buho_userDetails extends NavigationMixin(LightningElement) {
     label = {
         userdetails, enteryourname, knowyouremail, next, firstname, lastname, email, Clickhere, phone, notavaild, youraccountisalready, youraccountisalreadybut
     };
@@ -32,6 +34,14 @@ export default class Buho_userDetails extends LightningElement {
     @api agentId;
     userDetails = {};
 
+    // URL Parameters mapping
+    productInterest;
+    utmSource;
+    utmMedium;
+    utmCampaign;
+    utmContent;
+    market;
+    utmTerm
 
     @track inputValues = {
         countryCode: '+1',
@@ -66,8 +76,9 @@ export default class Buho_userDetails extends LightningElement {
     @track loginPassword = '';
     @track loginError = '';
     @track isLoggingIn = false;
+    showForgotPasswordLink = true;
 
-    isDebug = false;
+    isDebug = true;
     disableInput = false;
 
     __formPopulated = false;
@@ -110,27 +121,27 @@ export default class Buho_userDetails extends LightningElement {
     get emailScreenSlides() {
         return [
             {
-                image: this.ladyImage,
+                image: `${buhoAssets}/images/slide1.png`,
                 text: 'Smart protection for your Mexican adventures',
                 alt: 'Smart protection for your Mexican adventures'
             },
             {
-                image: this.ladyImage,
+                image: `${buhoAssets}/images/slide2.png`,
                 text: 'Comprehensive coverage for every journey',
                 alt: 'Comprehensive coverage'
             },
             {
-                image: this.ladyImage,
+                image: `${buhoAssets}/images/slide3.png`,
                 text: 'Fast and easy claims process',
                 alt: 'Easy claims'
             },
             {
-                image: this.ladyImage,
+                image: `${buhoAssets}/images/slide4.png`,
                 text: '24/7 customer support',
                 alt: '24/7 Support'
             },
             {
-                image: this.ladyImage,
+                image: `${buhoAssets}/images/silde5.png`,
                 text: 'Best rates for your peace of mind',
                 alt: 'Best rates'
             }
@@ -178,9 +189,9 @@ export default class Buho_userDetails extends LightningElement {
         // Check if it's a custom event from buho_input or a native event
         const name = event.detail?.name || event.target?.name;
         const value = event.detail?.value || event.target?.value;
-        
+
         let formattedValue = '';
-        
+
         // Reset customer flags if email changes
         if (name === 'Email') {
             if (this.inputValues?.Id) {
@@ -212,7 +223,7 @@ export default class Buho_userDetails extends LightningElement {
         this.flag.isInActiveCustomer = false;
         this.showActiveCustomerMessage = false;
         this.showPreviousInquiryModal = false;
-        
+
         try {
             let data = this.paramData?.Email ? this.paramData : this.inputValues;
             console.log('BUD OUTPUT : data', JSON.stringify(data));
@@ -244,7 +255,7 @@ export default class Buho_userDetails extends LightningElement {
 
             // Case 1: Lead exists (previous inquiry)
             if (this.returnLeadValue?.LeadInfo) {
-                
+
                 transformedData = createTransformedData?.(this.returnLeadValue) || [];
                 this.payload = JSON.parse(JSON.stringify(transformedData));
 
@@ -296,7 +307,7 @@ export default class Buho_userDetails extends LightningElement {
                     bubbles: true,
                     composed: true
                 }));*/
-                
+
                 if (this.returnLeadValue?.userData.IsActive) {
                     const userData = this.returnLeadValue?.userData;
                     const contactData = this.returnLeadValue?.contactData
@@ -337,7 +348,7 @@ export default class Buho_userDetails extends LightningElement {
                 }));
                 this.flag = { ...this.flag, customerWithPortalAccess: true };
                 this.flag = { ...this.flag, isCustomer: true };
-              
+
             }
             // Case 4: New user
             else {
@@ -386,6 +397,15 @@ export default class Buho_userDetails extends LightningElement {
                 this.dispatchEvent(new CustomEvent('flagupdate', { detail: false }));
             }
         }
+    }
+
+    handleForgotPassword() {
+        this[NavigationMixin.Navigate]({
+            type: 'comm__namedPage',
+            attributes: {
+                name: 'Forgot_Password'
+            }
+        });
     }
 
     setUrlParam(key, value) {
@@ -512,8 +532,17 @@ export default class Buho_userDetails extends LightningElement {
     }
 
     // Handle login from inactive user modal
-    handleLoginFromInactiveModal() {
-        window.open(this.baseUrl + '/Buho/activateaccount', "_self");
+    async handleLoginFromInactiveModal() {
+        await activateUser({ userId: this.returnLeadValue?.userData?.Id })
+            .then((result) => {
+                this.showInactiveUserModal = false;
+                this.showActiveUserModal = true;
+                this.dispatchEvent(new CustomEvent('toastevent', { detail: { variant: 'success', title: 'Success', message: 'Your account has been activated successfully! Kindly login or reset your password using forgot password.' } }));
+            })
+            .catch((error) => {
+                if (this.isDebug) console.error('User activation error', error);
+                this.dispatchEvent(new CustomEvent('toastevent', { detail: { variant: 'error', title: 'Error', message: 'Error in user activation!' } }));
+            });
     }
 
     // Handle start new quote from inactive user modal
@@ -561,7 +590,7 @@ export default class Buho_userDetails extends LightningElement {
         this.loginError = '';
 
         try {
-            
+
             const result = await login({
                 username: this.loginUsername,
                 password: this.loginPassword,
@@ -676,6 +705,7 @@ export default class Buho_userDetails extends LightningElement {
 
     // Get data method - called by parent
     @api async getData() {
+        console.log('@@@get data called');
         await this.insertLeadData()
             .then(() => {
                 if (this.isDebug) console.log('BUD Lead data inserted successfully');
@@ -703,13 +733,40 @@ export default class Buho_userDetails extends LightningElement {
             Source__c: 'GoBuho Portal',
             Agent__c: this.agentId
         }
-        if(!this.inputValues.LeadSource){
+
+        if (this.productInterest) {
+            this.inputValues.Product_Interest__c = this.productInterest;
+        }
+        if (this.utmSource) {
+            this.inputValues.utm_source__c = this.utmSource;
+            this.inputValues.LeadSource = this.utmSource;
+        }
+        if (this.utmMedium) {
+            this.inputValues.utm_medium__c = this.utmMedium;
+        }
+        if (this.utmCampaign) {
+            this.inputValues.utm_campaign__c = this.utmCampaign;
+        }
+        if (this.utmContent) {
+            this.inputValues.utm_content__c = this.utmContent;
+        }
+
+        if (this.market) {
+            this.inputValues.Market__c = this.market;
+        }
+
+        if (this.utmTerm) {
+            this.inputValues.utm_term__c = this.utmTerm;
+        }
+
+
+        if (!this.inputValues.LeadSource) {
             this.inputValues.LeadSource = 'GoBuho';
         }
 
         // Add if there is some data validation 
         await this.checkData();
-        
+        if (this.isDebug) console.log('@@@saveLeadUserDetails', JSON.stringify(this.inputValues));
         //Save data in the backend
         await saveLeadUserDetails({ strLeadDetails: JSON.stringify(this.inputValues) })
             .then((result) => {
@@ -717,7 +774,8 @@ export default class Buho_userDetails extends LightningElement {
                     this.inputValues = result.Data;
                     if (this.isDebug) console.log('BUD Input values after insertion', this.inputValues);
                 } else if (result.Status === 'Error') {
-                    if (this.isDebug) console.log('BUD Error in inserting lead data', result.Message);
+                    if (this.isDebug) console.error('BUD Error in inserting lead data', result.Message);
+                    this.dispatchEvent(new CustomEvent('toastevent', { detail: { variant: 'error', title: 'Error', message: 'Getting error, please contact with support team!' } }));
                 }
             })
             .catch((error) => {
@@ -735,6 +793,29 @@ export default class Buho_userDetails extends LightningElement {
     connectedCallback() {
         if (this.isDebug) console.log('BUD OUTPUT : ', JSON.stringify(this.payload));
         const params = new URLSearchParams(window.location.search);
+
+        if (params.has('Product_Interest')) {
+            this.productInterest = params.get('Product_Interest');
+        }
+        if (params.has('utm_source')) {
+            this.utmSource = params.get('utm_source');
+        }
+        if (params.has('utm_medium')) {
+            this.utmMedium = params.get('utm_medium');
+        }
+        if (params.has('utm_campaign')) {
+            this.utmCampaign = params.get('utm_campaign');
+        }
+        if (params.has('utm_content')) {
+            this.utmContent = params.get('utm_content');
+        }
+        if (params.has('Market')) {
+            this.market = params.get('Market');
+        }
+        if (params.has('utm_term')) {
+            this.utmTerm = params.get('utm_term');
+        }
+
         if (params.get('email')) {
             this.paramData = {
                 Email: params.get('email')
@@ -742,6 +823,10 @@ export default class Buho_userDetails extends LightningElement {
             this.inputValues.Email = params.get('email')
             this.handleEmailInput();
         }
+
+        if(this.isDebug) console.log('@@@payload', this.payload);
+
+
         this.CampaignFields(params);
     }
 
@@ -767,18 +852,24 @@ export default class Buho_userDetails extends LightningElement {
         if (this.payload && this.payload.length > 0 && !this.__formPopulated) {
             this.payload = JSON.parse(JSON.stringify(this.payload));
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('step')) {
-                this.dispatchEvent(new CustomEvent('stepchange', { detail: urlParams.get('step') }));
-            }
             this.__formPopulated = true;
             const userDetailsData = this.payload.find((item) => item.userDetails);
+
             if (userDetailsData) {
                 this.userDetails = userDetailsData.userDetails;
                 this.showDetailedForm = true;
+                if(this.userDetails.FirstName) this.inputValues['FirstName'] = this.userDetails.FirstName;
+                if(this.userDetails.LastName) this.inputValues['LastName'] = this.userDetails.LastName;
+                if(this.userDetails.Phone) this.inputValues['Phone'] = this.userDetails.Phone;
+                if(this.userDetails.Id) this.inputValues['Id'] = this.userDetails.Id;
                 // Wait for DOM to update after showDetailedForm change
                 requestAnimationFrame(() => {
                     this.populateInputFields();
                 });
+            }
+
+            if (urlParams.has('step')) {
+                this.dispatchEvent(new CustomEvent('stepchange', { detail: urlParams.get('step') }));
             }
         }
     }

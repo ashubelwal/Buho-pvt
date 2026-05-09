@@ -51,7 +51,7 @@ export default class PolicyUtils extends LightningElement {
         isShowingEndTerm: true, annual: false, semiAnnual: false, portalAccessYes: false, isModelDisabled: false, isPolicyDisabled: false, isRequiredTowed: false, isNorthbound: false, isContactType: false,
         registeredOwner: false, companyRegisteredOption: false, isLoading: false, showManualMake: false, showManualModel: false, isPolicyAutomobile: false, isEndDateDisabled: false, isDMVService: false, isDomesticInsurance: false,
         isPolicyNorthbound: false, isPolicyRV: false, isPolicyMotorcycle: false, isPolicyWatercraft: false, isLienholderChecked: false, isVehicleRentedChecked: false,
-        isportalAccessHide: false, portalAccessNo: true, checkPortalAcccess: false, isUserDeactivated: false, disableEmail: false, emailService: false, isQuoteLoaded: false
+        isportalAccessHide: false, portalAccessNo: true, checkPortalAcccess: false, isUserDeactivated: false, disableEmail: false, emailService: false, isQuoteLoaded: false, isFutureStart: false
     }
 
     @track trackVar = {
@@ -1335,10 +1335,10 @@ export default class PolicyUtils extends LightningElement {
 
     //Apex invocations
     async saveLeadDetailsintoApex(leadJSON, quoteJSON, vechileJSON, towedJSON) {
-        console.log('leadJSON', leadJSON);
-        console.log('quoteJSON', quoteJSON);
-        console.log('vechileJSON', vechileJSON);
-        console.log('towedJSON', towedJSON);
+        console.log('leadJSON', leadJSON, typeof leadJSON);
+        console.log('quoteJSON', quoteJSON, typeof quoteJSON);
+        console.log('vechileJSON', vechileJSON, typeof vechileJSON);
+        console.log('towedJSON', towedJSON, typeof towedJSON);
 
         try {
             const result = await saveLeadDetails({
@@ -1358,7 +1358,8 @@ export default class PolicyUtils extends LightningElement {
             }
             return null; // In case result is falsy
         } catch (error) {
-            console.log('Error in saving quote--->', error.message);
+            console.log(error);
+            console.log('Error in saving quote 3--->', error.message);
             throw error; // Re-throw the error to be caught by the caller
         }
     }

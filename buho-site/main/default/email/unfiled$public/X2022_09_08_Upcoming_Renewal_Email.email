@@ -1,0 +1,236 @@
+<html>
+            <style type="text/css">
+                body{
+                    background:#ededed;
+                }
+                
+                .container{
+                    margin:10px auto;
+                    width:600px;
+                }
+                
+                /*-- Email CSS --*/
+                
+                .mexemeailtheme{
+                    background-color:#fff;
+                    font-family:Arial;
+                    overflow:hidden;
+                    width:100%;
+                }
+                
+                .mexemeailhead{
+                    background-color:#328081;
+                    padding:3px 5px 5px 5px;
+                    overflow:hidden;
+                    width:100%;
+                }
+                
+                .mexemeaillogo{
+                    padding-left:35px;
+                    overflow:hidden;
+                    width:100%;
+                }
+                
+                .mexemeaillogo p{
+                    font-family:Arial;
+                    font-weight:400;
+                    font-size:22px;
+                    color:#fff;
+                }
+                
+                .mexemeaillogo p > sup{
+                    font-size:15px;
+                }
+                
+                .mexemeailphoto{
+                    overflow:hidden;
+                    width:100%;
+                }
+                
+                .mexemeailphoto img{
+                    max-width:100%;
+                }
+                
+                .mexemeailcontent{
+                    background-color:#fff;
+                    padding:10px 30px;
+                    overflow:hidden;
+                    color:#5e5e5e;
+                    width:90%;
+                }
+                
+                .mexemeailcontent p{
+                    line-height:26px;
+                    font-size:18px;
+                    color:#5e5e5e;
+                }
+                
+                .mexemeailbut{
+                    background-color:#cf614d;
+                    text-transform:uppercase;
+                    text-decoration:none;
+                    padding:15px 35px;
+                    border-radius:30px;
+                    width:max-content;
+                    margin:10px 0px;
+                    font-weight:600;
+                    font-size:18px;
+                    display:block;
+                    color:#fff;
+                }
+                
+                .mexemeailbut:hover,
+                .mexemeailbut:focus{
+                    opacity:0.9;
+                }
+                
+                .mexemeailsocial{
+                    padding:15px 35px 35px 35px;
+                    background-color:#ebf3f3;
+                    overflow:hidden;
+                    width:100%;
+                }
+                
+                .mexemeailsocial h3{
+                    color:#5e5e5e;
+                }
+                
+                .mexemico{
+                    background-size:100%!important;
+                    margin-right:10px;
+                    overflow:hidden;
+                    display:block;
+                    float:left;
+                }
+                
+                .mexemico:hover,
+                .mexemico:focus{
+                    opacity:0.8;
+                }
+                
+                /*.mexemailfaceboock{
+                    background:url(https://www.mexinsurance.com/wp-content/uploads/emailfaceboock.png) no-repeat;
+                }
+                
+                .mexemailinstagram{
+                    background:url(https://www.mexinsurance.com/wp-content/uploads/emailinstagram.png) no-repeat;
+                }
+                
+                .mexemailtweeter{
+                    background:url(https://www.mexinsurance.com/wp-content/uploads/emailtweeter.png) no-repeat;
+                }*/
+                
+                .mexemeailfooter{
+                    background-color:#328081;
+                    padding:25px 35px;
+                    overflow:hidden;
+                    width:100%;
+                }
+                
+                .mexemeailfooter p{
+                    line-height:26px;
+                    font-size:16px;
+                    color:#bcd5d5;
+                }
+                
+                .mexemeailfooter p > a{
+                    text-decoration:none;
+                    color:#ffffff;
+                }
+                
+                .mexemeailfooter p > a:hover,
+                .mexemeailfooter p > a:focus{
+                    opacity:0.9;
+                }
+                
+                .mexemeailfooter a{
+                    text-decoration:none;
+                    color:#ffffff;
+                }
+                
+                .mexemeailfooter a:hover,
+                .mexemeailfooter a:focus{
+                    opacity:0.9;
+                }
+            </style>
+            <body>
+                <div style="background-color:#fff;font-family:Arial;overflow:hidden;width:100%;">
+ <div style="display:flex; background-color:#fff; padding:8px 0; ">
+<p style="margin:Auto;"><img src="https://www.mexinsurance.com/wp-content/uploads/2023/11/cropped-Logo-1-2048x312.png"  width="225" /></p>
+</div>
+
+                    <!--<div style="overflow:hidden;width:100%;" class="mexemeailphoto">
+                        <img style="max-width:100%;width:100%;" src="https://www.mexinsurance.com/wp-content/uploads/time-to-renew-3.jpg"/>
+
+                    </div>-->
+                    <div style="background-color:#fff;padding:10px 30px;overflow:hidden;color:#5e5e5e;width:90%;" class="mexemeailcontent">
+                        <!--<h2 style="line-height:26px;font-size:18px;color:#5e5e5e;">Account activation at MexInsurance.com&reg;</h2>-->
+                        <p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">
+                            
+                            Hello {!Contact.FirstName},<br/>
+                            <p>I just want to reach out directly about your policy renewal coming.  The system should also try to remind you about it but I wanted to reach out directly also.  
+<p>
+If you need help activating your new account or accessing your old policies, just let me know.  We can even do a video or telephone together...anytime.
+<h2 style="line-height:26px;font-size:18px;color:#5e5e5e;">Policy Renewal Details</h2>
+<table>
+     <tr>
+          <th>Policy</th>
+          <th>Carrier</th>
+          <th>Expiration</th>
+     </tr>
+     <tr>
+          <td>{!Policy__c.Name}</td>
+          <td>{!Policy__c.Underwriter_picklist__c}</td>
+          <td>{!Policy__c.End_Date__c}</td><br/>
+</table>
+<p><strong>Policy Summary:</strong></p>
+<table>
+     <tr>
+          <th>Year</th>
+          <th>Make</th>
+          <th>Model</th>
+          <th>Stated Value</th>
+          <th>Liability</th>
+
+     </tr>
+     <tr>
+          <th>{!Policy__c.Vehicle_Year__c}</th>
+          <th>{!Policy__c.Vehicle_Make__c}</th>
+          <th>{!Policy__c.Vehicle_Model__c}</th>
+          <th>{!Policy__c.Vehicle_Value__c}</th>
+          <th>{!Policy__c.Liability__c}</th>
+
+     </tr>
+</table>
+<br/>
+
+
+       <center>                 <a style="background-color:#003a70;text-transform:uppercase;text-decoration:none;padding:15px 35px;border-radius:30px;width:max-content;margin:10px 0px;font-weight:600;font-size:18px;display:block;color:#fff;" class="mexemeailbut" href="https://at.mexinsurance.com/s/login/">click here to renew now!</a>
+                    </div></center>
+                    <!--<div style="padding:15px 35px 35px 35px;background-color:#ebf3f3;overflow:hidden;width:100%;" class="mexemeailsocial">
+                        <h3 style="color:#5e5e5e;">Follow us</h3>
+                        <a style="background:no-repeat; text-decoration: none;" class="mexemico mexemailfaceboock" target="_blank" href="https://www.facebook.com/mexinsurance">
+							<img src="https://mexinsurance--c.vf.force.com/resource/1676628399000/icon_facebook_rounded_blue" width="48"/>
+						</a>
+                        <a style="background:no-repeat; text-decoration: none;" class="mexemico mexemailtweeter" target="_blank" href="https://twitter.com/mexinsurance">
+							<img src="https://mexinsurance--c.vf.force.com/resource/1676629924000/icon_twitter_rounded_blue?" width="48"/>
+						</a>
+                    </div>-->
+
+
+                    <div style="background-color:#fff;padding:18px 0;overflow:hidden;width:100%;" class="mexemeailfooter">
+                        <div style="display:flex;">
+<p style="margin:Auto;"><img src="https://www.mexinsurance.com/wp-content/uploads/2023/11/cropped-Logo-1-2048x312.png" width="175" /></p>
+</div>
+
+<div style="display:flex"><p style="margin:Auto;color:#000; padding-top: 20px; font-size: 14px;">&copy; MEXICO INSURANCE SERVICES, INC.</p> </div>
+
+<div style="display:flex"><p style="margin:Auto;color:#000; padding-top: 6px; font-size: 14px;">CALIFORNIA INSURANCE LICENSE: 0G35864</p> </div>
+<div style="display:flex"><p style="margin:Auto;color:#000; font-size: 11px; padding-top: 4px;"><a style="text-decoration:none;color:#000;" target="_blank" href="https://www.mexinsurance.com/">MEXINSURANCE.COM</a></p>  </div>
+
+<div style="display:flex"> <p style="margin:Auto;color:#000; font-size: 11px; padding-top: 4px;">T. 855 MEXICO.5</p> </div>
+
+                    </div>
+                </div>
+            </body>
+        </html>

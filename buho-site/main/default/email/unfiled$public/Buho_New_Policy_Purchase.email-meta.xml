@@ -5,7 +5,7 @@
     <encodingKey>ISO-8859-1</encodingKey>
     <name>Buho New Policy Purchase</name>
     <style>none</style>
-    <subject>Your BÚHO Policy Documents – You're Covered!</subject>
+    <subject>Your BÚHO Policy Documents – You&apos;re Covered!</subject>
     <type>visualforce</type>
     <uiType>Aloha</uiType>
 </EmailTemplate>

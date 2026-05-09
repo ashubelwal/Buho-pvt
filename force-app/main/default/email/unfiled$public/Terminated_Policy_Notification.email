@@ -1,0 +1,4 @@
+Policy Type: {!Policy__c.Policy_Type_picklist__c}
+Underwriter: {!Policy__c.Underwriter_picklist__c}
+
+Policy Link: {!Policy__c.Link}

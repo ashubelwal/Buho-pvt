@@ -9,6 +9,7 @@ import saveQuoteRecordData from '@salesforce/apex/NcExistingCustomerFlow.saveQuo
 
 export default class Nc_quotePage extends LightningElement {
     @api payload;
+    @api isAgentPortal = false;
     @track results = {};
     @api agentuserfee;
     @track isDebug = true;

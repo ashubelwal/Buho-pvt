@@ -7,10 +7,14 @@
     {
       "path": "buho-site",
       "default": false
+    },
+    {
+      "path": "agent-dashboard",
+      "default": false
     }
   ],
   "name": "Mex-Inscurance",
   "namespace": "",
   "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "63.0"
+  "sourceApiVersion": "66.0"
 }

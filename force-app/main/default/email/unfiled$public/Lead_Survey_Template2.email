@@ -1,0 +1,6 @@
+<table border="0" cellpadding="5" width="550" cellspacing="5" height="400" >
+<tr valign="top" height="400" >
+<td tEditID="c1r1" style=" background-color:#FFFFFF; bEditID:r3st1; color:#000000; bLabel:main; font-size:12pt; font-family:arial;" aEditID="c1r1" locked="0" >
+<![CDATA[<div style=""><font face="arial"><b><br></b></font></div><div style=""><font face="arial"><b><br></b></font></div><div style=""><b style="font-size: 12pt;">Hello! &nbsp;We want to thank you for stopping by <a href="http://www.mexinsurance.com/">Mex-Insurance.com</a> to get a quote for your &nbsp;{!Lead.Year_A__c} &nbsp;{!Lead.Make__c} {!Lead.Model__c} for {!Lead.Term__c}.</b></div><div style=""><br></div><div style=""><br></div><div style=""><font face="arial">We notice you did not complete the purchase. Our goal is to make you a customer so we ask you take 10 seconds to answer 1 question by clicking <a href="http://mexinsurance.force.com/survey/leadsurveynew?leadid={!Lead.Id}">here</a>.&nbsp;</font></div><div style=""><font face="arial"><br></font></div><div style=""><font face="arial"><br></font></div><div style=""><font face="arial"><br></font></div><div style=""><font face="arial"><br></font></div><div style=""><font face="arial">Thank you!</font></div>]]></td>
+</tr>
+</table>

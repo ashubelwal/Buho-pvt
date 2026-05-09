@@ -1,0 +1,230 @@
+<html>
+<style type="text/css">
+    body {
+        background: #ededed;
+    }
+
+    .container {
+        margin: 10px auto;
+        width: 600px;
+    }
+
+    /*-- Email CSS --*/
+
+    .mexemeailtheme {
+        background-color: #fff;
+        font-family: Arial;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .mexemeailhead {
+        background-color: ##003a70;
+        padding: 3px 5px 5px 5px;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .mexemeaillogo {
+        padding-left: 35px;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .mexemeaillogo p {
+        font-family: Arial;
+        font-weight: 400;
+        font-size: 22px;
+        color: #fff;
+    }
+
+    .mexemeaillogo p>sup {
+        font-size: 15px;
+    }
+
+    .mexemeailphoto {
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .mexemeailphoto img {
+        max-width: 100%;
+    }
+
+    .mexemeailcontent {
+        background-color: #fff;
+        padding: 10px 30px;
+        overflow: hidden;
+        color: #5e5e5e;
+        width: 90%;
+    }
+
+    .mexemeailcontent p {
+        line-height: 26px;
+        font-size: 18px;
+        color: #5e5e5e;
+    }
+
+    .mexemeailbut {
+        background-color: #cdcdcd;
+        text-transform: uppercase;
+        text-decoration: none;
+        padding: 15px 35px;
+        border-radius: 30px;
+        width: max-content;
+        margin: 10px 0px;
+        font-weight: 600;
+        font-size: 18px;
+        display: block;
+        color: #fff;
+    }
+
+    .mexemeailbut:hover,
+    .mexemeailbut:focus {
+        opacity: 0.9;
+    }
+
+    .mexemeailsocial {
+        padding: 15px 35px 35px 35px;
+        background-color: #e2e2e2;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .mexemeailsocial h3 {
+        color: #5e5e5e;
+    }
+
+    .mexemico {
+        background-size: 100% !important;
+        margin-right: 10px;
+        overflow: hidden;
+        display: block;
+        float: left;
+    }
+
+    .mexemico:hover,
+    .mexemico:focus {
+        opacity: 0.8;
+    }
+
+    /*.mexemailfaceboock{
+                    background:url(https://www.mexinsurance.com/wp-content/uploads/emailfaceboock.png) no-repeat;
+                }
+                
+                .mexemailinstagram{
+                    background:url(https://www.mexinsurance.com/wp-content/uploads/emailinstagram.png) no-repeat;
+                }
+                
+                .mexemailtweeter{
+                    background:url(https://www.mexinsurance.com/wp-content/uploads/emailtweeter.png) no-repeat;
+                }*/
+
+    .mexemeailfooter {
+        background-color: #003a70;
+        padding: 25px 35px;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .mexemeailfooter p {
+        line-height: 26px;
+        font-size: 16px;
+        color: #e2e2e2;
+    }
+
+    .mexemeailfooter p>a {
+        text-decoration: none;
+        color: #ffffff;
+    }
+
+    .mexemeailfooter p>a:hover,
+    .mexemeailfooter p>a:focus {
+        opacity: 0.9;
+    }
+
+    .mexemeailfooter a {
+        text-decoration: none;
+        color: #ffffff;
+    }
+
+    .mexemeailfooter a:hover,
+    .mexemeailfooter a:focus {
+        opacity: 0.9;
+    }
+</style>
+
+<body>
+    <div style="background-color:#fff;font-family:Arial;overflow:hidden;width:100%;">
+        <div style="display:flex; background-color:#fff; padding:20px 0; ">
+            <p style="margin:Auto;"><img
+                    src="https://www.mexinsurance.com/wp-content/uploads/2023/11/cropped-Logo-1-2048x312.png"
+                    width="225" /></p>
+        </div>
+        
+        <div style="background-color:#fff;padding:10px 30px;overflow:hidden;color:#5e5e5e;width:90%;"
+            class="mexemeailcontent">
+            <!--<h2 style="line-height:26px;font-size:18px;color:#5e5e5e;">Please tell us how we performed.</h2>-->
+            <p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">
+
+            <p>Dear {!Contact.FirstName}</p>
+            <p></p>
+            We obsess about the worst-case scenario so that you don't have to. Insurance is serious. We work hard to
+            ensure that your experience is 5-stars. <p>
+
+            <p>If you feel the representative who helped you provided 5-star service, please share it by clicking below.
+                </br>
+
+            <table>
+                <tr>
+                    <td style="padding:20">
+                        <a
+                            href="https://www.google.com/maps/place//data=!4m3!3m2!1s0x80d9553ab3809311:0x4242d3bff3ca5103!12e1?source=g.page.default"><img
+                                src="https://www.mexinsurance.com/wp-content/uploads/2023/12/Google-Review-Icon.jpg"
+                                width="50" height="50" /></a>
+                    </td>
+                    <td>
+
+                        <a
+                            href="https://www.yelp.com/writeareview/biz/K_IYeveQ8Bvc60YAb949VQ?return_url=%2Fbiz%2FK_IYeveQ8Bvc60YAb949VQ&source=biz_details_war_button"><img
+                                src="https://www.mexinsurance.com/wp-content/uploads/2023/12/Yelp.png" width="50"
+                                height="50" /></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+            
+             
+                    <div style="background-color:#fff;padding:18px 0;overflow:hidden;width:100%;"
+                        class="mexemeailfooter">
+                        <div style="display:flex;">
+                            <p style="margin:Auto;"><img
+                                    src="https://www.mexinsurance.com/wp-content/uploads/2023/11/cropped-Logo-1-2048x312.png"
+                                    width="175" /></p>
+                        </div>
+
+                        <div style="display:flex">
+                            <p style="margin:Auto;color:#000; padding-top: 20px; font-size: 14px;">&copy; MEXICO
+                                INSURANCE SERVICES, INC.</p>
+                        </div>
+
+                        <div style="display:flex">
+                            <p style="margin:Auto;color:#000; padding-top: 6px; font-size: 14px;">CALIFORNIA INSURANCE
+                                LICENSE: 0G35864</p>
+                        </div>
+                        <div style="display:flex">
+                            <p style="margin:Auto;color:#000; font-size: 11px; padding-top: 4px;"><a
+                                    style="text-decoration:none;color:#000;" target="_blank"
+                                    href="https://www.mexinsurance.com/">MEXINSURANCE.COM</a></p>
+                        </div>
+
+                        <div style="display:flex">
+                            <p style="margin:Auto;color:#000; font-size: 11px; padding-top: 4px;">T. 855 MEXICO.5</p>
+                        </div>
+
+                    </div>
+        </div>
+    
+</body>
+
+</html>

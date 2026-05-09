@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>This template will request a happy client to submit a google review.</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Review Request</name>
+    <style>none</style>
+    <subject>Reviews Are Important - Please Share Your Experience</subject>
+    <textOnly>MexInsurance ®
+
+
+Dear {!Contact.FirstName}
+
+
+We obsess about the worst-case scenario so that you don&apos;t have to.  Insurance is serious.  We work hard to ensure that your experience is 5-stars.
+
+
+If you feel the representative who helped you provided 5-star service, please share it by clicking below.
+
+
+
+
+
+
+Follow us
+
+Questions About Your Account?
+Call @ (855) MEXICO-5
+
+By using this website you agree to the
+Terms of Purchase, Access and Use Agreement
+
+Privacy Policy
+
+California Insurance License: 0G35864
+© Mexico Insurance Services, Inc.
+
+3813 Ray Street, San Diego, CA 92104</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

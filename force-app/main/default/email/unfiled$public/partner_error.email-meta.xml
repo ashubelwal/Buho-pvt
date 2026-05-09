@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Template for sending followup to the Partner Email error that was sent to 14,500 community users</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Partner Error Email</name>
+    <style>none</style>
+    <subject>Oooops - That was Embarrassing....</subject>
+    <textOnly>{!Contact.FirstName},you received an email this morning about joining our Partner Community, which was NOT intended for you.  Our other business, the Mexinsurance®, has an overly eager project team of geniuses that unfortunately made a terrible mistake.  Not only did the email go to the wrong people, but it was not even the right email template.  I take full responsiblity for working them too hard and not enforcing proper change controls.
+
+Please dont mark the emails as spam.  I promise it wont happen again.
+
+If you or someone you know is interested in working with Mexinsurance® to provide the highest quality insurance for Mexico, like an insurance agency or company, send them here!
+
+-- Respectfully,
+
+Charles
+CEO
+Mexinsurance®</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

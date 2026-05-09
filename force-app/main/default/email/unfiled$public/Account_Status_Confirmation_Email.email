@@ -1,0 +1,239 @@
+<html>
+<style type="text/css">
+    body {
+        background: #ededed;
+    }
+
+    .container {
+        margin: 10px auto;
+        width: 600px;
+    }
+
+    /*-- Email CSS --*/
+
+    .mexemeailtheme {
+        background-color: #fff;
+        font-family: Arial;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .mexemeailhead {
+        background-color: #328081;
+        padding: 3px 5px 5px 5px;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .mexemeaillogo {
+        padding-left: 35px;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .mexemeaillogo p {
+        font-family: Arial;
+        font-weight: 400;
+        font-size: 22px;
+        color: #fff;
+    }
+
+    .mexemeaillogo p>sup {
+        font-size: 15px;
+    }
+
+    .mexemeailphoto {
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .mexemeailphoto img {
+        max-width: 100%;
+    }
+
+    .mexemeailcontent {
+        background-color: #fff;
+        padding: 10px 30px;
+        overflow: hidden;
+        color: #5e5e5e;
+        width: 90%;
+    }
+
+    .mexemeailcontent p {
+        line-height: 26px;
+        font-size: 18px;
+        color: #5e5e5e;
+    }
+
+    .mexemeailbut {
+        background-color: #cf614d;
+        text-transform: uppercase;
+        text-decoration: none;
+        padding: 15px 35px;
+        border-radius: 30px;
+        width: max-content;
+        margin: 10px 0px;
+        font-weight: 600;
+        font-size: 18px;
+        display: block;
+        color: #fff;
+    }
+
+    .mexemeailbut:hover,
+    .mexemeailbut:focus {
+        opacity: 0.9;
+    }
+
+    .mexemeailsocial {
+        padding: 15px 35px 35px 35px;
+        background-color: #ebf3f3;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .mexemeailsocial h3 {
+        color: #5e5e5e;
+    }
+
+    .mexemico {
+        background-size: 100% !important;
+        margin-right: 10px;
+        overflow: hidden;
+        display: block;
+        float: left;
+    }
+
+    .mexemico:hover,
+    .mexemico:focus {
+        opacity: 0.8;
+    }
+
+    /*.mexemailfaceboock{
+                    background:url(https://www.mexinsurance.com/wp-content/uploads/emailfaceboock.png) no-repeat;
+                }
+                
+                .mexemailinstagram{
+                    background:url(https://www.mexinsurance.com/wp-content/uploads/emailinstagram.png) no-repeat;
+                }
+                
+                .mexemailtweeter{
+                    background:url(https://www.mexinsurance.com/wp-content/uploads/emailtweeter.png) no-repeat;
+                }*/
+
+    .mexemeailfooter {
+        background-color: #328081;
+        padding: 25px 35px;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .mexemeailfooter p {
+        line-height: 26px;
+        font-size: 16px;
+        color: #bcd5d5;
+    }
+
+    .mexemeailfooter p>a {
+        text-decoration: none;
+        color: #ffffff;
+    }
+
+    .mexemeailfooter p>a:hover,
+    .mexemeailfooter p>a:focus {
+        opacity: 0.9;
+    }
+
+    .mexemeailfooter a {
+        text-decoration: none;
+        color: #ffffff;
+    }
+
+    .mexemeailfooter a:hover,
+    .mexemeailfooter a:focus {
+        opacity: 0.9;
+    }
+</style>
+
+<body>
+    <div style="background-color:#fff;font-family:Arial;overflow:hidden;width:100%;">
+
+        <div style="display:flex; background-color:#fff; padding:8px 0;text-align: -webkit-center; ">
+            <p style="margin:Auto;"><!--<img
+                    src="https://mexinsurance--ca.sandbox.file.force.com/servlet/servlet.ImageServer?id=0158I000000BDJ7&oid=00D8I0000008h1W&lastMod=1682667043000"
+                    width="150" />-->
+<img src="https://www.mexinsurance.com/wp-content/uploads/2023/11/cropped-Logo-1-2048x312.png" alt="i_logo" style="width:30%;" /> 
+</p>
+        </div>
+
+        <p>Dear {ACCOUNT_FIRSTNAME},</p>
+        <p>
+            You have an account associated with this email address {CONFIRM_EMAIL} from our old system that has yet to be activated in the new system.
+            <strong><mark> We will remove it and any associated policies, vehicles, and drivers on May 1, 2023.</mark></strong>
+        </p>
+        <p>
+            Please confirm this is OK with you.
+            <ol type="1">
+                <li>Click YES to remove this {CONFIRM_EMAIL} email/account from our system.</li>
+                <li>Click NO to start the activation process for this email.</li>
+            </ol>
+            <table style="border-collapse:collapse;width:auto;">
+                <tr style="">
+                    <td style="display: inline;padding-left: 16px;" align="left">
+                        <a href="{REJECT_LINK}" style="text-decoration:none;">
+                            <div
+                                style="text-align:center;border: 1px solid #003a70;border-radius:3px;background: #ffffff;font-weight:bold;width: 125px;height: AUTO;PADDING: 10px;color: #003a70;font-size: 24px;">
+                                Yes</div>
+                        </a>
+                    </td>
+                    <td style="padding-left:15px" align="left">
+                        <a href="{CONFIRM_LINK}" style="text-decoration:none;">
+                            <div
+                                style="text-align:center;border: 1px solid #003a70;border-radius:3px;background: #003a70;font-weight:bold;width: 125px;height: AUTO;PADDING: 10px;font-size: 24px;color: #ffffff;">
+                                No</div>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </p>
+
+        <p>Please respond by April 30, 2023, or this email {CONFIRM_EMAIL} account will be deleted automatically. Please reply with any questions.</p>
+        <p>
+            Thank you.
+        </p>
+        <p>
+            Respectfully,<br />
+            Charles
+        </p>
+
+
+        <div style="background-color:#fff;padding:18px 0;overflow:hidden;width:100%;" class="mexemeailfooter">
+            <div style="display:flex;">
+                <p style="margin:Auto;"><img
+                        src="https://www.mexinsurance.com/wp-content/uploads/2023/11/cropped-Logo-1-2048x312.png"
+                        width="175" /></p>
+            </div>
+
+            <div style="display:flex">
+                <p style="margin:Auto;color:#000; padding-top: 20px; font-size: 14px;">&copy; MEXICO INSURANCE SERVICES,
+                    INC.</p>
+            </div>
+
+            <div style="display:flex">
+                <p style="margin:Auto;color:#000; padding-top: 6px; font-size: 14px;">CALIFORNIA INSURANCE LICENSE:
+                    0G35864</p>
+            </div>
+            <div style="display:flex">
+                <p style="margin:Auto;color:#000; font-size: 11px; padding-top: 4px;"><a
+                        style="text-decoration:none;color:#000;" target="_blank"
+                        href="https://www.mexinsurance.com/">MEXINSURANCE.COM</a></p>
+            </div>
+
+            <div style="display:flex">
+                <p style="margin:Auto;color:#000; font-size: 11px; padding-top: 4px;">T. 855 MEXICO.5</p>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>

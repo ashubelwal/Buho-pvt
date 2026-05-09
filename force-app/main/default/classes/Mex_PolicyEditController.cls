@@ -122,27 +122,29 @@ public without sharing class Mex_PolicyEditController {
     }
     
     private static Set<String> removeFields = new Set<String>{
-        'isdeleted', 'createddate', 'createdbyid', 'lastmodifieddate', 'lastmodifiedbyid', 'systemmodstamp', 'lastvieweddate',
-            'lastreferenceddate'
-            };
+        'isdeleted', 'createddate', 'createdbyid',
+        'lastmodifieddate', 'lastmodifiedbyid',
+        'systemmodstamp', 'lastvieweddate',
+        'lastreferenceddate'
+    };
                 
-                private static List<String> getAllFields(String objectName) {
-                    SObjectType objectType = describeObject(objectName);
-                    Map<String, Schema.SObjectField> mfields = objectType.getDescribe().fields.getMap();
-                    
-                    List<String> fieldsSet = new List<String>();
-                    for (String s : mfields.keySet()) {
-                        if ((mfields.get(s).getDescribe().isAccessible() && !removeFields.contains(String.valueOf(s).toLowerCase())) || Test.isRunningTest()) {
-                            fieldsSet.add(s);
-                        }
-                    }
-                    
-                    if (fieldsSet != null && !fieldsSet.contains('id')) {
-                        fieldsSet.add('id');
-                    }
-                    
-                    return fieldsSet;
-                }
+    private static List<String> getAllFields(String objectName) {
+        SObjectType objectType = describeObject(objectName);
+        Map<String, Schema.SObjectField> mfields = objectType.getDescribe().fields.getMap();
+        
+        List<String> fieldsSet = new List<String>();
+        for (String s : mfields.keySet()) {
+            if ((mfields.get(s).getDescribe().isAccessible() && !removeFields.contains(String.valueOf(s).toLowerCase())) || Test.isRunningTest()) {
+                fieldsSet.add(s);
+            }
+        }
+        
+        if (fieldsSet != null && !fieldsSet.contains('id')) {
+            fieldsSet.add('id');
+        }
+        
+        return fieldsSet;
+    }
     
     
     private static SObjectType describeObject(String objectName) {

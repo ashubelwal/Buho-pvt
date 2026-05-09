@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Account Status Confirmation Email</name>
+    <style>none</style>
+    <subject>IMPORTANT - Action Required</subject>
+    <textOnly>© MEXICO INSURANCE SERVICES, INC.
+
+CALIFORNIA INSURANCE LICENSE: 0G35864
+
+MEXINSURANCE.COM
+
+T. 855 MEXICO.5</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>This template will welcome a new prospective partner to the platform deliver the offer agreement for signature</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Partner-Agency-Offer</name>
+    <style>none</style>
+    <subject>Congratulations! Your Contract Offer from Mexinsurance®</subject>
+    <textOnly>Dear {!Lead.FirstName},
+
+Congratulations! We are thrilled to offer you a contract to start writing Mexico Insurance on the MexInsurance platform.
+
+OFFER DETAILS:
+
+Approved Product(s): &apos;PRODUCT&apos;
+Approved Company: &apos;CARRIER&apos;
+Approved Medium: &apos;PLATFORM&apos;
+
+
+Your Monthly Commitment: &apos;COMMITMENT&apos;
+Monthly Fee: &apos;RECURRING&apos;
+Setup Charge: &apos;SETUP&apos;
+
+COMPENSATION:
+
+Product Commission Auto: &apos;AGENCY_COMM_AUTO_NEW&apos;
+Product Commission RV: &apos;AGENCY_COMM_RV_NEW&apos;
+Product Commission Motorcycle: &apos;AGENCY_COMM_MOTO_NEW&apos;
+Product Commission Watercraft: &apos;AGENCY_COMM_WATER_NEW&apos;
+
+
+
+NEXT STEPS:
+
+Your contract is available here.
+
+Once signed, you will receive a welcome letter with a link to activate your online portal account, enabling you to start writing Mexico insurance in minutes!
+
+Congratulations again on your success. Your reputable agency and dedication are highly valued, and we look forward to a fruitful partnership.
+
+
+Respectfully,
+
+
+Charles Lundy
+CEO
+MexInsurance
+
+
+© MEXINSURANCE SOLUTIONS, INC.</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

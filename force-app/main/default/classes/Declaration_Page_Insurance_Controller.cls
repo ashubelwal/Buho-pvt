@@ -20,9 +20,11 @@ public without sharing class Declaration_Page_Insurance_Controller {
     public user agencyData{get; set;}
     public decimal totalBrokerageFee {get;set;}
     public decimal netPremiumWithoutAgentAndBrokerFee {get;set;}
+    public Boolean isBuho{get;set;}
 
     public Declaration_Page_Insurance_Controller() {
         try{ 
+            isBuho = false;
             primaryInsuredDriver = new driver__c();
             Watercraft = new Watercraft__c();
             towedUnitsList = new list<Towed_Unit__c>();
@@ -79,7 +81,11 @@ public without sharing class Declaration_Page_Insurance_Controller {
                 
                 
                 if( policy.Agency__c != null){
-                    agencyList = [Select id,Name,FirstName, LastName, Website__c, Phone, Primary_Color__c,Partner_email__c, Partner_Id__c, Partner_Name__c, Logo_URL__c, User_Type__c,ContactId,Agent_Id__c from user where ContactId =: policy.Agency__c OR Email =: policy.Agency__r.Email LIMIT 1];
+                    agencyList = [SELECT Id,Name,FirstName, LastName, Website__c, Phone, Primary_Color__c,
+                                    Partner_email__c, Partner_Id__c, Partner_Name__c, 
+                                    Logo_URL__c, User_Type__c,ContactId,Agent_Id__c 
+                                FROM User 
+                                WHERE ContactId =: policy.Agency__c OR Email =: policy.Agency__r.Email LIMIT 1];
                 }
                 
                 if(agencyList.size() > 0){

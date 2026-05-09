@@ -1,0 +1,230 @@
+<template>
+  <div>
+    <c-custom-toast auto-close-time="8000"></c-custom-toast>
+  </div>
+
+  <div style="display: block">
+    <!-- User Details Section -->
+    <div class="section-card">
+      <div
+        class="section-card-header"
+        style="border-bottom: none; padding-bottom: 0; margin-bottom: 0"
+      >
+        <div style="display: flex; align-items: center">
+          <div
+            class="placeholder-icon"
+            style="
+              width: 24px;
+              height: 24px;
+              font-size: 1rem;
+              margin-right: 8px;
+              margin-bottom: 0;
+              border-radius: 6px;
+            "
+          >
+            <i class="bi bi-person"></i>
+          </div>
+          <span class="section-card-title" style="font-size: 1.1rem; margin-bottom: 0"
+            >Personal Information</span
+          >
+        </div>
+      </div>
+
+      <div style="margin-top: 16px">
+        <lightning-record-form
+          record-id={recordId}
+          object-api-name="User"
+          mode="view"
+          fields={fields}
+          columns="2"
+          onsubmit={handleSubmit}
+        >
+        </lightning-record-form>
+      </div>
+    </div>
+
+    <!-- Agency Reference Section (if userTypeAgency) -->
+    <template if:true={userTypeAgency}>
+      <div class="section-card">
+        <div
+          class="section-card-header"
+          style="border-bottom: none; padding-bottom: 0; margin-bottom: 0"
+        >
+          <div style="display: flex; align-items: center">
+            <div
+              class="placeholder-icon"
+              style="
+                width: 24px;
+                height: 24px;
+                font-size: 1rem;
+                margin-right: 8px;
+                margin-bottom: 0;
+                border-radius: 6px;
+              "
+            >
+              <i class="bi bi-building"></i>
+            </div>
+            <span class="section-card-title" style="font-size: 1.1rem; margin-bottom: 0"
+              >Reference Options</span
+            >
+          </div>
+        </div>
+
+        <template if:true={isLoading}>
+          <div class="spinner">
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+          </div>
+        </template>
+
+        <div class="customMeteDataMainClass" style="margin-top: 16px">
+          <div class="modal-fields-grid">
+            <div class="modal-form-group">
+              <lightning-input
+                type="color"
+                label="Primary Colour"
+                name="Primary_Color__c"
+                value={primaryColor}
+                onchange={handleMDTFieldHandler}
+              ></lightning-input>
+            </div>
+            <div class="modal-form-group">
+              <lightning-input
+                type="text"
+                label="Partner Name"
+                name="Partner_Name__c"
+                value={partnerName}
+                onchange={handleMDTFieldHandler}
+              ></lightning-input>
+            </div>
+            <div class="modal-form-group">
+              <lightning-input
+                type="text"
+                label="Partner Email"
+                name="Partner_email__c"
+                value={email}
+                onchange={handleMDTFieldHandler}
+              ></lightning-input>
+            </div>
+            <div class="modal-form-group">
+              <lightning-input
+                type="text"
+                label="Logo URL"
+                name="Logo_URL__c"
+                value={url}
+                onchange={handleMDTFieldHandler}
+              ></lightning-input>
+            </div>
+            <div class="modal-form-group">
+              <lightning-input
+                type="text"
+                label="Partner Id"
+                name="Partner_Id__c"
+                value={PartnerId}
+                onchange={handleMDTFieldHandler}
+              ></lightning-input>
+            </div>
+          </div>
+          <div style="margin-top: 24px; text-align: right">
+            <button class="btn-qa primary" disabled={isDisabled} onclick={handleUpdateMdtClick}>
+              Update Reference
+            </button>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- Affiliate Details Section -->
+    <div class="section-card">
+      <div
+        class="section-card-header"
+        style="border-bottom: none; padding-bottom: 0; margin-bottom: 0"
+      >
+        <div style="display: flex; align-items: center">
+          <div
+            class="placeholder-icon"
+            style="
+              width: 24px;
+              height: 24px;
+              font-size: 1rem;
+              margin-right: 8px;
+              margin-bottom: 0;
+              border-radius: 6px;
+            "
+          >
+            <i class="bi bi-link-45deg"></i>
+          </div>
+          <span class="section-card-title" style="font-size: 1.1rem; margin-bottom: 0"
+            >Affiliate Details</span
+          >
+        </div>
+      </div>
+
+      <div style="margin-top: 16px">
+        <p style="color: var(--text-light); margin-bottom: 16px; font-size: 0.95rem">
+          Copy this code and paste it where you want it to appear on your webpage.
+        </p>
+
+        <div
+          style="
+            background: var(--bg-page);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 20px;
+          "
+        >
+          <p
+            style="
+              word-break: break-all;
+              color: var(--text-dark);
+              margin: 0;
+              font-family: monospace;
+              font-size: 0.95rem;
+              line-height: 1.5;
+              flex: 1;
+            "
+          >
+            {editableText}
+          </p>
+          <button class="btn-qa primary" name="with_frame" onclick={handleFrameButtonClick}>
+            Copy Code
+          </button>
+        </div>
+
+        <div
+          style="
+            background: var(--bg-page);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 20px;
+          "
+        >
+          <p
+            style="
+              word-break: break-all;
+              color: var(--text-dark);
+              margin: 0;
+              font-family: monospace;
+              font-size: 0.95rem;
+              line-height: 1.5;
+              flex: 1;
+            "
+          >
+            {noneditableText}
+          </p>
+          <button class="btn-qa primary" name="without_frame" onclick={handleFrameButtonClick}>
+            Copy URL
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

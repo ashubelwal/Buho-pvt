@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>This template will welcome a new prospective partner to the platform and request NDA</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Partner-Interest1</name>
+    <style>none</style>
+    <subject>Partnership Opportunities Await – Please Review Our NDA</subject>
+    <textOnly>Hello, {!Lead.FirstName},
+
+Welcome to our exclusive world-class platform. We are excited to offer you the highest quality insurance options for Mexico.
+
+As we say in Mexico, &quot;primero, lo primero&quot; (first things first). To ensure our mutual interests are protected, please review and sign our NDA.
+
+You can access the NDA by clicking here.
+
+Respectfully,
+
+
+Charles Lundy
+CEO
+MexInsurance
+
+
+© MEXINSURANCE SOLUTIONS, INC.</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>New Trucking Insurance Options</title>
+
+    <!--[if mso]>
+      <xml>
+        <o:OfficeDocumentSettings>
+          <o:AllowPNG/>
+          <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+      </xml>
+    <![endif]-->
+
+    <style>
+      html, body { margin:0 !important; padding:0 !important; height:100% !important; width:100% !important; }
+      * { -ms-text-size-adjust:100%; -webkit-text-size-adjust:100%; }
+      table, td { mso-table-lspace:0pt !important; mso-table-rspace:0pt !important; border-collapse:collapse !important; border-spacing:0 !important; }
+      img { -ms-interpolation-mode:bicubic; border:0; outline:none; text-decoration:none; display:block; }
+      a { text-decoration:none; }
+      a[x-apple-data-detectors] { color:inherit !important; text-decoration:none !important; }
+
+      @media screen and (max-width: 620px) {
+        .container { width:100% !important; }
+        .px { padding-left:18px !important; padding-right:18px !important; }
+        .py { padding-top:18px !important; padding-bottom:18px !important; }
+        .logo { width:240px !important; height:auto !important; }
+        .h1 { font-size:22px !important; line-height:28px !important; }
+        .p { font-size:16px !important; line-height:24px !important; }
+      }
+    </style>
+  </head>
+
+  <body style="margin:0; padding:0; background-color:#ededed;">
+    <!-- Preheader -->
+    <div style="display:none; font-size:1px; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden; mso-hide:all;">
+      New trucking insurance markets with flexible financing and lower upfront costs.
+    </div>
+
+    <center style="width:100%; background-color:#ededed;">
+      <!--[if mso]>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+        <tr><td align="center">
+      <![endif]-->
+
+      <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" style="width:600px; margin:0 auto;">
+        <tr>
+          <td style="padding:18px 10px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#ffffff; border-radius:10px; overflow:hidden;">
+
+              <!-- Logo -->
+              <tr>
+                <td align="center" style="padding:22px 18px 12px;">
+                  <img src="https://gobuho.com/wp-content/uploads/2026/01/Owl-Logo-Small.png"
+                       width="320"
+                       alt="BÚHO Insurance"
+                       class="logo"
+                       style="width:320px; max-width:100%; height:auto;">
+                </td>
+              </tr>
+
+              <!-- Divider -->
+              <tr>
+                <td style="padding:0 30px;">
+                  <table role="presentation" width="100%">
+                    <tr>
+                      <td style="border-top:1px solid #e6e6e6; font-size:0; line-height:0;">&nbsp;</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+              <!-- Content -->
+              <tr>
+                <td class="px py" style="padding:24px 30px; font-family:Arial, Helvetica, sans-serif; color:#5e5e5e;">
+                  <h1 class="h1" style="margin:0 0 16px; font-size:24px; line-height:30px; font-weight:700; color:#003a70;">
+                    New trucking insurance options
+                  </h1>
+
+                  <p class="p" style="margin:0 0 14px; font-size:18px; line-height:26px;">
+                    Hello {!Lead.FirstName},
+                  </p>
+
+                  <p class="p" style="margin:0 0 14px; font-size:18px; line-height:26px;">
+                    Thank you for requesting a trucking insurance quote with us.
+                  </p>
+
+                  <p class="p" style="margin:0 0 14px; font-size:18px; line-height:26px;">
+                    We’ve recently expanded our trucking carrier network and now offer additional markets and financing options that allow us to reduce upfront payments on higher-premium policies while keeping strong coverage in place.
+                  </p>
+
+                  <p class="p" style="margin:0 0 18px; font-size:18px; line-height:26px;">
+                    BUHO Insurance works with multiple carriers and payment partners to match coverage and payment structure to your authority, equipment, and lanes.
+                  </p>
+
+                  <p class="p" style="margin:0 0 18px; font-size:18px; line-height:26px;">
+                    I’ll be calling shortly to review available options and see what works best for your operation.
+                  </p>
+
+                  <p class="p" style="margin:0; font-size:18px; line-height:26px;">
+                    Best regards,<br><br>
+                    {{Sender Name}}<br>
+                    BUHO Insurance
+                  </p>
+                </td>
+              </tr>
+
+              <!-- Footer -->
+              <tr>
+                <td style="padding:18px 30px 22px; background-color:#f3f4f6; font-family:Arial, Helvetica, sans-serif; color:#111827;">
+                  <table role="presentation" width="100%">
+                    <tr>
+                      <td align="center" style="padding-bottom:10px;">
+                        <img src="https://gobuho.com/wp-content/uploads/2026/01/Owl-Logo-Small.png"
+                             width="160"
+                             alt="BÚHO Insurance"
+                             style="width:160px; max-width:100%; height:auto;">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td align="center" style="font-size:13px; line-height:18px;">
+                        &copy; BÚHO Insurance
+                      </td>
+                    </tr>
+                    <tr>
+                      <td align="center" style="font-size:13px; line-height:18px; padding-top:4px;">
+                        California Insurance License: 0G35864
+                      </td>
+                    </tr>
+                    <tr>
+                      <td align="center" style="font-size:13px; line-height:18px; padding-top:4px;">
+                        Texas Insurance License: 2485907
+                      </td>
+                    </tr>
+                    <tr>
+                      <td align="center" style="font-size:12px; line-height:17px; padding-top:6px;">
+                        <a href="https://gobuho.com/" target="_blank" style="color:#111827; text-decoration:underline;">GoBuho.com</a>
+                        &nbsp;|&nbsp; <a href="tel:+1-619-691-7747">619.691.7747</a>  | <a href="tel:+1-915-292-2992">915.292.2992</a> 
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+            </table>
+          </td>
+        </tr>
+      </table>
+
+      <!--[if mso]>
+        </td></tr>
+      </table>
+      <![endif]-->
+    </center>
+  </body>
+</html>

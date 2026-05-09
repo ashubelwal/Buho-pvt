@@ -1,0 +1,6 @@
+<table border="0" cellpadding="5" width="550" cellspacing="5" height="400" >
+<tr valign="top" height="400" >
+<td tEditID="c1r1" style=" background-color:#FFFFFF; bEditID:r3st1; color:#000000; bLabel:main; font-size:12pt; font-family:arial;" aEditID="c1r1" locked="0" >
+<![CDATA[<div style="color: rgb(0, 0, 0); font-family: arial; font-size: 12pt;"><br></div><div style="color: rgb(0, 0, 0); font-family: arial; font-size: 12pt;"><b style="font-size: 12pt;">Thank you for being a loyal client</b></div><div style="color: rgb(0, 0, 0); font-family: arial; font-size: 12pt;"><font face="arial"><b><br></b></font></div><div style="color: rgb(0, 0, 0); font-family: arial; font-size: 12pt;"><font face="arial"><br></font></div><div style=""><font face="arial" style=""><div style="text-align: left;">Over the years we have grown together and it’s thanks to you were are still around. I am putting together a new effort to provide a premium service experience for our clients. I wonder if you would take 1 minute of your time to answer a couple questions?&nbsp;<span style="font-size: 12pt;">Please click </span><a href="http://mexinsurance.force.com/survey/loyalsurvey?conid={!Account.Id}" style="font-size: 12pt;">here</a></div></font></div>]]></td>
+</tr>
+</table>

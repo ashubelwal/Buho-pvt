@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Communities: Old Email - Change Email 2</name>
+    <style>none</style>
+    <subject>Your {!Community.Name} account&apos;s email address was changed</subject>
+    <textOnly>Hi {!Receiving_User.FirstName},
+
+We received a request to change the email address for the username {!User.Username}. Please make sure the following changes are correct:
+
+Previous Email Address: {!ChgEmailVer.OldEmail}
+New Email Address: {!ChgEmailVer.NewEmail}
+
+If you didn&apos;t request this change, contact your {!Community.Name} administrator or reply to this email.
+
+
+Thank you,
+{!Organization.Name}</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

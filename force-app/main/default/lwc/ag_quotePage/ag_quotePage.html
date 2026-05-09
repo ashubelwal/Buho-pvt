@@ -198,8 +198,13 @@
                                             <!-- Conditionally show "See More" button -->                                            
                                             <template if:true={item.showSeeMore}>
                                                 <div class="slds-m-top_small">
-                                                    <c-nc_modal modal-title={item.key} data-key={item.key} btn-name='See more' class-names='cBtn'
-                                                        modal-content={item.fullDescription}>
+                                                    <c-nc_modal modal-title={item.key} 
+                                                        data-key={item.key} 
+                                                        btn-name='See more' 
+                                                        class-names='cBtn'
+                                                        modal-content={item.fullDescription}
+                                                        is-agent-portal={isAgentPortal}
+                                                        >
                                                     </c-nc_modal>                    
                                                 </div>                            
                                             </template>

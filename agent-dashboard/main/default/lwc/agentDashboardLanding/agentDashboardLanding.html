@@ -1,0 +1,183 @@
+<template>
+  <!-- ── Stat Cards ────────────────────────────────────────────────── -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-card-left">
+        <p class="stat-card-label">Total Policies</p>
+        <p class="stat-card-value">{stats.activePolicies}</p>
+        <template lwc:if={stats.policiesTrend}>
+          <span class={stats.policiesClass}>
+            <i class={stats.policiesIcon}></i>{stats.policiesTrend}
+          </span>
+        </template>
+      </div>
+      <div class="stat-card-icon-wrap stat-icon-green">
+        <i class="bi bi-shield-check"></i>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-card-left">
+        <p class="stat-card-label">Expiring Soon (30 Days)</p>
+        <p class="stat-card-value">{stats.expiringSoon}</p>
+      </div>
+      <div class="stat-card-icon-wrap stat-icon-blue">
+        <i class="bi bi-clock-history"></i>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-card-left">
+        <p class="stat-card-label">Total Clients</p>
+        <p class="stat-card-value">{stats.totalClients}</p>
+        <template lwc:if={stats.clientsTrend}>
+          <span class={stats.clientsClass}>
+            <i class={stats.clientsIcon}></i>{stats.clientsTrend}
+          </span>
+        </template>
+      </div>
+      <div class="stat-card-icon-wrap stat-icon-purple">
+        <i class="bi bi-people"></i>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-card-left">
+        <p class="stat-card-label">Monthly Revenue</p>
+        <p class="stat-card-value">{stats.monthlyRevenue}</p>
+        <template lwc:if={stats.revenueTrend}>
+          <span class={stats.revenueClass}>
+            <i class={stats.revenueIcon}></i>{stats.revenueTrend}
+          </span>
+        </template>
+      </div>
+      <div class="stat-card-icon-wrap stat-icon-orange">
+        <i class="bi bi-currency-dollar"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Quick Actions ─────────────────────────────────────────────── -->
+  <div class="section-card">
+    <div class="section-card-header">
+      <span class="section-card-title">Quick Actions</span>
+    </div>
+    <div class="quick-actions-row">
+      <button class="btn-qa primary" type="button" onclick={handleNewQuoteClick}><i class="bi bi-plus-lg"></i> New Quote</button>
+      <button class="btn-qa" type="button" onclick={openAddClientModal}><i class="bi bi-person-plus"></i> Add Client</button>
+      <button class="btn-qa" type="button" onclick={handleLookUpPolicyClick}><i class="bi bi-search"></i> Look Up</button>
+      <button class="btn-qa" type="button" onclick={handleGenerateReport}>
+        <i class="bi bi-file-earmark-bar-graph"></i> Generate Report
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Recent Quotes ─────────────────────────────────────────────── -->
+  <div class="section-card">
+    <div class="section-card-header">
+      <span class="section-card-title">Recent Quotes</span>
+    </div>
+
+    <template if:true={isLoadingQuotes}>
+      <div style="padding: 24px; text-align: center">Loading recent quotes...</div>
+    </template>
+
+    <template if:false={isLoadingQuotes}>
+      <template if:true={hasQuotes}>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Quote Id</th>
+              <th>Client</th>
+              <th>Vehicle</th>
+              <th>Premium</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template for:each={recentQuotes} for:item="quote">
+              <tr key={quote.Id}>
+                <td>{quote.quoteNumber}</td>
+                <td>{quote.account}</td>
+                <td>{quote.vehicle}</td>
+                <td>{quote.premium}</td>
+                <td>{quote.createdDate}</td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </template>
+      <template if:false={hasQuotes}>
+        <div style="padding: 24px; text-align: center; color: #64748b">No recent quotes found.</div>
+      </template>
+    </template>
+  </div>
+
+  <!-- ── Renewals Due ──────────────────────────────────────────────── -->
+  <div class="section-card">
+    <div class="section-card-header">
+      <span class="section-card-title">Renewals Due</span>
+      <button class="btn-view-all" type="button">View All</button>
+    </div>
+
+    <template if:true={isLoadingRenewals}>
+      <div style="padding: 24px; text-align: center">Loading renewals...</div>
+    </template>
+
+    <template if:false={isLoadingRenewals}>
+      <template if:true={hasRenewals}>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Policy ID</th>
+              <th>Client</th>
+              <th>Vehicle</th>
+              <th>Expiry Date</th>
+              <th>Days Until</th>
+              <th>Premium</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template for:each={renewals} for:item="renewal">
+              <tr key={renewal.Id}>
+                <td>{renewal.policyNumber}</td>
+                <td>{renewal.client}</td>
+                <td>{renewal.vehicle}</td>
+                <td>{renewal.expiryDate}</td>
+                <td><span class={renewal.badgeClass}>{renewal.daysUntil}</span></td>
+                <td>{renewal.premium}</td>
+                <td>
+                  <button class="btn-tbl renew" type="button" data-id={renewal.Id} onclick={handleRenewClick}>Renew</button>
+                  <button class="btn-tbl contact" type="button" data-id={renewal.contactId} onclick={handleContactClick}>Contact</button>
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </template>
+      <template if:false={hasRenewals}>
+        <div style="padding: 24px; text-align: center; color: #64748b">
+          No upcoming renewals found.
+        </div>
+      </template>
+    </template>
+  </div>
+
+  <!-- ── Add Client Modal ─────────────────────────────────────────── -->
+  <template lwc:if={showAddClientModal}>
+    <c-agent-add-client
+      contact-id={contactId}
+      onclientcreated={handleClientCreated}
+      onclosemodal={closeAddClientModal}
+    ></c-agent-add-client>
+  </template>
+
+  <!-- ── Hidden chart component – loaded in background for CSV export ─ -->
+  <div style="display:none">
+    <c-policy-chart-dashboard-v2
+      data-id="chart-report"
+      is-new-u-i="true"
+    ></c-policy-chart-dashboard-v2>
+  </div>
+</template>

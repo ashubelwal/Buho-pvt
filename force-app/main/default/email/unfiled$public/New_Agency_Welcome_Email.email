@@ -1,0 +1,15 @@
+Dear {!Receiving_User.FirstName},
+
+Congratulations on becoming an approved agency partner.  Here are the links you've been waiting for:
+
+Login to your account here:  {!Community_Url}
+Reset your password here: https://at.mexinsurance.com/agency/ForgotPassword
+Your username: {!User.Username}
+Your affiliate ID:  {!Affiliate__c.Affiliate_Id__c}
+Your affiliate portal link for iframe: https://at.mexinsurance.com/affiliate?code={!Affiliate__c.Affiliate_Id__c}
+
+If you have any questions or concerns, your account representative is:
+Charles Lundy 
+charles@mexinsurance.net
+
+MexInsurance

@@ -1,106 +1,110 @@
 <template>
-    <!-- ============== LIST VIEW ============== -->
-    <template if:true={isListView}>
-        <!-- Page Header -->
-        <div class="mypolicy-header">
-            <div class="mypolicy-header-left">
-                <h1 class="mypolicy-title">My Policies &amp; Coverage Management</h1>
-                <p class="mypolicy-subtitle">Policy Filter &amp; Sort</p>
+  <!-- ============== LIST VIEW ============== -->
+  <template if:true={isListView}>
+    <!-- Page Header -->
+    <div class="mypolicy-header">
+      <div class="mypolicy-header-left">
+        <h1 class="mypolicy-title">My Policies &amp; Coverage Management</h1>
+        <p class="mypolicy-subtitle">Policy Filter &amp; Sort</p>
+      </div>
+      <div class="mypolicy-header-actions">
+        <!-- All Policies Dropdown -->
+        <div class="mypolicy-dropdown">
+          <button class="btn-dropdown" onclick={handleDropdownToggle}>
+            {selectedFilter}
+            <img src={chevronDownIconUrl} alt="" class="icon-chevron" />
+          </button>
+          <template if:true={isDropdownOpen}>
+            <div class="mypolicy-dropdown-menu">
+              <template for:each={filterOptions} for:item="option">
+                <button
+                  key={option.value}
+                  class="mypolicy-dropdown-item"
+                  data-value={option.value}
+                  onclick={handleFilterSelect}
+                >
+                  {option.label}
+                </button>
+              </template>
             </div>
-            <div class="mypolicy-header-actions">
-                <!-- All Policies Dropdown -->
-                <div class="mypolicy-dropdown">
-                    <button class="btn-dropdown" onclick={handleDropdownToggle}>
-                        {selectedFilter}
-                        <img src={chevronDownIconUrl} alt="" class="icon-chevron" />
-                    </button>
-                    <template if:true={isDropdownOpen}>
-                        <div class="mypolicy-dropdown-menu">
-                            <template for:each={filterOptions} for:item="option">
-                                <button key={option.value} class="mypolicy-dropdown-item" data-value={option.value} onclick={handleFilterSelect}>
-                                    {option.label}
-                                </button>
-                            </template>
-                        </div>
-                    </template>
-                </div>
+          </template>
+        </div>
 
-                <!-- Filter Button -->
-                <!--button class="btn-filter" onclick={handleFilterClick}>
+        <!-- Filter Button -->
+        <!--button class="btn-filter" onclick={handleFilterClick}>
                     <img src={filterIconUrl} alt="" class="icon-btn" />
                     Filter
                 </button-->
 
-                <!-- Add Policy Button -->
-                <button class="btn-add-policy" onclick={handleAddPolicy}>
-                    <img src={plusIconUrl} alt="" class="icon-btn icon-white" />
-                    Add Policy
-                </button>
-            </div>
-        </div>
+        <!-- Add Policy Button -->
+        <button class="btn-add-policy" onclick={handleAddPolicy}>
+          <img src={plusIconUrl} alt="" class="icon-btn icon-white" />
+          Add Policy
+        </button>
+      </div>
+    </div>
 
-        <!-- Policies Grid -->
-        <div class="mypolicy-grid">
-            <template for:each={policies} for:item="policy">
-                <c-buhodb_policycard
-                    key={policy.id}
-                    policy-id={policy.id}
-                    vehicle-name={policy.vehicleName}
-                    policy-number={policy.policyNumber}
-                    active-until={policy.activeUntil}
-                    coverage={policy.coverage}
-                    premium={policy.premium}
-                    payment-type={policy.paymentType}
-                    onviewdetails={handleViewDetails}
-                    ondownloaddocuments={handleDownloadDocuments}
-                    onrenew={handleRenew}>
-                </c-buhodb_policycard>
-            </template>
-        </div>
+    <!-- Policies Grid -->
+    <div class="mypolicy-grid">
+      <template for:each={policies} for:item="policy">
+        <c-buhodb_policycard
+          key={policy.id}
+          policy-id={policy.id}
+          vehicle-name={policy.vehicleName}
+          policy-number={policy.policyNumber}
+          active-until={policy.activeUntil}
+          coverage={policy.coverage}
+          premium={policy.premium}
+          payment-type={policy.paymentType}
+          onviewdetails={handleViewDetails}
+          ondownloaddocuments={handleDownloadDocuments}
+          onrenew={handleRenew}
+        >
+        </c-buhodb_policycard>
+      </template>
+    </div>
 
-        <!-- Empty State -->
-        <template if:true={noPolicies}>
-            <div class="mypolicy-empty">
-                <p>No policies found. Click "Add Policy" to get started.</p>
-            </div>
-        </template>
+    <!-- Empty State -->
+    <template if:true={noPolicies}>
+      <div class="mypolicy-empty">
+        <p>No policies found. Click "Add Policy" to get started.</p>
+      </div>
     </template>
+  </template>
 
-    <!-- ============== DETAIL VIEW ============== -->
-    <template if:true={isDetailView}>
-        <c-buhodb_policydetail
-            policy-id={selectedPolicyId}
-            onback={handleBackToList}>
-        </c-buhodb_policydetail>
-    </template>
+  <!-- ============== DETAIL VIEW ============== -->
+  <template if:true={isDetailView}>
+    <c-buhodb_policydetail policy-id={selectedPolicyId} onback={handleBackToList}>
+    </c-buhodb_policydetail>
+  </template>
 
-    <!-- ============== ADD POLICY (QUOTE WIZARD) ============== -->
-    <template if:true={isAddPolicyView}>
-        <c-buho_quote-wizard show-header="false"></c-buho_quote-wizard>
-    </template>
+  <!-- ============== ADD POLICY (QUOTE WIZARD) ============== -->
+  <template if:true={isAddPolicyView}>
+    <c-buho_quote-wizard show-header="false"></c-buho_quote-wizard>
+  </template>
 
-    <!-- ============== BACK TO POLICY (shared for edit / renew / terminate) ============== -->
-    <template if:true={showBackToPolicy}>
-        <div class="pd-back-bar">
-            <button class="pd-btn-back" onclick={handleBackToDetail}>
-                <img src={chevronLeftIconUrl} alt="" class="pd-icon-back" />
-                Back to Policy
-            </button>
-        </div>
-    </template>
+  <!-- ============== BACK TO POLICY (shared for edit / renew / terminate) ============== -->
+  <template if:true={showBackToPolicy}>
+    <div class="pd-back-bar">
+      <button class="pd-btn-back" onclick={handleBackToDetail}>
+        <img src={chevronLeftIconUrl} alt="" class="pd-icon-back" />
+        Back to Policy
+      </button>
+    </div>
+  </template>
 
-    <!-- ============== EDIT POLICY ============== -->
-    <template if:true={isEditPolicyView}>
-        <c-nc_policy-edit-main-screen is-buho-u-i="true"></c-nc_policy-edit-main-screen>
-    </template>
+  <!-- ============== EDIT POLICY ============== -->
+  <template if:true={isEditPolicyView}>
+    <c-nc_policy-edit-main-screen is-buho-u-i="true"></c-nc_policy-edit-main-screen>
+  </template>
 
-    <!-- ============== RENEW POLICY ============== -->
-    <template if:true={isRenewPolicyView}>
-        <c-nc_policy-edit-main-screen is-buho-u-i="true"></c-nc_policy-edit-main-screen>
-    </template>
+  <!-- ============== RENEW POLICY ============== -->
+  <template if:true={isRenewPolicyView}>
+    <c-nc_renewal-flow-main-screen is-buho-u-i="true"></c-nc_renewal-flow-main-screen>
+  </template>
 
-    <!-- ============== TERMINATE POLICY ============== -->
-    <template if:true={isTerminatePolicyView}>
-        <c-terminate-policy-main-screen></c-terminate-policy-main-screen>
-    </template>
+  <!-- ============== TERMINATE POLICY ============== -->
+  <template if:true={isTerminatePolicyView}>
+    <c-terminate-policy-main-screen></c-terminate-policy-main-screen>
+  </template>
 </template>

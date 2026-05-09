@@ -1,0 +1,10 @@
+<html>
+            <body>
+                <p>Hello {!Contact.Name},</p>
+                
+                <p>We are pleased to inform you that your policy auto-renewal has been approved.</p>
+               <p> Auto-Renewal Status: Approved</p>
+               <p>Renewal Date: {!EndDate}</p>
+               <p>Term: Annual (One Year)</p>
+            </body>
+ </html>

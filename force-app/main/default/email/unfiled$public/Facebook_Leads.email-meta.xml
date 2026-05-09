@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>This will be sent to new Social Facebook/Meta Paid Leads (Facebook, Instagram, etc)</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Facebook Leads</name>
+    <style>none</style>
+    <subject>Your Mexinsurance® Quote is Ready!</subject>
+    <textOnly>Dear {!Lead.FirstName}
+
+Thank you for submitting the Facebook quote details.  As promised, your customized quote link is below.
+
+We obsess about insurance in Mexico.  We constantly monitor the companies in Mexico to make sure that the companies competing for your business on our platform are the biggest in Mexico. (click here to see the report).  The quotes attached are ALL from top companies.
+
+
+{!Lead.LastName} Custom Quote
+
+
+© MEXICO INSURANCE SERVICES, INC.
+California Insurance License: 0G35864
+MexInsurance.com
+T. 855 MEXICO.5</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

@@ -108,13 +108,22 @@ export default class Buho_driverDetails extends LightningElement {
                 this.driver = {
                     ...this.driver,
                     Id: selectedDriver.Id || null,
+                    label: selectedDriver.label || '',
+                    value: selectedDriver.value || '',
                     First_Name__c: selectedDriver.First_Name__c || '',
                     Last_Name__c: selectedDriver.Last_Name__c || '',
                     License_Country__c: selectedDriver.License_Country__c || 'United States',
                     License_state__c: selectedDriver.License_state__c || '',
                     license_number__c: selectedDriver.license_number__c || '',
                     Dob__c: selectedDriver.Dob__c || '',
-                    Driver_Type__c: false // All additional drivers are not owners
+                    Driver_Type__c: false,
+                    Country__c: selectedDriver.Country__c || '',
+                    Country_Text__c: selectedDriver.Country_Text__c || '',
+                    State_Province__c: selectedDriver.State_Province__c || '',
+                    Postal_Code__c: selectedDriver.Postal_Code__c || '',
+                    City__c: selectedDriver.City__c || '',
+                    Address__c: selectedDriver.Address__c || '',
+                    diff: selectedDriver.diff || null
                 };
 
                 if (this.driver.License_Country__c) {

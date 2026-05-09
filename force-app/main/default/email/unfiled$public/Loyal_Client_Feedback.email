@@ -1,0 +1,14 @@
+<style>
+.im {
+    color: #000;
+	}
+</style>
+<div class="im">
+<div class="m_5246926589937975145im">
+<img width="200px" height="30px" src="https://mexinsurance--c.na22.content.force.com/servlet/servlet.ImageServer?id=01515000004uv8u&oid=00D15000000NeKA&lastMod=1455732738000"> 
+<h3>Thank you for being a loyal client since {!Account.Created_At__c}. </h3>
+<br/>
+Over the years we have grown together and it’s thanks to you were are still around.
+I am putting together a new effort to provide a premium service experience for our
+clients. I wonder if you would take 1 minute of your time to answer a couple questions?
+Please click <a href= "http://mexinsurance.force.com/survey/loyalsurvey?conid={!Account.Id}" > here</a></div></div>

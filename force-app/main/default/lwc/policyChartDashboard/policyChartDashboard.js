@@ -44,6 +44,7 @@ export default class PolicyChartDashboard extends LightningElement {
 
     async loadInitialData() {
         await Promise.all([this.fetchPolicyDataForChart(''), this.fetchPolicyDataForBarChart('')]);
+        console.log('Initial Data Loaded');
         this.renderCharts();
     }
 
@@ -74,7 +75,7 @@ export default class PolicyChartDashboard extends LightningElement {
         return getPolicyDataforPieChart({ policyTerm: policyType, userId: this.userId })
             .then((data) => {
                 this.chartData = data || [];
-                console.log('Pie Chart Data:::',data);
+                console.log('Pie Chart Data:::', data);
             })
             .catch((error) => {
                 console.error('Error fetching pie chart data:', error);
@@ -84,9 +85,9 @@ export default class PolicyChartDashboard extends LightningElement {
     fetchPolicyDataForBarChart(policyType) {
         return getPolicyDataforBarChart({ policyTerm: policyType, userId: this.userId })
             .then((data) => {
-                console.log('Bar Chart Data:::',data);
+                console.log('Bar Chart Data:::', data);
                 this.barChartData = data || [];
-                console.log('barChartData Data:::',this.barChartData);
+                console.log('barChartData Data:::', this.barChartData);
             })
             .catch((error) => {
                 console.error('Error fetching bar chart data:', error);
@@ -94,6 +95,7 @@ export default class PolicyChartDashboard extends LightningElement {
     }
 
     async renderCharts() {
+        console.log('renderCharts');
         if (!this.isChartJsInitialized || !this.chartData.length) {
             return;
         }
@@ -118,11 +120,11 @@ export default class PolicyChartDashboard extends LightningElement {
         ).then((result) => result.every(count => count === null) ? null : result);
 
         // Render Pie Charts
-        console.log('policyCountsForRenew:::',policyCountsForRenew);
+        console.log('policyCountsForRenew:::', policyCountsForRenew);
         if (policyCountsForRenew != null) {
-             
+
             let pieCtxRenew = this.template.querySelector('canvas[data-id="pie-chartrenew"]').getContext('2d');
-            
+
             let policyRenewTypes = policyTypes.map((type) => `${type} Renew`);
             if (this.pieChartRenew) this.pieChartRenew.destroy();
             this.pieChartRenew = new Chart(pieCtxRenew, {
@@ -136,8 +138,8 @@ export default class PolicyChartDashboard extends LightningElement {
                     maintainAspectRatio: false,
                 },
             });
-        }else{
-             this.isPolicyForRenew = false;
+        } else {
+            this.isPolicyForRenew = false;
         }
 
         if (policyCountsForNew != null) {
@@ -155,13 +157,13 @@ export default class PolicyChartDashboard extends LightningElement {
                     maintainAspectRatio: false,
                 },
             });
-        }else{
+        } else {
             this.isPolicyForRenew = false;
         }
 
         // Render Bar Chart
         if (this.isAgency) {
-            if(!this.barChartData.length){
+            if (!this.barChartData.length) {
                 this.isAgency = false;
                 return;
             }

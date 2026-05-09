@@ -1,0 +1,61 @@
+<template>
+  <!-- ── Chart Section ───────────────────────────────────── -->
+  <div class="section-card">
+    <div
+      class="section-card-header"
+      style="justify-content: space-between; flex-wrap: wrap; gap: 16px"
+    >
+      <span class="section-card-title">Policy Analytics</span>
+      <div class="table-toolbar" style="display: flex; gap: 8px; align-items: center">
+        <select
+          class="modal-form-input"
+          style="width: auto; min-width: 200px; cursor: pointer"
+          onchange={handlePolicyChange}
+        >
+          <option value="" disabled selected>Select Data Range</option>
+          <template for:each={policyOptions} for:item="opt">
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          </template>
+        </select>
+        <button class="btn-qa primary" onclick={downloadCSV} style="margin: 0; height: 100%">
+          <i class="bi bi-download"></i> Download Excel
+        </button>
+      </div>
+    </div>
+
+    <!-- Pie Charts (New & Renew) -->
+    <div class="stats-grid stats-grid-2" style="margin-top: 8px">
+      <template if:true={isPolicyForNew}>
+        <div class="stat-card" style="flex-direction: column; align-items: stretch">
+          <div style="height: 350px; position: relative; width: 100%">
+            <canvas lwc:dom="manual" class="chart" data-id="pie-chart"></canvas>
+          </div>
+        </div>
+      </template>
+
+      <template if:true={isPolicyForRenew}>
+        <div class="stat-card" style="flex-direction: column; align-items: stretch">
+          <div style="height: 350px; position: relative; width: 100%">
+            <canvas lwc:dom="manual" class="chart" data-id="pie-chartrenew"></canvas>
+          </div>
+        </div>
+      </template>
+    </div>
+
+    <!-- Bar Charts (Agency Net) -->
+    <template if:true={isAgency}>
+      <div class="stats-grid stats-grid-2" style="margin-top: 18px">
+        <div class="stat-card" style="flex-direction: column; align-items: stretch">
+          <div style="height: 350px; position: relative; width: 100%">
+            <canvas lwc:dom="manual" class="chart" data-id="bar-chart-net-commission"></canvas>
+          </div>
+        </div>
+        <div class="stat-card" style="flex-direction: column; align-items: stretch">
+          <div style="height: 350px; position: relative; width: 100%">
+            <canvas lwc:dom="manual" class="chart" data-id="bar-chart-net"></canvas>
+          </div>
+        </div>
+      </div>
+    </template>
+  </div>
+</template>

@@ -93,11 +93,17 @@ private static Map<String, Object> updateVehicleDetails(Lead lead, Map<String, O
     Map<String, Object> response = new Map<String, Object>();
     
     try {
+        Boolean isUsedForCompanyUse = false;
+        if(vehicleDetails.containsKey('Is_the_vehicle_registered_to_a_business__c') ) {
+            isUsedForCompanyUse = (Boolean) vehicleDetails.get('Is_the_vehicle_registered_to_a_business__c');
+        } else if(vehicleDetails.containsKey('is_the_vehicle_used_for_business_purpose__c') ) {
+            isUsedForCompanyUse = (Boolean) vehicleDetails.get('is_the_vehicle_used_for_business_purpose__c');
+        }
         // Transform to match your exact desired format
         Map<String, Object> transformedData = new Map<String, Object>{
             'Coverage__c' => vehicleDetails.get('Coverage__c'),
             'Vehicle_Type__c' => vehicleDetails.get('Vehicle_sub_type__c'),
-            'Is_the_vehicle_used_for_business_purpose__c' => vehicleDetails.get('is_the_vehicle_used_for_business_purpose__c'),
+            'Is_the_vehicle_used_for_business_purpose__c' => isUsedForCompanyUse,
             'Is_this_a_Rental_Vehicle__c' => vehicleDetailsOld.get('Is_this_a_Rental_Vehicle__c'),
             'Salvage_Vehicle__c' => vehicleDetails.get('salvage_vehicle__c'),
             'Is_there_a_driver_under_21__c' => vehicleDetails.get('is_there_a_driver_under_21__c'),

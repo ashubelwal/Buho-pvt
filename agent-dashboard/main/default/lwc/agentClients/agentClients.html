@@ -1,0 +1,181 @@
+<template>
+  <!-- ── Stat Cards ────────────────────────────────────────────── -->
+  <div class="stats-grid stats-grid-3">
+    <div class="stat-card">
+      <div class="stat-card-left">
+        <p class="stat-card-label">Total Clients</p>
+        <p class="stat-card-value">{totalClients}</p>
+      </div>
+      <div class="stat-card-icon-wrap stat-icon-purple"><i class="bi bi-person"></i></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-left">
+        <p class="stat-card-label">Showing</p>
+        <p class="stat-card-value">{filteredCount}</p>
+      </div>
+      <div class="stat-card-icon-wrap stat-icon-pink"><i class="bi bi-funnel"></i></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-left">
+        <p class="stat-card-label">Pages</p>
+        <p class="stat-card-value">{totalPages}</p>
+      </div>
+      <div class="stat-card-icon-wrap stat-icon-blue">
+        <i class="bi bi-file-earmark-person"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Clients Table ─────────────────────────────────────────── -->
+  <div class="section-card">
+    <div class="section-card-header">
+      <span class="section-card-title">Agency Clients</span>
+      <div class="table-toolbar">
+        <div class="search-bar">
+          <i class="bi bi-search"></i>
+          <input
+            type="text"
+            placeholder="Search by name, email, phone"
+            value={searchValue}
+            onchange={handleSearch}
+          />
+        </div>
+        <button class="btn-qa primary" type="button" onclick={openCreateModal}>
+          <i class="bi bi-person-plus me-1"></i> Add Client
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <template lwc:if={isLoading}>
+      <div class="placeholder-page" style="min-height: 180px">
+        <div class="placeholder-icon"><i class="bi bi-hourglass-split"></i></div>
+        <p class="placeholder-subtitle">Loading clients...</p>
+      </div>
+    </template>
+
+    <!-- Error -->
+    <template lwc:elseif={hasError}>
+      <div class="placeholder-page" style="min-height: 180px">
+        <div
+          class="placeholder-icon"
+          style="background: rgba(255, 75, 75, 0.1); color: var(--danger)"
+        >
+          <i class="bi bi-exclamation-triangle"></i>
+        </div>
+        <p class="placeholder-title" style="color: var(--danger)">Error loading clients</p>
+        <p class="placeholder-subtitle">{errorMessage}</p>
+      </div>
+    </template>
+
+    <!-- Data table -->
+    <template lwc:elseif={hasClients}>
+      <div class="table-scroll-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Email</th>
+              <th>Address</th>
+              <th>Created Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template for:each={paginatedClients} for:item="client">
+              <tr key={client.Id}>
+                <td class="fw-bold">{client.Name}</td>
+                <td>{client.Phone}</td>
+                <td>
+                  <div class="contact-cell">
+                    <span class="contact-line"><i class="bi bi-envelope"></i> {client.Email}</span>
+                  </div>
+                </td>
+                <td>{client.Address}</td>
+                <td>{client.CreatedDate}</td>
+                <td>
+                  <button
+                    class="action-icon-btn"
+                    type="button"
+                    data-id={client.Id}
+                    onclick={openClientModal}
+                    title="View Details"
+                  >
+                    <i class="bi bi-eye"></i>
+                  </button>
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination-controls">
+        <button class="btn-qa" onclick={prevPage} disabled={isFirstPage}>Previous</button>
+        <div class="page-info">{pageInfo}</div>
+        <button class="btn-qa" onclick={nextPage} disabled={isLastPage}>Next</button>
+      </div>
+    </template>
+
+    <!-- Empty state -->
+    <template lwc:else>
+      <div class="placeholder-page" style="min-height: 180px">
+        <div class="placeholder-icon"><i class="bi bi-people"></i></div>
+        <p class="placeholder-title">No clients found</p>
+        <p class="placeholder-subtitle">Clients associated with your agency will appear here.</p>
+      </div>
+    </template>
+  </div>
+
+  <!-- ── View Details Modal ────────────────────────────────────── -->
+  <template lwc:if={showClientModal}>
+    <div class="modal-overlay" onclick={closeClientModal}>
+      <div class="modal-card" onclick={stopPropagation}>
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-title">Client Details</h2>
+            <p class="modal-subtitle">Full information for {selectedClient.Name}</p>
+          </div>
+          <button class="modal-close-btn" type="button" onclick={closeClientModal}>
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-fields-grid">
+            <div class="modal-field">
+              <span class="modal-field-label">Full Name</span>
+              <span class="modal-field-value">{selectedClient.Name}</span>
+            </div>
+            <div class="modal-field">
+              <span class="modal-field-label">Phone</span>
+              <span class="modal-field-value">{selectedClient.Phone}</span>
+            </div>
+            <div class="modal-field full-width">
+              <span class="modal-field-label">Email</span>
+              <span class="modal-field-value">{selectedClient.Email}</span>
+            </div>
+            <div class="modal-field full-width">
+              <span class="modal-field-label">Address</span>
+              <span class="modal-field-value">{selectedClient.Address}</span>
+            </div>
+            <div class="modal-field">
+              <span class="modal-field-label">Created Date</span>
+              <span class="modal-field-value">{selectedClient.CreatedDate}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- ── Create Client Modal (delegated to child component) ───── -->
+  <template lwc:if={showCreateModal}>
+    <c-agent-add-client
+      contact-id={contactId}
+      onclientcreated={handleClientCreated}
+      onclosemodal={closeCreateModal}
+    ></c-agent-add-client>
+  </template>
+</template>

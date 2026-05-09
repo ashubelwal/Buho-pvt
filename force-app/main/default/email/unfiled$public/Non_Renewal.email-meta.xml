@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>This template will request a response to why the user did not renew their policy.</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Non Renewal</name>
+    <style>none</style>
+    <subject>Policy Non-Renewal Survey - Please Share Your Experience</subject>
+    <textOnly>Dear {!Contact.FirstName}
+
+We noticed you did not renew your Mexico insurance with us, so we want to know why.  Please take just 2 minutes and let us know.
+
+We obsess about insurance in Mexico.  We constantly monitor the companies in Mexico to make sure that the companies competing for your business on our platform are the biggest in Mexico. (click here to see the report).  In addition to making sure the insurance is top-of-the-line, we&apos;ve made significant investments in your experience purchasing insurance both online and in-person.  For these reasons, a non-renewal is a great concern.  Please click the link above to let us know how we lost you.
+
+
+
+© MEXICO INSURANCE SERVICES, INC.
+California Insurance License: 0G35864
+MexInsurance.com
+T. 855 MEXICO.5</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

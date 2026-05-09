@@ -1,0 +1,27 @@
+<template>
+    <template if:true={isVisible}>
+        <div class={toastClass} role="alert">
+            <div class="toast-icon">
+                <template if:true={isSuccess}>
+                    <i class="bi bi-check-circle-fill"></i>
+                </template>
+                <template if:true={isError}>
+                    <i class="bi bi-x-circle-fill"></i>
+                </template>
+                <template if:true={isWarning}>
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                </template>
+                <template if:true={isInfo}>
+                    <i class="bi bi-info-circle-fill"></i>
+                </template>
+            </div>
+            <div class="toast-content">
+                <div class="toast-title">{title}</div>
+                <div class="toast-message">{message}</div>
+            </div>
+            <button class="toast-close" onclick={handleClose}>
+                <i class="bi bi-x"></i>
+            </button>
+        </div>
+    </template>
+</template>

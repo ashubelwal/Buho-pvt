@@ -1,0 +1,5 @@
+Contact Id  {!Contact.Id}
+
+SFID  {!Contact.SFID__c}
+
+ID {!Contact.Id__c}

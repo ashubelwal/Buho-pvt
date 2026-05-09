@@ -1,4 +1,4 @@
-import { LightningElement ,api, track } from 'lwc';
+import { LightningElement, api, track } from 'lwc';
 import validateandGenerateQuotePDF from '@salesforce/apex/PolicyDocumentGenerator.validateandGenerateQuotePDF';
 
 
@@ -7,13 +7,14 @@ export default class AgentPolicyQuickActions extends LightningElement {
     @api renewdPolicyId;
     @api actionmode;
     @track isLoading;
+    @api isAgentPortal;
 
     get acknowledgementMessage() {
         return this.actionmode == 'renew' ? 'Your policy has been renewed successfully' : 'Your policy has been updated successfully';
     }
 
-    showToastmethod(variant,title,message) {
-        this.template.querySelector('c-custom-toast').showToast(variant,title,message);
+    showToastmethod(variant, title, message) {
+        this.template.querySelector('c-custom-toast').showToast(variant, title, message);
     }
 
     generatePolicyPDF(event) {
@@ -22,24 +23,26 @@ export default class AgentPolicyQuickActions extends LightningElement {
             .then((result) => {
                 this.isLoading = false;
                 if (result) {
-                     if(this.cmpSource == 'comm'){
+                    if (this.cmpSource == 'comm') {
                         window.open(('/customer/apex/' + result + '?id=' + this.renewdPolicyId), '_blank');
+                    } else if (this.isAgentPortal) {
+                        window.open(('/agencyvforcesite/apex/' + result + '?id=' + this.renewdPolicyId), '_blank');
                     } else {
                         window.open(('/apex/' + result + '?id=' + this.renewdPolicyId), '_blank');
                     }
                 } else {
-                    if(this.cmpSource == 'comm'){
-                        this.showToastmethod('error','Something wrong happened while generating PDF!','Cannot generate PDF for the current policy.');
-        
-                    }else{
+                    if (this.cmpSource == 'comm') {
+                        this.showToastmethod('error', 'Something wrong happened while generating PDF!', 'Cannot generate PDF for the current policy.');
+
+                    } else {
                         let errEvt = new ShowToastEvent({
                             message: 'Cannot generate PDF for the current policy.',
                             title: 'Something wrong happened while generating PDF!',
                             variant: 'error',
                         });
-                        this.dispatchEvent(errEvt);       
+                        this.dispatchEvent(errEvt);
                     }
-                   
+
                 }
             })
             .catch((error) => {
@@ -48,18 +51,26 @@ export default class AgentPolicyQuickActions extends LightningElement {
             });
     }
 
+    navigateToNewQuote() {
+        this.dispatchEvent(new CustomEvent('navigate', {
+            detail: { page: 'newQuote' },
+            bubbles: true,
+            composed: true
+        }));
+    }
+
     navigateToPolicy(event) {
         console.log('this.cmpSource');
         console.log(this.cmpSource);
-        if(this.cmpSource == 'comm'){
+        if (this.cmpSource == 'comm') {
             let currentUrl = window.location.origin;
-            location.replace(`${currentUrl}/agency/policy/`+this.renewdPolicyId);
+            location.replace(`${currentUrl}/agency/policy/` + this.renewdPolicyId);
             console.log('INSIDE community');
-        }else{
+        } else {
             console.log('OUTSIDE community');
             window.open(('/' + this.renewdPolicyId), '_blank');
         }
-        
+
     }
 
 }

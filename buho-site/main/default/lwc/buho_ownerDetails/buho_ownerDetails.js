@@ -138,14 +138,22 @@ export default class Buho_ownerDetails extends LightningElement {
                 // Populate owner with selected driver's data
                 this.owner = {
                     ...selectedDriver,
+                    label: selectedDriver.label || '',
+                    value: selectedDriver.value || '',
+                    First_Name__c: selectedDriver.First_Name__c || '',
+                    Last_Name__c: selectedDriver.Last_Name__c || '',
+                    License_Country__c: selectedDriver.License_Country__c || 'United States',
+                    License_state__c: selectedDriver.License_state__c || '',
+                    license_number__c: selectedDriver.license_number__c || '',
+                    Dob__c: selectedDriver.Dob__c || '',
                     Driver_Type__c: 'Owner & Driver',
-                    // Keep any existing address data if present
                     Country__c: selectedDriver.Country__c || '',
                     Country_Text__c: selectedDriver.Country_Text__c || '',
                     State_Province__c: selectedDriver.State_Province__c || '',
                     Postal_Code__c: selectedDriver.Postal_Code__c || '',
                     City__c: selectedDriver.City__c || '',
                     Address__c: selectedDriver.Address__c || '',
+                    diff: selectedDriver.diff || null,
                     isLeasedOrFinanced: selectedDriver.isLeasedOrFinanced || false
                 };
 
@@ -296,8 +304,15 @@ export default class Buho_ownerDetails extends LightningElement {
                 // Pre-populate owner data including address
                 this.owner = {
                     ...existingOwner,
+                    label: existingOwner.label || '',
+                    value: existingOwner.value || '',
+                    First_Name__c: existingOwner.First_Name__c || '',
+                    Last_Name__c: existingOwner.Last_Name__c || '',
+                    License_Country__c: existingOwner.License_Country__c || 'United States',
+                    License_state__c: existingOwner.License_state__c || '',
+                    license_number__c: existingOwner.license_number__c || '',
+                    Dob__c: existingOwner.Dob__c || '',
                     Driver_Type__c: 'Owner & Driver',
-                    // Preserve address fields
                     Country__c: existingOwner.Country__c || '',
                     Country_Text__c: existingOwner.Country_Text__c || '',
                     State_Province__c: existingOwner.State_Province__c || '',
@@ -314,7 +329,7 @@ export default class Buho_ownerDetails extends LightningElement {
                 this.currentStep === 'ownerSelection';
                 console.log('OD Pre-populated owner:', this.owner);
                 console.log('OD Pre-selected owner ID:', this.selectedOwnerId);
-                this.handleOwnershipSelection({currentTarget:{dataset:{value:'personal'}}});
+                this.handleOwnershipSelection({ currentTarget: { dataset: { value: 'personal' } } });
 
             }
 
@@ -325,7 +340,7 @@ export default class Buho_ownerDetails extends LightningElement {
                 this.flag.Is_the_vehicle_registered_to_a_business__c = true;
                 this.currentStep = 'companyDetails';
                 this.inputValues.companyInformation = companyPayload;
-                this.handleOwnershipSelection({currentTarget:{dataset:{value:'business'}}});
+                this.handleOwnershipSelection({ currentTarget: { dataset: { value: 'business' } } });
             }
 
             const finalVehicleDetails = this.payload.find(item => item.finalizeVehicleDetails)?.finalizeVehicleDetails;
@@ -623,19 +638,31 @@ export default class Buho_ownerDetails extends LightningElement {
         }
 
         // Update finalizeVehicleDetails section
+        const companyInformation = this.inputValues?.companyInformation || {};
+        const businessAddressObj = {
+            Country__c: companyInformation.Company_Country__c || '',
+            State_Province__c: companyInformation.Company_State__c || '',
+            Postal_Code__c: companyInformation.Company_Zip__c || '',
+            City__c: companyInformation.Company_City__c || '',
+            Address__c: companyInformation.Company_Address__c || ''
+        };
+        const shouldAttachBusinessAddress = this.currentVehicleType === 'business';
+
         const finalizeIndex = this.payload.findIndex(item => item.finalizeVehicleDetails);
         if (finalizeIndex >= 0) {
             this.payload[finalizeIndex] = {
                 ...this.payload[finalizeIndex],
                 finalizeVehicleDetails: {
                     ...this.payload[finalizeIndex].finalizeVehicleDetails,
-                    Is_the_vehicle_registered_to_a_business__c: this.flag.Is_the_vehicle_registered_to_a_business__c
+                    Is_the_vehicle_registered_to_a_business__c: this.flag.Is_the_vehicle_registered_to_a_business__c,
+                    ...(shouldAttachBusinessAddress ? { BusinessAddress__c: businessAddressObj } : {})
                 }
             };
         } else {
             this.payload = [...this.payload, {
                 finalizeVehicleDetails: {
-                    Is_the_vehicle_registered_to_a_business__c: this.flag.Is_the_vehicle_registered_to_a_business__c
+                    Is_the_vehicle_registered_to_a_business__c: this.flag.Is_the_vehicle_registered_to_a_business__c,
+                    ...(shouldAttachBusinessAddress ? { BusinessAddress__c: businessAddressObj } : {})
                 }
             }];
         }
@@ -653,12 +680,13 @@ export default class Buho_ownerDetails extends LightningElement {
             } catch (e) {
                 console.log('OD Error in saveFinalizeVehicleDetails:', e.message);
             }
+            // Save company data if business vehicle
+            if (this.flag.Is_the_vehicle_registered_to_a_business__c && this.inputValues.companyInformation) {
+                await this.handleCompanyDataSave();
+            }
         }
 
-        // Save company data if business vehicle
-        if (this.flag.Is_the_vehicle_registered_to_a_business__c && this.inputValues.companyInformation) {
-            await this.handleCompanyDataSave();
-        }
+
 
         // Save driver/owner data
         await this.handleDriverDataSave();
@@ -678,7 +706,8 @@ export default class Buho_ownerDetails extends LightningElement {
             },
             {
                 finalizeVehicleDetails: {
-                    Is_the_vehicle_registered_to_a_business__c: this.flag.Is_the_vehicle_registered_to_a_business__c
+                    Is_the_vehicle_registered_to_a_business__c: this.flag.Is_the_vehicle_registered_to_a_business__c,
+                    ...(shouldAttachBusinessAddress ? { BusinessAddress__c: businessAddressObj } : {})
                 }
             }
         ];

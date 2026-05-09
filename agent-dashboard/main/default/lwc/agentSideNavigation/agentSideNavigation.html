@@ -1,0 +1,81 @@
+<template>
+  <aside class={sidebarClass}>
+    <!-- Logo -->
+    <div class="sidebar-logo-area">
+      <img class="sidebar-logo" src={logoUrl} alt="Mex Insurance" />
+    </div>
+
+    <nav class="sidebar-nav">
+      <!-- MAIN group -->
+      <p class="sidebar-section-label">Main</p>
+
+      <div class={navClass.dashboard} data-page="dashboard" onclick={handleNavClick}>
+        <i class="bi bi-grid-1x2-fill"></i>
+        <span>Dashboard</span>
+      </div>
+
+      <div class={navClass.clients} data-page="clients" onclick={handleNavClick}>
+        <i class="bi bi-people"></i>
+        <span>Clients</span>
+      </div>
+
+      <div class={navClass.quotes} data-page="quotes" onclick={handleNavClick}>
+        <i class="bi bi-file-earmark-text"></i>
+        <span>Quotes</span>
+      </div>
+
+      <div class={navClass.renewals} data-page="renewals" onclick={handleNavClick}>
+        <i class="bi bi-arrow-repeat"></i>
+        <span>Renewals</span>
+      </div>
+
+      <!-- ACTIONS group -->
+      <p class="sidebar-section-label">Actions</p>
+
+      <div class={navClass.newQuote} data-page="newQuote" onclick={handleNavClick}>
+        <i class="bi bi-plus-circle"></i>
+        <span>New Quote</span>
+      </div>
+
+      <div class={navClass.endorsement} data-page="endorsement" onclick={handleNavClick}>
+        <i class="bi bi-pencil-square"></i>
+        <span>Endorsement</span>
+      </div>
+
+      <div class={navClass.cancelPolicy} data-page="cancelPolicy" onclick={handleNavClick}>
+        <i class="bi bi-x-circle"></i>
+        <span>Cancel Policy</span>
+      </div>
+
+      <!-- MANAGEMENT group -->
+      <p class="sidebar-section-label">Management</p>
+
+      <div class={navClass.reports} data-page="reports" onclick={handleNavClick}>
+        <i class="bi bi-bar-chart-line"></i>
+        <span>Charts</span>
+      </div>
+
+      <div class={navClass.underwriting} data-page="underwriting" onclick={handleNavClick}>
+        <i class="bi bi-list-columns-reverse"></i>
+        <span>Underwriting</span>
+      </div>
+
+      <template lwc:if={isAgencyUser}>
+        <div class={navClass.users} data-page="users" onclick={handleNavClick}>
+          <i class="bi bi-person-badge"></i>
+          <span>Users</span>
+        </div>
+      </template>
+
+      <div class={navClass.profile} data-page="profile" onclick={handleNavClick}>
+        <i class="bi bi-person-circle"></i>
+        <span>Profile</span>
+      </div>
+
+      <div class="sidebar-nav-item" onclick={handleLogout}>
+        <i class="bi bi-box-arrow-right"></i>
+        <span>Logout</span>
+      </div>
+    </nav>
+  </aside>
+</template>

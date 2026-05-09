@@ -1,0 +1,538 @@
+<template>
+  <div>
+    <c-custom-toast auto-close-time="8000"></c-custom-toast>
+  </div>
+
+  <template if:true={isModalOpen}>
+    <section
+      role="dialog"
+      tabindex="-1"
+      aria-modal="true"
+      aria-labelledby="modal-heading-02"
+      class="slds-modal slds-fade-in-open"
+    >
+      <div class="slds-modal__container">
+        <div class="slds-modal__header">
+          <h1 id="modal-heading-03" class="slds-modal__title slds-hyphenate" tabindex="-1">
+            Transfer Ownsership
+          </h1>
+        </div>
+
+        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-01">
+          <div>
+            This contact does not associated with current Agency. Do you want to Transfer the
+            Ownership!
+          </div>
+          <c-transfer-ownership-manager
+            onclosemodal={cancelTransferOwnership}
+            contact-id={currentContactId}
+            ontoast={handleToast}
+            user-id={userId}
+          ></c-transfer-ownership-manager>
+        </div>
+        <div class="slds-modal__footer">
+          <button
+            class="slds-button slds-button_neutral"
+            aria-label="Cancel and close"
+            onclick={cancelTransferOwnership}
+          >
+            Cancel
+          </button>
+          <button class="slds-button slds-button_brand" onclick={handlerTransferOwnership}>
+            Transfer Ownership
+          </button>
+        </div>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+  </template>
+
+  <div style="background: #fff; border-radius: 4px" class="slds-p-around_medium">
+    <template if:true={isLoading}>
+      <div class="spinner">
+        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+      </div>
+    </template>
+    <div class="slds-m-bottom_small">
+      <h2 class="slds-text-heading_medium">MexInsurance Agent</h2>
+    </div>
+    <div class="searchForm">
+      <lightning-layout multiple-rows class="">
+        <lightning-layout-item
+          size="12"
+          small-device-size="12"
+          medium-device-size="6"
+          large-device-size="4"
+          padding="around-small"
+        >
+          <lightning-input
+            class="searchValidate"
+            type="text"
+            label="Search"
+            name="searchValue"
+            onchange={handleInputChange}
+            pattern="^\S+(?: \S+)*$"
+            placeholder="Search by Name, Email, Policy number"
+            value={searchData.searchValue}
+            required
+            onkeyup={handlekeyUp}
+            maxlength="30"
+          >
+          </lightning-input>
+        </lightning-layout-item>
+
+        <lightning-layout-item
+          size="12"
+          small-device-size="12"
+          medium-device-size="3"
+          large-device-size="3"
+          padding="around-small"
+        >
+          <lightning-button label="Search" title="Search" onclick={handleSearch}></lightning-button>
+        </lightning-layout-item>
+
+        <lightning-layout-item
+          size="12"
+          small-device-size="12"
+          medium-device-size="3"
+          large-device-size="3"
+          padding="around-small"
+          class="slds-text-align_right"
+        >
+          <!-- <lightning-button label='Add new Lead' title='Add new Lead' onclick={handleNewLead} class="">
+					</lightning-button> -->
+        </lightning-layout-item>
+
+        <template if:true={booleanVar.createLeadButton}>
+          <div class="slds-p-left_medium">
+            <!-- <p>No data found!!!☹️</p> -->
+            <lightning-button
+              class=""
+              variant="base"
+              label="Create new Lead"
+              title="Create new Lead"
+              onclick={handleNewLead}
+            >
+            </lightning-button>
+          </div>
+        </template>
+
+        <!-- Lead Data  -->
+        <template if:true={booleanVar.leadDataStatus}>
+          <lightning-layout-item
+            size="12"
+            small-device-size="12"
+            medium-device-size="12"
+            large-device-size="12"
+            padding="around-small"
+          >
+            <div class="policyList">
+              <div class="slds-m-bottom_small slds-p-around_small">
+                <h2 class="slds-text-title_cap slds-m-bottom_small searchListTitle">Lead</h2>
+                <lightning-datatable
+                  hide-checkbox-column
+                  key-field="id"
+                  data={data}
+                  columns={columns}
+                  onrowaction={handleLeadRowAction}
+                >
+                </lightning-datatable>
+              </div>
+            </div>
+          </lightning-layout-item>
+        </template>
+
+        <!-- Contact data  -->
+        <template if:true={booleanVar.contactDataStatus}>
+          <lightning-layout-item
+            size="12"
+            small-device-size="12"
+            medium-device-size="12"
+            large-device-size="12"
+            padding="around-small"
+          >
+            <div class="policyList">
+              <div class="slds-m-bottom_small slds-p-around_small">
+                <h2 class="slds-text-title_cap slds-m-bottom_small searchListTitle">Contact</h2>
+                <lightning-datatable
+                  hide-checkbox-column
+                  key-field="id"
+                  data={searchResults.contactData}
+                  columns={contactColumns}
+                  onrowaction={handleRowAction}
+                >
+                </lightning-datatable>
+              </div>
+
+              <!-- <lightning-layout multiple-rows class="">
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="around-small">
+                                    <h2 class="slds-text-title_cap slds-m-bottom_small searchListTitle"> Policy </h2>
+                                    <div class="policyItem">
+                                        <span class="activePolicy">Active</span>
+                                        <a class="slds-m-left_x-small" href="#"> CACAB-23-EPEFG </a>
+                                        <span class="slds-m-left_x-small actionBtn" data-id='CACAB-23-EPEFG'
+                                            data-actiontype="EDIT" data-obj="policy" onclick={handleOperations}> Edit
+                                        </span>
+                                        <span class="slds-m-left_x-small actionBtn" data-id='CACAB-23-EPEFG'
+                                            data-actiontype="RENEW" data-obj="policy" onclick={handleOperations}> Renew
+                                        </span>
+                                        <span class="slds-m-left_x-small actionBtn" data-id='a0H8I000001kOHqUAM'
+                                            data-actiontype="TERMINATE" data-obj="policy" onclick={handleOperations}>
+                                            Terminate </span>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="around-small">
+                                    <h2 class="slds-text-title_cap slds-m-bottom_small searchListTitle"> Quote </h2>
+                                    <div class="policyItem">
+                                        <a class="slds-m-left_x-small"
+                                            href="/lightning/n/Contact_Detail/?&p=CACAB-23-EPEFG"> CACAB-23-EPEFG </a>
+                                        <span class="slds-m-left_x-small actionBtn" data-id='CACAB-23-EPEFG'
+                                            data-actiontype="CONTINUEQUOTE" data-obj="quote" onclick={handleOperations}>
+                                            Continue quote </span>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout> -->
+            </div>
+          </lightning-layout-item>
+        </template>
+
+        <!-- Quote data  -->
+        <!-- <template if:true={booleanVar.quoteDataStatus}>
+					<lightning-layout-item size="12" small-device-size="12" medium-device-size="12"
+						large-device-size="12" padding="around-small">
+						<div class="policyList">
+							<div class="slds-m-bottom_small slds-p-around_small">
+								<h2 class="slds-text-title_cap slds-m-bottom_small searchListTitle"> Quote </h2>
+								<lightning-datatable hide-checkbox-column key-field="id" data={searchResults.quoteData}
+									columns={quoteTable} onrowaction={handleRowAction}>
+								</lightning-datatable>
+
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-m-top_small">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">                                            
+                                            <th class="">
+                                                <div class="" title="Type">Name</div>
+                                            </th>
+                                            <th class="">
+                                                <div class="" title="Value">Type</div>
+                                            </th>
+                                            <th class="">
+                                                <div class="" title="Days">Term</div>
+                                            </th>
+                                            <th class="">
+                                                <div class="" title="Days">Start Date</div>
+                                            </th>
+                                            <th class="">
+                                                <div class="" title="Days">End Date</div>
+                                            </th>
+                                            <th class="">
+                                                <div class="" title="Action">Action</div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={searchResults.quoteData} for:item="quote">
+                                            <tr class="slds-line-height_reset" key={quote.Id}>                                                
+                                                <td>
+                                                    <div class="slds-truncate" title="Quote name">
+                                                        {quote.Name}</div>
+                                                </td>
+                                                <td>
+                                                    <div class="slds-truncate" title="Quote type">
+                                                        {quote.Policy_Type_picklist__c}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="slds-truncate" title="">
+                                                        {quote.Term_Days__c}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="slds-truncate" title="">
+                                                        {quote.Start_Date_for_Coverage__c}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="slds-truncate" title="">
+                                                        {quote.End_Date_for_Coverage__c}
+                                                    </div>
+                                                </td>                                                
+                                                <td>
+                                                    <div class="slds-truncate">
+                                                        <span class="actionBtn" data-id={quote.Contact__c}
+                                                            data-actiontype="VIEW" data-obj="contact" onclick={handleOperations}> Contact </span>
+                                                        <span class="actionBtn" data-id={quote.Lead__c}
+                                                            data-actiontype="VIEW" data-obj="Lead" onclick={handleOperations}> Lead </span>
+                                                        <span class="actionBtn" data-id={quote.Id}
+                                                            data-actiontype="VIEW" data-obj="quote" onclick={handleOperations}> Continue quote </span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+							</div>
+						</div>
+					</lightning-layout-item>
+				</template> -->
+
+        <!-- Policy Data  -->
+        <template if:true={booleanVar.policyDataStatus}>
+          <lightning-layout-item
+            size="12"
+            small-device-size="12"
+            medium-device-size="12"
+            large-device-size="12"
+            padding="around-small"
+          >
+            <div class="policyList">
+              <div class="slds-m-bottom_small slds-p-around_small">
+                <h2 class="slds-text-title_cap slds-m-bottom_small searchListTitle">Policy</h2>
+                <!-- <lightning-datatable hide-checkbox-column key-field="id" data={searchResults.policyData}
+									columns={quoteTable}> 
+								    </lightning-datatable> 
+                                -->
+                <table
+                  class="slds-table slds-table_cell-buffer slds-table_bordered slds-m-top_small"
+                >
+                  <thead>
+                    <tr class="slds-line-height_reset">
+                      <th class="">
+                        <div class="" title="Type">Status</div>
+                      </th>
+                      <th class="">
+                        <div class="" title="Type">Name</div>
+                      </th>
+                      <th class="">
+                        <div class="" title="Value">Type</div>
+                      </th>
+                      <th class="">
+                        <div class="" title="Days">Term</div>
+                      </th>
+                      <th class="">
+                        <div class="" title="Days">Start Date</div>
+                      </th>
+                      <th class="">
+                        <div class="" title="Days">End Date</div>
+                      </th>
+                      <th class="">
+                        <div class="" title="Action">Action</div>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <template for:each={searchResults.policyData} for:item="policy">
+                      <tr class="slds-line-height_reset" key={policy.Id}>
+                        <td>
+                          <div class="slds-truncate activePolicy text-center" title="Policy Status">
+                            {policy.Status_picklist__c}
+                          </div>
+                        </td>
+                        <td>
+                          <div class="slds-truncate" title="POlicy name">{policy.Name}</div>
+                        </td>
+                        <td>
+                          <div class="slds-truncate" title="Policy type">
+                            {policy.Policy_Type_picklist__c}
+                          </div>
+                        </td>
+                        <td>
+                          <div class="slds-truncate" title="">{policy.Term_days__c}</div>
+                        </td>
+                        <td>
+                          <div class="slds-truncate" title="">{policy.Start_Date__c}</div>
+                        </td>
+                        <td>
+                          <div class="slds-truncate" title="">{policy.End_Date__c}</div>
+                        </td>
+                        <td>
+                          <div class="slds-truncate">
+                            <template if:true={isAgentportal}>
+                              <span
+                                class="actionBtn"
+                                data-id={policy.Contact__c}
+                                data-actiontype="VIEW"
+                                data-obj="contact"
+                                onclick={handleOperations}
+                              >
+                                Contact
+                              </span>
+                            </template>
+
+                            <!-- <span class="actionBtn" data-id={policy.Quote_c__c}
+                                                            data-actiontype="VIEW" data-obj="quote" onclick={handleOperations}> Quote </span> -->
+
+                            <span
+                              class="actionBtn"
+                              data-id={policy.Id}
+                              data-actiontype="EDIT"
+                              data-obj="policy"
+                              lwc:if={policy.EditBtn}
+                              onclick={navigateToPolicyEdit}
+                            >
+                              Edit
+                            </span>
+                            <span
+                              class="actionBtn"
+                              data-id={policy.Id}
+                              data-actiontype="RENEW"
+                              data-obj="policy"
+                              lwc:if={policy.RenewBtn}
+                              onclick={navigateToPolicyRenew}
+                            >
+                              Renew
+                            </span>
+                            <span
+                              class="actionBtn"
+                              data-id={policy.Id}
+                              data-actiontype="TERMINATE"
+                              data-obj="policy"
+                              lwc:if={policy.TerminateBtn}
+                              onclick={handleOperations}
+                            >
+                              Terminate
+                            </span>
+
+                            <span
+                              class="actionBtn"
+                              data-id={policy.Id}
+                              data-actiontype="VIEWPOLICY"
+                              data-obj="policy"
+                              onclick={handleViewPolicyOperations}
+                            >
+                              View Policy
+                            </span>
+                            <span
+                              class="actionBtn"
+                              data-id={policy.Contact__c}
+                              data-actiontype="CREATEPOLICY"
+                              data-obj="policy"
+                              onclick={handleCreatePolicy}
+                            >
+                              Create Policy
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                    </template>
+                  </tbody>
+                </table>
+              </div>
+              <!-- <template for:each={searchResults.policyData} for:item="policy">
+                                        <div class="policyItem" key={policy.Id}>
+                                            <span class="activePolicy">{policy.Status_picklist__c}</span>
+                                            <a class="slds-m-left_x-small" href="#">{policy.Name} </a>
+                                            <a class="slds-m-left_x-small" href="#">Contact </a>
+
+
+                                            <span class="slds-m-left_x-small actionBtn" data-id={policy.Id}
+                                                data-actiontype="EDIT" data-obj="policy" onclick={handleOperations}> Edit
+                                            </span>
+                                            <span class="slds-m-left_x-small actionBtn" data-id={policy.Id}
+                                                data-actiontype="RENEW" data-obj="policy" onclick={handleOperations}> Renew
+                                            </span>
+                                            <span class="slds-m-left_x-small actionBtn" data-id={policy.Id}
+                                                data-actiontype="TERMINATE" data-obj="policy" onclick={handleOperations}>
+                                                Terminate </span>
+                                        </div>
+                                    </template> -->
+
+              <!-- <lightning-layout-item size="12" small-device-size="12" medium-device-size="6"
+                                    large-device-size="6" padding="around-small">
+                                    <h2 class="slds-text-title_cap slds-m-bottom_small searchListTitle"> Quote </h2>
+                                    <div class="policyItem">
+                                        <a class="slds-m-left_x-small"
+                                            href="/lightning/n/Contact_Detail/?&p=CACAB-23-EPEFG"> CACAB-23-EPEFG </a>
+                                        <span class="slds-m-left_x-small actionBtn" data-id='CACAB-23-EPEFG'
+                                            data-actiontype="CONTINUEQUOTE" data-obj="quote" onclick={handleOperations}>
+                                            Continue quote </span>
+                                    </div>
+                                </lightning-layout-item> -->
+            </div>
+          </lightning-layout-item>
+        </template>
+
+        <template if:true={booleanVar.noDataFound}>
+          <lightning-layout-item
+            size="12"
+            small-device-size="12"
+            medium-device-size="12"
+            large-device-size="12"
+            padding="around-small"
+          >
+            <div class="slds-p-left_xx-small">
+              <p>No data found!!!☹️</p>
+              <!-- <lightning-button class="" variant="base" label='Create new Lead' title='Create new Lead' onclick={handleNewLead}>
+                            </lightning-button>              -->
+            </div>
+          </lightning-layout-item>
+        </template>
+      </lightning-layout>
+    </div>
+
+    <template if:true={isShowModal}>
+      <section
+        role="dialog"
+        tabindex="-1"
+        aria-labelledby="modal-heading-01"
+        aria-modal="true"
+        aria-describedby="modal-content-id-1"
+        class="slds-modal slds-fade-in-open"
+      >
+        <div class="slds-modal__container">
+          <!-- modal header start -->
+          <header class="slds-modal__header">
+            <button
+              class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+              title="Close"
+              onclick={hideModalBox}
+            >
+              <lightning-icon
+                icon-name="utility:close"
+                alternative-text="close"
+                variant="inverse"
+                size="small"
+              ></lightning-icon>
+              <span class="slds-assistive-text">Close</span>
+            </button>
+            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+              Add Email in Contact
+            </h2>
+          </header>
+
+          <!-- modal body start -->
+          <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+            <lightning-input
+              class=""
+              label="Email"
+              type="email"
+              maxlength="40"
+              name="Email"
+              onchange={handleEmailInput}
+              required
+            >
+            </lightning-input>
+          </div>
+
+          <!-- modal footer start-->
+          <footer class="slds-modal__footer">
+            <button class="slds-button slds-button_neutral" onclick={hideModalBox}>Cancel</button>
+            <button
+              class="slds-button slds-button_neutral slds-p-left_small"
+              onclick={handleUpdateEmail}
+            >
+              Save
+            </button>
+          </footer>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <template if:false={isAgentportal}>
+      <c-policy-chart-dashboard></c-policy-chart-dashboard>
+    </template>
+  </div>
+</template>

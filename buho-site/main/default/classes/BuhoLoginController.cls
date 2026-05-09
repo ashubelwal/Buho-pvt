@@ -221,4 +221,9 @@ public without sharing class BuhoLoginController {
         }
     }
 
+    @AuraEnabled
+    public static void activateUser(Id userId) {
+        update new User(Id = userId, IsActive = true);
+    }
+
 }

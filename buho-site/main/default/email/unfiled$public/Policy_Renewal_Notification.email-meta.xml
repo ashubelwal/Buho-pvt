@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <letterhead>BuhoLetterHead</letterhead>
+    <name>Policy Renewal Notification</name>
+    <style>freeForm</style>
+    <subject>Buho Renewal | Policy {!Policy__c.Vehicle_Policy__c}</subject>
+    <textOnly>Dear {!Contact.FirstName},
+
+This is a reminder that the Mexico Insurance policy below is about to expire.
+
+
+Policy Renewal Details
+
+Current Policy: {!Policy__c.Name}
+
+Expiration: {!Policy__c.End_Date__c}
+
+
+
+Policy Summary:
+
+{!Policy__c.Territory_picklist__c}
+
+{!Policy__c.Vehicle_Year__c}
+
+{!Policy__c.Vehicle_Make__c}
+
+{!Policy__c.Vehicle_Model__c}
+
+{!Policy__c.Vehicle_Value__c}
+
+{!Policy__c.Liability_picklist__c}
+
+{!Policy__c.Medical_picklist__c}
+
+
+
+Renewal Quote:  {!Policy__c.Total_Premium_Amount__c}
+
+
+For your convenience, you can manage your policy online, click here to renew now!
+
+
+
+
+
+
+Questions About Your Account?
+
+
+(858) 663-6453
+
+Customer Care Hours:
+
+Mon-Fri: 10am - 5pm PST, After-hours including Sat-Sun and
+
+Every Holiday: Online Only</textOnly>
+    <type>html</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

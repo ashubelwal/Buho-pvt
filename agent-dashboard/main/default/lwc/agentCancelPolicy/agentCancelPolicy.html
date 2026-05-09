@@ -1,0 +1,78 @@
+
+
+<template>
+  <div class="section-card">
+    <div class="section-card-header">
+      <span class="section-card-title">Cancel Policy</span>
+      <div class="table-toolbar">
+        <div class="search-bar">
+          <i class="bi bi-search"></i>
+          <input type="text" placeholder="Search Policies to Cancel..." onkeyup={handleSearch} />
+        </div>
+      </div>
+    </div>
+
+    <template if:true={isLoading}>
+      <div style="padding: 24px; text-align: center">Loading active policies...</div>
+    </template>
+
+    <template if:false={isLoading}>
+      <template if:true={hasPolicies}>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Policy Number</th>
+              <th>Client</th>
+              <th>Vehicle</th>
+              <th>Status</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Premium</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template for:each={paginatedPolicies} for:item="p">
+              <tr key={p.Id}>
+                <td>{p.policyNumber}</td>
+                <td>{p.client}</td>
+                <td>{p.vehicle}</td>
+                <td><span class="badge-days safe">{p.status}</span></td>
+                <td>{p.startDate}</td>
+                <td>{p.endDate}</td>
+                <td>{p.premium}</td>
+                <td>
+                  <button
+                    class="action-icon-btn remove"
+                    type="button"
+                    data-id={p.Id}
+                    onclick={navigateToPolicyTerminate}
+                    title="Terminate Policy"
+                  >
+                    <i class="bi bi-x-circle"></i>
+                  </button>
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+        
+        <!-- Pagination Controls -->
+        <div class="pagination-controls mt-2" style="display: flex; justify-content: space-between; align-items: center; padding: 16px;">
+            <button class="btn-pagination" onclick={prevPage} disabled={isFirstPage}>
+                <i class="bi bi-chevron-left"></i> Previous
+            </button>
+            <span class="page-info">{pageInfo}</span>
+            <button class="btn-pagination" onclick={nextPage} disabled={isLastPage}>
+                Next <i class="bi bi-chevron-right"></i>
+            </button>
+        </div>
+      </template>
+      <template if:false={hasPolicies}>
+        <div style="padding: 24px; text-align: center; color: #64748b">
+          No active policies found.
+        </div>
+      </template>
+    </template>
+  </div>
+</template>

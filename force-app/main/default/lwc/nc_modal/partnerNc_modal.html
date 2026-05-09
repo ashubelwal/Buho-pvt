@@ -1,0 +1,32 @@
+<template>
+  <!-- Partner View Trigger -->
+  <template if:false={isVisible}>
+    <button class="btn-qa primary" onclick={handleOpenModal}>
+      {btnName}
+    </button>
+  </template>
+
+  <!-- Partner View Modal Overlay -->
+  <template if:true={isVisible}>
+    <div class="modal-overlay">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-title">{modalTitle}</h2>
+          </div>
+          <button class="modal-close-btn" onclick={handleCloseModal} aria-label="Close">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-field">
+            <p class="modal-field-value">{modalContent}</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-modal-save" onclick={handleCloseModal}>Close</button>
+        </div>
+      </div>
+    </div>
+  </template>
+</template>

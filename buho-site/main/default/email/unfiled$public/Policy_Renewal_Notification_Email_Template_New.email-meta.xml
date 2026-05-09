@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>This is the email template for the flow that sends renewal notices 15 days prior to expiration.</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Policy Renewal Notification Email Template New</name>
+    <style>none</style>
+    <subject>Policy Renewal |  {!Policy__c.Vehicle_Policy__c}</subject>
+    <textOnly>MexInsurance ®
+
+Dear {!Contact.FirstName},
+
+This is a reminder that the Mexico Insurance policy below is about to expire.
+
+Policy Renewal Details
+
+Policy Carrier  Expiration Date
+{!Policy__c.Name}  {!Policy__c.Underwriter_picklist__c}  {!Policy__c.End_Date__c}
+
+
+Vehicle Stated Value Liability
+{!Policy__c.Vehicle_Year__c}  {!Policy__c.Vehicle_Make__c} {!Policy__c.Vehicle_Model__c}  {!Policy__c.Vehicle_Value__c}  {!Policy__c.Liability_picklist__c}
+
+
+For your convenience, you can quickly renew your policy online by clicking the button below.
+
+
+Click here to renew now!
+
+
+
+Follow us
+
+Questions About Your Account?
+Call @ (858) 663-6453
+
+By using this website you agree to the
+Terms of Purchase, Access and Use Agreement
+
+Privacy Policy
+
+California Insurance License: 0G35864
+© Mexico Insurance Services, Inc.
+
+3813 Ray Street, San Diego, CA 92104</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

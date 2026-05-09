@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>This will be used for the renewal retention efforts after leaving a voicemail.</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Renewal No Contact Followup</name>
+    <style>none</style>
+    <subject>Regarding Your MexInsurance® Non-Renewal</subject>
+    <textOnly>Hi {!Contact.FirstName},
+
+I called you but didn&apos;t get a hold of you. I&apos;m just following up because I think your policy has expired. I want to make sure you got our renewal notice. Sometimes, they can get lost in your email or end up in the wrong folder.
+
+If you need help, here&apos;s what you can do:
+
+Call me at 619-691-7747
+Send me a WhatsApp message at 619-488-6500
+Send me an SMS text message at 619-691-7747
+
+
+Or, if you want to renew on your own, I&apos;ve included a step-by-step video walkthrough that can guide you through the process.
+
+Click here to watch the video walkthrough
+Click here to login (your email is your user id)
+
+
+Let me know if you have any questions!
+
+--
+Mexico Insurance Services
+License 0G35864
+www.mexinsurance.com</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

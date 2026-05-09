@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <letterhead>EmailTemplate</letterhead>
+    <name>Policy Documents - Northbound</name>
+    <style>freeForm</style>
+    <subject>Your MexInsurance® Documents</subject>
+    <textOnly>Congratulations you are covered in the United States and Canada!
+
+Your policy is attached to this email.  We recommend you print a copy and keep it in the glove box.  Having the paperwork in your glove box allows for the retrieval of important information in case you are unable to provide it electronically.
+
+Be sure to check out our Border Crossing page to make sure you have everything else you need.
+
+Thank you for choosing MexInsurance®!
+
+
+
+
+Charles Lundy
+
+Founder and CEO
+
+MexInsurance®
+
+License 0E02163</textOnly>
+    <type>html</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

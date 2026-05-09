@@ -98,6 +98,10 @@ export default class Buhodb_dashboardlanding extends LightningElement {
         return `${buhoAssets}/images/mypoliciesicon.svg`;
     }
 
+    get plusIconUrl() {
+        return `${buhoAssets}/images/plus-icon.svg`;
+    }
+
     // ── Policy carousel data ──
     get mappedPolicies() {
         return this.activePolicyList.map((p) => ({
@@ -280,6 +284,16 @@ export default class Buhodb_dashboardlanding extends LightningElement {
 
     handleRenew() {
         console.log('Renew policy');
+    }
+
+    handleAddPolicy() {
+        this.dispatchEvent(
+            new CustomEvent('hashupdate', {
+                detail: { hash: 'newpolicy' },
+                bubbles: true,
+                composed: true
+            })
+        );
     }
 
     handleEditVehicle(event) {

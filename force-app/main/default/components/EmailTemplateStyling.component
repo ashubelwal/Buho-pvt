@@ -1,118 +1,122 @@
-<apex:component access="global">
-    <apex:attribute name="policyType" description="This is the value for the component." type="String" /> 
-    <html>
-        <style type="text/css">
-            body{
-                background:#ededed;
-            }
-            
-            .container{
-                margin:10px auto;
-                width:600px;
-            }
-            
-            /*-- Email CSS --*/
-            
-            .mexemeailtheme{
-                background-color:#fff;
-                font-family:Arial;
-                overflow:hidden;
-                width:100%;
-            }
-            
-            .mexemeailhead{
-                background-color:#328081;
-                padding:3px 5px 5px 5px;
-                overflow:hidden;
-                width:100%;
-            }
-            
-            .mexemeaillogo{
-                padding-left:35px;
-                overflow:hidden;
-                width:100%;
-            }
-            
-            .mexemeaillogo p{
-                font-family:Arial;
-                font-weight:400;
-                font-size:22px;
-                color:#fff;
-            }
-            
-            .mexemeaillogo p > sup{
-                font-size:15px;
-            }
-            
-            .mexemeailphoto{
-                overflow:hidden;
-                width:100%;
-            }
-            
-            .mexemeailphoto img{
-                max-width:100%;
-            }
-            
-            .mexemeailcontent{
-                background-color:#fff;
-                padding:10px 30px;
-                overflow:hidden;
-                color:#5e5e5e;
-                width:90%;
-            }
-            
-            .mexemeailcontent p{
-                line-height:26px;
-                font-size:18px;
-                color:#5e5e5e;
-            }
-            
-            .mexemeailbut{
-                background-color:#cf614d;
-                text-transform:uppercase;
-                text-decoration:none;
-                padding:15px 35px;
-                border-radius:30px;
-                width:max-content;
-                margin:10px 0px;
-                font-weight:600;
-                font-size:18px;
-                display:block;
-                color:#fff;
-            }
-            
-            .mexemeailbut:hover,
-            .mexemeailbut:focus{
-                opacity:0.9;
-            }
-            
-            .mexemeailsocial{
-                padding:15px 35px 35px 35px;
-                background-color:#ebf3f3;
-                overflow:hidden;
-                width:100%;
-            }
-            
-            .mexemeailsocial h3{
-                color:#5e5e5e;
-            }
-            
-            .mexemico{
-                background-size:100%!important;
-                margin-right:10px;
-                overflow:hidden;
-                display:block;
-                /*height:45px;
+<apex:component access="global" controller="EmailTemplateStylingController">
+  <apex:attribute
+    name="policyType"
+    description="This is the value for the component."
+    type="String"
+  />
+  <html>
+    <style type="text/css">
+      body {
+        background: #ededed;
+      }
+
+      .container {
+        margin: 10px auto;
+        width: 600px;
+      }
+
+      /*-- Email CSS --*/
+
+      .mexemeailtheme {
+        background-color: #fff;
+        font-family: Arial;
+        overflow: hidden;
+        width: 100%;
+      }
+
+      .mexemeailhead {
+        background-color: #328081;
+        padding: 3px 5px 5px 5px;
+        overflow: hidden;
+        width: 100%;
+      }
+
+      .mexemeaillogo {
+        padding-left: 35px;
+        overflow: hidden;
+        width: 100%;
+      }
+
+      .mexemeaillogo p {
+        font-family: Arial;
+        font-weight: 400;
+        font-size: 22px;
+        color: #fff;
+      }
+
+      .mexemeaillogo p > sup {
+        font-size: 15px;
+      }
+
+      .mexemeailphoto {
+        overflow: hidden;
+        width: 100%;
+      }
+
+      .mexemeailphoto img {
+        max-width: 100%;
+      }
+
+      .mexemeailcontent {
+        background-color: #fff;
+        padding: 10px 30px;
+        overflow: hidden;
+        color: #5e5e5e;
+        width: 90%;
+      }
+
+      .mexemeailcontent p {
+        line-height: 26px;
+        font-size: 18px;
+        color: #5e5e5e;
+      }
+
+      .mexemeailbut {
+        background-color: #cf614d;
+        text-transform: uppercase;
+        text-decoration: none;
+        padding: 15px 35px;
+        border-radius: 30px;
+        width: max-content;
+        margin: 10px 0px;
+        font-weight: 600;
+        font-size: 18px;
+        display: block;
+        color: #fff;
+      }
+
+      .mexemeailbut:hover,
+      .mexemeailbut:focus {
+        opacity: 0.9;
+      }
+
+      .mexemeailsocial {
+        padding: 15px 35px 35px 35px;
+        background-color: #ebf3f3;
+        overflow: hidden;
+        width: 100%;
+      }
+
+      .mexemeailsocial h3 {
+        color: #5e5e5e;
+      }
+
+      .mexemico {
+        background-size: 100% !important;
+        margin-right: 10px;
+        overflow: hidden;
+        display: block;
+        /*height:45px;
                 width:45px;*/
-                float:left;
-            }
-            
-            .mexemico:hover,
-            .mexemico:focus{
-                opacity:0.8;
-            }
-            
-            /*.mexemailfaceboock{
+        float: left;
+      }
+
+      .mexemico:hover,
+      .mexemico:focus {
+        opacity: 0.8;
+      }
+
+      /*.mexemailfaceboock{
                 background:url(https://www.mexinsurance.com/wp-content/uploads/emailfaceboock.png) no-repeat;
             }
             
@@ -123,112 +127,196 @@
             .mexemailtweeter{
                 background:url(https://www.mexinsurance.com/wp-content/uploads/emailtweeter.png) no-repeat;
             }*/
-            
-            .mexemeailfooter{
-                background-color:#328081;
-                padding:25px 35px;
-                overflow:hidden;
-                width:100%;
-            }
-            
-            .mexemeailfooter p{
-                line-height:26px;
-                font-size:16px;
-                color:#bcd5d5;
-            }
-            
-            .mexemeailfooter p > a{
-                text-decoration:none;
-                color:#ffffff;
-            }
-            
-            .mexemeailfooter p > a:hover,
-            .mexemeailfooter p > a:focus{
-                opacity:0.9;
-            }
-            
-            .mexemeailfooter a{
-                text-decoration:none;
-                color:#ffffff;
-            }
-            
-            .mexemeailfooter a:hover,
-            .mexemeailfooter a:focus{
-                opacity:0.9;
-            }
-        </style>
-        <div style="background-color:#fff;font-family:Arial;
-                overflow:hidden;width:100%;">
-            <div class="mexemeailhead" style="background-color:#fff;padding:3px 5px 5px 5px;overflow:hidden;width:100%;">
-                 <div style="display:flex; padding:8px 0; ">
-<p style="margin:Auto;"><img src="https://www.mexinsurance.com/wp-content/uploads/2023/11/cropped-Logo-1-2048x312.png"  width="150" /></p>
-</div>
-            </div>
-            <div style="overflow:hidden;width:100%;" class="mexemeailphoto">
-                <!--<img style="max-width:100%;width:100%;" src="https://www.mexinsurance.com/wp-content/uploads/emailhead.jpg"/>-->
-            </div>
-            <div style="background-color:#fff;padding:10px 30px;overflow:hidden;color:#5e5e5e;width:90%;" class="mexemeailcontent">
-                <apex:outputText rendered="{!policyType == 'southbound'}">
-                    <h2 style="line-height:26px;font-size:18px;color:#5e5e5e;">Congratulations you are covered in Mexico!</h2>
-                    <p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">Your policy is attached to this email. We recommend you print a copy and keep it in the glove box.  Having the paperwork in your glove box allows for the retrieval of important information in case you are unable to provide it electronically.  You may also need to provide a paper copy for a vehicle permit (if necessary).</p>
-                    <!--<p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">Be sure to check out our <a href="https://www.mexinsurance.com/mexico-border-crossing/" target="_blank" >Border Crossing page</a> to make sure you have everything else you need.</p>-->
-                    <p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">Thank you for choosing MexInsurance®!</p>
-                </apex:outputText>
 
-                <apex:outputText rendered="{!policyType == 'northbound'}">
-                    <h2 style="line-height:26px;font-size:18px;color:#5e5e5e;">Congratulations you are covered in the United States and Canada! </h2>
-                    <p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">Your policy is attached to this email. We recommend you print a copy and keep it in the glove box.  Having the paperwork in your glove box allows for the retrieval of important information in case you are unable to provide it electronically.  </p>
-                    <!--<p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">Be sure to check out our <a href="https://www.mexinsurance.com/mexico-border-crossing/" target="_blank" >Border Crossing page</a> to make sure you have everything else you need.</p>-->
-                    <p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">Thank you for choosing MexInsurance®!</p>
-                </apex:outputText>
+      .mexemeailfooter {
+        background-color: #328081;
+        padding: 25px 35px;
+        overflow: hidden;
+        width: 100%;
+      }
 
-                <apex:outputText rendered="{!policyType == 'driverLicense'}">
-                    <h2 style="line-height:26px;font-size:18px;color:#5e5e5e;">Congratulations you are covered in Mexico! </h2>
-                    <p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">Your policy is attached to this email. We recommend you print a copy and keep it in the glove box of any vehicle that you drive.  Having the paperwork in your glove box allows for the retrieval of important information in case you are unable to provide it electronically. </p>
-                    <!--<p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">Be sure to check out our <a href="https://www.mexinsurance.com/mexico-border-crossing/" target="_blank" >Border Crossing page</a> to make sure you have everything else you need.</p>-->
-                    <p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">Thank you for choosing MexInsurance®!</p>
-                </apex:outputText>
+      .mexemeailfooter p {
+        line-height: 26px;
+        font-size: 16px;
+        color: #bcd5d5;
+      }
 
-                <apex:outputText rendered="{!policyType == 'watercraft'}">
-                    <h2 style="line-height:26px;font-size:18px;color:#5e5e5e;">Congratulations you are covered in Mexico! </h2>
-                    <p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">Your policy is attached to this email. We recommend you print a copy and keep it in the glove box.  Having the paperwork in your glove box allows for the retrieval of important information in case you are unable to provide it electronically.  You will also need to provide a paper copy to the dockmaster.</p>
-                    <!--<p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">Be sure to check out our <a href="https://www.mexinsurance.com/mexico-border-crossing/" target="_blank" >Border Crossing page</a> to make sure you have everything else you need.</p>-->
-                    <p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">Thank you for choosing MexInsurance®!</p>
-                </apex:outputText>
-                
-                <p>
-                    Charles Lundy<br/>
-                    Founder and CEO<br/>
-                    MexInsurance®<br/>
-                    License 0E02163
-                </p>
-            </div>
-            <!--<div style="padding:15px 35px 35px 35px;background-color:#ebf3f3;overflow:hidden;width:100%;">
+      .mexemeailfooter p > a {
+        text-decoration: none;
+        color: #ffffff;
+      }
+
+      .mexemeailfooter p > a:hover,
+      .mexemeailfooter p > a:focus {
+        opacity: 0.9;
+      }
+
+      .mexemeailfooter a {
+        text-decoration: none;
+        color: #ffffff;
+      }
+
+      .mexemeailfooter a:hover,
+      .mexemeailfooter a:focus {
+        opacity: 0.9;
+      }
+    </style>
+    <div style="background-color: #fff; font-family: Arial; overflow: hidden; width: 100%">
+      <div
+        class="mexemeailhead"
+        style="background-color: #fff; padding: 3px 5px 5px 5px; overflow: hidden; width: 100%"
+      >
+        <div style="display: flex; padding: 8px 0">
+          <p style="margin: Auto">
+            <img
+              src="{!logoUrl}"
+              width="150"
+            />
+          </p>
+        </div>
+      </div>
+      <div style="overflow: hidden; width: 100%" class="mexemeailphoto">
+        <!--<img style="max-width:100%;width:100%;" src="https://www.mexinsurance.com/wp-content/uploads/emailhead.jpg"/>-->
+      </div>
+      <div
+        style="
+          background-color: #fff;
+          padding: 10px 30px;
+          overflow: hidden;
+          color: #5e5e5e;
+          width: 90%;
+        "
+        class="mexemeailcontent"
+      >
+        <apex:outputText rendered="{!policyType == 'southbound'}">
+          <h2 style="line-height: 26px; font-size: 18px; color: #5e5e5e">
+            Congratulations you are covered in Mexico!
+          </h2>
+          <p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">
+            Your policy is attached to this email. We recommend you print a copy and keep it in the
+            glove box. Having the paperwork in your glove box allows for the retrieval of important
+            information in case you are unable to provide it electronically. You may also need to
+            provide a paper copy for a vehicle permit (if necessary).
+          </p>
+          <!--<p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">Be sure to check out our <a href="https://www.mexinsurance.com/mexico-border-crossing/" target="_blank" >Border Crossing page</a> to make sure you have everything else you need.</p>-->
+          <p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">
+            Thank you for choosing {!partnerName}!
+          </p>
+        </apex:outputText>
+
+        <apex:outputText rendered="{!policyType == 'northbound'}">
+          <h2 style="line-height: 26px; font-size: 18px; color: #5e5e5e">
+            Congratulations you are covered in the United States and Canada!
+          </h2>
+          <p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">
+            Your policy is attached to this email. We recommend you print a copy and keep it in the
+            glove box. Having the paperwork in your glove box allows for the retrieval of important
+            information in case you are unable to provide it electronically.
+          </p>
+          <!--<p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">Be sure to check out our <a href="https://www.mexinsurance.com/mexico-border-crossing/" target="_blank" >Border Crossing page</a> to make sure you have everything else you need.</p>-->
+          <p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">
+            Thank you for choosing {!partnerName}!
+          </p>
+        </apex:outputText>
+
+        <apex:outputText rendered="{!policyType == 'driverLicense'}">
+          <h2 style="line-height: 26px; font-size: 18px; color: #5e5e5e">
+            Congratulations you are covered in Mexico!
+          </h2>
+          <p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">
+            Your policy is attached to this email. We recommend you print a copy and keep it in the
+            glove box of any vehicle that you drive. Having the paperwork in your glove box allows
+            for the retrieval of important information in case you are unable to provide it
+            electronically.
+          </p>
+          <!--<p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">Be sure to check out our <a href="https://www.mexinsurance.com/mexico-border-crossing/" target="_blank" >Border Crossing page</a> to make sure you have everything else you need.</p>-->
+          <p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">
+            Thank you for choosing {!partnerName}!
+          </p>
+        </apex:outputText>
+
+        <apex:outputText rendered="{!policyType == 'watercraft'}">
+          <h2 style="line-height: 26px; font-size: 18px; color: #5e5e5e">
+            Congratulations you are covered in Mexico!
+          </h2>
+          <p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">
+            Your policy is attached to this email. We recommend you print a copy and keep it in the
+            glove box. Having the paperwork in your glove box allows for the retrieval of important
+            information in case you are unable to provide it electronically. You will also need to
+            provide a paper copy to the dockmaster.
+          </p>
+          <!--<p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">Be sure to check out our <a href="https://www.mexinsurance.com/mexico-border-crossing/" target="_blank" >Border Crossing page</a> to make sure you have everything else you need.</p>-->
+          <p sytle="line-height:26px;font-size:18px;color:#5e5e5e;">
+            Thank you for choosing {!partnerName}!
+          </p>
+        </apex:outputText>
+
+        <p>
+          {!userName}<br /> Founder and CEO<br /> {!partnerName}<br />
+          License {!agentId}
+        </p>
+      </div>
+      <!--<div style="padding:15px 35px 35px 35px;background-color:#ebf3f3;overflow:hidden;width:100%;">
                 <h3 style="color:#5e5e5e;">Follow us</h3>
                 <!--a style="background:url(https://www.mexinsurance.com/wp-content/uploads/emailfaceboock.png) no-repeat;" class="mexemico mexemailfaceboock" target="_blank" href="https://www.facebook.com/mexinsurance"></a>
                 <a style="background:url(https://www.mexinsurance.com/wp-content/uploads/emailinstagram.png) no-repeat;" class="mexemico mexemailinstagram" target="_blank" href="https://www.instagram.com/mexinsurance/"></a>
                 <a style="background:url(https://www.mexinsurance.com/wp-content/uploads/emailtweeter.png) no-repeat;" class="mexemico mexemailtweeter" target="_blank" href="https://twitter.com/mexinsurance"></a>-->
-                <!--<a style="background:no-repeat; text-decoration: none;" class="mexemico mexemailfaceboock" target="_blank" href="https://www.facebook.com/mexinsurance">
+      <!--<a style="background:no-repeat; text-decoration: none;" class="mexemico mexemailfaceboock" target="_blank" href="https://www.facebook.com/mexinsurance">
                     <img src="https://mexinsurance--c.vf.force.com/resource/1676628399000/icon_facebook_rounded_blue" width="48"/>
-</a>
-<a style="background:no-repeat; text-decoration: none;" class="mexemico mexemailtweeter" target="_blank" href="https://twitter.com/mexinsurance">
-<img src="https://mexinsurance--c.vf.force.com/resource/1676629924000/icon_twitter_rounded_blue?" width="48"/>
-</a>
-</div>-->
-            <div style="background-color:#fff;padding:18px 0;overflow:hidden;width:100%;" class="mexemeailfooter">
-                <div style="display:flex;">
-                    <p style="margin:Auto;"><img src="https://www.mexinsurance.com/wp-content/uploads/2023/11/cropped-Logo-1-2048x312.png" width="150" /></p>
-                </div>
-                
-                <div style="display:flex"><p style="margin:Auto;color:#000; padding-top: 20px; font-size: 14px;">&copy; MEXICO INSURANCE SERVICES, INC.</p> </div>
-                
-                <div style="display:flex"><p style="margin:Auto;color:#000; padding-top: 6px; font-size: 14px;">CALIFORNIA INSURANCE LICENSE: 0G35864</p> </div>
-                <div style="display:flex"><p style="margin:Auto;color:#000; font-size: 11px; padding-top: 4px;"><a style="text-decoration:none;color:#000;" target="_blank" href="https://www.mexinsurance.com/">MEXINSURANCE.COM</a></p>  </div>
-                
-                <div style="display:flex"> <p style="margin:Auto;color:#000; font-size: 11px; padding-top: 4px;">T. 855 MEXICO.5</p> </div>
-                
-            </div>
+ </a>
+ <a style="background:no-repeat; text-decoration: none;" class="mexemico mexemailtweeter" target="_blank" href="https://twitter.com/mexinsurance">
+ <img src="https://mexinsurance--c.vf.force.com/resource/1676629924000/icon_twitter_rounded_blue?" width="48"/>
+ </a>
+ </div>-->
+      <div
+        style="background-color: #fff; padding: 18px 0; overflow: hidden; width: 100%"
+        class="mexemeailfooter"
+      >
+        <div style="display: flex">
+          <p style="margin: Auto">
+            <img
+              src="{!logoUrl}"
+              width="150"
+            />
+          </p>
         </div>
 
-    </html>
+        <div style="display: flex">
+          <p style="margin: Auto; color: #000; padding-top: 20px; font-size: 14px">
+            &copy; {!partnerId}
+          </p>
+        </div>
+
+        <div style="display: flex">
+          <p style="margin: Auto; color: #000; padding-top: 6px; font-size: 14px">
+            CALIFORNIA INSURANCE LICENSE: {!agentId}
+          </p>
+        </div>
+        <div style="display: flex">
+          <p style="margin: Auto; color: #000; font-size: 11px; padding-top: 4px">
+            <a
+              style="text-decoration: none; color: #000"
+              target="_blank"
+              href="{!website}"
+              >{!websiteLabel}</a
+            >
+          </p>
+        </div>
+        
+        <apex:outputText rendered="{!address != ''}">
+            <div style="display: flex">
+              <p style="margin: Auto; color: #000; font-size: 11px; padding-top: 4px">
+                {!address}
+              </p>
+            </div>
+        </apex:outputText>
+
+        <div style="display: flex">
+          <p style="margin: Auto; color: #000; font-size: 11px; padding-top: 4px">
+            T. 855 MEXICO.5
+          </p>
+        </div>
+      </div>
+    </div>
+  </html>
 </apex:component>

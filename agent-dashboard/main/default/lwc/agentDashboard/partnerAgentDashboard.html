@@ -1,0 +1,395 @@
+<template>
+  <div>
+    <div style="background: #fff; padding: 24px; border-radius: 4px" class="position-relative">
+      <!-- Modals and Toasts (IDENTICAL to standard layout) -->
+      <div>
+        <c-custom-toast auto-close-time="8000"></c-custom-toast>
+      </div>
+
+      <template if:true={isModalOpen}>
+        <section
+          role="dialog"
+          tabindex="-1"
+          aria-modal="true"
+          aria-labelledby="modal-heading-02"
+          class="slds-modal slds-fade-in-open"
+        >
+          <div class="slds-modal__container">
+            <div class="slds-modal__header">
+              <h1 id="modal-heading-03" class="slds-modal__title slds-hyphenate" tabindex="-1">
+                Transfer Ownsership
+              </h1>
+            </div>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-01">
+              <div>
+                This contact does not associated with current Agency. Do you want to Transfer the
+                Ownership!
+              </div>
+              <c-transfer-ownership-manager
+                onclosemodal={cancelTransferOwnership}
+                contact-id={currentContactId}
+                ontoast={handleToast}
+                user-id={userId}
+              ></c-transfer-ownership-manager>
+            </div>
+            <div class="slds-modal__footer">
+              <button
+                class="slds-button slds-button_neutral"
+                aria-label="Cancel and close"
+                onclick={cancelTransferOwnership}
+              >
+                Cancel
+              </button>
+              <button class="slds-button slds-button_brand" onclick={handlerTransferOwnership}>
+                Transfer Ownership
+              </button>
+            </div>
+          </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+      </template>
+
+      <template if:true={isShowModal}>
+        <section
+          role="dialog"
+          tabindex="-1"
+          aria-labelledby="modal-heading-01"
+          aria-modal="true"
+          class="slds-modal slds-fade-in-open"
+        >
+          <div class="slds-modal__container">
+            <header class="slds-modal__header">
+              <button
+                class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                title="Close"
+                onclick={hideModalBox}
+              >
+                <lightning-icon
+                  icon-name="utility:close"
+                  alternative-text="close"
+                  variant="inverse"
+                  size="small"
+                ></lightning-icon>
+                <span class="slds-assistive-text">Close</span>
+              </button>
+              <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+                Add Email in Contact
+              </h2>
+            </header>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+              <lightning-input
+                class=""
+                label="Email"
+                type="email"
+                maxlength="40"
+                name="Email"
+                onchange={handleEmailInput}
+                required
+              ></lightning-input>
+            </div>
+            <footer class="slds-modal__footer">
+              <button class="slds-button slds-button_neutral" onclick={hideModalBox}>Cancel</button>
+              <button
+                class="slds-button slds-button_neutral slds-p-left_small"
+                onclick={handleUpdateEmail}
+              >
+                Save
+              </button>
+            </footer>
+          </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+      </template>
+
+      <!-- Spinner -->
+      <template if:true={isLoading}>
+        <div class="spinner">
+          <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </div>
+      </template>
+
+      <!-- Dashboard UI Content -->
+      <!--div class="mb-4 d-flex justify-content-between align-items-center">
+        <h2 class="h4 fw-bold mb-0">MexInsurance Look Up</h2>
+      </div-->
+
+      <div
+        class={searchContainerClass}
+        style="margin-bottom: 24px; transition: width 0.3s ease-in-out"
+      >
+        <div class="p-4 d-flex align-items-center flex-wrap">
+          <div class="flex-grow-1 me-4">
+            <lightning-input
+              class="searchValidate"
+              type="text"
+              label="Lookup"
+              name="searchValue"
+              placeholder="Search by Name, Email, Policy number"
+              value={searchData.searchValue}
+              required
+              onchange={handleInputChange}
+              onkeyup={handlekeyUp}
+              maxlength="30"
+            >
+            </lightning-input>
+          </div>
+          <div class="mt-4 d-flex">
+            <button class="btn-qa primary me-2" type="button" onclick={handleSearch}>
+              <i class="bi bi-search me-1"></i> Search
+            </button>
+            <template if:true={booleanVar.createLeadButton}>
+              <button class="btn-qa" type="button" onclick={handleNewLead}>
+                <i class="bi bi-person-plus me-1"></i> Create new Lead
+              </button>
+            </template>
+          </div>
+        </div>
+      </div>
+
+      <!-- No Data -->
+      <template if:true={booleanVar.noDataFound}>
+        <div class="alert alert-light mt-3 py-4 text-center text-muted" role="alert">
+          <i class="bi bi-exclamation-circle me-2"></i> No records found!
+        </div>
+      </template>
+
+      <!-- Leads Section -->
+      <template if:true={booleanVar.leadDataStatus}>
+        <div class="section-card mb-4" style="margin-bottom: 24px">
+          <div
+            class="section-card-header d-flex justify-content-between align-items-center"
+            style="cursor: pointer"
+            onclick={toggleLeads}
+          >
+            <span class="section-card-title"><i class="bi bi-person me-2"></i> Leads</span>
+            <i class={leadsIconClass}></i>
+          </div>
+          <template if:true={expandLeads}>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Phone</th>
+                  <th>Email</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template for:each={data} for:item="lead">
+                  <tr key={lead.Id}>
+                    <td class="fw-bold">{lead.Name}</td>
+                    <td>{lead.Phone}</td>
+                    <td>{lead.Email}</td>
+                    <td>
+                      <template if:true={isAgentportal}>
+                        <button
+                          class="btn-tbl view me-2"
+                          data-id={lead.Id}
+                          data-actiontype="Resume"
+                          data-obj="lead"
+                          onclick={handleLeadRowAction}
+                        >
+                          Resume
+                        </button>
+                        <button
+                          class="btn-tbl view"
+                          data-id={lead.Id}
+                          data-actiontype="Open"
+                          data-obj="lead"
+                          onclick={handleLeadRowAction}
+                        >
+                          Open
+                        </button>
+                      </template>
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </template>
+        </div>
+      </template>
+
+      <!-- Contacts Section -->
+      <template if:true={booleanVar.contactDataStatus}>
+        <div class="section-card mb-4" style="margin-bottom: 24px">
+          <div
+            class="section-card-header d-flex justify-content-between align-items-center"
+            style="cursor: pointer"
+            onclick={toggleContacts}
+          >
+            <span class="section-card-title"
+              ><i class="bi bi-person-lines-fill me-2"></i> Contacts</span
+            >
+            <i class={contactsIconClass}></i>
+          </div>
+          <template if:true={expandContacts}>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Phone</th>
+                  <th>Email</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template for:each={searchResults.contactData} for:item="contact">
+                  <tr key={contact.Id}>
+                    <td class="fw-bold">{contact.Name}</td>
+                    <td>{contact.Phone}</td>
+                    <td>{contact.Email}</td>
+                    <td>
+                      <template lwc:if={contact.Users}>
+                        <button
+                          class="btn-tbl view me-2"
+                          data-id={contact.Id}
+                          data-actiontype="create_policy"
+                          data-obj="contact"
+                          onclick={handleRowAction}
+                        >
+                          Create Policy
+                        </button>
+                      </template>
+                      <template lwc:else>
+                        <button
+                          class="btn-tbl view me-2"
+                          data-id={contact.Id}
+                          data-actiontype="create_policy"
+                          data-obj="contact"
+                          onclick={handleRowAction}
+                        >
+                          Create Policy
+                        </button>
+                        <button
+                          class="btn-tbl contact"
+                          data-id={contact.Id}
+                          data-actiontype="create_user"
+                          data-obj="contact"
+                          onclick={handleRowAction}
+                        >
+                          <i class="bi bi-person-add me-1"></i> Create User
+                        </button>
+                      </template>
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </template>
+        </div>
+      </template>
+
+      <!-- Policies Section -->
+      <template if:true={booleanVar.policyDataStatus}>
+        <div class="section-card mb-4" style="margin-bottom: 24px">
+          <div
+            class="section-card-header d-flex justify-content-between align-items-center"
+            style="cursor: pointer"
+            onclick={togglePolicies}
+          >
+            <span class="section-card-title"><i class="bi bi-shield-check me-2"></i> Policies</span>
+            <i class={policiesIconClass}></i>
+          </div>
+          <template if:true={expandPolicies}>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Status</th>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>Term</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template for:each={searchResults.policyData} for:item="policy">
+                  <tr key={policy.Id}>
+                    <td>
+                      <span
+                        class="badge bg-primary text-white"
+                        style="padding: 6px 12px; border-radius: 4px"
+                        >{policy.Status_picklist__c}</span
+                      >
+                    </td>
+                    <td class="fw-bold">{policy.Name}</td>
+                    <td>{policy.Policy_Type_picklist__c}</td>
+                    <td>{policy.Term_days__c}</td>
+                    <td>{policy.Start_Date__c}</td>
+                    <td>{policy.End_Date__c}</td>
+                    <td>
+                      <template if:true={isAgentportal}>
+                        <button
+                          class="btn-tbl view me-2"
+                          data-id={policy.Contact__c}
+                          data-actiontype="VIEW"
+                          data-obj="contact"
+                          onclick={handleOperations}
+                        >
+                          Contact
+                        </button>
+                      </template>
+                      <template lwc:if={policy.EditBtn}>
+                        <button
+                          class="btn-tbl view me-2"
+                          data-id={policy.Id}
+                          data-actiontype="EDIT"
+                          data-obj="policy"
+                          onclick={navigateToPolicyEdit}
+                        >
+                          Edit
+                        </button>
+                      </template>
+                      <template lwc:if={policy.RenewBtn}>
+                        <button
+                          class="btn-tbl renew me-2"
+                          data-id={policy.Id}
+                          data-actiontype="RENEW"
+                          data-obj="policy"
+                          onclick={navigateToPolicyRenew}
+                        >
+                          Renew
+                        </button>
+                      </template>
+                      <template lwc:if={policy.TerminateBtn}>
+                        <button
+                          class="btn-tbl contact me-2"
+                          data-id={policy.Id}
+                          data-actiontype="TERMINATE"
+                          data-obj="policy"
+                          onclick={handleOperations}
+                        >
+                          Terminate
+                        </button>
+                      </template>
+                      <button
+                        class="btn-tbl view me-2"
+                        data-id={policy.Id}
+                        data-actiontype="VIEWPOLICY"
+                        data-obj="policy"
+                        onclick={handleViewPolicyOperations}
+                      >
+                        View Policy
+                      </button>
+                      <button
+                        class="btn-tbl contact"
+                        data-id={policy.Contact__c}
+                        data-actiontype="CREATEPOLICY"
+                        data-obj="policy"
+                        onclick={handleCreatePolicy}
+                      >
+                        Create Policy
+                      </button>
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </template>
+        </div>
+      </template>
+    </div>
+  </div>
+</template>

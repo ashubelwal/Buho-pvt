@@ -11,7 +11,7 @@
 * 1.0 | April 30, 2025 |   | Initial Version
 **/
 
-public without sharing class NcExistingCustomerFlow {
+public class NcExistingCustomerFlow {
 
     @AuraEnabled
     public static String checkCommunityUserAndFetchDetails() {
@@ -42,7 +42,6 @@ public without sharing class NcExistingCustomerFlow {
                         responseMap.put('drivers', driversList);
                     }
                     vehicleList = getVehicles(loginUserList[0].contactId);
-                    System.debug('vehicleList@@@@'+vehicleList);
                     if (vehicleList != null && !vehicleList.isEmpty()) {
                         responseMap.put('vehicles', vehicleList);
                     }
@@ -58,15 +57,10 @@ public without sharing class NcExistingCustomerFlow {
                     }
                 }
             }
-            
-            responseMap.put('status', 'success'); } catch (Exception ex) { 
-                responseMap.put('status', 'error'); responseMap.put('message', ex.getMessage()); 
-                CustomErrorExceptionHandlerException.LogException(ex); 
-            }
+            responseMap.put('status', 'success'); } catch (Exception ex) { responseMap.put('status', 'error'); responseMap.put('message', ex.getMessage()); CustomErrorExceptionHandlerException.LogException(ex); }
         return JSON.serialize(responseMap);
     }
-	
-    @AuraEnabled
+	    @AuraEnabled
     public static List<Address__c> getAddressData (String country, String postalCode, String stateCode, String cityCode){
         
         String Condition = ' where Name =:country AND ';
@@ -123,7 +117,6 @@ public without sharing class NcExistingCustomerFlow {
     private static List<Vehicle__c> getVehicles(String contactId) {
         String query = getQueryWithAllFields(Vehicle__c.getSObjectType().getDescribe().getName());
         query += ' WHERE Contact__c = :contactId';
-        System.debug('@@@@query'+query);
         return Database.query(query);
     }
     
@@ -649,6 +642,143 @@ public without sharing class NcExistingCustomerFlow {
         }
         return responseMap;
     }
+     @AuraEnabled
+    public static Map<String, Object> updateVehicleRecordData(String vehicleRecord, String companyRecord) {
+        Map<String, Object> responseMap = new Map<String, Object>();
 
+        try {
+            if (!String.isEmpty(vehicleRecord) && !String.isEmpty(companyRecord)) {
+                System.debug('vehicleRecord@@###' + vehicleRecord);
+                System.debug('companyRecord@@###!!' + companyRecord);
+
+                // Deserialize vehicle JSON into a Vehicle__c instance
+                Vehicle__c vehicleData = (Vehicle__c) JSON.deserialize(vehicleRecord, Vehicle__c.class);
+
+                // Deserialize company JSON into a generic Map
+                Map<String, Object> companyDataMap = (Map<String, Object>) JSON.deserializeUntyped(companyRecord);
+                Map<String, Object> vehicleRecordMap = (Map<String, Object>) JSON.deserializeUntyped(vehicleRecord);
+                if (vehicleData != null && vehicleData.Id != null && !companyDataMap.isEmpty() && !vehicleRecordMap.isEmpty()) {
+                    // Map company fields to vehicle fields
+                    if (companyDataMap.containsKey('Company_Name__c')) {
+                        vehicleData.Company_Name__c = (String) companyDataMap.get('Company_Name__c');
+                    }
+                    if (companyDataMap.containsKey('Company_Phone__c')) {
+                        vehicleData.Company_Phone__c = (String) companyDataMap.get('Company_Phone__c');
+                    }
+                    if (companyDataMap.containsKey('Tax_ID__c')) {
+                        vehicleData.Tax_ID__c = (String) companyDataMap.get('Tax_ID__c');
+                    }
+                    if (companyDataMap.containsKey('Company_Country__c')) {
+                        vehicleData.Company_Country__c = (String) companyDataMap.get('Company_Country__c');
+                    }
+                    if (companyDataMap.containsKey('Company_Address__c')) {
+                        vehicleData.Company_Address__c = (String) companyDataMap.get('Company_Address__c');
+                    }
+                    if (companyDataMap.containsKey('Company_Zip__c')) {
+                        vehicleData.Company_Zip__c = (String) companyDataMap.get('Company_Zip__c');
+                    }
+                    if (companyDataMap.containsKey('Company_State__c')) {
+                        vehicleData.Company_State__c = (String) companyDataMap.get('Company_State__c');
+                    }
+                    if (companyDataMap.containsKey('Company_City__c')) {
+                        vehicleData.Company_City__c = (String) companyDataMap.get('Company_City__c');
+                    }
+                    if(vehicleRecordMap.containsKey('Is_the_vehicle_registered_to_a_business__c')){
+                        vehicleData.Is_the_vehicle_registered_to_a_business__c = (Boolean) vehicleRecordMap.get('Is_the_vehicle_registered_to_a_business__c');
+                    }
+                    vehicleData.Vehicle_Owner_Name__c = '';
+                    vehicleData.Vehicle_Owner_Phone__c = '';
+                    vehicleData.Vehicle_Owner_Address__c = '';
+                    vehicleData.Vehicle_Owner_Driver_License__c = '';
+                    vehicleData.Vehicle_Owner_Driver_License_State__c = '';
+                    vehicleData.Vehicle_Owner_City__c = '';
+                    vehicleData.Vehicle_Owner_State__c = '';
+                    vehicleData.Vehicle_Owner_Postal_Code__c = '';
+                    vehicleData.Vehicle_Owner_Country__c = '';
+                    // Update vehicle record in Salesforce
+                    system.debug('vehicleData@@####'+ vehicleData);
+                    update vehicleData;
+
+                    responseMap.put('status', 'success');
+                    responseMap.put('vehicleData', vehicleData);
+                } else {
+                    responseMap.put('status', 'error');
+                    responseMap.put('message', 'Vehicle Id is missing or invalid.');
+                }
+            } else {
+                responseMap.put('status', 'error');
+                responseMap.put('message', 'Vehicle or Company data is missing.');
+            }
+        } catch (Exception ex) {
+            responseMap.put('status', 'error');
+            responseMap.put('message', ex.getMessage());
+            CustomErrorExceptionHandlerException.LogException(ex);
+        }
+
+        return responseMap;
+    }
+
+    @AuraEnabled
+    public static Map<String, Object> updateVehicleWithOwnerDriver(String vehicleRecord, String driversJson) {
+        Map<String, Object> result = new Map<String, Object>();
+        System.debug('driversJson@@###' + driversJson);
+        try {
+            if (String.isNotBlank(vehicleRecord) && String.isNotBlank(driversJson)) {
+                Vehicle__c vehicleData = (Vehicle__c) JSON.deserialize(vehicleRecord, Vehicle__c.class);
+                List<Driver__c> allDrivers = (List<Driver__c>) JSON.deserialize(driversJson, List<Driver__c>.class);
+
+                System.debug('All drivers@@###' + allDrivers);
+
+                // Filter drivers by Driver_Type__c values
+                List<Driver__c> filteredDrivers = new List<Driver__c>();
+                for (Driver__c d : allDrivers) {
+                    // You can adjust this condition as needed
+                    String driverType = d.Driver_Type__c.toLowerCase();
+                        if (driverType == 'true' || driverType == 'owner' || driverType == 'co-owner' || driverType == 'owner & driver') {
+                            filteredDrivers.add(d);
+                        }
+                }
+
+                System.debug('Filtered drivers@@###' + filteredDrivers);
+
+                if (vehicleData != null && !filteredDrivers.isEmpty()) {
+                    Driver__c ownerDriver = filteredDrivers[0];
+                    vehicleData.Vehicle_Owner_Name__c = ownerDriver.First_Name__c + ' ' + ownerDriver.Last_Name__c;
+                    vehicleData.Vehicle_Owner_Phone__c = ownerDriver.Phone__c;
+                    vehicleData.Vehicle_Owner_Address__c = ownerDriver.Address__c;
+                    vehicleData.Vehicle_Owner_Driver_License__c = ownerDriver.license_number__c;
+                    vehicleData.Vehicle_Owner_Driver_License_State__c = ownerDriver.License_state__c;
+                    vehicleData.Vehicle_Owner_City__c = ownerDriver.City__c;
+                    vehicleData.Vehicle_Owner_State__c = ownerDriver.State_Province__c;
+                    vehicleData.Vehicle_Owner_Postal_Code__c = ownerDriver.Postal_Code__c;
+                    vehicleData.Vehicle_Owner_Country__c = ownerDriver.Country__c;
+                    vehicleData.Is_the_vehicle_registered_to_a_business__c = false;
+                    vehicleData.Company_Name__c = '';
+                    vehicleData.Company_Phone__c = '';
+                    vehicleData.Tax_ID__c = '';
+                    vehicleData.Company_Country__c = '';
+                    vehicleData.Company_Address__c = '';
+                    vehicleData.Company_Zip__c = '';
+                    vehicleData.Company_State__c = '';
+                    vehicleData.Company_City__c = '';
+                    update vehicleData;
+                    System.debug('vehicleData@@###' + vehicleData);
+
+                    result.put('status', 'success');
+                    result.put('vehicleData', vehicleData);
+                } else {
+                    result.put('status', 'error');
+                    result.put('message', 'No matching drivers found or vehicle data missing.');
+                }
+            } else {
+                result.put('status', 'error');
+                result.put('message', 'Missing vehicleRecord or driversJson.');
+            }
+        } catch (Exception e) {
+            result.put('status', 'error');
+            result.put('message', e.getMessage());
+        }
+        return result;
+    }
 
 }

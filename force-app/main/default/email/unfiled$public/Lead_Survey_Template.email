@@ -1,0 +1,4 @@
+<img width="200px" height="30px" src="https://mexinsurance--c.na22.content.force.com/servlet/servlet.ImageServer?id=01515000004uv8u&oid=00D15000000NeKA&lastMod=1455732738000"> 
+<h3>Hello!  We want to thank you for stopping by  <a href="http://www.mexinsurance.com/">Mex-Insurance.com</a> to get a quote{!Lead.Lead_Template_Merge_Text__c} {!Lead.Year_A__c}  {!Lead.Make__c} {!Lead.Model__c} {!Lead.Lead_Template_Merge_Text1__c} {!Lead.Term__c}.</h3>
+<br>
+We notice you did not complete the purchase.  Our goal is to make you a customer so we ask you take 10 seocnds to answer 1 question by clicking <a href ="http://mexinsurance.force.com/survey/leadsurveynew?leadid={!Lead.Id}" >here </a>. <br><br> Thank you!<br><br>

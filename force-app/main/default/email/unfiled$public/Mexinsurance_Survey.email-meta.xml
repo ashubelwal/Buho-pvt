@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Mexinsurance-Survey</name>
+    <style>none</style>
+    <subject>Mexinsurance Survey</subject>
+    <textOnly>Hello!  We want to thank you for stopping by at Mex-Insurance.com to get a quote for your  {!Quote__c.Vehicle_Year__c}  {!Quote__c.Vehicle_Make__c} {!Quote__c.Vehicle_Model__c}  for {!Quote__c.Term_Days__c}.
+We notice that you did not complete the purchase.  Our goal is to make you a customer so we ask that you take 30 seconds to answer 4 questions by clicking here. !
+
+Thank you!</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

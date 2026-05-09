@@ -1,0 +1,65 @@
+<apex:page 
+    controller="BuhoLoginFlowController"
+    action="{!finishFlow}"
+    showHeader="false" 
+    sidebar="false" 
+    standardStylesheets="false" 
+    applyBodyTag="false" 
+    docType="html-5.0">
+    
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>We've Moved — Buho Insure</title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap" />
+        <apex:stylesheet value="{!$Resource.buhoAssets + '/css/buhoStyles.css'}" />
+    </head>
+    <body>
+        <div class="centered-layout">
+            <div class="page-container">
+                <div class="auth-card">
+
+                    <!-- Logo -->
+                    <div class="auth-logo">
+                        <img src="{!$Resource.buhoAssets + '/images/Logo.png'}" alt="Buho Insure" class="logo-icon" Style="margin:auto;"/>
+                    </div>
+
+                    <!-- Heading -->
+                    <div class="auth-title">
+                        <h1>We've <span class="highlight">Moved!</span></h1>
+                        <p class="auth-subtitle">Your account has been successfully migrated.</p>
+                    </div>
+
+                    <!-- Migration message -->
+                    <div class="buho-success-message" style="margin-bottom: 28px; font-size: 15px; line-height: 1.7;">
+                        <strong>Great news!</strong> Your MexInsurance account has been upgraded and migrated to our new platform —
+                        <strong>Buho Insurance</strong>. All your policies, documents, and account details are safe and ready for you on the new site.
+                    </div>
+
+                    <div class="welcome-text" style="margin-bottom: 28px;">
+                        <p style="font-size: 15px; color: #374151; line-height: 1.7;">
+                            Going forward, you can directly visit
+                            <a href="https://u.gobuho.com" style="color: #13203D; font-weight: 600;">u.gobuho.com</a>
+                            and log in directly.
+                        </p>
+                    </div>
+
+                    <!-- Primary CTA: Go to new site -->
+                    <a href="{!frontdoorUrl}" style="text-decoration: none; display: block; margin-bottom: 14px;">
+                        <button class="btn-signin" type="button">
+                            Visit Buho Insurance
+                        </button>
+                    </a>
+                    <!-- Footer note -->
+                    <p class="signup-text" style="margin-top: 32px;">
+                        Need help? Contact us at
+                        <a href="mailto:support@gobuho.com" class="signup-link">support@gobuho.com</a>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
+</apex:page>

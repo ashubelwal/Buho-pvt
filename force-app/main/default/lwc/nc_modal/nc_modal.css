@@ -114,3 +114,36 @@
     from { opacity: 1; }
     to { opacity: 0; }
 }
+
+/* 
+   Partner Portal Modal Overrides 
+   Note: These classes are primarily driven by the portal's style.css 
+   We include them here for robustness and specific LWC scoping adjustments.
+*/
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;   /* Force full viewport width */
+    height: 100vh;  /* Force full viewport height */
+    z-index: 9999;  /* Ensure it is above everything */
+    display: flex;
+    align-items: center;    /* Vertical center */
+    justify-content: center; /* Horizontal center */
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent backdrop */
+}
+
+.modal-card {
+    border: none !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22) !important;
+}
+
+.modal-close-btn i {
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+.modal-field-value {
+    color: #4a5568;
+    font-size: 0.95rem;
+}

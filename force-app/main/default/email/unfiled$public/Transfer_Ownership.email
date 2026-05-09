@@ -1,0 +1,6 @@
+<table border="0" cellpadding="5" width="550" cellspacing="5" height="400" >
+<tr valign="top" height="400" >
+<td tEditID="c1r1" style=" background-color:#FFFFFF; bEditID:r3st1; color:#000000; bLabel:main; font-size:12pt; font-family:arial;" aEditID="c1r1" locked="0" >
+<![CDATA[Hi {!agencyName}<div><br></div><div>This is to notify you that the ownership of the following contact has been transferred.<br><div><br></div><div><p><strong>Contact Details:</strong></p><ul><li><strong>Name:{!contactName}</strong></li><li><strong>Email:</strong>&nbsp;<strong>{!contactEmail}</strong></li></ul><div><br></div></div><div><p><strong>New Owner:</strong><strong style="font-size: 12pt;">{!newOwnerName}</strong></p><p><strong><br></strong></p><div>Please note that you can still access the contact's associated policies which was created by {!agencyName}.</div></div></div>]]></td>
+</tr>
+</table>

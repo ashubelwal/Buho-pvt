@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Post Service Template</name>
+    <style>none</style>
+    <subject>MexInsurance.com Service Experience</subject>
+    <textOnly>Dear {!Contact.Name} {!Lead.Name} : We want to provide the ultimate service experience for our clients. Can you help us achieve that goal?
+Please take 60 seconds of your time to rate the service you received  here.</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

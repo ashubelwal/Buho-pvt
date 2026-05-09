@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>User Activation Email Template</name>
+    <style>none</style>
+    <subject>Activate Your MexInsurance® Account</subject>
+    <textOnly>MexInsurance ®
+
+Congrats {!Contact.FirstName},
+
+Click the link below in your browser to activate your account.
+
+{!COMMUNITY_URL}
+
+Follow us
+
+By using this website you agree to the
+Terms of Purchase, Access and Use Agreement
+
+Privacy Policy
+
+California Insurance License: 0G35864
+© Mexico Insurance Services, Inc.
+
+3813 Ray Street, San Diego, CA 92104</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

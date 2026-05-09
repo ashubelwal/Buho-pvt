@@ -1,0 +1,70 @@
+<template>
+  <!-- Bootstrap 5 + Bootstrap Icons loaded via static resource in the JS -->
+  <div class="auth-page" style={backgroundStyle}>
+    <!-- Top-right logo bar -->
+    <div class="auth-topbar">
+      <img class="auth-logo" src={logoUrl} alt="Mex Insurance Logo" />
+      <div class="topbar-divider"></div>
+    </div>
+
+    <!-- Glassmorphism sign-in card -->
+    <div class="auth-card-wrapper">
+      <div class="auth-card">
+        <!-- Card Header -->
+        <div class="auth-card-header">
+          <p class="auth-tagline">Welcome back to <span>MexInsurance&#174;</span></p>
+          <h1>Sign in</h1>
+          <p class="auth-switch-link">
+            Don&#39;t have an account?&nbsp;
+            <a href="#" onclick={handleGoToSignup}>Sign up</a>
+          </p>
+        </div>
+
+        <!-- Form Equivalent -->
+        <div class="auth-form" onkeypress={handleKeyPress}>
+          
+          <template if:true={errorCheck}>
+            <div class="alert alert-danger" role="alert" style="color: #dc3545; background-color: #f8d7da; border-color: #f5c6cb; padding: .75rem 1.25rem; margin-bottom: 1rem; border-radius: .25rem; font-size: 14px;">
+                {errorMessage}
+            </div>
+          </template>
+          <!-- Email -->
+          <div class="form-group">
+            <label class="form-label" for="login-email">Email address</label>
+            <input
+              type="email"
+              id="login-email"
+              class="form-control email-input"
+              placeholder="you@example.com"
+              autocomplete="email"
+            />
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            <label class="form-label" for="login-password">Password</label>
+            <input
+              type="password"
+              id="login-password"
+              class="form-control password-input"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+            />
+            <a class="auth-helper-link" href="#" onclick={handleForgotPassword}>Forgot password?</a>
+          </div>
+
+          <!-- Remember me -->
+          <div class="form-check mt-2">
+            <input class="form-check-input" type="checkbox" id="rememberMe" />
+            <label class="form-check-label small text-muted" for="rememberMe">
+              Keep me signed in
+            </label>
+          </div>
+
+          <!-- CTA -->
+          <button type="button" class="btn-auth-primary" onclick={handleLogin}>Sign in</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
