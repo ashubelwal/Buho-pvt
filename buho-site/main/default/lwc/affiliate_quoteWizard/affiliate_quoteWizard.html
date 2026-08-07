@@ -1,0 +1,54 @@
+<template>
+    <div class="theme-wrapper" style={dynamicStyle}>
+        <!-- Custom Partner Header -->
+        <template if:true={displayHeader}>
+            <header class="wizard-header glass-card">
+                <div class="container-fluid px-4 py-3 d-flex justify-content-between align-items-center">
+                    <div class="partner-branding d-flex align-items-center">
+                        <template if:true={agencyLogo}>
+                            <img src={agencyLogo} alt="Agency Logo" class="logo-icon me-3">
+                        </template>
+                        <div>
+                            <h3 class="agent-title mb-0">{ownerName}</h3>
+                            <span class="badge">Partner portal</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-contact" onclick={handleContactClick}>Contact Us</button>
+                </div>
+            </header>
+        </template>
+
+        <!-- Stepper Navigation & Reusable Components -->
+        <main class="wizard-main">
+            <div class="wizard-container">
+                <template if:true={showProgressBar}>
+                    <c-buho_progress-bar
+                        current-step={currentStep}
+                        total-steps={totalSteps}
+                        hide-back-button={isFirstStep}
+                        onback={handleNavigation}>
+                    </c-buho_progress-bar>
+                </template>
+
+                <c-buho_toast></c-buho_toast>
+
+                <div class="wizard-steps">
+                    <template if:true={componentConstructor}>
+                        <lwc:component 
+                            lwc:is={componentConstructor} 
+                            payload={payload}
+                            onpayloadupdate={handlePayloadUpdate}
+                            onfullpayloadupdate={handlePayloadUpdateComplete}
+                            onchangescreen={handleNavigation}
+                            onloadingstatuschange={handleLoadingStatus}
+                            ontoastevent={handleToastEvent}
+                            onstepchange={handleStepChange}
+                            total-steps={totalSteps}
+                            >
+                        </lwc:component>
+                    </template>
+                </div>
+            </div>
+        </main>
+    </div>
+</template>

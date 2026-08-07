@@ -1,4 +1,4 @@
-<apex:page controller="Declaration_Page_Insurance_Controller" applyBodyTag="false" renderAs="pdf">
+<apex:page controller="Declaration_Page_Insurance_Controller" title="Policy PDF" applyBodyTag="false" renderAs="pdf" contentType="application/pdf#policy.pdf" >
     <head>
         <style>
             @page {

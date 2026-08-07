@@ -1,2 +1,27 @@
-<apex:page >
+<!-- VF Page: TestBatchTosendQuoteEmail -->
+<apex:page controller="TestBatchTosendQuoteEmailController">
+    <apex:form>
+        <apex:pageBlock title="Run Batch">
+            
+            <apex:pageBlockSection columns="1">
+                <apex:inputText value="{!policyId}" label="Policy Id"/>
+            </apex:pageBlockSection>
+
+            
+
+            <apex:pageBlockButtons>
+                <apex:commandButton value="Run Batch" action="{!runBatch}"/>
+            </apex:pageBlockButtons>
+
+            <apex:pageBlockSection columns="1">
+                <apex:inputText value="{!contactId}" label="Contact Id"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons>
+                <apex:commandButton value="Get Contact" action="{!getContact}"/>
+            </apex:pageBlockButtons>
+            {!userRecord.Email}
+            <apex:pageMessages />
+
+        </apex:pageBlock>
+    </apex:form>
 </apex:page>

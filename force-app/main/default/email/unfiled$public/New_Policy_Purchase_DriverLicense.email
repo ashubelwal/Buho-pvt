@@ -1,5 +1,5 @@
-<messaging:emailTemplate subject="Welcome to MexInsurance" recipientType="Contact" relatedToType="Contact">
+<messaging:emailTemplate subject="Welcome to MexInsurance" recipientType="Contact" renderUsingSystemContextWithoutSharing="true">
 <messaging:htmlEmailBody >
-<c:EmailTemplateStyling policyType="driverLicense" />
+<c:EmailTemplateStyling policyType="driverLicense" contactIdVar="{!recipient.id}" />
 </messaging:htmlEmailBody>
 </messaging:emailTemplate>

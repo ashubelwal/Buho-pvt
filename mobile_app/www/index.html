@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Buho Mobile</title>
+    <style>
+        /* Modern Reset and Layout */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #0d1117; /* Dark background matching Buho design */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding-top: env(safe-area-inset-top);
+            padding-right: env(safe-area-inset-right);
+            padding-bottom: env(safe-area-inset-bottom);
+            padding-left: env(safe-area-inset-left);
+        }
+
+        /* Safe area container to handle notch on modern phones */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            /* Adjust padding to respect safe areas */
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+            padding-left: env(safe-area-inset-left, 0px);
+            padding-right: env(safe-area-inset-right, 0px);
+        }
+
+        iframe {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            border: none;
+            background-color: #ffffff;
+        }
+
+        /* Loading indicator while Salesforce site is loading */
+        .loader-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0d1117;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader-logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            /* Pulse animation */
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        .loader-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #2f80ed;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loader-text {
+            color: #ffffff;
+            margin-top: 15px;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            opacity: 0.8;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Error state class */
+        .error-message {
+            color: #ff4d4d;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+            text-align: center;
+            padding: 0 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="loader" class="loader-container">
+        <!-- Minimalistic stylized icon to represent Buho logo -->
+        <svg class="loader-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="background: linear-gradient(135deg, #2f80ed, #00d2ff); padding: 15px; box-sizing: border-box;">
+            <path d="M50 15L80 45L50 75L20 45L50 15Z" fill="white"/>
+            <circle cx="50" cy="50" r="10" fill="#0d1117"/>
+        </svg>
+        <div class="loader-spinner"></div>
+        <div class="loader-text">Loading Buho Portal...</div>
+        <div id="error-msg" class="error-message">
+            Taking longer than expected. Please check your internet connection.
+        </div>
+    </div>
+
+    <div class="app-container">
+        <iframe 
+            id="portal-iframe" 
+            src="https://u.gobuho.com" 
+            allow="geolocation; microphone; camera; midi; encrypted-media;" 
+            sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-downloads allow-storage-access-by-user-activation"
+        ></iframe>
+    </div>
+
+    <script>
+        const iframe = document.getElementById('portal-iframe');
+        const loader = document.getElementById('loader');
+        const errorMsg = document.getElementById('error-msg');
+
+        // Show warning if it takes too long to load (12 seconds)
+        const timeoutId = setTimeout(() => {
+            if (errorMsg) {
+                errorMsg.style.display = 'block';
+            }
+        }, 12000);
+
+        // Hide loader when the iframe loads
+        iframe.addEventListener('load', () => {
+            clearTimeout(timeoutId);
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }
+        });
+
+        // Listen to download message from iframe (Option A)
+        window.addEventListener('message', async (event) => {
+            alert('open page event received Bingo!');
+            if (event.data && event.data.type === 'downloadPdf') {
+                const pdfUrl = event.data.url;
+                const fileName = event.data.name || 'document.pdf';
+
+                if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Filesystem && window.Capacitor.Plugins.FileOpener) {
+                    const { Filesystem, FileOpener } = window.Capacitor.Plugins;
+                    try {
+                        const download = await Filesystem.downloadFile({
+                            url: pdfUrl,
+                            path: fileName,
+                            directory: 'CACHE'
+                        });
+
+                        await FileOpener.open({
+                            filePath: download.path,
+                            contentType: 'application/pdf',
+                            openWithDefault: true
+                        });
+                    } catch (error) {
+                        console.error('Error downloading/opening file in container:', error);
+                        window.open(pdfUrl, '_system');
+                    }
+                } else {
+                    window.open(pdfUrl, '_system');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

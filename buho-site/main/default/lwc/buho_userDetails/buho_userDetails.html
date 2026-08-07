@@ -39,33 +39,139 @@
                     </button>
                 </div>
 
-                <div class="form-footer">
-                    <a href="#">Customer Support</a>
-                    <a href="#">Terms Of Service</a>
-                </div>
-            </div>
-            <!-- Right Section - Carousel -->
-            <div class="image-section">
-                <c-buho_carousel
-                    slides-data={emailScreenSlides}
-                    auto-advance-interval="5000">
-                </c-buho_carousel>
+        <!--div class="form-footer">
+          <a href="#">Customer Support</a>
+          <a href="#">Terms Of Service</a>
+        </div-->
+      </div>
+      <!-- Right Section - Carousel -->
+      <div class="image-section d-none d-md-block">
+        <c-buho_carousel slides-data={emailScreenSlides} auto-advance-interval="5000">
+        </c-buho_carousel>
+      </div>
+    </div>
+  </template>
+
+  <!-- Detailed Form (After Email Verification with Man With Tab Image) -->
+  <template if:true={showDetailedForm}>
+    <div class="email-check-container">
+      <!-- Left Section - Carousel -->
+      <div class="image-section d-none d-md-block">
+        <c-buho_carousel slides-data={detailedFormSlides} auto-advance-interval="5000">
+        </c-buho_carousel>
+      </div>
+
+      <!-- Right Section - Detailed Form -->
+      <div class="form-section">
+        <div class="form-header">
+          <a href="/" class="d-none d-md-block">
+            <img src={logoUrl} alt="BÚHO Logo" class="logo" />
+          </a>
+
+          <!-- Progress Bar Component -->
+          <c-buho_progress-bar current-step="1" total-steps={totalSteps} onback={handleBackToEmail}>
+          </c-buho_progress-bar>
+        </div>
+
+        <div class="form-content">
+          <h1>
+            Join thousands <br />
+            <span class="highlight">protected by BUHO</span>
+          </h1>
+
+          <!-- First Name -->
+          <div class="form-group">
+            <c-buho_input
+              type="input"
+              input-type="text"
+              name="FirstName"
+              label="First Name"
+              value={inputValues.FirstName}
+              placeholder="Enter Your First Name"
+              pattern="^[A-Za-zÀ-ÿ\s]+$"
+              message-when-pattern-mismatch="Please enter a valid name (letters only)"
+              oninput={handleInputChange}
+              required
+              disabled={disableInput}
+            >
+            </c-buho_input>
+          </div>
+
+          <!-- Last Name -->
+          <div class="form-group">
+            <c-buho_input
+              type="input"
+              input-type="text"
+              name="LastName"
+              label="Last Name"
+              value={inputValues.LastName}
+              placeholder="Enter Your Last Name"
+              pattern="^[A-Za-zÀ-ÿ\s]+$"
+              message-when-pattern-mismatch="Please enter a valid name (letters only)"
+              oninput={handleInputChange}
+              required
+              disabled={disableInput}
+            >
+            </c-buho_input>
+          </div>
+
+          <!-- Email Address -->
+          <div class="form-group">
+            <c-buho_input
+              type="input"
+              input-type="email"
+              name="Email"
+              label="Email Address"
+              value={inputValues.Email}
+              placeholder="Enter Your Email Address"
+              oninput={handleInputChange}
+              disabled
+              required
+            >
+            </c-buho_input>
+          </div>
+
+          <!-- Phone Number with Country Code -->
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <div class="phone-input-wrapper">
+              <c-buho_input
+                type="combobox"
+                name="countryCode"
+                options={countryCodesOptions}
+                value={inputValues.countryCode}
+                container-class="country-code-wrapper"
+                dropdown-class="country-code-select"
+                onchange={handleInputChange}
+                disabled={disableInput}
+              >
+              </c-buho_input>
+              <c-buho_input
+                type="input"
+                input-type="tel"
+                name="Phone"
+                value={inputValues.Phone}
+                placeholder="(123) 456-7890"
+                input-class="phone-input"
+                max-length="14"
+                oninput={handleInputChange}
+                required
+                disabled={disableInput}
+              >
+              </c-buho_input>
             </div>
 
             
         </div>
     </template>
 
-    <!-- Detailed Form (After Email Verification with Man With Tab Image) -->
-    <template if:true={showDetailedForm}>
-        <div class="email-check-container">
-            <!-- Left Section - Carousel -->
-            <div class="image-section">
-                <c-buho_carousel
-                    slides-data={detailedFormSlides}
-                    auto-advance-interval="5000">
-                </c-buho_carousel>
-            </div>
+        <!--div class="form-footer">
+          <a href="#">Customer Support</a>
+          <a href="#">Terms Of Service</a>
+        </div-->
+      </div>
+    </div>
+  </template>
 
             <!-- Right Section - Detailed Form -->
             <div class="form-section">

@@ -13,6 +13,13 @@
     <targetConfigs>
         <targetConfig targets="lightningCommunity__Default">
             <property
+                type="Boolean"
+                name="isEnhanced"
+                label="Enable Enhanced UI"
+                default="false"
+                description="Toggle to use the new wizard-based UI"
+            />
+            <property
                 type="String"
                 name="cmpSource"
                 label="Component source"

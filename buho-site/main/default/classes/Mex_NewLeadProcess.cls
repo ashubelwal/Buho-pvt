@@ -928,9 +928,11 @@ public without sharing class Mex_NewLeadProcess {
                     if (leadObj.Quote_Details__c != null && !String.isBlank(leadObj.Quote_Details__c)) {
                         quoteRecord = (Quote__c)JSON.deserialize(leadObj.Quote_Details__c, Quote__c.class);
                     }
+                    System.debug('leadObj.Vehicle_details__c!!!!'+leadObj.Vehicle_details__c);
                     if (leadObj.Vehicle_details__c != null && !String.isBlank(leadObj.Vehicle_details__c)) {
                         vehicleRecord = (VehicleRecordWrapper)JSON.deserialize(leadObj.Vehicle_details__c.replaceAll('__c', '_Tempc'), VehicleRecordWrapper.class);
                     }
+                    System.debug('vehicleRecord!!!!'+vehicleRecord);
                     if (leadObj.Company_details__c != null && !String.isBlank(leadObj.Company_details__c) && vehicleRecord.Is_the_vehicle_registered_to_a_business_Tempc) {
                         companyRecord = (CompanyDetailsWrapper)JSON.deserialize(leadObj.Company_details__c.replaceAll('__c', '_Tempc'), CompanyDetailsWrapper.class);
                     }
@@ -1081,6 +1083,7 @@ public without sharing class Mex_NewLeadProcess {
                                 newVehicle.Year__c = vehicleRecord.Year_Tempc;
                                 newVehicle.Make__c = vehicleRecord.Make_Tempc;
                                 newVehicle.Model__c = vehicleRecord.Model_Tempc;
+                                //newVehicle.Vehicle_sub_type__c = vehicleRecord.Vehicle_sub_type__c;
                                 newVehicle.Value__c = Decimal.valueOf(vehicleRecord.Value_Tempc);
                                 newVehicle.Account_Vehicle__c = leadConvertRslt.getAccountId();
                                 newVehicle.Contact__c = leadConvertRslt.getContactId();

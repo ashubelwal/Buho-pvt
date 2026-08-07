@@ -1,19 +1,45 @@
 import { LightningElement ,api, track } from 'lwc';
 import validateandGenerateQuotePDF from '@salesforce/apex/PolicyDocumentGenerator.validateandGenerateQuotePDF';
-
+import defaultTemplate from './affiliatePolicyQuickActions.html';
+import enhancedTemplate from './enhanced.html';
 
 export default class AffiliatePolicyQuickActions extends LightningElement {
     @api cmpSource;
     @api renewdPolicyId;
     @api actionmode;
+    @api isEnhanced = false;
     @track isLoading;
 
-    get acknowledgementMessage() {
-        return this.actionmode == 'renew' ? 'Your policy has been renewed successfully' : 'Your policy has been updated successfully';
+    render() {
+        return this.isEnhanced ? enhancedTemplate : defaultTemplate;
     }
 
-    showToastmethod(variant,title,message) {
-        this.template.querySelector('c-custom-toast').showToast(variant,title,message);
+    get acknowledgementMessage() {
+        if (this.actionmode === 'renew') {
+            return 'Your policy has been renewed successfully';
+        }
+        if (this.actionmode === 'purchase' || this.actionmode === 'new') {
+            return 'Your policy has been created successfully';
+        }
+        return 'Your policy has been updated successfully';
+    }
+
+    handleNewQuote() {
+        window.location.reload();
+    }
+
+    showToastmethod(variant, title, message) {
+        if (this.isEnhanced) {
+            const toast = this.template.querySelector('c-buho_toast');
+            if (toast) {
+                toast.showToast({ variant, title, message });
+            }
+        } else {
+            const toast = this.template.querySelector('c-custom-toast');
+            if (toast) {
+                toast.showToast({ variant, title, message });
+            }
+        }
     }
 
     generatePolicyPDF(event) {
@@ -22,40 +48,15 @@ export default class AffiliatePolicyQuickActions extends LightningElement {
             .then((result) => {
                 this.isLoading = false;
                 if (result) {
-                    window.open(('/apex/' + result + '?id=' + this.renewdPolicyId), '_blank');
+                    window.open(('/affiliatevforcesite/apex/' + result + '?id=' + this.renewdPolicyId), '_blank');
                 } else {
-                    if(this.cmpSource == 'comm'){
-                        this.showToastmethod('error','Something wrong happened while generating PDF!','Cannot generate PDF for the current policy.');
-        
-                    }else{
-                        let errEvt = new ShowToastEvent({
-                            message: 'Cannot generate PDF for the current policy.',
-                            title: 'Something wrong happened while generating PDF!',
-                            variant: 'error',
-                        });
-                        this.dispatchEvent(errEvt);       
-                    }
-                   
+                    this.showToastmethod('error', 'Something wrong happened while generating PDF!', 'Cannot generate PDF for the current policy.');
                 }
             })
             .catch((error) => {
                 this.isLoading = false;
                 console.log(error);
+                this.showToastmethod('error', error?.body?.message || 'An error occurred while generating the PDF. Please try again.', 'PDF Generation Error');
             });
     }
-
-    navigateToPolicy(event) {
-        console.log('this.cmpSource');
-        console.log(this.cmpSource);
-        if(this.cmpSource == 'comm'){
-            let currentUrl = window.location.origin;
-            location.replace(`${currentUrl}/partnercomm/policy/`+this.renewdPolicyId);
-            console.log('INSIDE community');
-        }else{
-            console.log('OUTSIDE community');
-            window.open(('/' + this.renewdPolicyId), '_blank');
-        }
-        
-    }
-
 }

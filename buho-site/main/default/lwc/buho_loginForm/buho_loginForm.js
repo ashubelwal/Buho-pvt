@@ -57,5 +57,20 @@ export default class Buho_loginForm extends LightningElement {
             composed: true
         }));
     }
+
+    connectedCallback() {
+        if (!this.errorMessage) {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const ec = urlParams.get('ec');
+                const ed = urlParams.get('ed');
+                if (ec && ed) {
+                    this.errorMessage = decodeURIComponent(escape(window.atob(ed)));
+                }
+            } catch (e) {
+                console.error('Error parsing/decoding URL error parameters in login form:', e);
+            }
+        }
+    }
 }
 

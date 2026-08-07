@@ -124,6 +124,7 @@ export default class Buhodb_container extends LightningElement {
      * Dispatch with: new CustomEvent('loadingstatus', { detail: { isLoading: true/false }, bubbles: true, composed: true })
      */
     handleLoadingStatus(event) {
+        console.log('loading event received!!!',event);
         this.isLoading = event.detail.isLoading;
     }
 

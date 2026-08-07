@@ -55,6 +55,12 @@ public class AffiliateControllerTest {
         
         // Test valid scenario
         String result = AffiliateController.saveLeadDetails(leadJson, quoteJSON, vehicleJSON, towedlistJSON, affiliateCode);
+        System.assertNotEquals(null, result);
+        Lead savedLead = (Lead)JSON.deserialize(result, Lead.class);
+        System.assertNotEquals(null, savedLead.Id);
+        
+        Lead dbLead = [SELECT Affiliate__c FROM Lead WHERE Id = :savedLead.Id];
+        System.assertEquals(affiliateUserList[0].Id, dbLead.Affiliate__c);
         
         // Test with null affiliate code
         try {

@@ -1214,10 +1214,13 @@ export default class Buho_quotePage extends NavigationMixin(LightningElement) {
                 return;
             }
             else if (this.isDownloadQuote == true) {
-                //window.open(`/apex/selectedQuoteNewRate?Id=${this.selectedQuote.QuoteData.Id}`, "_blank");
-                console.log('this.selectedQuote.QuoteData :: ' + this.selectedQuote.QuoteData.Id);
+                const link = `${this.baseUrl}vforcesite/apex/selectedQuoteNewRate?Id=${this.selectedQuote.QuoteData.Id}`;
                 this.isDownloadQuote == false;
-                window.open(`${this.baseUrl}vforcesite/apex/selectedQuoteNewRate?Id=${this.selectedQuote.QuoteData.Id}`, "_blank");
+                if (window.parent && window.parent !== window) {
+                    window.parent.postMessage({ type: 'downloadPdf', url: link, name: 'policy.pdf' }, '*');
+                } else {
+                    window.open(link, "_system");
+                }
                 this.dispatchEvent(new CustomEvent('loadingstatuschange', { detail: true }));
                 return;
 

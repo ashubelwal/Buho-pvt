@@ -1,12 +1,22 @@
 import { LightningElement, track, api } from 'lwc';
+import { loadStyle } from 'lightning/platformResourceLoader';
+import AGENT_STYLE from '@salesforce/resourceUrl/AgentStyle';
 import calculateTotalCoverage from '@salesforce/apex/CalculateCoverage.calculateTotalCoverage';
 import getDescriptionAndTitle from '@salesforce/apex/CalculateCoverageTitleAndDescription.getDescriptionAndTitle';
-import saveQuoteDetails from '@salesforce/apex/QuoteOptionFlow.saveQuoteDetails';
-import getVendors from '@salesforce/apex/QuoteOptionFlow.getVendors';
-import saveQuoteRecord from '@salesforce/apex/QuoteOptionFlow.saveQuoteRecord';
-import saveQuoteRecordData from '@salesforce/apex/NcExistingCustomerFlow.saveQuoteRecordData';
+
+// Dual-template support — render() picks the right HTML at runtime
+import defaultTemplate from './ag_quotePageCopy.html';
+import enhancedTemplate from './enhanced.html';
 
 export default class Nc_quotePage extends LightningElement {
+    /** Set to true from the parent to render the enhanced wizard-style template */
+    @api isEnhanced = false;
+
+    /** LWC render hook — returns the correct HTML template */
+    render() {
+        return this.isEnhanced ? enhancedTemplate : defaultTemplate;
+    }
+
     @api payload;
     @track results = {};
     @api agentuserfee;
@@ -28,10 +38,12 @@ export default class Nc_quotePage extends LightningElement {
     @track liabilityDisabled = false; // Add this line
     @track vehicleAge;
     @track isLoading = false;
+    @track goldClass = `slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-p-around_small`;
+    @track maxClass = `slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-p-around_small`;
+    @track isCoverageExpanded = false;
 
     @track coverageData;
     @track coverageList = [];
-    @track maxClass = `slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-p-around_small`;
     // Liability Options
     liabilityOptions = ['100,000', '200,000', '300,000', '500,000', '1,000,000'];
     @track combinedLiabilityValue = this.liabilityOptions[0]; // Default first value
@@ -82,8 +94,8 @@ export default class Nc_quotePage extends LightningElement {
 
     // Compute the tab properties dynamically
     get computedTabs() {
-        console.log('this.activeTab :: ',this.activeTab);
-        console.log('computedTabs tabs : ',this.tabs);
+        console.log('this.activeTab :: ', this.activeTab);
+        console.log('computedTabs tabs : ', this.tabs);
         // this.checkedData.Max__c = this.tabs.Max;
         // this.checkedData.Gold__c = this.tabs.Gold;
         // this.checkedData.Platinum__c = this.tabs.Gold;
@@ -94,7 +106,22 @@ export default class Nc_quotePage extends LightningElement {
             class: tab.id === this.activeTab
                 ? 'slds-tabs_default__item slds-is-active'
                 : 'slds-tabs_default__item',
+            pillClass: tab.id === this.activeTab
+                ? 'aqp-company-pill aqp-company-pill--active'
+                : 'aqp-company-pill',
         }));
+    }
+
+    get coverageToggleLabel() {
+        return this.isCoverageExpanded ? 'Hide Coverage Details' : 'Show Coverage Details';
+    }
+
+    get coverageToggleIcon() {
+        return this.isCoverageExpanded ? '▲' : '▼';
+    }
+
+    handleToggleCoverage() {
+        this.isCoverageExpanded = !this.isCoverageExpanded;
     }
 
     // Disabled States for Liability
@@ -129,12 +156,14 @@ export default class Nc_quotePage extends LightningElement {
         this.dispatchEvent(new CustomEvent('loadingstatuschange', { detail: false }));
         const clickedTabId = event.currentTarget.dataset.tabId;
 
-        // Find the clicked tab and move it to the first position in the array
-        const clickedTab = this.tabs.find((tab) => tab.id === clickedTabId);
-        const otherTabs = this.tabs.filter((tab) => tab.id !== clickedTabId);
+        if (!this.isEnhanced) {
+            // Find the clicked tab and move it to the first position in the array
+            const clickedTab = this.tabs.find((tab) => tab.id === clickedTabId);
+            const otherTabs = this.tabs.filter((tab) => tab.id !== clickedTabId);
 
-        // Update the tabs order
-        this.tabs = [clickedTab, ...otherTabs];
+            // Update the tabs order
+            //this.tabs = [clickedTab, ...otherTabs];
+        }
 
         // Set the clicked tab as active
         this.activeTab = clickedTabId;
@@ -238,12 +267,12 @@ export default class Nc_quotePage extends LightningElement {
         this.dispatchEvent(navEvent);
         if (this.isDebug) console.log('Selected Quote: ', JSON.stringify(res));
         this.dispatchEvent(new CustomEvent('emailordownload', {
-             detail: {
-                data : res ,
-                coverage : this.coverageData,
-                sendemail : isEmailSent
-             }
+            detail: {
+                data: res,
+                coverage: this.coverageData,
+                sendemail: isEmailSent
             }
+        }
         ));
 
 
@@ -257,32 +286,27 @@ export default class Nc_quotePage extends LightningElement {
             this.checkedData = { ...this.checkedData, [name]: checked };
             if (this.isDebug) console.log(`🔄 Input Changed: ${name} | Checked: ${checked} | Type: ${type}`);
             this.handleGoldUpdate(checked);
-            if(checked == true){
+            if (checked == true) {
                 this.handleLiabilityOnly(!checked);
             }
-            
+
         }
         if (event?.target?.name === 'Max__c') {
             const { name, checked, type } = event.target;
             this.checkedData = { ...this.checkedData, [name]: checked };
             if (this.isDebug) console.log(`🔄 Input Changed: ${name} | Checked: ${checked} | Type: ${type}`);
             this.handleMaxUpdate(checked);
-            if(checked == true){
+            if (checked == true) {
                 this.handleLiabilityOnly(!checked);
             }
         }
-        // if (event?.target?.name === 'Platinum__c') {
-        //     const { name, checked, type } = event.target;
-        //     this.checkedData = { ...this.checkedData, [name]: checked };
-        //     if (this.isDebug) console.log(`🔄 Input Changed: ${name} | Checked: ${checked} | Type: ${type}`);
-        //     // this.handlePlatinumUpdate(checked);
-        // }
+       
         if (event?.target?.name === 'Coverage__c') {
             const { name, checked, type } = event.target;
             this.checkedData = { ...this.checkedData, [name]: checked };
             if (this.isDebug) console.log(`🔄 Input Changed: ${name} | Checked: ${checked} | Type: ${type}`);
             this.handleLiabilityOnly(checked);
-            if(checked == true){
+            if (checked === true) {
                 this.handleMaxUpdate(!checked);
                 this.handleGoldUpdate(!checked);
             }
@@ -294,7 +318,7 @@ export default class Nc_quotePage extends LightningElement {
     }
 
     handleLiabilityOnly(isChecked) {
-        console.log('in the handle Liablicty',this.payload);
+        console.log('in the handle Liablicty', this.payload);
         if (!this.payload || !Array.isArray(this.payload)) {
             return;
         }
@@ -414,11 +438,11 @@ export default class Nc_quotePage extends LightningElement {
             if (this.isDebug) console.error('Term Option is undefined');
             return;
         }
-        
+
         // Update Liability__c safely
         updatedPayload[termOptionIndex].termOption.Max__c = isChecked;
         this.payload = updatedPayload;
-       
+
         // if (this.isDebug) console.log('After Update:', JSON.stringify(this.payload[termOptionIndex], null, 2));
 
         //Update the Quote based on new data
@@ -432,7 +456,7 @@ export default class Nc_quotePage extends LightningElement {
             if (this.isDebug) console.error('Payload is undefined or not an array');
             return;
         }
-        
+
         const termOptionIndex = this.payload.findIndex(item => item.hasOwnProperty('termOption'));
 
         if (termOptionIndex === -1) {
@@ -448,9 +472,9 @@ export default class Nc_quotePage extends LightningElement {
 
         //Clone the entire payload for reactivity
         let updatedPayload = JSON.parse(JSON.stringify(this.payload));
-        
+
         //updatedPayload[vehicleOptionIndex].vehicleDetails.Coverage__c = isChecked == false ? 'Liability' : 'Complete';
-        
+
         //Ensure vehicleDetails exists
         if (!updatedPayload[termOptionIndex].termOption) {
             if (this.isDebug) console.error('Term Option is undefined');
@@ -687,10 +711,19 @@ export default class Nc_quotePage extends LightningElement {
             }
         }
     }
-    
+
     connectedCallback() {
+        if (this.isEnhanced) {
+            loadStyle(this, AGENT_STYLE)
+                .then(() => {
+                    console.log('AgentStyle loaded in ag_quotePageCopy');
+                })
+                .catch(error => {
+                    console.error('Error loading AgentStyle in ag_quotePageCopy', error);
+                });
+        }
         console.log('Payload :: ', this.payload);
-        console.log('Agent Fee Data in connected Callback',this.agentuserfee);
+        console.log('Agent Fee Data in connected Callback', this.agentuserfee);
         this.dispatchEvent(new CustomEvent('loadingstatuschange', { detail: false }));
         if (this.isDebug) console.log('Payload OUTPUT : ', JSON.stringify(this.payload));
 
@@ -710,38 +743,25 @@ export default class Nc_quotePage extends LightningElement {
             if (vehicleObj && vehicleObj.vehicleDetails && vehicleObj.vehicleDetails.Coverage__c) {
                 this.liabilityOnly = vehicleObj.vehicleDetails.Coverage__c == 'Liability' ? true : false;
                 console.log('liabilityOnly@####??', this.liabilityOnly);
-                if(this.liabilityOnly == true){
+                if (this.liabilityOnly == true) {
                     this.checkedData.Max__c = false;
                     this.checkedData.Gold__c = false;
                 }
             }
 
             // Calculate vehicle age
-                if (vehicleObj?.vehicleDetails.Year__c) {
-                    const currentYear = new Date().getFullYear();
-                    this.vehicleAge = currentYear - parseInt(vehicleObj.vehicleDetails.Year__c);
-                }
-
-                // Set default tab if not set
-                if (!this.activeTab) {
-                    this.activeTab = 'Mapfre';
-                }
-
-                // Evaluate conditions
-                this.evaluateLiabilityConditions();
-
-            /*// Add vehicle age calculation
-            if (vehicleObj && vehicleObj.vehicleDetails && vehicleObj.vehicleDetails.Year__c) {
+            if (vehicleObj?.vehicleDetails.Year__c) {
                 const currentYear = new Date().getFullYear();
                 this.vehicleAge = currentYear - parseInt(vehicleObj.vehicleDetails.Year__c);
-                
-                // Apply conditions based on vehicle age and active tab
-                if ((this.vehicleAge > 20 && this.activeTab === 'Chubb') || 
-                    (this.vehicleAge > 25 && this.activeTab === 'Mapfre')) {
-                    this.liabilityOnly = true;
-                    this.liabilityDisabled = true; // Add this flag to control disabled state
-                }
-            }*/
+            }
+
+            // Set default tab if not set
+            if (!this.activeTab) {
+                this.activeTab = 'Mapfre';
+            }
+
+            // Evaluate conditions
+            this.evaluateLiabilityConditions();
 
             const termIndex = this.payload.findIndex(item => item.hasOwnProperty('termOption'));
 
@@ -761,13 +781,13 @@ export default class Nc_quotePage extends LightningElement {
                 };
 
                 this.dispatchPayloadUpdate('termOption', {
-                    Gold__c : this.checkedData?.Gold__c
+                    Gold__c: this.checkedData?.Gold__c
                 });
                 this.dispatchPayloadUpdate('termOption', {
-                     Max__c: this.checkedData?.Max__c
+                    Max__c: this.checkedData?.Max__c
                 });
                 this.dispatchPayloadUpdate('termOption', {
-                     Platinum__c: this.checkedData?.Platinum__c
+                    Platinum__c: this.checkedData?.Platinum__c
                 });
 
 
@@ -782,29 +802,6 @@ export default class Nc_quotePage extends LightningElement {
         this.getQuote();
         window.addEventListener('scroll', this.handleScroll.bind(this));
     }
-   
-    // prepareCoverageList() {
-    //     this.chubbCoverageList = [];
-
-    //     if (
-    //         this.coverageData &&
-    //         this.coverageData.Chubb &&
-    //         typeof this.coverageData.Chubb === 'object'
-    //     ) {
-    //         this.chubbCoverageList = Object.entries(this.coverageData.Chubb)
-    //             .filter(([_, value]) => {
-    //                 const title = value?.Title?.toLowerCase();
-    //                 return title !== 'not covered' && title !== 'not included';
-    //             })
-    //             .map(([key, value]) => ({
-    //                 key,
-    //                 title: value.Title || '',
-    //                 description: value.Description || '',
-    //                 image: value.Image || '',
-    //                 value: value.Value || ''
-    //             }));
-    //     }
-    // }
 
     prepareCoverageList(companyName) {
         this.coverageList = [];
@@ -854,188 +851,26 @@ export default class Nc_quotePage extends LightningElement {
         const nresult = await getDescriptionAndTitle({ jsonString: JSON.stringify(this.payload) });
         this.coverageData = nresult || '';
         if (this.isDebug) console.log('OUTPUT : Desc loading');
-        
+
         //updated term method
-       // await this.calculateCoverageUpdate();
+        // await this.calculateCoverageUpdate();
 
         if (this.isDebug) console.log('Return result for coverageDetails', nresult);
-        console.log('This is the payload :: '+ JSON.stringify(this.payload));
+        console.log('This is the payload :: ' + JSON.stringify(this.payload));
         calculateTotalCoverage({ jsonString: JSON.stringify(this.payload) })
             .then(async (result) => {
-                let data = result;
+
                 if (this.isDebug) console.log('Quote OUTPUT : ', result);
 
                 this.allQuote = JSON.parse(JSON.stringify(result));
-                
-                const res =  await this.updateTabs();
+                this.isLoading = false;
+                await this.updateTabs();
             }).catch((err) => {
                 if (this.isDebug) console.log('Error: ', err);
 
                 this.dispatchEvent(new CustomEvent('loadingstatuschange', { detail: true }));
             });
-        this.isLoading = false;
     }
-
-    // async calculateCoverageUpdate() {
-    //     try {
-    //         console.log('Reached here 0');
-    //         console.log('Payload',this.payload);
-    //         const parsedPayload = JSON.parse(JSON.stringify(this.payload));
-            
-    //         console.log('Reached here 1');
-    //         // extract termOption
-    //         let termOption = parsedPayload.find(obj => obj.termOption)?.termOption;
-    //         if (!termOption) {
-    //             console.error('No termOption found in payload');
-    //             return;
-    //         }
-    //         console.log('Reached here 2');
-
-    //         // pick user-selected term
-    //         const userSelectedTerm = (termOption.Term__c || '').trim();
-    //         const startDate = new Date(termOption.Start_Date_for_Coverage__c);
-    //         const endDate   = new Date(termOption.End_Date_for_Coverage__c);
-    //         const diffDays  = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-            
-    //         console.log(`⚡ Coverage duration = ${diffDays} days`);
-
-    //         // decide terms
-    //         let termsToCalculate = [];
-    //         if (!['Semi-Annual', 'Annual'].includes(userSelectedTerm)) {
-    //             if (diffDays > 180) {
-    //                 termsToCalculate = ['Daily', 'Annual'];
-    //             } else if (diffDays > 90) {
-    //                 termsToCalculate = ['Daily', 'Semi-Annual', 'Annual'];
-    //             } else if (diffDays > 30) {
-    //                 termsToCalculate = ['Daily', '90-Days', 'Semi-Annual'];
-    //             } else if (diffDays > 1) {
-    //                 termsToCalculate = ['Daily', '30-Days', '90-Days'];
-    //             } else {
-    //                 termsToCalculate = ['Daily'];
-    //             }
-    //         } else {
-    //             termsToCalculate = [userSelectedTerm];
-    //         }
-
-    //         console.log('✅ Terms selected:', termsToCalculate);
-
-    //         // sequential calls to Apex per term
-    //         for (let termKey of termsToCalculate) {
-    //             const clonedPayload = JSON.parse(JSON.stringify(parsedPayload));
-    //             let clonedTermOption = clonedPayload.find(obj => obj.termOption)?.termOption;
-    //             if (clonedTermOption) {
-    //                 clonedTermOption.Term__c = termKey;
-    //             }
-
-    //             const updatedJson = JSON.stringify(clonedPayload);
-
-    //             console.log(`▶ Calling Apex for term: ${termKey}`);
-    //             const res = await calculateTotalCoverage({ jsonString: updatedJson });
-    //             this.results[termKey] = res;
-    //             console.log(`📝 Result for ${termKey}:`, res);
-    //         }
-
-            
-
-    //     } catch (error) {
-    //         console.error('Error in calculateCoverage:', error);
-    //     }
-    // }
-
-    // @api
-    //  updateTabs() {
-    //  try{
-    //     let showMedical = this.payload.find(i => i.vehicleDetails)?.vehicleDetails?.Vehicle_sub_type__c !== 'Motorcycle';
-    //     this.isLoading = true;
-    //     console.log('OUTPUT agentuserfee: ',this.agentuserfee);
-    //     let data = this.allQuote;
-    //     if (this.isDebug) console.log('Quote OUTPUT : ', data);
-    //     let totals = [];
-    //     for (const company in data) {
-    //         // if (this.isDebug) console.log('12 OUTPUT : ', JSON.stringify(Object.values(data[company])));
-    //         if (parseFloat(data[company].Liability) > 0 && parseFloat(data[company].Total) > 0) {
-    //             totals.push({
-    //                 id: company,
-    //                 label: company,
-    //                 Gold: data[company].Is_Gold__c === "true" ? true : false,
-    //                 Max: data[company].Is_Max__c === "true" ? true : false,
-    //                 Platinum: data[company].Is_Platinum__c === "true" ? true : false,
-    //                 TermAndConditionENG: data[company].TermAndConditionENG != '' ? data[company].TermAndConditionENG : '',
-    //                 TermAndConditionSPN: data[company].TermAndConditionSPN != '' ? data[company].TermAndConditionSPN : '',
-    //                 showMedical: showMedical,
-    //                 total: (
-    //                     parseFloat(data[company].Total)
-                      
-    //                 ).toFixed(2),
-    //                 coverageList: [
-    //                     {
-    //                         liability: data[company].Liability != '' ? {
-    //                             title: 'Liability (Damage You Cause)',
-    //                             desc: 'USD ',
-    //                             price: data[company].Liability,
-    //                             img: 'https://via.placeholder.com/150'
-    //                         } : false
-    //                     }
-    //                 ],
-    //                 coverageListByCompanyName: this.coverageData
-    //             });
-    //             this.activeTab = this.activeTab.trim() === "" ? 'Mapfre' : this.activeTab; // Setting it default because of fixed order system
-                
-    //         }
-    //     }
-
-
-    //     this.tabs = totals.map(company => {
-    //         return {
-    //             ...company,
-    //             coverageList: company.coverageList.flatMap(coverage => Object.values(coverage))
-    //         };
-    //     });
-
-    //     // Add sorting here
-    //     const companyOrderMap = {
-    //         'Mapfre': 1,
-    //         'Qualitas': 2,
-    //         'Chubb': 3,
-    //     };
-
-    //     this.tabs.sort((a, b) => {
-    //         const orderA = companyOrderMap[a.label] || 99;
-    //         const orderB = companyOrderMap[b.label] || 99;
-    //         return orderA - orderB;
-    //     });
-
-    //     const hasMapfre = this.tabs.some(tab => tab.id === 'Mapfre');
-    //     if (!hasMapfre) { this.activeTab = 'Chubb'; }
-
-    //     this.tabs = this.tabs.map((tab) => ({
-    //         ...tab,
-    //         isSelected: tab.id === this.activeTab,
-    //         tabIndex: tab.id === this.activeTab ? '0' : '-1',
-    //         class: tab.id === this.activeTab
-    //             ? 'slds-tabs_default__item slds-is-active'
-    //             : 'slds-tabs_default__item',
-    //     }));
-
-    //     if (this.activeTab != 'Mapfre') {
-    //         const clickedTab = this.tabs.find((tab) => tab.id === this.activeTab);
-    //         const otherTabs = this.tabs.filter((tab) => tab.id !== this.activeTab);
-    //         this.tabs = [clickedTab, ...otherTabs];
-    //     }
-
-    //     this.prepareCoverageList(this.activeTab);
-    //     this.evaluateLiabilityConditions();
-
-    //     if (this.isDebug) console.log('Quote details: ', JSON.stringify(this.tabs));
-
-
-    //     this.dispatchEvent(new CustomEvent('loadingstatuschange', { detail: true }));
-    //     this.isLoading = false;
-    //  }catch(error){
-    //     console.log('Error occured in updated Tabs',error.message);
-    //  }
-    // }
-    
     @api
     updateTabs() {
         try {
@@ -1044,7 +879,7 @@ export default class Nc_quotePage extends LightningElement {
             console.log('OUTPUT agentuserfee: ', this.agentuserfee);
 
             let data = this.allQuote || {};
-            if (this.isDebug) console.log('Quote OUTPUT : ', data);
+            if (this.isDebug) console.log('data Quote OUTPUT : ', data);
 
             let totals = [];
 
@@ -1053,7 +888,7 @@ export default class Nc_quotePage extends LightningElement {
                 const total = parseFloat(data[company]?.Total) || 0;
 
                 // Solo agregamos si hay liability y total válidos
-                if (liability > 0 && total > 0) {
+                if (total > 0) {
                     totals.push({
                         id: company,
                         label: company,
@@ -1131,10 +966,13 @@ export default class Nc_quotePage extends LightningElement {
                 class: tab.id === this.activeTab
                     ? 'slds-tabs_default__item slds-is-active'
                     : 'slds-tabs_default__item',
+                pillClass: tab.id === this.activeTab
+                    ? 'aqp-company-pill aqp-company-pill--active'
+                    : 'aqp-company-pill',
             }));
 
             // Mover el tab seleccionado al inicio
-            if (this.activeTab !== 'Mapfre') {
+            if (!this.isEnhanced && this.activeTab !== 'Mapfre') {
                 const clickedTab = this.tabs.find((tab) => tab.id === this.activeTab);
                 const otherTabs = this.tabs.filter((tab) => tab.id !== this.activeTab);
                 this.tabs = clickedTab ? [clickedTab, ...otherTabs] : otherTabs;
@@ -1176,7 +1014,7 @@ export default class Nc_quotePage extends LightningElement {
 
         this.dispatchEvent(new CustomEvent('loadingstatuschange', { detail: false }));
         // 'temp' is a local variable, not a class property (this.temp)
-        let temp = { ['quotePage']: this.selectedQuote }; 
+        let temp = { ['quotePage']: this.selectedQuote };
         try {
             let updatedData = await this.createDataForQuoteSave();
 
@@ -1207,9 +1045,9 @@ export default class Nc_quotePage extends LightningElement {
 
         this.dispatchEvent(new CustomEvent('loadingstatuschange', { detail: true }));
         if (this.isDebug) console.log('Sending Selected Quote in parent component', this.selectedQuote);
-        
+
         // Correctly return the 'quotePage' property from the local 'temp' variable
-        return temp['quotePage']; 
+        return temp['quotePage'];
     }
 
     async createDataForContactQuoteSave() {
@@ -1324,7 +1162,7 @@ export default class Nc_quotePage extends LightningElement {
                     vehicleTheft = '1000';
                 } else {
                     vehicleCollision = updatedVehicleValueCollision > 500 ? String(updatedVehicleValueCollision) : '500';
-                    vehicleTheft = updatedVehicleValueTheft > 1000 ? String(updatedVehicleValueTheft) : '1000';                     
+                    vehicleTheft = updatedVehicleValueTheft > 1000 ? String(updatedVehicleValueTheft) : '1000';
                 }
             }
         }
@@ -1333,8 +1171,8 @@ export default class Nc_quotePage extends LightningElement {
                 vehicleCollision = null; // This will become "" in JSON, not null
                 vehicleTheft = null;
             } else {
-                    vehicleCollision = '500';
-                    vehicleTheft = '1000';
+                vehicleCollision = '500';
+                vehicleTheft = '1000';
             }
         }
         if (underwriter.toLowerCase() === 'qualitas') {
@@ -1347,13 +1185,13 @@ export default class Nc_quotePage extends LightningElement {
                     vehicleTheft = '1000';
                 } else {
                     vehicleCollision = '1000';
-                    vehicleTheft = '1000';                     
+                    vehicleTheft = '1000';
                 }
             }
         }
 
-        console.log('Vehicle collison',vehicleCollision);
-        console.log('Vehicle theft',vehicleTheft);
+        console.log('Vehicle collison', vehicleCollision);
+        console.log('Vehicle theft', vehicleTheft);
 
         const dataMapped = {
             Start_Date_for_Coverage__c: dataMap?.termOption?.Start_Date_for_Coverage__c,

@@ -1,8 +1,9 @@
-import { LightningElement, api, track } from 'lwc';
+import { LightningElement, api, track, wire } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import buhoAssets from '@salesforce/resourceUrl/buhoAssets';
+import buhoAssets from '@salesforce/resourceUrl/BuhoAssets';
 import getTimeZone from '@salesforce/apex/Mex_NewLeadProcess.getTimeZone';
+import getCurrentSiteDetails from '@salesforce/apex/BuhoLoginController.getCurrentSiteDetails';
 import preViewPdfAction from '@salesforce/apex/Mex_PolicyEditController.preViewPdfAction';
 import getEditPolicyDetail from '@salesforce/apex/Mex_PolicyEditController.getEditPolicyDetail';
 import Displaypolicy from '@salesforce/label/c.TR_Display_Policy';
@@ -29,7 +30,9 @@ export default class Buhodb_policyCustomButtonComponent extends NavigationMixin(
     @api totalPremium;
     @api packageName;
     @api termName;
+    @api baseUrl
 
+    currentSiteData;
     policyExpiredOrTerminated;
     homeownersPolicy = false;
     renewPolicyDisabled = false;
@@ -70,11 +73,37 @@ export default class Buhodb_policyCustomButtonComponent extends NavigationMixin(
         }
     }
 
+    get finalBaseUrl() {
+        console.log(this.baseUrl, 'base url');
+        console.log('current site', this.currentSiteData)
+        let base = this.baseUrl || '';
+        if (!base) {
+            const { baseUrl: siteBase, pathPrefix } = this.currentSiteData || {};
+            base = siteBase ? (pathPrefix ? siteBase : `${siteBase}/`) : '';
+        }
+
+        1 / 0;
+        return base;
+    }
+
+    @wire(getCurrentSiteDetails)
+    wiredSiteDetails({ data, error }) {
+        if (data) {
+            this.currentSiteData = data;
+            this.error = undefined;
+            console.log('Site Details:', JSON.stringify(data));
+        } else if (error) {
+            this.error = error;
+            this.currentSiteData = undefined;
+            console.error('Error:', error);
+        }
+    }
+
     fetchPolicyData = async () => {
         try {
-            this.spinner = true;
+            this.showSpinner(true);
             const systemTime = await getTimeZone();
-            
+
             const { status, ...rest } = await getEditPolicyDetail({ 'policyId': this.recordId });
 
             if (rest && rest?.policyData && rest.policyData?.Policy_Type_picklist__c && rest.policyData.Policy_Type_picklist__c == 'Northbound') {
@@ -90,7 +119,7 @@ export default class Buhodb_policyCustomButtonComponent extends NavigationMixin(
 
             if (status == 'success') {
                 this.policyExpiredOrTerminated = rest.policyData.Status_picklist__c;
-                this.spinner = false;
+                this.showSpinner(false);
                 const timeNow = new Date();
                 if ((parseInt(new Date(rest.policyData?.Issued_At__c).getFullYear()) <= 2019) || (rest?.policyData?.Status_picklist__c == 'Updated' || rest?.policyData?.Status_picklist__c == 'Terminated' || new Date(rest?.policyData.Start_Date__c) > timeNow)) {
                     this.renewPolicyDisabled = true;
@@ -99,10 +128,10 @@ export default class Buhodb_policyCustomButtonComponent extends NavigationMixin(
                 const mminutes = Math.floor((rest.quoteData.Start_Time__c % 3600000) / 60000);
                 const sseconds = Math.floor(((rest.quoteData.Start_Time__c % 3600000) % 60000) / 1000);
                 const Firstdate = new Date(rest.quoteData.Start_Date_for_Coverage__c);
-                
+
                 const Customdate = new Date(Firstdate.getFullYear(), Firstdate.getMonth(), Firstdate.getDate(), hhours, mminutes, sseconds);
 
-                if (rest.quoteData.Term__c == 'Daily') {    
+                if (rest.quoteData.Term__c == 'Daily') {
                     let startDatetime = this.calculateDateTime(rest.quoteData.Start_Date_for_Coverage__c, rest.quoteData.Start_Time__c);
                     let endDatetime = this.calculateDateTime(rest.quoteData.End_Date_for_Coverage__c, rest.quoteData.End_Time__c);
 
@@ -111,7 +140,7 @@ export default class Buhodb_policyCustomButtonComponent extends NavigationMixin(
                     }
                 }
             } else {
-                this.spinner = false;
+                this.showSpinner(false);
                 if (status == 'error') {
                     let evt = new ShowToastEvent({
                         message: this.label.Oursystemfoundsome,
@@ -123,7 +152,7 @@ export default class Buhodb_policyCustomButtonComponent extends NavigationMixin(
             }
         } catch (error) {
             console.log(error);
-            this.spinner = false;
+            this.showSpinner(false);
             if (error.status === 500 && error.statusText === 'Server Error') {
                 let errEvt = new ShowToastEvent({
                     message: this.label.Oursystemfoundsome,
@@ -194,18 +223,51 @@ export default class Buhodb_policyCustomButtonComponent extends NavigationMixin(
         this.navigateToHash('terminatepolicy');
     }
 
+    buildVfUrl(path) {
+        let base = this.finalBaseUrl || '';
+        if (base && !base.endsWith('/')) {
+            base += '/';
+        }
+        return `${base}vforcesite${path}`;
+    }
+
     async handleDisplayClick() {
+        this.showSpinner(true);
         let actionData = await preViewPdfAction({ 'policyId': this.recordId });
         if (actionData != null) {
-            window.open('/vforcesite' + actionData, "_blank");
+
+            const link = this.buildVfUrl(actionData);
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({ type: 'downloadPdf', url: link, name: 'policy.pdf' }, '*');
+            } else {
+                this[NavigationMixin.Navigate]({
+                    type: 'standard__webPage',
+                    attributes: {
+                        url: link
+                    }
+                });
+            }
+            this.showSpinner(false);
         }
     }
 
     generatePolicyPDF(event) {
+        this.showSpinner(true);
         validateandGenerateQuotePDF({ 'policyId': this.recordId })
             .then((result) => {
                 if (result) {
-                    window.open(('/apex/' + result + '?id=' + this.recordId), '_blank');
+
+                    const link = this.buildVfUrl('/apex/' + result + '?id=' + this.recordId);
+                    if (window.parent && window.parent !== window) {
+                        window.parent.postMessage({ type: 'downloadPdf', url: link, name: 'policy.pdf' }, '*');
+                    } else {
+                        this[NavigationMixin.Navigate]({
+                            type: 'standard__webPage',
+                            attributes: {
+                                url: link
+                            }
+                        });
+                    }
                 } else {
                     let errEvt = new ShowToastEvent({
                         message: 'Cannot generate PDF for the current policy.',
@@ -214,6 +276,7 @@ export default class Buhodb_policyCustomButtonComponent extends NavigationMixin(
                     });
                     this.dispatchEvent(errEvt);
                 }
+                this.showSpinner(false);
             })
             .catch((error) => {
                 console.log('Some error occured');
@@ -222,10 +285,22 @@ export default class Buhodb_policyCustomButtonComponent extends NavigationMixin(
     }
 
     generatePolicyGreenCard(event) {
+        this.showSpinner(true);
         generateGreenCardfromPolicyId({ 'policyId': this.recordId })
             .then((result) => {
                 if (result) {
-                    window.open(('/apex/renderAsPdf?id=' + this.recordId), '_blank');
+                    const link = this.buildVfUrl('/apex/renderAsPdf?id=' + this.recordId);
+                    if (window.parent && window.parent !== window) {
+                        window.parent.postMessage({ type: 'downloadPdf', url: link, name: 'policy_greencard.pdf' }, '*');
+                    } else {
+
+                        this[NavigationMixin.Navigate]({
+                            type: 'standard__webPage',
+                            attributes: {
+                                url: link
+                            }
+                        });
+                    }
                 } else {
                     let errEvt = new ShowToastEvent({
                         message: 'Cannot generate Yellow Card for the current policy',
@@ -234,10 +309,22 @@ export default class Buhodb_policyCustomButtonComponent extends NavigationMixin(
                     });
                     this.dispatchEvent(errEvt);
                 }
+                this.showSpinner(false);
             })
             .catch((error) => {
                 console.log('Some error occured');
                 console.log(error);
             });
+    }
+
+    showSpinner(value) {
+        console.log('dispatching loader', value);
+        this.dispatchEvent(
+            new CustomEvent('loadingstatuschange', {
+                detail: value,
+                bubbles: true,
+                composed: true
+            })
+        );
     }
 }

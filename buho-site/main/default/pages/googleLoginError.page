@@ -1,0 +1,20 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="false">
+    <script>
+        (function() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var errorCode = urlParams.get('ErrorCode');
+            var errorDesc = urlParams.get('ErrorDescription');
+
+            if (errorCode || errorDesc) {
+                // Safe UTF-8 Base64 encoding
+                var encodedCode = window.btoa(unescape(encodeURIComponent(errorCode || '')));
+                var encodedDesc = window.btoa(unescape(encodeURIComponent(errorDesc || '')));
+                
+                // Redirect to the login page with encoded error params
+                window.location.href = '/login?ec=' + encodedCode + '&ed=' + encodedDesc;
+            } else {
+                window.location.href = '/login';
+            }
+        })();
+    </script>
+</apex:page>

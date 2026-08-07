@@ -1,6 +1,6 @@
 import { LightningElement, api, track } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
-
+import isGuest from '@salesforce/user/isGuest';
 // Static Resources - All assets in one ZIP
 import buhoAssets from '@salesforce/resourceUrl/buhoAssets';
 
@@ -97,6 +97,13 @@ export default class Buho_login extends NavigationMixin(LightningElement) {
         return true;
     }
 
+    get isExperienceBuilder() {
+        const currentUrl = window.location.href;
+        // Experience Builder previews or edits match these URL fragments
+        return currentUrl.includes('/live-preview') || 
+               currentUrl.includes('commeditor');
+    }
+
     // Lifecycle hooks
     connectedCallback() {
         // Initialize carousel image URLs
@@ -107,6 +114,22 @@ export default class Buho_login extends NavigationMixin(LightningElement) {
 
         // Start auto-advance
         this.startAutoAdvance();
+        if (!isGuest && !this.isExperienceBuilder ) {
+            window.location.href = '/#dashboard';
+        }
+
+        // Parse and decode login error parameters from URL (base64 encoded)
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+            const ec = urlParams.get('ec');
+            const ed = urlParams.get('ed');
+            if (ec && ed) {
+                // Safe UTF-8 Base64 decoding
+                this.errorMessage = decodeURIComponent(escape(window.atob(ed)));
+            }
+        } catch (e) {
+            console.error('Error parsing/decoding login error parameters:', e);
+        }
     }
 
     disconnectedCallback() {
@@ -176,10 +199,11 @@ export default class Buho_login extends NavigationMixin(LightningElement) {
     }
 
     handleGoogleLogin() {
-        // Navigate to Google OAuth endpoint
-        // This should be configured in Salesforce Auth Providers
-        const googleAuthUrl = `${basePath}/services/auth/sso/Google`;
-        window.location.href = googleAuthUrl;
+        window.location.href = '/services/auth/sso/Google_Login';
+    }
+
+    handleAppleLogin() {
+        window.location.href = 'https://u.gobuho.com/communityvforcesitevforcesite/services/auth/sso/Apple_Mobile_Log';
     }
 
     handleTwitterLogin() {

@@ -369,7 +369,7 @@ export default class Buho_driverDetails extends LightningElement {
             }));
 
             this.loginUserDriverOption = [
-                { label: '-- Select a Driver --', value: '' },
+                //{ label: '-- Select a Driver --', value: '' },
                 ...this.existingDriversList
             ];
             if(this.drivers.length == 0 && this.__currentUserDetails) {

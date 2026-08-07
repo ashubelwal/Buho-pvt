@@ -1,7 +1,7 @@
-public with sharing class AfterPolicyCreated {
+public without sharing class AfterPolicyCreated {
     
     @AuraEnabled
-    public static void saveAsPDF(Id policyId,String pref) {
+    public static void saveAsPDF(Id policyId, String pref) {
         PageReference pdfPage = new PageReference('/apex/' + pref);
         pdfPage.getParameters().put('id', policyId);
         pdfPage.setRedirect(false);
@@ -61,22 +61,16 @@ public with sharing class AfterPolicyCreated {
             system.debug('quoteRecord--- updatePolicyDetails:---->'+quoteRecord);
             if (quoteRecord != null) {
                 
-                policyRecord = [SELECT Id, Name, Quote_c__c, Start_Time__c, End_Time__c From Policy__c Where Quote_c__c = :quoteRecord.Id];
+                policyRecord = [SELECT Id, Name, Quote_c__c, Start_Time__c, End_Time__c FROM Policy__c WHERE Quote_c__c = :quoteRecord.Id];
 
                 String result =   AfterPolicyCreated.deleteFiles(policyRecord.Id);
-
-
-
-                        String pref = PolicyDocumentGenerator.validateandGenerateQuotePDF(policyRecord.Id);
-                        SYstem.debug('pref value '+pref);
-                        if(pref !=null){
-                            AfterPolicyCreated.saveAsPDF(policyRecord.Id,pref);
-                        }
-                        return 'Success';   
-                
-                
-                
-            }
+                String pref = PolicyDocumentGenerator.validateandGenerateQuotePDF(policyRecord.Id);
+                SYstem.debug('pref value '+pref);
+                if(pref !=null){
+                    AfterPolicyCreated.saveAsPDF(policyRecord.Id,pref);
+                }
+                return 'Success';
+    }
 
             return 'Failed';
         

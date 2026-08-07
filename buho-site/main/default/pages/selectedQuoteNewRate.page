@@ -73,11 +73,16 @@
         <!-- Header -->
          <div class = "header">
             <div align="auto">
-                <apex:outputPanel rendered="{!isBuho}">
-                    <img src="{!$Resource.buhoAssets + '/images/Logo.png'}" style="height:60px; width:auto; float:left;" />
+                <apex:outputPanel rendered="{!isAffiliate}">
+                    <img src="{!affiliateRecord.Agency_Logo__c}" style="height:60px; width:auto; float:left;" />
                 </apex:outputPanel>
-                <apex:outputPanel rendered="{!!isBuho}">
-                    <img src="{!$Resource.MexInsuranceLogo}" style="height:30px; width:auto; float:left;" />
+                <apex:outputPanel rendered="{!!isAffiliate}">
+                    <apex:outputPanel rendered="{!isBuho}">
+                        <img src="{!$Resource.buhoAssets + '/images/Logo.png'}" style="height:60px; width:auto; float:left;" />
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!!isBuho}">
+                        <img src="{!$Resource.MexInsuranceLogo}" style="height:30px; width:auto; float:left;" />
+                    </apex:outputPanel>
                 </apex:outputPanel>
                 
                 <apex:outputPanel rendered="{!quoteDetail.Underwriter__c == 'Mapfre'}">

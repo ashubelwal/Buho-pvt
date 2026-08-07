@@ -20,6 +20,10 @@ export default class AffiliateHeader extends LightningElement {
     @track checkSessionId;
     @track pageUrl;
 
+    get hasAffiliatePhoto() {
+        return this.ownerPhoto ? true : false;  
+    }
+
     @wire(CurrentPageReference)
     getPageReferenceParameters(currentPageReference) {
         if (currentPageReference) {

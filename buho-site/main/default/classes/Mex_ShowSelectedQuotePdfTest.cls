@@ -131,4 +131,75 @@ public class Mex_ShowSelectedQuotePdfTest {
         
         test.stopTest(); 
     }
+    @isTest static void testAffiliateFlow() {
+        TriggerSwitch__c customsetting = new TriggerSwitch__c();
+        customsetting.Name = 'PolicyTrigger';
+        customsetting.Active__c = false;
+        insert customsetting;
+
+        // Create an Affiliate record with a known ID
+        Affiliate__c affiliate = new Affiliate__c();
+        affiliate.Affiliate_Id__c = 'AFF-TEST-001';
+        affiliate.Owner_Name__c = 'Test Owner';
+        affiliate.Agent_Fee__c = 10;
+        affiliate.Agency_Logo__c = 'https://example.com/logo.png';
+        insert affiliate;
+
+        // Create a Quote to pass as the 'Id' parameter
+        Quote__c quotes = new Quote__c();
+        Time myTime = Time.newInstance(1, 2, 3, 4);
+        quotes.Start_Time__c = myTime;
+        quotes.End_Time__c = myTime;
+        quotes.Territory__c = 'Baja/Sonora';
+        quotes.Coverage__c = 'Liability';
+        quotes.Policy_Type_picklist__c = 'Watercraft';
+        quotes.Underwriter__c = 'Chubb';
+        insert quotes;
+
+        Test.startTest();
+
+        PageReference pgRef = Page.selectedQuoteNewRate;
+        Test.setCurrentPage(pgRef);
+        ApexPages.currentPage().getParameters().put('Id', quotes.Id);
+        ApexPages.currentPage().getParameters().put('affiliateCode', 'AFF-TEST-001');
+
+        Mex_ShowSelectedQuotePdf controller = new Mex_ShowSelectedQuotePdf();
+
+        // Assert affiliate path was taken
+        System.assertEquals(true, controller.isAffiliate, 'isAffiliate should be true when a matching affiliate code is passed');
+        System.assertNotEquals(null, controller.affiliateRecord, 'affiliateRecord should be populated');
+        System.assertEquals('AFF-TEST-001', controller.affiliateRecord.Affiliate_Id__c);
+
+        Test.stopTest();
+    }
+
+    @isTest static void testNoAffiliateCode() {
+        TriggerSwitch__c customsetting = new TriggerSwitch__c();
+        customsetting.Name = 'PolicyTrigger';
+        customsetting.Active__c = false;
+        insert customsetting;
+
+        Quote__c quotes = new Quote__c();
+        Time myTime = Time.newInstance(1, 2, 3, 4);
+        quotes.Start_Time__c = myTime;
+        quotes.End_Time__c = myTime;
+        quotes.Territory__c = 'Baja/Sonora';
+        quotes.Coverage__c = 'Complete';
+        quotes.Policy_Type_picklist__c = 'Watercraft';
+        quotes.Underwriter__c = 'Mapfre';
+        insert quotes;
+
+        Test.startTest();
+
+        PageReference pgRef = Page.selectedQuoteNewRate;
+        Test.setCurrentPage(pgRef);
+        ApexPages.currentPage().getParameters().put('Id', quotes.Id);
+        // No affiliateCode parameter — isAffiliate should remain false
+
+        Mex_ShowSelectedQuotePdf controller = new Mex_ShowSelectedQuotePdf();
+
+        System.assertEquals(false, controller.isAffiliate, 'isAffiliate should be false when no affiliateCode is passed');
+
+        Test.stopTest();
+    }
 }

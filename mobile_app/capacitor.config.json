@@ -1,0 +1,20 @@
+{
+  "appId": "com.mysalesforce.mycommunity.C00D15000000NeKAEA0.A0OTR3000000AU3FOAW",
+  "appName": "Buho Sandbox",
+  "webDir": "www",
+  "server": {
+    "url": "https://u.gobuho.com",
+    "androidScheme": "https",
+    "allowNavigation": [
+      "u.gobuho.com"
+    ]
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 3000,
+      "launchAutoHide": true,
+      "backgroundColor": "#ffffff",
+      "showSpinner": false
+    }
+  }
+}

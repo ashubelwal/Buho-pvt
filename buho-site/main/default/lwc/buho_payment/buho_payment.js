@@ -976,11 +976,12 @@ export default class Payment extends NavigationMixin(LightningElement) {
                 this.dispatchEvent(new CustomEvent('toastevent', { detail: { variant: 'success', title: this.label.Success, message: this.label.Paymentsuccessfull } }));
                 // condition here for edit and lead
 
-
+                console.log('vehicle data before create policy',JSON.stringify(this.editpolicydata.vehicleData));
                 let createCloneNewPolicy;
                 if (this.policyType == 'Watercraft') {
                     createCloneNewPolicy = await createNewWatercraftEditPolicy({ 'watercraftData': JSON.stringify(this.editpolicydata.watercraftData), 'DriverData': JSON.stringify(this.editpolicydata.DriverData), 'quoteId': this.newQuoteId, 'oldPolicyId': this.editpolicydata.policyData.Id, 'isRenewal': false });
                 } else {
+
                     createCloneNewPolicy = await createNewEditPolicy({ 'vehicleData': JSON.stringify(this.editpolicydata.vehicleData), 'DriverData': JSON.stringify(this.editpolicydata.DriverData), 'towedUnitData': JSON.stringify(this.editpolicydata.towedUnitData), 'quoteId': this.newQuoteId, 'oldPolicyId': this.editpolicydata.policyData.Id, 'isRenewal': false });
                 }
 
