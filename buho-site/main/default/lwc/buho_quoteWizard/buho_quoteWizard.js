@@ -28,8 +28,6 @@ export default class Buho_quoteWizard extends LightningElement {
     leadId;
     stylesLoaded = false; // Flag to prevent multiple CSS loads
 
-
-
     // Steps and their corresponding component imports
     steps = [
         { component: "c/buho_userDetails", name: "userDetails" },
@@ -47,6 +45,7 @@ export default class Buho_quoteWizard extends LightningElement {
         { component: "c/buho_confirmation", name: "confirmation" },
         { component: "c/buho_feedback", name: "feedback" },
     ];
+
     @api set showHeader(value) {
         // Attribute strings like "false" must be coerced to a real boolean
         this.displayHeader = value !== false && value !== 'false';

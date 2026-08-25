@@ -479,6 +479,9 @@ export default class RenewalFlowMainScreen extends LightningElement {
             Id: getSafe(inputData, 'DriverData.0.Contact__c', '')
         };
 
+        const isWatercraft = this.policyType === 'Watercraft';
+        const activeVehicleSource = isWatercraft ? 'watercraftData' : 'vehicleData';
+
         const isBusinessUse = getSafe(inputData, 'vehicleData.Is_the_vehicle_used_for_business_purpose__c', false);
         const isRental = getSafe(inputData, 'vehicleData.Rental__c', 'No') === 'Yes';
         const isSalvage = getSafe(inputData, 'vehicleData.Salvage_Vehicle__c', false);
@@ -512,42 +515,47 @@ export default class RenewalFlowMainScreen extends LightningElement {
             Electric_Hybrid__c: isElectric,
             towunits: towunitsList,
             Liability__c: getSafe(inputData, 'quoteData.Liability__c', '300000'),
-            Medical__c: getSafe(inputData, 'quoteData.Medical__c', '10000/50000'),
-            Year__c: getSafe(inputData, 'vehicleData.Year__c', ''),
-            Vehicle_sub_type__c: getSafe(inputData, 'vehicleData.Vehicle_Type__c', 'Automobile-Van-Minivan'),
-            Make: getSafe(inputData, 'vehicleData.Make__c', ''),
-            Model: getSafe(inputData, 'vehicleData.Model__c', ''),
-            Value__c: getSafe(inputData, 'vehicleData.Value__c', '0'),
+            Medical__c: getSafe(inputData, 'quoteData.Medical__c', '10,000/50,000'),
+            Year__c: getSafe(inputData, `${activeVehicleSource}.Year__c`, ''),
+            Vehicle_sub_type__c: isWatercraft ? 'Watercraft' : getSafe(inputData, `${activeVehicleSource}.Vehicle_Type__c`, 'Automobile-Van-Minivan'),
+            Make: getSafe(inputData, `${activeVehicleSource}.Make__c`, ''),
+            Model: getSafe(inputData, `${activeVehicleSource}.Model__c`, ''),
+            Value__c: getSafe(inputData, `${activeVehicleSource}.Value__c`, '0'),
             towunitsList: towunitsList,
             vehicleList: [
                 {
-                    Id: getSafe(inputData, 'vehicleData.Id', ''),
-                    label: `${getSafe(inputData, 'vehicleData.Make__c', '')} ${getSafe(inputData, 'vehicleData.Model__c', '')} ${getSafe(inputData, 'vehicleData.Year__c', '')} - ${getSafe(inputData, 'vehicleData.Vin__c', '')}`,
-                    value: getSafe(inputData, 'vehicleData.Id', ''),
+                    Id: getSafe(inputData, `${activeVehicleSource}.Id`, ''),
+                    label: `${getSafe(inputData, `${activeVehicleSource}.Make__c`, '')} ${getSafe(inputData, `${activeVehicleSource}.Model__c`, '')} ${getSafe(inputData, `${activeVehicleSource}.Year__c`, '')} - ${getSafe(inputData, `${activeVehicleSource}.Vin__c`, '') || getSafe(inputData, `${activeVehicleSource}.VIN_Number__c`, '')}`,
+                    value: getSafe(inputData, `${activeVehicleSource}.Id`, ''),
                     Coverage__c: getSafe(inputData, 'quoteData.Coverage__c', 'Complete'),
                     Electric_Hybrid__c: isElectric,
                     Liability__c: getSafe(inputData, 'policyData.Liability_picklist__c', '300000'),
-                    Medical__c: getSafe(inputData, 'policyData.Medical_picklist__c', '10000/50000'),
-                    Year__c: getSafe(inputData, 'vehicleData.Year__c', ''),
-                    Vehicle_sub_type__c: getSafe(inputData, 'vehicleData.Vehicle_Type__c', 'Automobile-Van-Minivan'),
-                    Make: getSafe(inputData, 'vehicleData.Make__c', ''),
-                    Model: getSafe(inputData, 'vehicleData.Model__c', ''),
-                    Value__c: getSafe(inputData, 'vehicleData.Value__c', '0'),
-                    Vin__c: getSafe(inputData, 'vehicleData.Vin__c', ''),
-                    Registered_Country__c: getSafe(inputData, 'vehicleData.Registered_Country__c', ''),
-                    Registered_State__c: getSafe(inputData, 'vehicleData.Registered_State__c', ''),
-                    licensePlate: getSafe(inputData, 'vehicleData.Registered_Plate__c', '')
+                    Medical__c: getSafe(inputData, 'policyData.Medical_picklist__c', '10,000/50,000'),
+                    Year__c: getSafe(inputData, `${activeVehicleSource}.Year__c`, ''),
+                    Vehicle_sub_type__c: isWatercraft ? 'Watercraft' : getSafe(inputData, `${activeVehicleSource}.Vehicle_Type__c`, 'Automobile-Van-Minivan'),
+                    Make: getSafe(inputData, `${activeVehicleSource}.Make__c`, ''),
+                    Model: getSafe(inputData, `${activeVehicleSource}.Model__c`, ''),
+                    Value__c: getSafe(inputData, `${activeVehicleSource}.Value__c`, '0'),
+                    Vin__c: getSafe(inputData, `${activeVehicleSource}.Vin__c`, '') || getSafe(inputData, `${activeVehicleSource}.VIN_Number__c`, ''),
+                    Registered_Country__c: getSafe(inputData, `${activeVehicleSource}.Registered_Country__c`, '') || getSafe(inputData, `${activeVehicleSource}.Flag__c`, ''),
+                    Registered_State__c: getSafe(inputData, `${activeVehicleSource}.Registered_State__c`, ''),
+                    licensePlate: getSafe(inputData, `${activeVehicleSource}.Registered_Plate__c`, '')
                 }
             ],
-            Vin__c: getSafe(inputData, 'vehicleData.Vin__c', ''),
-            Registered_Country__c: getSafe(inputData, 'vehicleData.Registered_Country__c', ''),
-            Registered_State__c: getSafe(inputData, 'vehicleData.Registered_State__c', ''),
-            licensePlate: getSafe(inputData, 'vehicleData.Registered_Plate__c', ''),
-            Id: getSafe(inputData, 'vehicleData.Id', ''),
-            Make__c: getSafe(inputData, 'vehicleData.Make__c', ''),
-            Model__c: getSafe(inputData, 'vehicleData.Model__c', ''),
-            Account_Vehicle__c: getSafe(inputData, 'vehicleData.Account_Vehicle__c', ''),
-            Contact__c: getSafe(inputData, 'vehicleData.Contact__c', '')
+            Vin__c: getSafe(inputData, `${activeVehicleSource}.Vin__c`, '') || getSafe(inputData, `${activeVehicleSource}.VIN_Number__c`, ''),
+            Registered_Country__c: getSafe(inputData, `${activeVehicleSource}.Registered_Country__c`, '') || getSafe(inputData, `${activeVehicleSource}.Flag__c`, ''),
+            Registered_State__c: getSafe(inputData, `${activeVehicleSource}.Registered_State__c`, ''),
+            licensePlate: getSafe(inputData, `${activeVehicleSource}.Registered_Plate__c`, ''),
+            Id: getSafe(inputData, `${activeVehicleSource}.Id`, ''),
+            Make__c: getSafe(inputData, `${activeVehicleSource}.Make__c`, ''),
+            Model__c: getSafe(inputData, `${activeVehicleSource}.Model__c`, ''),
+            Account_Vehicle__c: getSafe(inputData, `${activeVehicleSource}.Account_Vehicle__c`, ''),
+            Contact__c: getSafe(inputData, `${activeVehicleSource}.Contact__c`, ''),
+            Type_of_Vessel__c: getSafe(inputData, `${activeVehicleSource}.Type_of_Vessel__c`, ''),
+            Vessel_Length__c: getSafe(inputData, `${activeVehicleSource}.Vessel_Length__c`, ''),
+            Is_the_Maximum_Speed_more_than_50_mph__c: getSafe(inputData, 'quoteData.Is_the_Maximum_Speed_more_than_50_mph__c', 'No'),
+            Any_Boat_Operator_Under_22__c: getSafe(inputData, 'quoteData.Any_Boat_Operator_Under_22__c', 'No'),
+            Is_the_owner_living_in_Mexico__c: getSafe(inputData, 'quoteData.Is_the_owner_living_in_Mexico__c', 'No')
         };
 
         // Helper function to determine Driver_Type__c

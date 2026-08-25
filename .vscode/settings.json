@@ -6,13 +6,10 @@
   },
   "xml.preferences.showSchemaDocumentationType": "none",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true,
+  "editor.formatOnSave": false,
 
   "[javascript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
-  },
-  "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[xml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"

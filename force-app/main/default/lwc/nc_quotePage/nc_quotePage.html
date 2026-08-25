@@ -51,7 +51,8 @@
                                     </div>
                                 </div>
 
-                                <div class="slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12 slds-p-around_small">
+                                <div
+                                    class="slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12 slds-p-around_small">
                                     <template if:true={tab.showMedical}>
                                         <!-- Medical Section -->
                                         <label for="medical" style="font-size: 15px"> Medical </label>
@@ -85,16 +86,16 @@
                                 </template> -->
                                 <template if:true={tab.Gold}>
                                     <div class={goldClass}>
-                                        <lightning-input name="Gold__c" type="checkbox" label="Gold" checked={checkedData.Gold__c}
-                                            onchange={handleInputChange}>
+                                        <lightning-input name="Gold__c" type="checkbox" label="Gold"
+                                            checked={checkedData.Gold__c} onchange={handleInputChange}>
                                         </lightning-input>
                                     </div>
                                 </template>
-                                
+
                                 <template if:true={tab.Max}>
                                     <div class={maxClass}>
-                                        <lightning-input name="Max__c" type="checkbox" label="Max" checked={checkedData.Max__c}
-                                            onchange={handleInputChange}>
+                                        <lightning-input name="Max__c" type="checkbox" label="Max"
+                                            checked={checkedData.Max__c} onchange={handleInputChange}>
                                         </lightning-input>
                                     </div>
                                 </template>
@@ -121,36 +122,26 @@
                         </div>
 
 
-                        <div class="slds-grid slds-wrap slds-p-around_small slds-grid_align-spread">
+                        <div class="slds-grid slds-wrap slds-p-around_small slds-grid_align-spread" style="gap: 12px;">
                             <div class="slds-col">
-                               <button class="slds-button slds-button_brand" data-buy-id={tab.id} data-direction="next"
-                            onclick={handleBuyBtn}>Buy ${tab.total} </button>
+                                <button class="slds-button slds-button_brand" data-buy-id={tab.id} data-direction="next"
+                                    onclick={handleBuyBtn}>Buy ${tab.total} </button>
                             </div>
                             <div class="slds-col">
-                               <lightning-button 
-                                     label="Download Quote PDF" 
-                                     name="quote"
-                                     variant="brand" 
-                                     data-buy-id={tab.id}
-                                     data-send-email = false
-                                     data-direction="current"
-                                     onclick={handleEmailandDownloadQuote}>
-                               </lightning-button>
-                               <lightning-button 
-                                     style="margin-left: 8px;"
-                                     label="Email Quote PDF" 
-                                     name="quote"
-                                     data-buy-id={tab.id}
-                                     data-send-email = true
-                                     data-direction="current"
-                                     variant="brand" 
-                                     onclick={handleEmailandDownloadQuote}>
-                               </lightning-button>
+                                <lightning-button label="Download Quote PDF" name="quote" variant="brand"
+                                    data-buy-id={tab.id} data-send-email=false data-direction="current"
+                                    onclick={handleEmailandDownloadQuote}>
+                                </lightning-button>
+                                <lightning-button style="margin-left: 12px;" label="Email Quote PDF" name="quote"
+                                    data-buy-id={tab.id} data-send-email=true data-direction="current" variant="brand"
+                                    onclick={handleEmailandDownloadQuote}>
+                                </lightning-button>
                             </div>
                         </div>
-                        
-                       <div class="slds-m-top_x-small slds-text-body_small slds-text-color_weak">
-                            <p>
+
+                        <div
+                            class="slds-m-top_x-small slds-text-body_small slds-text-color_weak slds-text-align_center">
+                            <p style="clear: both;">
                                 View our Complete Coverage Details &#40;<a href="#" onclick={handleOpenEngDriveLink}
                                     data-buy-id={tab.id} class="slds-text-link">
                                     English
@@ -165,7 +156,7 @@
                     </div>
 
                     <template if:true={coverageList.length}>
-                        <lightning-layout multiple-rows>
+                        <lightning-layout multiple-rows style="width: 100%;">
                             <template for:each={coverageList} for:item="item">
                                 <lightning-layout-item key={item.key} size="12" class="coverage">
                                     <div class="slds-grid slds-wrap">

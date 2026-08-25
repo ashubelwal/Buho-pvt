@@ -3,10 +3,7 @@
   "singleQuote": true,
   "printWidth": 100,
   "tabWidth": 2,
-  "plugins": [
-    "prettier-plugin-apex",
-    "@prettier/plugin-xml"
-  ],
+  "plugins": ["prettier-plugin-apex", "@prettier/plugin-xml"],
   "overrides": [
     {
       "files": "*.cls",
@@ -15,10 +12,6 @@
     {
       "files": "*.trigger",
       "options": { "parser": "apex" }
-    },
-    {
-      "files": "**/lwc/**/*.html",
-      "options": { "parser": "lwc" }
     },
     {
       "files": "**/lwc/**/*.js",
