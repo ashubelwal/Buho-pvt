@@ -134,6 +134,8 @@ public without sharing class Mex_existingCustomerFlowController {
                     quoteData.Contact__c = userRecord.ContactId;
                     quoteData.Quote_Status__c = 'Draft';
                     quoteData.Towed_Unit__c = 'No';
+                    System.debug('@@@quoteData'+quoteData);
+                    System.debug('@@@quoteData Medical'+quoteData.Medical__c);
                     upsert quoteData;
 
                     watercraftData.Account__c = userRecord.AccountId;

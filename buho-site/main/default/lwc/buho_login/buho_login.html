@@ -45,12 +45,12 @@
                         <!-- Social Login Buttons -->
                         <template lwc:if={showSocialLogin}>
                             <br/>
-                            <button type="button" class="buho-btn-social" onclick={handleGoogleLogin}>
+                            <button type="button" class="buho-btn-social d-none d-lg-flex" onclick={handleGoogleLogin}>
                                 <img src={googleIconUrl} alt="Google" class="buho-social-icon">
                                 Sign In with Google
                             </button>
 
-                            <button type="button" class="buho-btn-social" onclick={handleAppleLogin}>
+                            <button type="button" class="buho-btn-social d-none" onclick={handleAppleLogin}>
                                 <i class="bi bi-apple buho-social-icon" style="font-size: 18px; line-height: 1; display: flex; align-items: center; justify-content: center;"></i>
                                 Sign In with Apple
                             </button>

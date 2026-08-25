@@ -1,11 +1,13 @@
 import { LightningElement, track, api } from 'lwc';
 import calculateTotalCoverage from '@salesforce/apex/CalculateCoverage.calculateTotalCoverage';
+import calculateWaterCraftRate from '@salesforce/apex/WatercraftCalculation.calculateWaterCraftRate';
 import getDescriptionAndTitle from '@salesforce/apex/CalculateCoverageTitleAndDescription.getDescriptionAndTitle';
 import saveQuoteDetails from '@salesforce/apex/QuoteOptionFlow.saveQuoteDetails';
 import getVendors from '@salesforce/apex/QuoteOptionFlow.getVendors';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import saveQuoteRecord from '@salesforce/apex/QuoteOptionFlow.saveQuoteRecord';
 import saveQuoteRecordData from '@salesforce/apex/NcExistingCustomerFlow.saveQuoteRecordData';
+import saveWatercraftQuoteRecordData from '@salesforce/apex/Mex_existingCustomerFlowController.saveWatercraftQuoteRecordData';
 import sendEmailQuoteDetails from '@salesforce/apex/Mex_NewLeadProcess.sendEmailQuoteDetails';
 import { NavigationMixin } from 'lightning/navigation';
 
@@ -37,9 +39,20 @@ export default class Nc_quotePage extends NavigationMixin(LightningElement) {
     @track isDownloadQuote = false;
     @track isEmailSent = false;
 
-    // Liability Options
-    liabilityOptions = ['100,000', '200,000', '300,000', '500,000', '1,000,000'];
-    @track combinedLiabilityValue = this.liabilityOptions[0]; // Default first value
+    // Liability Options Getter
+    get isWatercraft() {
+        const vehicleDetailsObj = (this.payload || []).find(i => i.vehicleDetails)?.vehicleDetails;
+        return vehicleDetailsObj?.Vehicle_sub_type__c === 'Watercraft' || !!(vehicleDetailsObj?.Type_of_Vessel__c);
+    }
+
+    get liabilityOptions() {
+        if (this.isWatercraft) {
+            return ['200,000', '400,000', '750,000'];
+        }
+        return ['100,000', '200,000', '300,000', '500,000', '1,000,000'];
+    }
+
+    @track combinedLiabilityValue; // Will be set dynamically in connectedCallback
 
     // Medical Options
     medicalValues = ['2,000/10,000', '3,000/15,000', '4,000/16,000', '5,000/25,000', '10,000/50,000', '15,000/75,000', '20,000/100,000'];
@@ -216,7 +229,7 @@ export default class Nc_quotePage extends NavigationMixin(LightningElement) {
 
     handleEmailandDownloadQuote(event) {
         const direction = event.currentTarget.dataset.direction; // safer than event.target
-        if (event.currentTarget.dataset.sendEmail == 'true') {
+        if (event.currentTarget.dataset.sendEmail === 'true') {
             this.isEmailSent = true;
             this.isDownloadQuote = false;
         }
@@ -691,9 +704,22 @@ export default class Nc_quotePage extends NavigationMixin(LightningElement) {
         if (Array.isArray(this.payload)) {
             // Find the object that has vehicleDetails
             const vehicleObj = this.payload.find(item => item.hasOwnProperty('vehicleDetails'));
+            const isWater = this.isWatercraft;
 
             if (vehicleObj && vehicleObj.vehicleDetails && vehicleObj.vehicleDetails.Liability__c) {
-                this.combinedLiabilityValue = vehicleObj.vehicleDetails.Liability__c;
+                const rawVal = vehicleObj.vehicleDetails.Liability__c;
+                if (isWater) {
+                    // Ensure the raw value is one of the valid watercraft options
+                    if (this.liabilityOptions.includes(rawVal)) {
+                        this.combinedLiabilityValue = rawVal;
+                    } else {
+                        this.combinedLiabilityValue = this.liabilityOptions[0];
+                    }
+                } else {
+                    this.combinedLiabilityValue = rawVal;
+                }
+            } else {
+                this.combinedLiabilityValue = this.liabilityOptions[0];
             }
             if (vehicleObj && vehicleObj.vehicleDetails && vehicleObj.vehicleDetails.Medical__c) {
                 this.medicalValue = vehicleObj.vehicleDetails.Medical__c;
@@ -710,7 +736,8 @@ export default class Nc_quotePage extends NavigationMixin(LightningElement) {
 
             // Set default tab if not set
             if (!this.activeTab) {
-                this.activeTab = 'Mapfre';
+                const isWatercraft = vehicleObj?.vehicleDetails?.Vehicle_sub_type__c === 'Watercraft';
+                this.activeTab = isWatercraft ? 'Chubb' : 'Mapfre';
             }
 
             // Evaluate conditions
@@ -847,21 +874,36 @@ export default class Nc_quotePage extends NavigationMixin(LightningElement) {
 
         if (this.isDebug) console.log('Return result for coverageDetails', nresult);
 
-        if (!isNaN(cleanValue) && cleanValue > 200000) {
+        const vehicleDetailsObj = this.payload.find(i => i.vehicleDetails)?.vehicleDetails;
+        const isWatercraft = vehicleDetailsObj?.Vehicle_sub_type__c === 'Watercraft'
+            || !!(vehicleDetailsObj?.Type_of_Vessel__c); // Backup: watercraft records always have Type_of_Vessel__c
+        if (isWatercraft) {
+            allowedVendors = ['Chubb'];
+        } else if (!isNaN(cleanValue) && cleanValue > 200000) {
             allowedVendors = [];
         } else if (!isNaN(cleanValue) && cleanValue > 150000) {
             allowedVendors = ['Mapfre', 'Chubb'];
         }
         await this.calculateCoverageUpdate()
             .then((result) => {
+                if (!result) {
+                    console.error('calculateCoverageUpdate returned no data — possible Apex error. Clearing tabs to prevent stale vendor data.');
+                    this.tabs = [];
+                    this.dispatchEvent(new CustomEvent('loadingstatuschange', { detail: true }));
+                    return;
+                }
                 let data = result;
                 if (this.isDebug) console.log('Quote OUTPUT : ', result);
 
                 this.allQuote = JSON.parse(JSON.stringify(result));
                 let totals = [];
                 for (const company in data) {
-                    // if (this.isDebug) console.log('12 OUTPUT : ', JSON.stringify(Object.values(data[company])));
-                    if (allowedVendors.includes(company) && parseFloat(data[company].Liability) > 0 && parseFloat(data[company].Total) > 0) {
+                    // For watercraft, only Total > 0 is required (no separate Liability field)
+                    const meetsLiabilityCheck = isWatercraft
+                        ? parseFloat(data[company].Total) > 0
+                        : (parseFloat(data[company].Liability) > 0 && parseFloat(data[company].Total) > 0);
+
+                    if (allowedVendors.includes(company) && meetsLiabilityCheck) {
                         totals.push({
                             id: company,
                             label: company,
@@ -884,7 +926,7 @@ export default class Nc_quotePage extends NavigationMixin(LightningElement) {
                             ],
                             coverageListByCompanyName: this.coverageData
                         });
-                        this.activeTab = this.activeTab.trim() === "" ? 'Mapfre' : this.activeTab; // Setting it default because of fixed order system
+                        this.activeTab = this.activeTab.trim() === "" ? (isWatercraft ? 'Chubb' : 'Mapfre') : this.activeTab; // Setting it default because of fixed order system
                     }
                 }
 
@@ -910,7 +952,9 @@ export default class Nc_quotePage extends NavigationMixin(LightningElement) {
                 });
 
                 const hasMapfre = this.tabs.some(tab => tab.id === 'Mapfre');
-                if (!hasMapfre) { this.activeTab = 'Chubb'; }
+                if (isWatercraft) {
+                    this.activeTab = 'Chubb';
+                } else if (!hasMapfre) { this.activeTab = 'Chubb'; }
 
                 this.tabs = this.tabs.map((tab) => ({
                     ...tab,
@@ -924,7 +968,9 @@ export default class Nc_quotePage extends NavigationMixin(LightningElement) {
                 if (this.activeTab != 'Mapfre') {
                     const clickedTab = this.tabs.find((tab) => tab.id === this.activeTab);
                     const otherTabs = this.tabs.filter((tab) => tab.id !== this.activeTab);
-                    this.tabs = [clickedTab, ...otherTabs];
+                    if (clickedTab) {
+                        this.tabs = [clickedTab, ...otherTabs];
+                    }
                 }
 
                 this.prepareCoverageList(this.activeTab);
@@ -1030,6 +1076,8 @@ export default class Nc_quotePage extends NavigationMixin(LightningElement) {
 
     async calculateCoverageUpdate() {
         try {
+            // Reset results so prior vendor data (Mapfre/Qualitas) cannot bleed into a new calculation
+            this.results = {};
             console.log('Payload', this.payload);
             // Create a mutable copy of the payload to avoid modifying the original
             const parsedPayload = JSON.parse(JSON.stringify(this.payload));
@@ -1071,6 +1119,9 @@ export default class Nc_quotePage extends NavigationMixin(LightningElement) {
 
             console.log('✅ Terms selected:', termsToCalculate);
 
+            const vehicleDetails = parsedPayload.find(obj => obj.vehicleDetails)?.vehicleDetails;
+            const isWatercraft = vehicleDetails?.Vehicle_sub_type__c === 'Watercraft';
+            console.log(isWatercraft, 'watercraft check', vehicleDetails);
             // Make sequential calls to Apex for each term
             for (let termKey of termsToCalculate) {
                 const clonedPayload = JSON.parse(JSON.stringify(parsedPayload));
@@ -1079,16 +1130,52 @@ export default class Nc_quotePage extends NavigationMixin(LightningElement) {
                     clonedTermOption.Term__c = termKey;
                 }
 
-                const updatedJson = JSON.stringify(clonedPayload);
+                if (isWatercraft) {
+                    // For watercraft, map vehicleDetails to watercraftDetails
+                    const vehicleDetailsObj = clonedPayload.find(obj => obj.vehicleDetails);
+                    if (vehicleDetailsObj) {
+                        clonedPayload.push({ watercraftDetails: vehicleDetailsObj.vehicleDetails });
+                    }
+                    const updatedJson = JSON.stringify(clonedPayload);
+                    console.log('typeof updatedJson:', typeof updatedJson);
+                    console.log('updatedJson value:', updatedJson);
+                    console.log(`▶ Calling Watercraft Apex for term: ${termKey}`, clonedPayload);
+                    const resStr = await calculateWaterCraftRate({ jsonString: updatedJson });
+                    console.log('Response from watercraft apex', resStr);
 
-                console.log(`▶ Calling Apex for term: ${termKey}`);
-                console.log('JSON String', updatedJson);
-                const res = await calculateTotalCoverage({ jsonString: updatedJson });
-                console.log('Response from apex', res);
-                // **FIX APPLIED HERE**
-                // The result from Apex is a read-only Proxy. We convert it to a
-                // plain JavaScript object to prevent errors in other functions.
-                this.results[termKey] = JSON.parse(JSON.stringify(res));
+                    const wrapper = JSON.parse(resStr);
+                    const rateResult = wrapper?.Data?.RateResult || {};
+                    const totalPremium = rateResult.TotalPremium || 0;
+
+                    this.results[termKey] = {
+                        "Chubb": {
+                            "Total": String(totalPremium),
+                            "Liability": String(rateResult.NetPremium || 0),
+                            "IVA": String(rateResult.IVAMexTax || 0),
+                            "BrokerFee": String(rateResult.BrokerPolicyFee || 0),
+                            "TotalSurcharges": String(rateResult.Surcharge || 0),
+                            "PropertyDamage": "0",
+                            "TotalTheft": "0",
+                            "Medical": "0",
+                            "platinumEndorsementPayment": "0",
+                            "Is_Gold__c": "false",
+                            "Is_Max__c": "false",
+                            "Is_Platinum__c": "false",
+                            "TermAndConditionENG": "",
+                            "TermAndConditionSPN": ""
+                        }
+                    };
+                } else {
+                    const updatedJson = JSON.stringify(clonedPayload);
+                    console.log(`▶ Calling Apex for term: ${termKey}`);
+                    console.log('JSON String', updatedJson);
+                    const res = await calculateTotalCoverage({ jsonString: updatedJson });
+                    console.log('Response from apex', res);
+                    // **FIX APPLIED HERE**
+                    // The result from Apex is a read-only Proxy. We convert it to a
+                    // plain JavaScript object to prevent errors in other functions.
+                    this.results[termKey] = JSON.parse(JSON.stringify(res));
+                }
 
                 console.log(`📝 Result for ${termKey}:`, this.results[termKey]);
             }
@@ -1232,10 +1319,22 @@ export default class Nc_quotePage extends NavigationMixin(LightningElement) {
                 const data = await this.createDataForContactQuoteSave(); // Add await here
                 if (this.isDebug) console.log('Data received:', data); // Verify the data structure
                 if (data && data.stringifiedData) {
-                    const result = await saveQuoteRecordData(data.stringifiedData);
+                    const vehicleDetailsObj = this.payload.find(i => i.vehicleDetails)?.vehicleDetails;
+                    const isWatercraft = vehicleDetailsObj?.Vehicle_sub_type__c === 'Watercraft';
+                    let result;
+                    if (isWatercraft) {
+                        result = await saveWatercraftQuoteRecordData({
+                            quoteRecord: data.stringifiedData.quoteRecord,
+                            watercraftRecord: data.stringifiedData.watercraftRecord
+                        });
+                    } else {
+                        result = await saveQuoteRecordData(data.stringifiedData);
+                    }
+
                     if (result.status == 'success') {
                         if (this.isDebug) console.log('Result after saving the qoute for exisiting costumer', result);
                         const savedVehicleData = result?.vehicleData;
+                        const savedWatercraftData = result?.watercraftData;
                         const savedQuoteData = result?.quoteData;
                         const savedTowedData = result?.towedUnitData;
                         if (savedVehicleData != null) {
@@ -1244,6 +1343,14 @@ export default class Nc_quotePage extends NavigationMixin(LightningElement) {
                                 Id: savedVehicleData?.Id != null ? savedVehicleData.Id : '',
                                 Account_Vehicle__c: savedVehicleData?.Account_Vehicle__c != null ? savedVehicleData.Account_Vehicle__c : '',
                                 Contact__c: savedVehicleData?.Contact__c != null ? savedVehicleData.Contact__c : ''
+                            });
+                        }
+                        if (savedWatercraftData != null) {
+                            if (this.isDebug) console.log('Watercraft data on save', savedWatercraftData);
+                            this.dispatchPayloadUpdate('vehicleDetails', {
+                                Id: savedWatercraftData?.Id != null ? savedWatercraftData.Id : '',
+                                Account_Vehicle__c: savedWatercraftData?.Account__c != null ? savedWatercraftData.Account__c : '',
+                                Contact__c: savedWatercraftData?.Contact__c != null ? savedWatercraftData.Contact__c : ''
                             });
                         }
                         if (savedQuoteData != null) {
@@ -1285,11 +1392,11 @@ export default class Nc_quotePage extends NavigationMixin(LightningElement) {
                 this.isEmailSent == false;
                 return;
             }
-            else if (this.isDownloadQuote == true) {
+            else if (this.isDownloadQuote === true) {
                 //window.open(`/apex/selectedQuoteNewRate?Id=${this.selectedQuote.QuoteData.Id}`, "_blank");
                 console.log('this.selectedQuote.QuoteData :: ' + this.selectedQuote.QuoteData.Id);
-                this.isDownloadQuote == false;
-                window.open(window.location.origin + `/customer/apex/selectedQuoteNewRate?Id=${this.selectedQuote.QuoteData.Id}`, "_blank");
+                this.isDownloadQuote = false;
+                window.open(window.location.origin + `/vforcesite/apex/selectedQuoteNewRate?Id=${this.selectedQuote.QuoteData.Id}`, "_blank");
                 this.dispatchEvent(new CustomEvent('loadingstatuschange', { detail: true }));
                 return;
 
@@ -1315,22 +1422,42 @@ export default class Nc_quotePage extends NavigationMixin(LightningElement) {
 
             if (this.isDebug) console.log('[DEBUG] Original vehicleDetailsData:', JSON.stringify(vehicleDetailsData, null, 2));
 
-            // Prepare vehicle record with only valid fields
-            const vehicleRecord = vehicleDetailsData ? {
-                is_the_vehicle_used_for_business_purpose__c: vehicleDetailsData.is_the_vehicle_used_for_business_purpose__c,
-                is_there_a_driver_under_21__c: vehicleDetailsData.is_there_a_driver_under_21__c,
-                Is_this_a_Rental_Vehicle__c: vehicleDetailsData.Is_this_a_Rental_Vehicle__c,
-                salvage_vehicle__c: vehicleDetailsData.salvage_vehicle__c,
-                isTowing: vehicleDetailsData.isTowing,
-                Year__c: vehicleDetailsData.Year__c,
-                Vehicle_sub_type__c: vehicleDetailsData.Vehicle_sub_type__c,
-                Value__c: vehicleDetailsData.Value__c,
-                Make__c: vehicleDetailsData.Make__c || vehicleDetailsData.Make,
-                Model__c: vehicleDetailsData.Model__c || vehicleDetailsData.Model,
-                Id: vehicleDetailsData?.Id != null ? vehicleDetailsData.Id : null,
-            } : {};
+            const isWatercraft = vehicleDetailsData?.Vehicle_sub_type__c === 'Watercraft';
+            let vehicleRecord = null;
+            let watercraftRecord = null;
+
+            if (isWatercraft) {
+                watercraftRecord = vehicleDetailsData ? {
+                    Id: vehicleDetailsData.Id || null,
+                    Year__c: vehicleDetailsData.Year__c,
+                    Make__c: vehicleDetailsData.Make__c || vehicleDetailsData.Make,
+                    Model__c: vehicleDetailsData.Model__c || vehicleDetailsData.Model,
+                    Value__c: vehicleDetailsData.Value__c,
+                    VIN_Number__c: vehicleDetailsData.VIN_Number__c || vehicleDetailsData.Vin__c,
+                    Type_of_Vessel__c: vehicleDetailsData.Type_of_Vessel__c,
+                    Vessel_Length__c: vehicleDetailsData.Vessel_Length__c,
+                    Beam__c: vehicleDetailsData.Beam__c,
+                    Engine_Type__c: vehicleDetailsData.Engine_Type__c,
+                    Flag__c: vehicleDetailsData.Flag__c || vehicleDetailsData.Registered_Country__c
+                } : null;
+            } else {
+                vehicleRecord = vehicleDetailsData ? {
+                    is_the_vehicle_used_for_business_purpose__c: vehicleDetailsData.is_the_vehicle_used_for_business_purpose__c,
+                    is_there_a_driver_under_21__c: vehicleDetailsData.is_there_a_driver_under_21__c,
+                    Is_this_a_Rental_Vehicle__c: vehicleDetailsData.Is_this_a_Rental_Vehicle__c,
+                    salvage_vehicle__c: vehicleDetailsData.salvage_vehicle__c,
+                    isTowing: vehicleDetailsData.isTowing,
+                    Year__c: vehicleDetailsData.Year__c,
+                    Vehicle_sub_type__c: vehicleDetailsData.Vehicle_sub_type__c,
+                    Value__c: vehicleDetailsData.Value__c,
+                    Make__c: vehicleDetailsData.Make__c || vehicleDetailsData.Make,
+                    Model__c: vehicleDetailsData.Model__c || vehicleDetailsData.Model,
+                    Id: vehicleDetailsData?.Id != null ? vehicleDetailsData.Id : null,
+                } : {};
+            }
 
             if (this.isDebug) console.log('[DEBUG] Cleaned vehicleRecord:', JSON.stringify(vehicleRecord, null, 2));
+            if (this.isDebug) console.log('[DEBUG] Cleaned watercraftRecord:', JSON.stringify(watercraftRecord, null, 2));
 
             const towedUnitRecord = towedUnitsData.length > 0 ? towedUnitsData : null;
 
@@ -1345,22 +1472,24 @@ export default class Nc_quotePage extends NavigationMixin(LightningElement) {
                 // Stringified data for immediate use
                 stringifiedData: {
                     quoteRecord: JSON.stringify(updatedQuoteData),
-                    vehicleRecord: JSON.stringify(vehicleRecord),
+                    vehicleRecord: vehicleRecord ? JSON.stringify(vehicleRecord) : '',
+                    watercraftRecord: watercraftRecord ? JSON.stringify(watercraftRecord) : '',
                     towedUnitRecord: towedUnitRecord ? JSON.stringify(towedUnitRecord) : ''
                 },
                 // Raw data for further processing
                 rawData: {
                     quoteRecord: updatedQuoteData,
                     vehicleRecord: vehicleRecord,
+                    watercraftRecord: watercraftRecord,
                     towedUnitRecord: towedUnitRecord
                 }
             };
 
             if (this.isDebug) console.log('[DEBUG] Prepared data:', {
                 stringifiedQuote: result.stringifiedData.quoteRecord.length,
-                stringifiedVehicle: result.stringifiedData.vehicleRecord.length,
-                rawQuoteKeys: Object.keys(result.rawData.quoteRecord),
-                rawVehicleKeys: Object.keys(result.rawData.vehicleRecord)
+                stringifiedVehicle: result.stringifiedData.vehicleRecord ? result.stringifiedData.vehicleRecord.length : 0,
+                stringifiedWatercraft: result.stringifiedData.watercraftRecord ? result.stringifiedData.watercraftRecord.length : 0,
+                rawQuoteKeys: Object.keys(result.rawData.quoteRecord)
             });
 
             return result;
@@ -1470,6 +1599,8 @@ export default class Nc_quotePage extends NavigationMixin(LightningElement) {
 
             Term__c: dataMap?.termOption?.Term__c,
             Territory__c: company,
+            Third_Party_Bodily_Injury__c: dataMap?.quoteData?.Third_Party_Bodily_Injury__c || (dataMap?.vehicleDetails?.Vehicle_sub_type__c === 'Watercraft' ? '$50,000 / $100,000' : null),
+            Property_Damage_Liability__c: dataMap?.quoteData?.Property_Damage_Liability__c || (dataMap?.vehicleDetails?.Vehicle_sub_type__c === 'Watercraft' ? '$100,000' : null),
 
             Net_Premium__c: parseFloat(selectedQuote?.Total) - parseFloat(selectedQuote?.IVA) - parseFloat(selectedQuote?.BrokerFee) - parseFloat(selectedQuote?.TotalSurcharges),
             Broker_Policy_Fee__c: selectedQuote?.BrokerFee,
