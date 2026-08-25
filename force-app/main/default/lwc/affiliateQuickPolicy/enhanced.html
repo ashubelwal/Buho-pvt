@@ -1,0 +1,1218 @@
+<template>
+    <!-- Dummy accordion element — legacy JS references activeSectionName which drives
+         accordion visibility. The agentDashboard div keeps querySelector references alive. -->
+    <div class="agentDashboard" style="display:none;"></div>
+    <c-buho_toast></c-buho_toast>
+
+    <!-- Global Spinner -->
+    <template if:true={booleanVar.isLoading}>
+        <div style="position:fixed;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.7);z-index:9999;">
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </div>
+    </template>
+
+    <!-- Invalid affiliate gate -->
+    <template if:false={isAffiliate}>
+        <div class="affiliateHead">
+            <div style="text-align:center">
+                <h2 style="font-weight:600;">The URL you entered is incorrect. Please verify it and try again. If the issue persists, contact your agency for further assistance.</h2>
+            </div>
+        </div>
+    </template>
+
+    <template if:true={isAffiliate}>
+        <div class="enhanced-wizard-wrapper" style={dynamicStyle}>
+
+            <!-- ═══════════════════════ LEFT SIDEBAR ═══════════════════════ -->
+            <template if:false={hideSidebar}>
+                <div class="wizard-sidebar">
+                    <div class={step1Class}>
+                        <div class="step-icon">
+                            <template if:true={isStep1Completed}>
+                                <lightning-icon icon-name="utility:check" size="small" variant="success"></lightning-icon>
+                            </template>
+                            <template if:false={isStep1Completed}>
+                                <lightning-icon icon-name="utility:user" size="small" variant="inverse"></lightning-icon>
+                            </template>
+                        </div>
+                        <div class="step-title">User Details</div>
+                    </div>
+                    <div class={step2Class}>
+                        <div class="step-icon">
+                            <template if:true={isStep2Completed}>
+                                <lightning-icon icon-name="utility:check" size="small" variant="success"></lightning-icon>
+                            </template>
+                            <template if:false={isStep2Completed}>
+                                <lightning-icon icon-name="utility:routing_offline" size="small" variant="inverse"></lightning-icon>
+                            </template>
+                        </div>
+                        <div class="step-title">Vehicle Details</div>
+                    </div>
+                    <div class={step3Class}>
+                        <div class="step-icon">
+                            <template if:true={isStep3Completed}>
+                                <lightning-icon icon-name="utility:check" size="small" variant="success"></lightning-icon>
+                            </template>
+                            <template if:false={isStep3Completed}>
+                                <lightning-icon icon-name="utility:event" size="small" variant="inverse"></lightning-icon>
+                            </template>
+                        </div>
+                        <div class="step-title">Term &amp; Territory</div>
+                    </div>
+                    <div class={step4Class}>
+                        <div class="step-icon">
+                            <template if:true={isStep4Completed}>
+                                <lightning-icon icon-name="utility:check" size="small" variant="success"></lightning-icon>
+                            </template>
+                            <template if:false={isStep4Completed}>
+                                <lightning-icon icon-name="utility:list" size="small" variant="inverse"></lightning-icon>
+                            </template>
+                        </div>
+                        <div class="step-title">Quote</div>
+                    </div>
+                    <div class={step5Class}>
+                        <div class="step-icon">
+                            <template if:true={isStep5Completed}>
+                                <lightning-icon icon-name="utility:check" size="small" variant="success"></lightning-icon>
+                            </template>
+                            <template if:false={isStep5Completed}>
+                                <lightning-icon icon-name="utility:cart" size="small" variant="inverse"></lightning-icon>
+                            </template>
+                        </div>
+                        <div class="step-title">Purchase</div>
+                    </div>
+                    <div class={step6Class}>
+                        <div class="step-icon">
+                            <template if:true={isStep6Completed}>
+                                <lightning-icon icon-name="utility:check" size="small" variant="success"></lightning-icon>
+                            </template>
+                            <template if:false={isStep6Completed}>
+                                <lightning-icon icon-name="utility:moneybag" size="small" variant="inverse"></lightning-icon>
+                            </template>
+                        </div>
+                        <div class="step-title">Payment</div>
+                    </div>
+                </div>
+            </template>
+
+            <!-- ═══════════════════════ RIGHT MAIN AREA ═══════════════════════ -->
+            <div class="wizard-main">
+                <!-- Header -->
+                <template if:false={hideHeader}>
+                    <div class="wizard-header">
+                        <template if:true={agencyLogo}>
+                            <img src={agencyLogo} alt="Agency Logo" class="agency-logo" />
+                        </template>
+                        <div class="wizard-header-text">
+                            <h2>{ownerName}</h2>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Content Area -->
+                <div class="wizard-content-container">
+
+                    <!-- ═══════════════════════════════════════
+                         STEP 1 — USER DETAILS
+                    ═══════════════════════════════════════ -->
+                    <div class="wizard-step" style={step1Style}>
+                        <div class="wizard-step-content">
+                            <h2 class="section-heading">User Details</h2>
+
+                            <!-- Existing contact lookup -->
+                            <template if:true={booleanVar.isEmailLoaded}>
+                                <c-contacts-feature contacttype={contactype}
+                                    ongetcontact={handleExistingContact}
+                                    onskipcontact={handleSkipContact}
+                                    contactsfeature={contactFeatureObj}
+                                    contactemail={trackVar.Email}>
+                                </c-contacts-feature>
+                            </template>
+
+                            <div class="row g-3">
+                                <div class="col-12 col-md-6">
+                                    <c-buho_input class="quoteValidate" label="First Name" name="FirstName" value={trackVar.FirstName}
+                                        pattern="^[A-Za-z]+(\s[A-Za-z]+)*$" title="Only alphabetic characters are allowed"
+                                        onchange={handleEnhancedInputChange} max-length="40" required="true"></c-buho_input>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <c-buho_input class="quoteValidate" label="Last Name" name="LastName" value={trackVar.LastName}
+                                        pattern="^[A-Za-z]+(\s[A-Za-z]+)*$" title="Only alphabetic characters are allowed"
+                                        onchange={handleEnhancedInputChange} max-length="40" required="true"></c-buho_input>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <c-buho_input class="quoteValidate" label="Email" input-type="email" name="Email" value={trackVar.Email}
+                                        disabled={booleanVar.disableEmail} required="true"
+                                        onchange={handleEnhancedInputChange} onblur={handleEnhancedFetchExistingLeadOnBlur}
+                                        max-length="40"></c-buho_input>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <c-buho_input class="quoteValidate" label="Phone" input-type="tel" name="Phone" value={trackVar.Phone}
+                                        pattern="\(\d{3}\) \d{3}-\d{4,7}" max-length="17"
+                                        onchange={handleEnhancedInputChange}></c-buho_input>
+                                </div>
+                            </div>
+
+                            <div class="wizard-footer">
+                                <button class="btn btn-primary" onclick={handleGoToVehicleDetails}>Next: Vehicle Details →</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ═══════════════════════════════════════
+                         STEP 2 — VEHICLE DETAILS
+                    ═══════════════════════════════════════ -->
+                    <div class="wizard-step" style={step2Style}>
+                        <div class="wizard-step-content">
+                            <h2 class="section-heading">Vehicle Details</h2>
+
+                            <!-- Saved vehicles dropdown -->
+                            <template if:true={vehiclesOptions.length}>
+                                <div class="row g-3 mb-3">
+                                    <div class="col-12">
+                                        <c-buho_input label="Saved Vehicles" name="ContactVehicleData" type="combobox"
+                                            options={vehiclesOptions} onchange={handleChangeVehiclesOption}></c-buho_input>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <div class="row g-3">
+                                <!-- Vehicle Type -->
+                                <div class="col-12 col-md-6">
+                                    <c-buho_input class="quoteValidate" label="Vehicle Type" name="Vehicle_sub_type__c" type="combobox"
+                                        value={trackVar.Vehicle_sub_type__c} options={vehicleTypeQuoteOptions}
+                                        onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                </div>
+
+                                <!-- Year: combobox Southbound / text Northbound -->
+                                <template if:false={booleanVar.isNorthbound}>
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="quoteValidate" label="Select Year" name="Year__c" type="combobox"
+                                            value={trackVar.Year__c} options={yearOption}
+                                            onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                    </div>
+                                </template>
+                                <template if:true={booleanVar.isNorthbound}>
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="quoteValidate" label="Year" name="Year__c" value={trackVar.Year__c}
+                                            input-type="text" pattern="[0-9]*" title="Only numbers are allowed"
+                                            max-length="4" onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                    </div>
+                                </template>
+
+                                <!-- Make / Model — Southbound (combobox + manual fallback) -->
+                                <template if:false={booleanVar.isNorthbound}>
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="quoteValidate" label="Make" name="Make__c" type="combobox"
+                                            value={trackVar.Make__c} options={makeOptions}
+                                            disabled={disableMake}
+                                            onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                    </div>
+                                    <template if:true={booleanVar.showManualMake}>
+                                        <div class="col-12 col-md-6">
+                                            <c-buho_input class="quoteValidate" label="Make (Manual)" name="MannualMake" value={trackVar.MannualMake}
+                                                pattern="^[A-Za-z]+(\s[A-Za-z]+)*$" title="Only alphabetic characters are allowed"
+                                                onchange={handleEnhancedInputChange} max-length="40" required="true"></c-buho_input>
+                                        </div>
+                                    </template>
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="quoteValidate" label="Model" name="Model__c" type="combobox"
+                                            value={trackVar.Model__c} options={modelOptions}
+                                            disabled={booleanVar.isModelDisabled}
+                                            onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                    </div>
+                                    <template if:true={booleanVar.showManualModel}>
+                                        <div class="col-12 col-md-6">
+                                            <c-buho_input class="quoteValidate" label="Model (Manual)" name="MannualModel" value={trackVar.MannualModel}
+                                                pattern="^([a-zA-Z0-9\-\_]+\s)*[a-zA-Z0-9]+$" title="Only alphanumeric characters are allowed"
+                                                onchange={handleEnhancedInputChange} max-length="40" required="true"></c-buho_input>
+                                        </div>
+                                    </template>
+                                </template>
+
+                                <!-- Make / Model — Northbound (plain text) -->
+                                <template if:true={booleanVar.isNorthbound}>
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="quoteValidate" label="Make" name="Make__c" value={trackVar.Make__c}
+                                            pattern="^[A-Za-z]+(\s[A-Za-z]+)*$" title="Only alphabetic characters are allowed"
+                                            onchange={handleEnhancedInputChange} max-length="40" required="true"></c-buho_input>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="quoteValidate" label="Model" name="Model__c" value={trackVar.Model__c}
+                                            pattern="^([a-zA-Z0-9\-\_]+\s)*[a-zA-Z0-9]+$" title="Only alphanumeric characters are allowed"
+                                            onchange={handleEnhancedInputChange} max-length="40" required="true"></c-buho_input>
+                                    </div>
+                                </template>
+
+                                <!-- Vehicle Value -->
+                                <div class="col-12 col-md-6">
+                                    <c-buho_input class="quoteValidate" label="Vehicle Value" name="Value__c" value={trackVar.Value__c}
+                                        input-type="text" pattern="[0-9]*" title="Only numbers are allowed"
+                                        onchange={handleEnhancedInputChange} max-length="6" required="true"></c-buho_input>
+                                </div>
+
+                                <!-- Under 21 (Southbound only) -->
+                                <template if:false={booleanVar.isNorthbound}>
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="quoteValidate" label="Will anyone under age 21 drive the vehicle?"
+                                            name="Is_there_a_driver_under_21__c" type="combobox"
+                                            value={trackVar.Is_there_a_driver_under_21__c} options={yesNoOptions}
+                                            onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                    </div>
+                                </template>
+
+                                <!-- Salvage -->
+                                <div class="col-12 col-md-6">
+                                    <c-buho_input class="quoteValidate" label="Is this a salvage vehicle?" name="Salvage_Vehicle__c" type="combobox"
+                                        value={trackVar.Salvage_Vehicle__c} options={yesNoOptions}
+                                        onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                </div>
+
+                                <!-- Business purpose -->
+                                <div class="col-12 col-md-6">
+                                    <c-buho_input class="quoteValidate" label="Is the vehicle used for business purposes?"
+                                        name="Is_the_vehicle_used_for_business_purpose__c" type="combobox"
+                                        value={trackVar.Is_the_vehicle_used_for_business_purpose__c} options={yesNoOptions}
+                                        onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                </div>
+
+                                <!-- Rental -->
+                                <div class="col-12 col-md-6">
+                                    <c-buho_input class="quoteValidate" label="Is this a rental vehicle?" name="Is_this_a_Rental_Vehicle__c" type="combobox"
+                                        value={trackVar.Is_this_a_Rental_Vehicle__c} options={yesNoOptions}
+                                        onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                </div>
+
+                                <!-- DOB (Northbound only) -->
+                                <template if:true={booleanVar.isNorthbound}>
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="quoteValidate" label="Date of Birth" name="Dob__c" input-type="date"
+                                            value={trackVar.vehicleDob}
+                                            onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                    </div>
+                                </template>
+
+                                <!-- Liability Only (Southbound) -->
+                                <template if:false={booleanVar.isNorthbound}>
+                                    <div class="col-12 col-md-6 d-flex align-items-center">
+                                        <c-buho_input class="quoteValidate" label="Liability Only" name="Coverage__c" type="checkbox"
+                                            checked={trackVar.Coverage__c}
+                                            onchange={handleEnhancedInputChange}></c-buho_input>
+                                    </div>
+                                </template>
+
+                                <!-- Towing checkbox -->
+                                <template if:true={booleanVar.isTowingCheckbox}>
+                                    <div class="col-12 col-md-6 d-flex align-items-center">
+                                        <c-buho_input class="quoteValidate" label="Are you towing anything?" name="Is_towing__c" type="checkbox"
+                                            checked={booleanVar.isTowingChecked}
+                                            onchange={handleEnhancedInputChange}></c-buho_input>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <!-- Towed Detail (inline section for Step 2 preview only) -->
+                            <template if:true={booleanVar.isTowing}>
+                                <h3 class="section-heading mt-4" style="font-size:16px;">Towed Detail</h3>
+                                <template if:true={addedTowed}>
+                                    <div class="table-responsive mb-3">
+                                        <table class="table table-bordered table-sm">
+                                            <thead class="table-light">
+                                                <tr><th>Type</th><th>Value</th><th>Days</th><th>Action</th></tr>
+                                            </thead>
+                                            <tbody>
+                                                <template for:each={addedTowed} for:item="towed">
+                                                    <tr key={towed.towedCount} style={towed.selectedStyle}>
+                                                        <td>{towed.Towed_Unit_Type__c}</td>
+                                                        <td>{towed.Towed_Unit_Value__c}</td>
+                                                        <td>{towed.Days_in_Tow__c}</td>
+                                                        <td>
+                                                            <lightning-button-icon icon-name="utility:edit" variant="bare"
+                                                                alternative-text="Edit" data-id={towed.towedCount}
+                                                                title="Edit" onclick={handleEditTowed}></lightning-button-icon>
+                                                            <lightning-button-icon icon-name="utility:delete" variant="bare"
+                                                                alternative-text="Delete" lwc:if={towed.isDeleteTowedButton}
+                                                                data-id={towed.towedCount} class="ms-2"
+                                                                onclick={handleDeleteTowned} title="Delete"></lightning-button-icon>
+                                                        </td>
+                                                    </tr>
+                                                </template>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </template>
+                                <div class="row g-3">
+                                    <div class="col-12 col-md-4">
+                                        <c-buho_input class="cTowed" label="Type of Towed Unit" name="Towed_Unit_Type__c" type="combobox"
+                                            value={newTowed.Towed_Unit_Type__c} options={TowedVehicleOptions}
+                                            onchange={handleEnhancedTowedInputChange} required="true"></c-buho_input>
+                                    </div>
+                                    <div class="col-12 col-md-4">
+                                        <c-buho_input class="cTowed" label="Towed Unit Value" name="Towed_Unit_Value__c"
+                                            value={newTowed.Towed_Unit_Value__c}
+                                            input-type="text" pattern="[0-9]*" max-length="6"
+                                            onchange={handleEnhancedTowedInputChange} required="true"></c-buho_input>
+                                    </div>
+                                    <div class="col-12 col-md-4">
+                                        <c-buho_input class="cTowed" label="Days in Tow" name="Days_in_Tow__c"
+                                            value={newTowed.Days_in_Tow__c}
+                                            input-type="text" pattern="[0-9]*" max-length="3"
+                                            onchange={handleEnhancedTowedInputChange} required="true"></c-buho_input>
+                                        <template if:true={isDaysInTowInvalid}>
+                                            <small class="text-danger">Days value must be the same as the old Towed.</small>
+                                        </template>
+                                    </div>
+                                    <div class="col-12 text-end">
+                                        <template if:false={booleanVar.editTowedBtn}>
+                                            <button class="btn btn-outline-primary btn-sm" onclick={handleAddNewTowed}>+ Add Towed Unit</button>
+                                        </template>
+                                        <template if:true={booleanVar.editTowedBtn}>
+                                            <button class="btn btn-outline-primary btn-sm" onclick={handleUpdateTowed}>Update Towed</button>
+                                        </template>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <div class="wizard-footer">
+                                <button class="btn btn-secondary" onclick={handleGoToUserDetails}>← Back</button>
+                                <button class="btn btn-primary" onclick={handleGoToTermTerritory}>Next: Term &amp; Territory →</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ═══════════════════════════════════════
+                         STEP 3 — TERM & TERRITORY
+                    ═══════════════════════════════════════ -->
+                    <div class="wizard-step" style={step3Style}>
+                        <div class="wizard-step-content">
+                            <h2 class="section-heading">Term &amp; Territory</h2>
+
+                            <!-- Term radios -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">Policy Term</label>
+                                <div class="row g-2">
+                                    <div class="col-auto">
+                                        <div class="form-check">
+                                            <input class="form-check-input quoteValidate" type="radio" name="Term__c" id="term-annual"
+                                                value="Annual(One Year)" onchange={handleEnhancedInputChange}
+                                                checked={booleanVar.isAnnual} />
+                                            <label class="form-check-label" for="term-annual">Annual (One Year)</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="form-check">
+                                            <input class="form-check-input quoteValidate" type="radio" name="Term__c" id="term-semi"
+                                                value="Semi-Annual(Half a Year)" onchange={handleEnhancedInputChange}
+                                                checked={booleanVar.isSemiAnnual} />
+                                            <label class="form-check-label" for="term-semi">Semi-Annual (Half a Year)</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="form-check">
+                                            <input class="form-check-input quoteValidate" type="radio" name="Term__c" id="term-daily"
+                                                value="Daily" onchange={handleEnhancedInputChange}
+                                                checked={booleanVar.isDaily} />
+                                            <label class="form-check-label" for="term-daily">Daily</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Dates -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-12 col-md-6">
+                                    <c-buho_input class="quoteValidate" label="Start Date for Coverage" name="Start_Date_for_Coverage__c"
+                                        input-type="date" value={trackVar.startDate}
+                                        onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <c-buho_input class="quoteValidate" label="End Date for Coverage" name="End_Date_for_Coverage__c"
+                                        input-type="date" value={trackVar.endDate}
+                                        disabled={booleanVar.isEndDateDisabled}
+                                        onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                </div>
+                                <!-- Times (daily term) -->
+                                <template if:true={booleanVar.isShowingEndTerm}>
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="quoteValidate" label="Start Time" name="Start_Time__c"
+                                            input-type="time" value={trackVar.startTime}
+                                            onchange={handleEnhancedInputChange}
+                                            onblur={handleEnhancedStartTimeValidation} required="true"></c-buho_input>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="quoteValidate" label="End Time" name="End_Time__c"
+                                            input-type="time" value={trackVar.endTime}
+                                            disabled="true" required="true"></c-buho_input>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <!-- Territory (Southbound only) -->
+                            <template if:false={booleanVar.isNorthbound}>
+                                <div class="mb-4">
+                                    <label class="form-label fw-semibold">Territory</label>
+                                    <div class="territory-cards">
+                                        <template for:each={territoryOptions} for:item="territory">
+                                            <div key={territory.value} 
+                                                 class={territory.className}
+                                                 data-territory={territory.value}
+                                                 onclick={handleTerritorySelect}>
+                                                <h4 class="territory-title">{territory.label}</h4>
+                                                <div class="territory-map">
+                                                    <img src={territory.imageUrl} alt={territory.label}>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <div class="wizard-footer">
+                                <button class="btn btn-secondary" onclick={handleGoToVehicleDetails}>← Back</button>
+                                <button class="btn btn-primary" onclick={handleGoToQuote}>Generate Quote →</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ═══════════════════════════════════════
+                         STEP 4 — QUOTE
+                         Uses the exact same c-ag_quote-page-copy and inline quote
+                         cards as the original template — no functionality stripped.
+                    ═══════════════════════════════════════ -->
+                    <div class="wizard-step" style={step4Style}>
+                        <div class="wizard-step-content">
+                            <h2 class="section-heading">Select a Quote</h2>
+
+                            <!-- Toast -->
+                            <template if:true={isShowToast}>
+                                <div class="slds-notify_container slds-is-relative">
+                                    <div class="slds-notify slds-notify_toast slds-theme_error" role="status">
+                                        <lightning-icon icon-name="Utility:error" alternative-text="error" title="error"></lightning-icon>
+                                        <div class="slds-notify__content">
+                                            <h2 class="slds-text-heading_small">{toastHeading}</h2>
+                                        </div>
+                                        <div class="slds-notify__close">
+                                            <lightning-icon class="slds-button slds-button_icon slds-button_icon-inverse"
+                                                icon-name="Utility:error" alternative-text="Close" title="Close"
+                                                onclick={closeToastEvent}></lightning-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <!-- Highlight (compare) view -->
+                            <template if:true={booleanVar.isQuoteLoaded}>
+                                <div class="mb-3">
+                                    <c-ag_quote-page-copy key={agentFee} payload={payload} agentuserfee={agentFee}
+                                        is-enhanced="true"
+                                        onselectquote={handleSelectedQuote} onemailordownload={downloadOrSendEmail}>
+                                    </c-ag_quote-page-copy>
+                                </div>
+                            </template>
+
+                            <!-- Toggle button -->
+                            <div class="mb-3">
+                                <template if:true={IsHighlightView}>
+                                    <button class="btn btn-outline-secondary btn-sm" onclick={highlightView}>Quote Detail</button>
+                                </template>
+                                <template if:false={IsHighlightView}>
+                                    <button class="btn btn-outline-secondary btn-sm" onclick={highlightView}>Compare</button>
+                                </template>
+                            </div>
+
+                            <!-- Detail view: Qualitas / Chubb / Mapfre cards -->
+                            <template if:false={IsHighlightView}>
+                                <div class="row g-3">
+                                    <!-- QUALITAS -->
+                                    <template if:false={booleanVar.isNorthbound}>
+                                        <template if:true={booleanVar.showQualitas}>
+                                            <div class="col-12 col-md-4">
+                                                <div class="card aqp-compare-card p-3 h-100">
+                                                    <div class="text-center mb-2">
+                                                        <img src={qualitasImg} alt="Qualitas" style="max-height:40px;" />
+                                                    </div>
+                                                    <div class="text-center fw-bold mb-2">
+                                                        <lightning-formatted-number value={trackVar.qualitasRatevalue}
+                                                            format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                                    </div>
+                                                     <!-- Dates -->
+                                                    <div class="row g-1 mb-2">
+                                                        <div class="col-6">
+                                                            <c-buho_input name="Start_Date_for_Coverage__c" input-type="date"
+                                                                value={trackVar.startDate}
+                                                                min={mindate} onchange={handleEnhancedDateChange} required="true"></c-buho_input>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <c-buho_input name="End_Date_for_Coverage__c" input-type="date"
+                                                                value={trackVar.endDate}
+                                                                disabled="true" required="true"></c-buho_input>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Days / Value -->
+                                                    <div class="row g-1 mb-2">
+                                                        <div class="col-6">
+                                                            <c-buho_input label="Days" name="qualitasDays"
+                                                                value={trackVar.qualitasDays} disabled="true"></c-buho_input>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <c-buho_input label="Vehicle Value" name="vehicleValue"
+                                                                value={trackVar.vehicleValue} disabled="true"></c-buho_input>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Liability +/- -->
+                                                    <div class="mb-2">
+                                                        <small class="fw-semibold">Combined Liability</small>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <button class="btn btn-sm btn-outline-secondary" name="qualitasLiability" data-type="low" onclick={updateLiability}>−</button>
+                                                            <c-buho_input name="qualitasLiability" value={qualitasLiability} disabled="true"></c-buho_input>
+                                                            <button class="btn btn-sm btn-outline-secondary" name="qualitasLiability" data-type="high" onclick={updateLiability}>+</button>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Medical +/- -->
+                                                    <template if:false={motorcyclePolicy}>
+                                                        <div class="mb-2">
+                                                            <small class="fw-semibold">Medical</small>
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                 <button class="btn btn-sm btn-outline-secondary" name="qualitasMedical" data-type="low" onclick={updateMedical}>−</button>
+                                                                 <c-buho_input name="qualitasMedical" value={qualitasMedical} disabled="true"></c-buho_input>
+                                                                 <button class="btn btn-sm btn-outline-secondary" name="qualitasMedical" data-type="high" data-id="qualitasQuote" onclick={updateMedical}>+</button>
+                                                            </div>
+                                                        </div>
+                                                    </template>
+                                                    <!-- Liability Only -->
+                                                    <div class="mb-2">
+                                                        <c-buho_input type="checkbox" name="Liability" label="Liability Only"
+                                                            checked={liablityType} onchange={handleEnhancedUpdateLibilityValue}></c-buho_input>
+                                                    </div>
+                                                    <button class="btn btn-primary w-100" name="qualitasQuote" value="Qualitas"
+                                                        onclick={handlePurchaseClick}>Purchase</button>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </template>
+
+                                    <!-- CHUBB -->
+                                    <template if:true={booleanVar.showChubb}>
+                                        <div class="col-12 col-md-4">
+                                            <div class="card aqp-compare-card p-3 h-100">
+                                                <div class="text-center mb-2">
+                                                    <img src={chubbImg} alt="Chubb" style="max-height:40px;" />
+                                                </div>
+                                                <div class="text-center fw-bold mb-2">
+                                                    <lightning-formatted-number value={trackVar.chubbRateValue}
+                                                        format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                                </div>
+                                                <div class="row g-1 mb-2">
+                                                    <div class="col-6">
+                                                        <c-buho_input name="Start_Date_for_Coverage__c" input-type="date"
+                                                            value={trackVar.startDate}
+                                                            min={mindate} onchange={handleEnhancedDateChange} required="true"></c-buho_input>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <c-buho_input name="End_Date_for_Coverage__c" input-type="date"
+                                                            value={trackVar.endDate} disabled="true" required="true"></c-buho_input>
+                                                    </div>
+                                                </div>
+                                                <div class="row g-1 mb-2">
+                                                    <div class="col-6">
+                                                        <c-buho_input label="Days" name="chubbDays"
+                                                            value={trackVar.chubbDays} disabled="true"></c-buho_input>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <c-buho_input label="Vehicle Value" name="chubbVehicleValue"
+                                                            value={trackVar.vehicleValue} disabled="true"></c-buho_input>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-2">
+                                                    <small class="fw-semibold">Combined Liability</small>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <button class="btn btn-sm btn-outline-secondary" name="chubbLiability" data-type="low" onclick={updateLiability}>−</button>
+                                                        <c-buho_input name="chubbLiability" value={chubbLiability} disabled="true"></c-buho_input>
+                                                        <button class="btn btn-sm btn-outline-secondary" name="chubbLiability" data-type="high" onclick={updateLiability}>+</button>
+                                                    </div>
+                                                </div>
+                                                <template if:false={booleanVar.isNorthbound}>
+                                                    <template if:false={motorcyclePolicy}>
+                                                        <div class="mb-2">
+                                                            <small class="fw-semibold">Medical</small>
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <button class="btn btn-sm btn-outline-secondary" name="chubbMedical" data-type="low" onclick={updateMedical}>−</button>
+                                                                <c-buho_input name="chubbMedical" value={chubbMedical} disabled="true"></c-buho_input>
+                                                                <button class="btn btn-sm btn-outline-secondary" name="chubbMedical" data-type="high" onclick={updateMedical}>+</button>
+                                                            </div>
+                                                        </div>
+                                                    </template>
+                                                </template>
+                                                <template if:true={booleanVar.isNorthbound}>
+                                                    <div class="mb-2">
+                                                        <small class="fw-semibold">Medical</small>
+                                                        <c-buho_input name="chubbMedicalNB" value="$5,000/$25,000" disabled="true"></c-buho_input>
+                                                    </div>
+                                                </template>
+                                                <!-- Liability Only checkbox -->
+                                                <template if:false={booleanVar.isNorthbound}>
+                                                    <div class="mb-2">
+                                                        <c-buho_input type="checkbox" name="Liability" label="Liability Only"
+                                                            checked={liablityType} onchange={handleEnhancedUpdateLibilityValue}></c-buho_input>
+                                                    </div>
+                                                </template>
+                                                <template if:true={booleanVar.isNorthbound}>
+                                                    <div class="mb-2">
+                                                        <c-buho_input type="checkbox" name="Liability" label="Liability Only" checked="true" disabled="true"></c-buho_input>
+                                                    </div>
+                                                </template>
+                                                <button class="btn btn-primary w-100" name="chubbQuote" value="Chubb"
+                                                    onclick={handlePurchaseClick}>Purchase</button>
+                                            </div>
+                                        </div>
+                                    </template>
+
+                                    <!-- MAPFRE (Southbound only) -->
+                                    <template if:false={booleanVar.isNorthbound}>
+                                        <template if:true={booleanVar.showMapfre}>
+                                            <div class="col-12 col-md-4">
+                                                <div class="card aqp-compare-card p-3 h-100">
+                                                    <div class="text-center mb-2">
+                                                        <img src={mapfreImg} alt="Mapfre" style="max-height:40px;" />
+                                                    </div>
+                                                    <div class="text-center fw-bold mb-2">
+                                                        <lightning-formatted-number value={trackVar.mapfreRatevalue}
+                                                            format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                                    </div>
+                                                    <div class="row g-1 mb-2">
+                                                        <div class="col-6">
+                                                            <c-buho_input name="Start_Date_for_Coverage__c" input-type="date"
+                                                                value={trackVar.startDate}
+                                                                min={mindate} onchange={handleEnhancedDateChange} required="true"></c-buho_input>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <c-buho_input name="End_Date_for_Coverage__c" input-type="date"
+                                                                value={trackVar.endDate} disabled="true" required="true"></c-buho_input>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row g-1 mb-2">
+                                                        <div class="col-6">
+                                                            <c-buho_input label="Days" name="mapfreDays"
+                                                                value={trackVar.mapfreDays} disabled="true"></c-buho_input>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <c-buho_input label="Vehicle Value" name="mapfreVehicleValue"
+                                                                value={trackVar.vehicleValue} disabled="true"></c-buho_input>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-2">
+                                                        <small class="fw-semibold">Combined Liability</small>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <button class="btn btn-sm btn-outline-secondary" name="mapfreLiability" data-type="low" onclick={updateLiability}>−</button>
+                                                            <c-buho_input name="mapfreLiability" value={mapfreLiability} disabled="true"></c-buho_input>
+                                                            <button class="btn btn-sm btn-outline-secondary" name="mapfreLiability" data-type="high" onclick={updateLiability}>+</button>
+                                                        </div>
+                                                    </div>
+                                                    <template if:false={motorcyclePolicy}>
+                                                        <div class="mb-2">
+                                                            <small class="fw-semibold">Medical</small>
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <button class="btn btn-sm btn-outline-secondary" name="mapfreMedical" data-type="low" onclick={updateMedical}>−</button>
+                                                                <c-buho_input name="mapfreMedical" value={mapfreMedical} disabled="true"></c-buho_input>
+                                                                <button class="btn btn-sm btn-outline-secondary" name="mapfreMedical" data-type="high" onclick={updateMedical}>+</button>
+                                                            </div>
+                                                        </div>
+                                                    </template>
+                                                    <!-- Coverage radios -->
+                                                    <div class="mb-2">
+                                                        <template if:true={isAutomobile}>
+                                                            <c-buho_input type="radio" name="Liability" label="Liability Only"
+                                                                onchange={handleEnhancedUpdateLibilityValue} checked={liablityType}></c-buho_input>
+                                                            <c-buho_input type="radio" name="Complete" label="Full Coverage"
+                                                                onchange={handleEnhancedUpdateLibilityValue} checked={fullAndCompleteCoverage}></c-buho_input>
+                                                            <c-buho_input type="radio" name="Max" label="Max Coverage"
+                                                                onchange={handleEnhancedUpdateLibilityValue} checked={maxCoverage}></c-buho_input>
+                                                        </template>
+                                                        <template if:false={isAutomobile}>
+                                                            <c-buho_input type="radio" name="Liability" label="Liability Only"
+                                                                onchange={handleEnhancedUpdateLibilityValue} checked={liablityType}></c-buho_input>
+                                                            <template if:true={motorcyclePolicy}>
+                                                                <c-buho_input type="radio" name="LiabilityTheft" label="Liability Theft"
+                                                                    onchange={handleEnhancedUpdateLibilityValue} checked={liabilityTheftCoverage}></c-buho_input>
+                                                            </template>
+                                                            <c-buho_input type="radio" name="Complete" label="Complete Coverage"
+                                                                onchange={handleEnhancedUpdateLibilityValue} checked={fullAndCompleteCoverage}></c-buho_input>
+                                                        </template>
+                                                    </div>
+                                                    <button class="btn btn-primary w-100" name="mapfreQuote" value="Mapfre"
+                                                        onclick={handlePurchaseClick}>Purchase</button>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </template>
+                                </div>
+                            </template>
+
+                            <div class="wizard-footer">
+                                <button class="btn btn-secondary" onclick={handleGoToTermTerritory}>← Back</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ═══════════════════════════════════════
+                         STEP 5 — PURCHASE
+                         Exact field set from original template
+                    ═══════════════════════════════════════ -->
+                    <div class="wizard-step" style={step5Style}>
+                        <div class="wizard-step-content">
+                            <h2 class="section-heading">Purchase</h2>
+
+                            <!-- Finalize Vehicle Details -->
+                            <div class="card p-3 mb-4">
+                                <h5 class="mb-3">Finalize Vehicle Details</h5>
+                                <div class="row g-3">
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="purchaseValidate" label="VIN Number"
+                                            pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\,-]+(?: [A-Za-z0-9*\,-]+)*$"
+                                            max-length="40" value={trackVar.Vin__c} name="Vin__c"
+                                            onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="purchaseValidate" type="combobox" name="Registered_Country__cmbx"
+                                            label="Registered Country" value={trackVar.Registered_Country__c}
+                                            options={countryoptions} onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                    </div>
+                                    <template if:true={otherCountryRegister}>
+                                        <div class="col-12 col-md-6">
+                                            <c-buho_input class="purchaseValidate" label="Registered Country"
+                                                pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\,-]+(?: [A-Za-z0-9*\,-]+)*$"
+                                                max-length="40" value={trackVar.Registered_Country__c}
+                                                name="Registered_Country__c" onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                        </div>
+                                    </template>
+                                    <template if:false={otherCountryRegister}>
+                                        <div class="col-12 col-md-6">
+                                            <c-buho_input class="purchaseValidate" type="combobox" name="Registered_State__c"
+                                                label="Registered State/Province" value={trackVar.Registered_State__c}
+                                                options={stateOption} onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                        </div>
+                                    </template>
+                                    <template if:true={otherCountryRegister}>
+                                        <div class="col-12 col-md-6">
+                                            <c-buho_input class="purchaseValidate" label="Registered State/Province"
+                                                value={trackVar.Registered_State__c} name="Registered_State__c"
+                                                pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\,-]+(?: [A-Za-z0-9*\,-]+)*$"
+                                                max-length="40" onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                        </div>
+                                    </template>
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="purchaseValidate" label="Place-License Plate"
+                                            max-length="10" value={trackVar.Registered_Plate__c}
+                                            name="Registered_Plate__c"
+                                            pattern="^([a-zA-Z0-9\-\_]+\s)*[a-zA-Z0-9]+$"
+                                            onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                    </div>
+                                    <div class="col-12 col-md-6 d-flex align-items-center">
+                                        <c-buho_input class="purchaseValidate" type="checkbox" label="Is vehicle leased or financed?"
+                                            checked={booleanVar.isLienholderChecked}
+                                            onchange={handleEnhancedInputChange} name="Is_Lienholder__c"></c-buho_input>
+                                    </div>
+                                    <div class="col-12 col-md-6 d-flex align-items-center">
+                                        <c-buho_input class="purchaseValidate" type="checkbox"
+                                            label="Is vehicle rented and/or owned by a company?"
+                                            onchange={handleEnhancedInputChange}
+                                            disabled={booleanVar.companyRegisteredOption}
+                                            checked={booleanVar.isVehicleRentedChecked}
+                                            name="Is_vehicle_owned_by_a_company_or_rented__c"></c-buho_input>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Lienholder component -->
+                            <template if:true={booleanVar.lienholderOption}>
+                                <div class="card p-3 mb-4">
+                                    <h5 class="mb-3">Lienholder</h5>
+                                    <c-lienholder-manager onlienholderdetails={updateLienHolderDetails}
+                                        lienholderdetails={customerData}></c-lienholder-manager>
+                                </div>
+                            </template>
+
+                            <!-- Company Address -->
+                            <template if:true={booleanVar.companyAddressOption}>
+                                <div class="card p-3 mb-4">
+                                    <h5 class="mb-3">Company Address</h5>
+                                    <div class="row g-3">
+                                        <div class="col-12 col-md-6">
+                                            <c-buho_input class="purchaseValidate" label="Name"
+                                                pattern="^[A-Za-z]+(\s[A-Za-z]+)*$" max-length="40"
+                                                value={trackVar.Company_Name__c} name="Company_Name__c"
+                                                onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <c-address-recommendations onsendaddress={handleCompanyAddress}></c-address-recommendations>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <c-buho_input class="purchaseValidate" type="combobox" name="Company_Country__cmbx"
+                                                value={trackVar.companyCountrycmbx} label="Country"
+                                                options={countryoptions} onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                        </div>
+                                        <template if:true={otherCountryCompany}>
+                                            <div class="col-12 col-md-6">
+                                                <c-buho_input class="purchaseValidate" label="Country"
+                                                    pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\,-]+(?: [A-Za-z0-9*\,-]+)*$"
+                                                    max-length="40" value={trackVar.Company_Country__c}
+                                                    name="Company_Country__c" onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                            </div>
+                                        </template>
+                                        <template if:false={otherCountryCompany}>
+                                            <div class="col-12 col-md-6">
+                                                <c-buho_input class="purchaseValidate" type="combobox" name="Company_State__c" label="State"
+                                                    value={trackVar.Company_State__c} options={CompanyStateOption}
+                                                    onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                            </div>
+                                        </template>
+                                        <template if:true={otherCountryCompany}>
+                                            <div class="col-12 col-md-6">
+                                                <c-buho_input class="purchaseValidate" label="State"
+                                                    pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\,-]+(?: [A-Za-z0-9*\,-]+)*$"
+                                                    max-length="40" value={trackVar.Company_State__c}
+                                                    name="Company_State__c" onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                            </div>
+                                        </template>
+                                        <div class="col-12 col-md-6">
+                                            <c-buho_input class="purchaseValidate" label="Postal Code" input-type="text"
+                                                pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\,-]+(?: [A-Za-z0-9*\,-]+)*$"
+                                                max-length="8" value={trackVar.Company_Zip__c}
+                                                name="Company_Zip__c" onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <c-buho_input class="purchaseValidate" label="City"
+                                                pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\,-]+(?: [A-Za-z0-9*\,-]+)*$"
+                                                max-length="40" value={trackVar.Company_City__c}
+                                                name="Company_City__c" onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <c-buho_input class="purchaseValidate" label="Address"
+                                                pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\,-]+(?: [A-Za-z0-9*\,-]+)*$"
+                                                max-length="40" value={trackVar.Company_Address__c}
+                                                name="Company_Address__c" onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <c-buho_input class="purchaseValidate" label="Phone" input-type="tel"
+                                                pattern="\(\d{3}\) \d{3}-\d{4,7}"
+                                                max-length="17" value={trackVar.Company_Phone__c}
+                                                name="Company_Phone__c" onchange={handleEnhancedInputChange} required="true"></c-buho_input>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <!-- Drivers / Human Operators -->
+                            <div class="card p-3 mb-4">
+                                <h5 class="mb-3">Human Operators and/or Owners</h5>
+                                <template if:true={driversOptions.length}>
+                                    <c-buho_input type="combobox" name="ContactDriverData" label="Drivers"
+                                        options={driversOptions} onchange={handleChangeDriverOption}></c-buho_input>
+                                </template>
+                                <!-- Driver table -->
+                                <template if:true={addedDriver.length}>
+                                    <div class="table-responsive mb-3">
+                                        <table class="table table-bordered table-sm">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Name</th><th>Country</th><th>State</th>
+                                                    <th>License #</th><th>Date of Birth</th><th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <template for:each={addedDriver} for:item="driver">
+                                                    <tr key={driver.license_number__c} style={driver.selectedStyle}>
+                                                        <td>{driver.First_Name__c} {driver.Last_Name__c}</td>
+                                                        <td>{driver.License_Country__c}</td>
+                                                        <td>{driver.License_state__c}</td>
+                                                        <td>{driver.license_number__c}</td>
+                                                        <td>{driver.Dob__c}</td>
+                                                        <td>
+                                                            <lightning-button-icon icon-name="utility:edit" variant="bare"
+                                                                alternative-text="Edit" data-id={driver.license_number__c}
+                                                                title="Edit" onclick={handleEditDriver}></lightning-button-icon>
+                                                            <lightning-button-icon icon-name="utility:delete" variant="bare"
+                                                                alternative-text="Delete" data-id={driver.license_number__c}
+                                                                class="ms-2" onclick={handleDeleteDriver} title="Delete"></lightning-button-icon>
+                                                        </td>
+                                                    </tr>
+                                                </template>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </template>
+                                <!-- Driver form fields -->
+                                <div class="row g-3">
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="driverValidation cDriver" label="First Name"
+                                            pattern="^[A-Za-z]+(\s[A-Za-z]+)*$" max-length="40"
+                                            value={newDriver.First_Name__c} name="First_Name__c"
+                                            onchange={handleEnhancedDriverFieldsChange} required="true"></c-buho_input>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="driverValidation cDriver" label="Last Name"
+                                            pattern="^[A-Za-z]+(\s[A-Za-z]+)*$" max-length="40"
+                                            value={newDriver.Last_Name__c} name="Last_Name__c"
+                                            onchange={handleEnhancedDriverFieldsChange} required="true"></c-buho_input>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="driverValidation cDriver" type="combobox" name="License_Country__cmbx"
+                                            label="License Country" value={newDriver.License_Country__cmbx}
+                                            options={countryoptions} onchange={handleEnhancedDriverFieldsChange} required="true"></c-buho_input>
+                                    </div>
+                                    <template if:true={newDriver.otherCountryVehicle}>
+                                        <div class="col-12 col-md-6">
+                                            <c-buho_input class="driverValidation cDriver" label="License Country"
+                                                pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\,-]+(?: [A-Za-z0-9*\,-]+)*$"
+                                                max-length="40" value={newDriver.License_Country__c}
+                                                name="License_Country__c" onchange={handleEnhancedDriverFieldsChange} required="true"></c-buho_input>
+                                        </div>
+                                    </template>
+                                    <template if:false={newDriver.otherCountryVehicle}>
+                                        <div class="col-12 col-md-6">
+                                            <c-buho_input class="driverValidation cDriver" type="combobox" name="License_state__c"
+                                                label="License State" value={newDriver.License_state__c}
+                                                options={vehicleStateOption} onchange={handleEnhancedDriverFieldsChange} required="true"></c-buho_input>
+                                        </div>
+                                    </template>
+                                    <template if:true={newDriver.otherCountryVehicle}>
+                                        <div class="col-12 col-md-6">
+                                            <c-buho_input class="driverValidation cDriver" label="License State"
+                                                pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\,-]+(?: [A-Za-z0-9*\,-]+)*$"
+                                                max-length="40" value={newDriver.License_state__c}
+                                                name="License_state__c" onchange={handleEnhancedDriverFieldsChange} required="true"></c-buho_input>
+                                        </div>
+                                    </template>
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="driverValidation cDriver" label="License #"
+                                            pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\,-]+(?: [A-Za-z0-9*\,-]+)*$"
+                                            value={newDriver.license_number__c} name="license_number__c"
+                                            max-length="40" onchange={handleEnhancedDriverFieldsChange} required="true"></c-buho_input>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="driverValidation cDriver" label="Date of birth" input-type="date"
+                                            value={newDriver.Dob__c} name="Dob__c"
+                                            onchange={handleEnhancedDriverFieldsChange} required="true"></c-buho_input>
+                                    </div>
+                                    <div class="col-12 col-md-6 d-flex align-items-center">
+                                        <c-buho_input class="cDriver" type="checkbox"
+                                            label="Registered Owner?"
+                                            name="Driver_Type__c" onchange={handleEnhancedDriverFieldsChange}
+                                            checked={newDriver.owner} disabled={booleanVar.registeredOwner}></c-buho_input>
+                                    </div>
+                                    <!-- Owner address fields -->
+                                    <template if:true={booleanVar.isOwner}>
+                                        <div class="col-12 col-md-6">
+                                            <c-address-recommendations onsendaddress={handleDriverAddress}></c-address-recommendations>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <c-buho_input class="driverValidation cDriver" type="combobox" name="Country__cmbx"
+                                                label="Owner Country" value={newDriver.Country__cmbx}
+                                                options={countryoptions} onchange={handleEnhancedDriverFieldsChange} required="true"></c-buho_input>
+                                        </div>
+                                        <template if:true={newDriver.otherCountryDriver}>
+                                            <div class="col-12 col-md-6">
+                                                <c-buho_input class="driverValidation cDriver" label="Owner Country"
+                                                    pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\,-]+(?: [A-Za-z0-9*\,-]+)*$"
+                                                    max-length="40" value={newDriver.Country__c}
+                                                    name="Country__c" onchange={handleEnhancedDriverFieldsChange} required="true"></c-buho_input>
+                                            </div>
+                                        </template>
+                                        <template if:false={newDriver.otherCountryDriver}>
+                                            <div class="col-12 col-md-6">
+                                                <c-buho_input class="driverValidation cDriver" type="combobox" name="State_Province__c"
+                                                    label="State" value={newDriver.State_Province__c}
+                                                    options={driverStateOption} onchange={handleEnhancedDriverFieldsChange} required="true"></c-buho_input>
+                                            </div>
+                                        </template>
+                                        <template if:true={newDriver.otherCountryDriver}>
+                                            <div class="col-12 col-md-6">
+                                                <c-buho_input class="driverValidation cDriver" label="State"
+                                                    max-length="40" value={newDriver.State_Province__c}
+                                                    name="State_Province__c" onchange={handleEnhancedDriverFieldsChange} required="true"></c-buho_input>
+                                            </div>
+                                        </template>
+                                        <div class="col-12 col-md-6">
+                                            <c-buho_input class="driverValidation cDriver" label="Postal Code" input-type="text"
+                                                max-length="8" name="Postal_Code__c"
+                                                value={newDriver.Postal_Code__c} onchange={handleEnhancedDriverFieldsChange} required="true"></c-buho_input>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <c-buho_input class="driverValidation cDriver" label="City" name="City__c"
+                                                max-length="40"
+                                                value={newDriver.City__c} onchange={handleEnhancedDriverFieldsChange} required="true"></c-buho_input>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <c-buho_input class="driverValidation cDriver" label="Address" name="Address__c"
+                                                max-length="40"
+                                                value={newDriver.Address__c} onchange={handleEnhancedDriverFieldsChange} required="true"></c-buho_input>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <c-buho_input class="driverValidation cDriver" label="Phone" name="Phone__c" input-type="tel"
+                                                max-length="17"
+                                                value={newDriver.Phone__c} onchange={handleEnhancedDriverFieldsChange} required="true"></c-buho_input>
+                                        </div>
+                                    </template>
+                                </div>
+                                <div class="d-flex justify-content-end mt-3">
+                                    <template if:false={booleanVar.editDriverBtn}>
+                                        <button class="btn btn-primary btn-sm" onclick={handleAddNewDriver}>Add Driver</button>
+                                    </template>
+                                    <template if:true={booleanVar.editDriverBtn}>
+                                        <button class="btn btn-primary btn-sm" onclick={handleUpdateDriver}>Update Driver</button>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <!-- Towed Unit component (same as original) -->
+                            <template if:true={booleanVar.isTowingChecked}>
+                                <div class="mb-4">
+                                    <c-agent-towed-unit added-towed={addedTowed}
+                                        onupdatetowed={updateTowedController}
+                                        enable-new-towed={falseValue}
+                                        action-type="newTowed"></c-agent-towed-unit>
+                                </div>
+                            </template>
+
+                            <!-- Toast + Proceed button -->
+                            <c-buho_toast></c-buho_toast>
+
+                            <div class="wizard-footer">
+                                <button class="btn btn-secondary" onclick={handleGoToQuote}>← Back to Quote</button>
+                                <button class="btn btn-primary" onclick={handleProceedButton}>Proceed to Payment →</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ═══════════════════════════════════════
+                         STEP 6 — PAYMENT
+                    ═══════════════════════════════════════ -->
+                    <div class="wizard-step" style={step6Style}>
+                        <div class="wizard-step-content">
+                            <h2 class="section-heading">Payment</h2>
+
+                            <!-- Policy Terms component -->
+                            <template if:true={customerData.Policy_Type__c}>
+                                <div class="card p-3 mb-4">
+                                    <h5 class="mb-3">Policy Terms</h5>
+                                    <c-agent-term-agreement term-policy-type={customerData.Policy_Type__c}
+                                        ondestinationinformation={handleDestinationInfo}></c-agent-term-agreement>
+                                </div>
+                            </template>
+
+                            <!-- Payment form -->
+                            <div class="card p-3 mb-4">
+                                <h5 class="mb-3">Let's tackle the Payment now</h5>
+                                <div class="alert alert-info" style="font-size:18px;">
+                                    <b>Payable Amount:</b>&nbsp;&nbsp;
+                                    <lightning-formatted-number value={totalAmount} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                </div>
+                                <!-- Billing Address -->
+                                <div class="row g-3 mb-3">
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="validate paymentValidation" label="Address" name="Street__c"
+                                            value={trackVar.paymentStreet}
+                                            pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\,-]+(?: [A-Za-z0-9*\,-]+)*$"
+                                            max-length="40" required="true" onchange={handleEnhancedPaymentInputChange}></c-buho_input>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="validate paymentValidation" type="combobox" name="paymentCountrycmbx"
+                                            value={trackVar.paymentCountrycmbx} label="Country"
+                                            options={countryoptions} onchange={handleEnhancedPaymentInputChange} required="true"></c-buho_input>
+                                    </div>
+                                    <template if:true={otherCountrypayment}>
+                                        <div class="col-12 col-md-6">
+                                            <c-buho_input class="validate paymentValidation" label="Country"
+                                                pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\,-]+(?: [A-Za-z0-9*\,-]+)*$"
+                                                max-length="40" value={trackVar.paymentCountry} name="Country__c"
+                                                onchange={handleEnhancedPaymentInputChange} required="true"></c-buho_input>
+                                        </div>
+                                    </template>
+                                    <template if:false={otherCountrypayment}>
+                                        <div class="col-12 col-md-6">
+                                            <c-buho_input class="validate paymentValidation" type="combobox" name="State__c" label="State"
+                                                value={trackVar.paymentState} options={paymentStateOption}
+                                                onchange={handleEnhancedPaymentInputChange} required="true"></c-buho_input>
+                                        </div>
+                                    </template>
+                                    <template if:true={otherCountrypayment}>
+                                        <div class="col-12 col-md-6">
+                                            <c-buho_input class="validate paymentValidation" label="State"
+                                                pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\,-]+(?: [A-Za-z0-9*\,-]+)*$"
+                                                max-length="40" value={trackVar.paymentState} name="State__c"
+                                                onchange={handleEnhancedPaymentInputChange} required="true"></c-buho_input>
+                                        </div>
+                                    </template>
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="validate paymentValidation" label="City" name="City__c" required="true"
+                                            pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\,-]+(?: [A-Za-z0-9*\,-]+)*$"
+                                            max-length="40" value={trackVar.paymentCity}
+                                            onchange={handleEnhancedPaymentInputChange}></c-buho_input>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="validate paymentValidation" label="Postal Code" name="Postal_Code__c"
+                                            value={trackVar.paymentZip} input-type="text"
+                                            pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\,-]+(?: [A-Za-z0-9*\,-]+)*$"
+                                            max-length="8" required="true" onchange={handleEnhancedPaymentInputChange}></c-buho_input>
+                                    </div>
+                                </div>
+                                <!-- Card Details -->
+                                <div class="row g-3">
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="validate paymentValidation" label="Card Holder Name" name="name"
+                                            pattern="^(?!.*[ ]{2,})(?! *$)[A-Za-z0-9*\,-]+(?: [A-Za-z0-9*\,-]+)*$"
+                                            max-length="40" required="true" onchange={handleEnhancedPaymentInputChange}
+                                            value={payeeName}></c-buho_input>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="validate paymentValidation" label="Card Number" name="cardNumber"
+                                            value={formattedCreditCardNumber}
+                                            pattern="[0-9\s]*" input-type="tel"
+                                            max-length="19" data-id="cardNumber" required="true"
+                                            onchange={handleEnhancedPaymentInputChange}></c-buho_input>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="validate paymentValidation" type="combobox" name="month" data-id="month"
+                                            label="Expiration Month" placeholder="MM" options={months}
+                                            onchange={handleEnhancedPaymentInputChange} required="true"></c-buho_input>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="validate paymentValidation" type="combobox" name="year" label="Expiration Year"
+                                            placeholder="YYYY" options={YYYY}
+                                            onchange={handleEnhancedPaymentInputChange} data-id="year" required="true"></c-buho_input>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <c-buho_input class="validate paymentValidation" label="Security Code" name="code"
+                                            input-type="text" max-length="4"
+                                            pattern="^(?=.*[1-9])\d+$" required="true"
+                                            onchange={handleEnhancedPaymentInputChange}></c-buho_input>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="wizard-footer">
+                                <button class="btn btn-secondary" onclick={handleGoToPurchase}>← Back</button>
+                                <button class="btn btn-primary" onclick={handlMakePayment}>Make Payment</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ═══════════════════════════════════════
+                         STEP 7 — SUCCESS & POLICY DOWNLOAD
+                    ═══════════════════════════════════════ -->
+                    <div class="wizard-step" style={step7Style}>
+                        <div class="wizard-step-content">
+                            <c-affiliate-policy-quick-actions
+                                cmp-source={cmpSource}
+                                renewd-policy-id={renewdPolicyId}
+                                actionmode="purchase"
+                                is-enhanced={isEnhanced}>
+                            </c-affiliate-policy-quick-actions>
+                        </div>
+                    </div>
+
+                </div><!-- end wizard-content-container -->
+            </div><!-- end wizard-main -->
+        </div><!-- end enhanced-wizard-wrapper -->
+
+    </template>
+</template>

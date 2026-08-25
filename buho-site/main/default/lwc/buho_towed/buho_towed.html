@@ -6,26 +6,6 @@
             <p class="section-subtitle">Add information about any items you'll be towing</p>
         </div>
 
-        <!-- Existing Customer Towed Unit Selection -->
-        <template if:true={currentUserType}>
-            <template if:true={existingtowedUnits}>
-                <div class="towed-existing-select">
-                    <div class="form-group">
-                        <label>Select a Previously Added Towed Unit</label>
-                        <select 
-                            name="existingTow" 
-                            class="form-select"
-                            onchange={changetowedOption}>
-                            <option value="">Select a Tow From Account</option>
-                            <template for:each={existingtowedUnits} for:item="option">
-                                <option key={option.value} value={option.value}>{option.label}</option>
-                            </template>
-                        </select>
-                    </div>
-                </div>
-            </template>
-        </template>
-
         <!-- Towed Units Table -->
         <template if:true={isTowAdded}>
             <div class="towed-units-table">
@@ -69,6 +49,23 @@
                             </template>
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </template>
+
+        <!-- Existing Customer Towed Unit Selection -->
+        <template if:true={showExistingTowedUnits}>
+            <div class="towed-existing-select">
+                <div class="form-group">
+                    <c-buho_input 
+                        type="searchable_combobox"
+                        name="existingTow" 
+                        label="Select a Previously Added Towed Unit"
+                        placeholder="Select a Tow From Account"
+                        value={selectedTowedId}
+                        options={existingtowedUnits}
+                        onchange={changetowedOption}>
+                    </c-buho_input>
                 </div>
             </div>
         </template>

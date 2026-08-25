@@ -13,7 +13,7 @@ import USER_ID from '@salesforce/user/Id';
 import { log } from 'c/buho_utils';
 export default class Buho_quoteWizard extends LightningElement {
     @track displayHeader = true;
-    
+    chatReady = false;
     @track componentConstructor; // Holds the current component
     @track currentStep = 1; // Tracks the current step (1-indexed for display)
     @track payload = []; // Shared payload to store form data
@@ -123,6 +123,7 @@ export default class Buho_quoteWizard extends LightningElement {
     }
     // Lifecycle hook: triggered when component is inserted into the DOM
     async connectedCallback() {
+
         const urlParams = new URLSearchParams(window.location.search);
         const quoteId = urlParams.has('quote') ?? '';
         try {
@@ -172,13 +173,17 @@ export default class Buho_quoteWizard extends LightningElement {
             console.error('BQW Error in connectedCallback:', err.message);
         }
         console.log('is user already loggedin', USER_ID);
-        if(USER_ID) {
+        if (USER_ID) {
             try {
                 updateAgency();
-            } catch(err) {
+            } catch (err) {
                 console.error('BQW Error in updating agency:', err);
             }
         }
+    }
+
+    handleContactClick() {
+        window.dispatchEvent(new CustomEvent('openChat'));
     }
 
 
@@ -338,7 +343,7 @@ export default class Buho_quoteWizard extends LightningElement {
             } else if (direction === 'previous' && !this.isFirstStep) {
                 this.currentStep--;
                 this.isSkipComponent(false);
-                if(USER_ID && this.currentStep < 3){
+                if (USER_ID && this.currentStep < 3) {
                     this.currentStep = 2;
                 }
                 await this.loadComponent();
@@ -390,7 +395,7 @@ export default class Buho_quoteWizard extends LightningElement {
                 console.error('2BQW Error capturing payload:', err.message);
                 return;
             }
-           
+
             this.currentStep = step;
             await this.loadComponent();
         } catch (err) {

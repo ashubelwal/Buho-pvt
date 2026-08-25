@@ -6,6 +6,7 @@ const STORAGE_KEY = 'buhoPolicyDetailId';
 
 export default class Buhodb_policydetail extends LightningElement {
     @api policyId;
+    @api baseUrl;
 
     @track policyDetail;
     @track isLoadingDetail = true;
@@ -14,6 +15,7 @@ export default class Buhodb_policydetail extends LightningElement {
     @track showCoverageSection = true;
     @track showFeesSection = true;
     @track showTripSection = true;
+    
 
     // ── Wire: Single policy detail ──
     @wire(getPolicyById, { policyId: '$policyId' })

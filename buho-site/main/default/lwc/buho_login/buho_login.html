@@ -3,7 +3,7 @@
         <div class="buho-login-container">
             <!-- Left Section - Login Form -->
             <div class="buho-login-section">
-                <div class="buho-login-content">
+                <div class="buho-login-content" style="align-self: flex-start;">
                     <!-- Logo -->
                     <div class="buho-logo">
                         <img src={logoUrl} alt="BÚHO" class="buho-logo-icon">
@@ -43,19 +43,25 @@
                         </c-buho_login-form>
 
                         <!-- Social Login Buttons -->
-                        <!--template lwc:if={showSocialLogin}>
+                        <template lwc:if={showSocialLogin}>
+                            <br/>
                             <button type="button" class="buho-btn-social" onclick={handleGoogleLogin}>
                                 <img src={googleIconUrl} alt="Google" class="buho-social-icon">
                                 Sign In with Google
                             </button>
 
-                            <button type="button" class="buho-btn-social" onclick={handleTwitterLogin}>
+                            <button type="button" class="buho-btn-social" onclick={handleAppleLogin}>
+                                <i class="bi bi-apple buho-social-icon" style="font-size: 18px; line-height: 1; display: flex; align-items: center; justify-content: center;"></i>
+                                Sign In with Apple
+                            </button>
+
+                            <!--button type="button" class="buho-btn-social" onclick={handleTwitterLogin}>
                                 <img src={twitterIconUrl} alt="Twitter" class="buho-social-icon">
                                 Sign In with Twitter
-                            </button>
+                            </button-->
                         </template>
 
-                        <div class="buho-signup-text">
+                        <!--div class="buho-signup-text">
                             New to BÚHO? <a class="buho-signup-link" onclick={handleSignUp}>Sign Up</a>
                         </div-->
                     </div>
@@ -64,7 +70,7 @@
 
             <!-- Right Section - Carousel -->
             <template lwc:if={showCarousel}>
-                <div class="buho-carousel-section">
+                <div class="buho-carousel-section d-none d-md-block">
                     <div class="buho-carousel-container">
                         <template for:each={slides} for:item="slide" for:index="index">
                             <div key={slide.id} class={slide.cssClass}>

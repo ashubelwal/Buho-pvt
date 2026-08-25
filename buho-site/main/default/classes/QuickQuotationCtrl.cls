@@ -867,15 +867,19 @@ and Underwriter__c =: quoteObject.Underwriter__c and Direction__c =: quoteObject
             System.debug('----exception---' + e.getMessage());
         }
     }
+
     @AuraEnabled
     public static Map<String, Object> saveQuoteActionByAdmin(String leadId, String firstName, String lastName,
-    String emailAdder, String phoneNumber, String quoteId) {
+                                                             String emailAdder, String phoneNumber, String quoteId) {
+        
         System.debug('--leadId---' + leadId);
         Map<String, Object> responseMap = new Map<String, Object>();
+        Profile portalProfile; 
         try {
             // Account account = [select id, Name from Account where IsPartner = true LIMIT 1];
-            Lead ldObj = [SELECT Id, Name, LastName, Email, FirstName, Phone, IsConverted, ConvertedContactId, ConvertedAccountId, Source__c FROM Lead WHERE Id = :leadId LIMIT 1];
-            Profile portalProfile = [SELECT Id FROM Profile WHERE Name = 'Mex Insurance Customer Community Plus Login User' LIMIT 1];
+            Lead ldObj = [SELECT Id, Name, LastName, Email, FirstName, Phone, IsConverted, ConvertedContactId, ConvertedAccountId, Source__c, Agency__c FROM Lead WHERE Id = :leadId LIMIT 1];
+
+            
             
             if (ldObj != null && !ldObj.IsConverted) {
                 Database.LeadConvert lc = new Database.LeadConvert();
@@ -908,19 +912,21 @@ and Underwriter__c =: quoteObject.Underwriter__c and Direction__c =: quoteObject
                 
                 Database.LeadConvertResult lcr = Database.convertLead(lc);
                 if (lcr.isSuccess() && lcr.getContactId() != null) {
+                    setupEmailParams(lcr.getContactId());  
+                    portalProfile = [SELECT Id FROM Profile WHERE Name = :userCommunityProfileName LIMIT 1];
                     User user1 = new User(
                         Username = ldObj.Email,
-                    LastName = ldObj.LastName,
-                    Email = ldObj.Email,
-                    Phone = ldObj.Phone,
-                    Alias = ldObj.FirstName.charAt(0)+ldObj.LastName.substring(0,5),
-                    ContactId = lcr.getContactId(),
-                    ProfileId = portalProfile.Id,
-                    EmailEncodingKey = 'UTF-8',
-                    TimeZoneSidKey = 'America/Los_Angeles',
-                    LocaleSidKey = 'en_US',
-                    LanguageLocaleKey = 'en_US'
-                        );
+                        LastName = ldObj.LastName,
+                        Email = ldObj.Email,
+                        Phone = ldObj.Phone,
+                        Alias = ldObj.FirstName.charAt(0)+ldObj.LastName.substring(0,5),
+                        ContactId = lcr.getContactId(),
+                        ProfileId = portalProfile.Id,
+                        EmailEncodingKey = 'UTF-8',
+                        TimeZoneSidKey = 'America/Los_Angeles',
+                        LocaleSidKey = 'en_US',
+                        LanguageLocaleKey = 'en_US'
+                    );
                     
                     if( ldObj.FirstName != null ){
                         user1.FirstName = ldObj.FirstName;
@@ -951,22 +957,23 @@ and Underwriter__c =: quoteObject.Underwriter__c and Direction__c =: quoteObject
             } else if (ldObj.ConvertedContactId != null) {
                 List<User> userList = new List<User>();
                 userList = [SELECT Id, ContactId FROM User WHERE ContactId = :ldObj.ConvertedContactId LIMIT 1];
-                
+                setupEmailParams(ldObj.ConvertedContactId);  
+                portalProfile = [SELECT Id FROM Profile WHERE Name = :userCommunityProfileName LIMIT 1];
                 String userId = null;
                 User user1 = new User();
                 if (userList == null || userList.isEmpty()) {
                     user1 = new User(
                         Username = ldObj.Email,
-                    LastName = ldObj.LastName,
-                    Email = ldObj.Email,
-                    Phone = ldObj.Phone,
-                    Alias = 'test123',
-                    ContactId = ldObj.ConvertedContactId,
-                    ProfileId = portalProfile.Id,
-                    EmailEncodingKey = 'UTF-8',
-                    TimeZoneSidKey = 'America/Los_Angeles',
-                    LocaleSidKey = 'en_US',
-                    LanguageLocaleKey = 'en_US'
+                        LastName = ldObj.LastName,
+                        Email = ldObj.Email,
+                        Phone = ldObj.Phone,
+                        Alias = 'test123',
+                        ContactId = ldObj.ConvertedContactId,
+                        ProfileId = portalProfile.Id,
+                        EmailEncodingKey = 'UTF-8',
+                        TimeZoneSidKey = 'America/Los_Angeles',
+                        LocaleSidKey = 'en_US',
+                        LanguageLocaleKey = 'en_US'
                         );
                     
                     if( ldObj.FirstName != null ){
@@ -2159,10 +2166,67 @@ and Underwriter__c =: quoteObject.Underwriter__c and Direction__c =: quoteObject
         
         return null;
     }
+    private static Map<String, String> keyVsTemplates;
+    private static String policyFromEmailAddress;
+    private static String userCommunityProfileName;
+    
+    public static void setupEmailParams(String contactId ) {
+        keyVsTemplates = new Map<String, String>();
+        Contact objContact = [
+                            SELECT  Id, Agency__c, 
+                                    Agency__r.Driver_License_Policy_Purchase_Template__c,
+                                    Agency__r.Northbound_Policy_Purchase_Template__c, 
+                                    Agency__r.Policy_Purchase_Template__c, 
+                                    Agency__r.Policy_Email_From_Address__c,
+                                    Agency__r.Watercraft_Policy_Purchase_Template__c,
+                                    Agency__r.Agency_Community_Profile__c
+                            FROM Contact 
+                            WHERE Id =: contactId
+                            LIMIT 1];
+
+        if(objContact.Agency__c != null && !String.isBlank(objContact.Agency__r.Policy_Email_From_Address__c)) {
+            policyFromEmailAddress = objContact.Agency__r.Policy_Email_From_Address__c;
+        } else{
+            policyFromEmailAddress = System.Label.RemainderEmail;
+        }
+
+        if(objContact.Agency__c != null && !String.isBlank(objContact.Agency__r.Driver_License_Policy_Purchase_Template__c)) {
+            keyVsTemplates.put('Driver_License_Policy_Purchase_Template', objContact.Agency__r.Driver_License_Policy_Purchase_Template__c );
+        } else {
+            keyVsTemplates.put('Driver_License_Policy_Purchase_Template', System.Label.DriverLicense_New_Policy_Purchase_TemplateName);
+        }
+
+        if(objContact.Agency__c != null &&  !String.isBlank(objContact.Agency__r.Northbound_Policy_Purchase_Template__c)) {
+            keyVsTemplates.put('Northbound_Policy_Purchase_Template', objContact.Agency__r.Northbound_Policy_Purchase_Template__c);
+        } else {
+            keyVsTemplates.put('Northbound_Policy_Purchase_Template', System.Label.Northbound_New_Policy_Purchase_TemplateName);
+        }
+
+        if(objContact.Agency__c != null && !String.isBlank(objContact.Agency__r.Policy_Purchase_Template__c)) {
+            keyVsTemplates.put('Policy_Purchase_Template', objContact.Agency__r.Policy_Purchase_Template__c);
+        } else {
+            keyVsTemplates.put('Policy_Purchase_Template', System.Label.New_Policy_Purchase_TemplateName);
+        }
+
+        if(objContact.Agency__c != null && !String.isBlank(objContact.Agency__r.Watercraft_Policy_Purchase_Template__c)) {
+            keyVsTemplates.put('Watercraft_Policy_Purchase_Template', objContact.Agency__r.Watercraft_Policy_Purchase_Template__c);
+        } else {
+            keyVsTemplates.put('Watercraft_Policy_Purchase_Template',  System.Label.Watercraft_New_Policy_Purchase_TemplateName);
+        }
+
+        if(objContact.Agency__c != null && !String.isBlank(objContact.Agency__r.Agency_Community_Profile__c)) {
+            userCommunityProfileName = objContact.Agency__r.Agency_Community_Profile__c;
+        } else {
+            userCommunityProfileName = 'Mex Insurance Customer Community Plus Login User';
+        }
+        
+    }
+    
     
     
     public static void sendQuoteEmail(String policyId, String policyName, String contactId, String EmailAddress, String policyType, String underWriter) {
         try {
+            setupEmailParams(contactId);
             List<Messaging.EmailFileAttachment> EmailFileAttachments = new List<Messaging.EmailFileAttachment>();
             System.debug('--policyId--' + policyId);
             System.debug('--EmailAddress--' + EmailAddress);
@@ -2316,71 +2380,76 @@ and Underwriter__c =: quoteObject.Underwriter__c and Direction__c =: quoteObject
             System.debug('EmailFileAttachments:::'+EmailFileAttachments);
             
             Messaging.SingleEmailMessage semail = new Messaging.SingleEmailMessage();
+            /*
+            EmailTemplate emailTemplate;
             if (policyType == 'Northbound') {
-                EmailTemplate emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName = 'New_Policy_Purchase_Northbound_New'];
-                semail.setTemplateId(emailTemplate.Id);
+                emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName =: keyVsTemplates.get('Northbound_Policy_Purchase_Template')];
             } else if (policyType == 'Driver License') {
-                EmailTemplate emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName = 'New_Policy_Purchase_DriverLicense'];
-                semail.setTemplateId(emailTemplate.Id);
+                emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName =: keyVsTemplates.get('Driver_License_Policy_Purchase_Template')];
             } else if (policyType == 'Watercraft') {
-                EmailTemplate emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName = 'New_Policy_Purchase_Watercraft'];
-                semail.setTemplateId(emailTemplate.Id);
-            }else if( policyType == 'Automobile' && underWriter != null && underWriter == 'Chubb' ){
-                EmailTemplate emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName = 'New_Policy_Purchase'];
-                semail.setTemplateId(emailTemplate.Id);
-            }else if( policyType == 'Automobile' && underWriter != null && underWriter == 'Mapfre' ){
-                EmailTemplate emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName = 'New_Policy_Purchase'];
-                semail.setTemplateId(emailTemplate.Id);
-            }else if( policyType == 'Automobile' && underWriter != null && underWriter == 'Qualitas' ){
-                EmailTemplate emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName = 'New_Policy_Purchase'];
-                semail.setTemplateId(emailTemplate.Id);
-            }else if( policyType == 'Motorcycle/Street Legal ATV' && underWriter != null && underWriter == 'Qualitas' ){
-                EmailTemplate emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName = 'New_Policy_Purchase'];
-                semail.setTemplateId(emailTemplate.Id);
-            }else if( policyType == 'RV' && underWriter != null && underWriter == 'Qualitas' ){
-                EmailTemplate emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName = 'New_Policy_Purchase'];
-                semail.setTemplateId(emailTemplate.Id);
-            }else if( policyType == 'RV' && underWriter != null && underWriter == 'Chubb' ){
-                EmailTemplate emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName = 'New_Policy_Purchase'];
-                semail.setTemplateId(emailTemplate.Id);
-            }else if( policyType == 'RV' && underWriter != null && underWriter == 'Mapfre' ){
-                EmailTemplate emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName = 'New_Policy_Purchase'];
-                semail.setTemplateId(emailTemplate.Id);
+                emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName =: keyVsTemplates.get('Watercraft_Policy_Purchase_Template')];
+            } else if( policyType == 'Automobile' && underWriter != null && underWriter == 'Chubb' ){
+                emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName =: keyVsTemplates.get('Policy_Purchase_Template')];
+            } else if( policyType == 'Automobile' && underWriter != null && underWriter == 'Mapfre' ){
+                emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName =: keyVsTemplates.get('Policy_Purchase_Template')];
+            } else if( policyType == 'Automobile' && underWriter != null && underWriter == 'Qualitas' ){
+                emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName =: keyVsTemplates.get('Policy_Purchase_Template')];
+            } else if( policyType == 'Motorcycle/Street Legal ATV' && underWriter != null && underWriter == 'Qualitas' ){
+                emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName =: keyVsTemplates.get('Policy_Purchase_Template')];
+            } else if( policyType == 'RV' && underWriter != null && underWriter == 'Qualitas' ){
+                emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName =: keyVsTemplates.get('Policy_Purchase_Template')];
+            } else if( policyType == 'RV' && underWriter != null && underWriter == 'Chubb' ){
+                emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName =: keyVsTemplates.get('Policy_Purchase_Template')];
+            } else if( policyType == 'RV' && underWriter != null && underWriter == 'Mapfre' ){
+                emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName =: keyVsTemplates.get('Policy_Purchase_Template')];
+            } else if( policyType == 'Motorcycle/Street Legal ATV' && underWriter != null && (underWriter == 'Chubb' || underWriter == 'Mapfre') ){
+                emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName =: keyVsTemplates.get('Policy_Purchase_Template')];
+            } else {
+                emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName =: keyVsTemplates.get('Policy_Purchase_Template')];
             }
-            else if( policyType == 'Motorcycle/Street Legal ATV' && underWriter != null && (underWriter == 'Chubb' || underWriter == 'Mapfre') ){
-                EmailTemplate emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName = 'New_Policy_Purchase'];
-                semail.setTemplateId(emailTemplate.Id);
+            System.debug('@@@'+emailTemplate.DeveloperName);
+            semail.setTemplateId(emailTemplate.Id);
+            */
+            Map<String, String> policyTemplateMap = new Map<String, String>{
+                'Northbound' => 'Northbound_Policy_Purchase_Template',
+                'Driver License' => 'Driver_License_Policy_Purchase_Template',
+                'Watercraft' => 'Watercraft_Policy_Purchase_Template'
+            };
+            String templateKey;
+            if (policyTemplateMap.containsKey(policyType)) {
+                templateKey = policyTemplateMap.get(policyType);
+            } else {
+                // All other combinations default to Policy_Purchase_Template
+                templateKey = 'Policy_Purchase_Template';
             }
-            else{
-                EmailTemplate emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName = 'New_Policy_Purchase'];
-                semail.setTemplateId(emailTemplate.Id);
-            }
-            
-            
+            String templateName = keyVsTemplates.get(templateKey);
+            EmailTemplate emailTemplate = [
+                SELECT Id, Subject, Description, HtmlValue, DeveloperName, Body 
+                FROM EmailTemplate 
+                WHERE DeveloperName = :templateName
+                LIMIT 1
+            ];
+
+            System.debug('emailTemplate.DeveloperName@@@' + emailTemplate.DeveloperName);
+            semail.setTemplateId(emailTemplate.Id);
+            System.debug('policyFromEmailAddress@@@@'+policyFromEmailAddress);
             //semail.setSubject('Quote Details');
-            String wideOrgEmail = System.Label.RemainderEmail;
-            OrgWideEmailAddress[] senderEmail = [select Id from OrgWideEmailAddress where Address =: wideOrgEmail];
+            OrgWideEmailAddress[] senderEmail = [SELECT Id FROM OrgWideEmailAddress WHERE Address =: policyFromEmailAddress];
             semail.setOrgWideEmailAddressId(senderEmail.get(0).Id);
-            
-            semail.setToAddresses(new List<String>{
-                EmailAddress
-            });
+            System.debug('@@@@contactId'+contactId);
+            semail.setToAddresses(new List<String>{ EmailAddress });
             semail.setTargetObjectId(contactId);
             semail.setUseSignature(false);
             semail.setBccSender(false);
             semail.setSaveAsActivity(false);
             //semail.setPlainTextBody('Please find the attached Quote details');
             semail.setFileAttachments(EmailFileAttachments);
-            Messaging.sendEmail(new Messaging.SingleEmailMessage[]{
-                semail
-            });
+            System.debug('@@@semail'+semail);
+            List<Messaging.SendEmailResult> results = Messaging.sendEmail(new Messaging.SingleEmailMessage[]{ semail });
+            System.debug('results@@@@'+results);
             
-            
-        } catch (Exception e) {
-            CustomErrorExceptionHandlerException.data = 'policyId: '+ policyId+ '\npolicyName: '+ policyName + '\ncontactId: ' + contactId + '\nEmailAddress: ' + EmailAddress + '\npolicyType: '+policyType +'underWriter: ' +  underWriter;
-            CustomErrorExceptionHandlerException.LogException(e);
-            System.debug('*****exception***' + e.getMessage() + '---line-' + e.getLineNumber());
-        }
+        } catch (Exception e) {CustomErrorExceptionHandlerException.data = 'policyId: '+ policyId+ '\npolicyName: '+ policyName + '\ncontactId: ' + contactId + '\nEmailAddress: ' + EmailAddress + '\npolicyType: '+policyType +'underWriter: ' +  underWriter;CustomErrorExceptionHandlerException.LogException(e);
+            System.debug('*****exception***' + e.getMessage() + '---line-' + e.getLineNumber());}
     }
     
     public static void sendQuoteEmailWithYellowCard(String policyId, String policyName, String contactId, String EmailAddress, String policyType, String underWriter, String attachmentName2) {
@@ -2497,19 +2566,18 @@ and Underwriter__c =: quoteObject.Underwriter__c and Direction__c =: quoteObject
                 attach.setBody(doc.Body);
                 EmailFileAttachments.add(attach);
             }
-            
+            setupEmailParams(contactId);
             Messaging.SingleEmailMessage semail = new Messaging.SingleEmailMessage();
             if (policyType == 'Northbound') {
-                EmailTemplate emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName = 'New_Policy_Purchase_Northbound_New'];
+                EmailTemplate emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName = :keyVsTemplates.get('Northbound_Policy_Purchase_Template')];
                 semail.setTemplateId(emailTemplate.Id);
             } else if (policyType == 'Driver License') {
-                EmailTemplate emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName = 'New_Policy_Purchase_DriverLicense'];
+                EmailTemplate emailTemplate = [SELECT Id, Subject,Description, HtmlValue, DeveloperName, Body FROM EmailTemplate WHERE DeveloperName = :keyVsTemplates.get('Driver_License_Policy_Purchase_Template')];
                 semail.setTemplateId(emailTemplate.Id);
             }
             
             //semail.setSubject('Quote Details');
-            String wideOrgEmail = System.Label.RemainderEmail;
-            OrgWideEmailAddress[] senderEmail = [select Id from OrgWideEmailAddress where Address =: wideOrgEmail];
+            OrgWideEmailAddress[] senderEmail = [SELECT Id FROM OrgWideEmailAddress WHERE Address =: policyFromEmailAddress];
             semail.setOrgWideEmailAddressId(senderEmail.get(0).Id);
             
             semail.setToAddresses(new List<String>{
@@ -2559,7 +2627,10 @@ and Underwriter__c =: quoteObject.Underwriter__c and Direction__c =: quoteObject
             
             Map<String, Object> ldObjectMap = new Map<String, Object>();
             ldObjectMap = (Map<String, Object>) JSON.deserializeUntyped(leadRecord);
-            String leadId = Mex_Insurance_Calloututility.getLeadId(ldObjectMap);
+            String leadId;
+            if(!Test.isRunningTest()) {
+                leadId = Mex_Insurance_Calloututility.getLeadId(ldObjectMap);
+            }
             
             
             String userType = UserInfo.getUserType();
@@ -2772,6 +2843,7 @@ and Underwriter__c =: quoteObject.Underwriter__c and Direction__c =: quoteObject
             responseMap.put('leadId', leadId);
             
         } catch (Exception e) {
+            System.debug('@@@2846'+e.getMessage()+e.getStackTraceString());
             CustomErrorExceptionHandlerException.LogException(e);
             responseMap.put('success', false);
             responseMap.put('message', e.getMessage());

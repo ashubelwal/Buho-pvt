@@ -708,7 +708,7 @@ public without sharing class Mex_PolicyEditController {
     @AuraEnabled
     public static Map<String, String> createNewEditPolicy(String vehicleData, String DriverData, String towedUnitData, String quoteId, String oldPolicyId, Boolean isRenewal) {
         Map<String, String> responseMap = new Map<String, String>();
-
+        System.debug('@@@@vehicleData'+vehicleData);
         try {
             if (String.isNotBlank(quoteId)) {
                 SYstem.debug('inside QuoteId');
@@ -740,6 +740,7 @@ public without sharing class Mex_PolicyEditController {
                     Vehicle__c vehicleRecord;
                     if (!String.isEmpty(vehicleData)) {
                         vehicleRecord = (Vehicle__c) JSON.deserialize(vehicleData, Vehicle__c.class);
+                        System.debug('@@vehicleRecord after '+vehicleRecord);
                         Map<String, Object> rawData = (Map<String, Object>) JSON.deserializeUntyped(vehicleData);
 
                         Map<String, SObjectField> fieldMap = Vehicle__c.SObjectType.getDescribe().fields.getMap();

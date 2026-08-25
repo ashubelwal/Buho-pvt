@@ -1,0 +1,247 @@
+<template>
+    <!-- ═══════════════════ SPINNER ═══════════════════ -->
+    <template if:true={isLoading}>
+        <div class="aqp-spinner-overlay">
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </div>
+    </template>
+
+    <div class="aqp-wrapper">
+
+        <!-- ═══════════════════════════════════════════════════════
+             COMPANY SELECTOR — dropdown style
+        ═══════════════════════════════════════════════════════ -->
+        <div class="aqp-selector-row">
+            <label class="aqp-selector-label">Select Insurance Provider</label>
+            <div class="aqp-company-pills">
+                <template for:each={computedTabs} for:item="tab">
+                    <button
+                        key={tab.id}
+                        class={tab.pillClass}
+                        data-tab-id={tab.id}
+                        onclick={handleTabClick}
+                        aria-pressed={tab.isSelected}>
+                        <span class="aqp-pill-name">{tab.label}</span>
+                        <span class="aqp-pill-price">${tab.total}</span>
+                    </button>
+                </template>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════
+             QUOTE CARD — rendered for the active tab only
+        ═══════════════════════════════════════════════════════ -->
+        <template for:each={computedTabs} for:item="tab">
+            <template if:true={tab.isSelected}>
+                <div key={tab.id} class="aqp-quote-card">
+
+                    <!-- Card Header: company name + big total -->
+                    <div class="aqp-card-header">
+                        <div class="aqp-card-header-left">
+                            <span class="aqp-provider-badge">{tab.label}</span>
+                            <template if:true={tab.Platinum}>
+                                <span class="aqp-tier-badge aqp-tier-platinum">Platinum</span>
+                            </template>
+                            <template if:true={tab.Gold}>
+                                <span class="aqp-tier-badge aqp-tier-gold">Gold</span>
+                            </template>
+                            <template if:true={tab.Max}>
+                                <span class="aqp-tier-badge aqp-tier-max">Max</span>
+                            </template>
+                        </div>
+                        <div class="aqp-card-header-right">
+                            <span class="aqp-total-label">Total</span>
+                            <span class="aqp-total-amount">${tab.total}</span>
+                        </div>
+                    </div>
+
+                    <!-- ─── Coverage Adjustments ─── -->
+                    <div class="aqp-adjustments-grid">
+
+                        <!-- Combined Liability stepper -->
+                        <div class="aqp-stepper-block">
+                            <label class="aqp-stepper-label">Combined Liability</label>
+                            <div class="aqp-stepper">
+                                <button class="aqp-stepper-btn"
+                                    onclick={decrementLiability}
+                                    disabled={isMinLiabilityDisabled}
+                                    aria-label="Decrease liability">
+                                    <span>−</span>
+                                </button>
+                                <span class="aqp-stepper-value">{combinedLiabilityValue}</span>
+                                <button class="aqp-stepper-btn"
+                                    onclick={incrementLiability}
+                                    disabled={isMaxLiabilityDisabled}
+                                    aria-label="Increase liability">
+                                    <span>+</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Medical stepper (conditional) -->
+                        <template if:true={tab.showMedical}>
+                            <div class="aqp-stepper-block">
+                                <label class="aqp-stepper-label">Medical</label>
+                                <div class="aqp-stepper">
+                                    <button class="aqp-stepper-btn"
+                                        onclick={decrementMedical}
+                                        disabled={isMinMedicalDisabled}
+                                        aria-label="Decrease medical">
+                                        <span>−</span>
+                                    </button>
+                                    <span class="aqp-stepper-value">{medicalValue}</span>
+                                    <button class="aqp-stepper-btn"
+                                        onclick={incrementMedical}
+                                        disabled={isMaxMedicalDisabled}
+                                        aria-label="Increase medical">
+                                        <span>+</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </template>
+
+                    </div>
+
+                    <!-- ─── Coverage-tier & Liability-Only toggles ─── -->
+                    <div class="aqp-toggles-row">
+
+                        <!-- Gold -->
+                        <template if:true={tab.Gold}>
+                            <div class={goldClass}>
+                                <c-buho_input
+                                    type="checkbox"
+                                    name="Gold__c"
+                                    label="Gold"
+                                    checked={checkedData.Gold__c}
+                                    onchange={handleInputChange}>
+                                </c-buho_input>
+                            </div>
+                        </template>
+
+                        <!-- Max -->
+                        <template if:true={tab.Max}>
+                            <div class={maxClass}>
+                                <c-buho_input
+                                    type="checkbox"
+                                    name="Max__c"
+                                    label="Max"
+                                    checked={checkedData.Max__c}
+                                    onchange={handleInputChange}>
+                                </c-buho_input>
+                            </div>
+                        </template>
+
+                        <!-- Platinum (read-only) -->
+                        <template if:true={tab.Platinum}>
+                            <div class="aqp-toggle-item">
+                                <c-buho_input
+                                    type="checkbox"
+                                    name="Platinum__c"
+                                    label="Platinum"
+                                    title="All Tourist Vehicle policies on MexInsurance are Platinum. This cannot be deselected."
+                                    checked
+                                    disabled
+                                    onchange={handleInputChange}>
+                                </c-buho_input>
+                            </div>
+                        </template>
+
+                        <!-- Liability Only -->
+                        <div class="aqp-toggle-item">
+                            <c-buho_input
+                                type="checkbox"
+                                name="Coverage__c"
+                                label="Liability Only"
+                                checked={liabilityOnly}
+                                disabled={liabilityDisabled}
+                                onchange={handleInputChange}>
+                            </c-buho_input>
+                        </div>
+
+                    </div>
+
+                    <!-- ─── Action Buttons ─── -->
+                    <div class="aqp-actions-row">
+                        <button class="aqp-btn-buy"
+                            data-buy-id={tab.id}
+                            data-direction="next"
+                            onclick={handleBuyBtn}>
+                            Buy &nbsp;${tab.total}
+                        </button>
+
+                        <div class="aqp-secondary-actions">
+                            <button class="aqp-btn-secondary"
+                                data-buy-id={tab.id}
+                                data-send-email="false"
+                                data-direction="next"
+                                onclick={handleEmailandDownloadQuote}>
+                                <span>↓</span> Download PDF
+                            </button>
+                            <button class="aqp-btn-secondary"
+                                data-buy-id={tab.id}
+                                data-send-email="true"
+                                data-direction="next"
+                                onclick={handleEmailandDownloadQuote}>
+                                <span>✉</span> Email PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ─── T&C links ─── -->
+                    <div class="aqp-tnc-row">
+                        <span>View Complete Coverage Details:</span>
+                        <a href="#" onclick={handleOpenEngDriveLink}
+                           data-buy-id={tab.id} class="aqp-tnc-link">English</a>
+                        <span class="aqp-tnc-sep">/</span>
+                        <a href="#" onclick={handleOpenSpnDriveLink}
+                           data-buy-id={tab.id} class="aqp-tnc-link">Spanish</a>
+                    </div>
+
+                    <!-- ─── Coverage List (collapsed by default) ─── -->
+                    <div class="aqp-coverage-section">
+                        <button class="aqp-coverage-toggle" onclick={handleToggleCoverage}
+                                aria-expanded={isCoverageExpanded}>
+                            <span class="aqp-coverage-toggle-icon">{coverageToggleIcon}</span>
+                            {coverageToggleLabel}
+                        </button>
+
+                        <template if:true={isCoverageExpanded}>
+                            <div class="aqp-coverage-body">
+                                <template if:true={coverageList.length}>
+                                    <template for:each={coverageList} for:item="item">
+                                        <div key={item.key} class="aqp-coverage-item">
+                                            <div class="aqp-coverage-img-wrap">
+                                                <img src={item.image} alt={item.key} class="aqp-coverage-img" />
+                                            </div>
+                                            <div class="aqp-coverage-detail">
+                                                <div class="aqp-coverage-name">{item.key}</div>
+                                                <div class={item.classList}>{item.description}</div>
+                                                <template if:true={item.showSeeMore}>
+                                                    <div class="aqp-see-more-wrap">
+                                                        <c-nc_modal
+                                                            modal-title={item.key}
+                                                            data-key={item.key}
+                                                            btn-name="See more"
+                                                            class-names="cBtn"
+                                                            modal-content={item.fullDescription}>
+                                                        </c-nc_modal>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </template>
+
+                                <template if:false={coverageList.length}>
+                                    <p class="aqp-no-coverage">No coverage data available for this provider.</p>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+
+                </div><!-- end aqp-quote-card -->
+            </template>
+        </template>
+
+    </div><!-- end aqp-wrapper -->
+</template>

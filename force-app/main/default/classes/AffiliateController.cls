@@ -4,14 +4,16 @@ public without sharing class AffiliateController {
         try{
             if(affiliateId != null){
                 List<Affiliate__c> affiliateUserList = [SELECT Affiliate_Id__c, Agency_Logo__c, 
-                                                        Agent_Id__c,                                                          Agent_Contact__c,Agent_Fee__c ,
+                                                        Agent_Id__c,                                                          
+                                                        Agent_Contact__c,
+                                                        Agent_Fee__c ,
                                                         Agency_Id__c, 
                                                         Owner_Name__c, 
-                                                        Owner_Photo__c
-                                                        FROM Affiliate__c Where Affiliate_Id__c =: affiliateId];
-                
-                
-                
+                                                        Owner_Photo__c,
+                                                        Theme_Primary_Color__c,
+                                                        Theme_Accent_Color__c,
+                                                        Theme_Light_Color__c
+                                                        FROM Affiliate__c WHERE Affiliate_Id__c =: affiliateId];
                 if(affiliateUserList.size() > 0){
                     if(affiliateUserList[0].Agent_Fee__c == null){
                         affiliateUserList[0].Agent_Fee__c = 0;
@@ -71,6 +73,8 @@ public without sharing class AffiliateController {
                         if(affiliateUserList.size() > 0 && affiliateUserList[0].Agent_Contact__c != null){
                             getLeadData.Agent__c = affiliateUserList[0].Agent_Contact__c;
                         }
+
+                        getLeadData.Affiliate__c = affiliateUserList[0].Id;
                         
                         getLeadData.Towing__c = towedlistJSON;
                         System.debug('Lead Before Saving'+getLeadData);

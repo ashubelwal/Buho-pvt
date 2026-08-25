@@ -30,7 +30,7 @@
                 <div class="slds-col ">
                     <lightning-accordion class="agentDashboard" onsectiontoggle={handleToggleSection}
                         active-section-name={activeSectionName}>
-                        <div class="card slds-p-around_small slds-m-bottom_large insuranceType">
+                        <!--div class="card slds-p-around_small slds-m-bottom_large insuranceType">
 
                             <fieldset class="slds-form-element slds-m-bottom_small" role="radiogroup">
                                 <legend class="slds-form-element__legend slds-form-element__label slds-m-bottom_small">
@@ -48,106 +48,16 @@
                                                 <span class="slds-radio_faux">Create Policy</span>
                                             </label>
                                         </span>
-
-                                        <!-- <span class="slds-button slds-radio_button">
-                                            <input type="radio" name="Policy_Type__c" id="example-unique-id-95"
-                                                value="RV" onchange={handleInputChange} checked={booleanVar.isPolicyRV}
-                                                disabled={booleanVar.isPolicyDisabled} />
-                                            <label class="slds-radio_button__label" for="example-unique-id-95">
-                                                <span class="slds-radio_faux">RV</span>
-                                            </label>
-                                        </span>
-
-                                        <span class="slds-button slds-radio_button">
-                                            <input type="radio" name="Policy_Type__c" id="example-unique-id-96"
-                                                value="Motorcycle/Street Legal ATV" onchange={handleInputChange}
-                                                checked={booleanVar.isPolicyMotorcycle}
-                                                disabled={booleanVar.isPolicyDisabled} />
-                                            <label class="slds-radio_button__label" for="example-unique-id-96">
-                                                <span class="slds-radio_faux">Motorcycle/ATV</span>
-                                            </label>
-                                        </span> -->
-
-                                        <!-- <span class="slds-button slds-radio_button">
-										<input type="radio" name="Policy_Type__c" id="example-unique-id-97"
-											disabled={booleanVar.isPolicyDisabled} onchange={handleInputChange}
-											value="Northbound" checked={booleanVar.isPolicyNorthbound} />
-										<label class="slds-radio_button__label" for="example-unique-id-97">
-											<span class="slds-radio_faux">Mexican Vehicles</span>
-										</label>
-									</span> -->
-
-                                        <!-- <span class="slds-button slds-radio_button">
-                                            <input type="radio" name="ContactType" id="example-unique-id-98"
-                                                disabled={booleanVar.isPolicyDisabled} onchange={handleContactType}
-                                                value="DMV Service" checked={booleanVar.isDMVService} />
-                                            <label class="slds-radio_button__label" for="example-unique-id-98">
-                                                <span class="slds-radio_faux">DMV Service</span>
-                                            </label>
-                                        </span>
-
-                                        <span class="slds-button slds-radio_button">
-                                            <input type="radio" name="ContactType" id="example-unique-id-99"
-                                                disabled={booleanVar.isPolicyDisabled} onchange={handleContactType}
-                                                value="Domestic Insurance" checked={booleanVar.isDomesticInsurance} />
-                                            <label class="slds-radio_button__label" for="example-unique-id-99">
-                                                <span class="slds-radio_faux">Domestic Insurance</span>
-                                            </label>
-                                        </span> -->
-                                        <!-- 
-									<span class="slds-button slds-radio_button">
-										<input type="radio" name="Policy_Type__c" id="example-unique-id-99" onchange={handleInputChange}
-										 value="Watercraft" checked={booleanVar.isPolicyWatercraft} disabled={booleanVar.isPolicyDisabled}/>
-										<label class="slds-radio_button__label" for="example-unique-id-99">
-											<span class="slds-radio_faux">Watercraft</span>
-									</label>
-									</span> -->
-
                                     </div>
                                 </div>
                             </fieldset>
-                            <!-- 
-                            <template if:true={booleanVar.isportalAccessHide}>
-                                <div class="portal">
-                                    <h4 class="smallHeading">Do you want a portal access?</h4>
-                                    <div class="slds-grid slds-wrap">
-                                        <div class="slds-grid slds-wrap">
-                                            <div class="slds-col slds-p-around_small">
-                                                <lightning-input class="" type="radio" name="portalAccess" label="Yes"
-                                                    value="Yes" onchange={handleInputChange}
-                                                    checked={booleanVar.portalAccessYes}>
-                                                </lightning-input>
-                                            </div>
-                                            <div class="slds-col slds-p-around_small">
-                                                <lightning-input class="validate" type="radio" name="portalAccess"
-                                                    label="No" value="No" checked={booleanVar.portalAccessNo}
-                                                    onchange={handleInputChange}>
-                                                </lightning-input>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </template> -->
-
+                        
                             <template if:true={booleanVar.isUserDeactivated}>
                                 <h2 style="color:red">Note: The user already exists. Kindly activate the user.</h2>
                             </template>
 
-                            <!-- <template if:true={booleanVar.isTowingCheckbox}>
-							<div class="slds-form-element">
-								<div class="slds-form-element__control">
-									<div class="slds-checkbox">
-										<input type="checkbox" name="Is_towing__c" value="Yes" id="towing"
-											onchange={handleInputChange} checked={booleanVar.isTowingChecked} />
-										<label class="slds-checkbox__label" for="towing">
-											<span class="slds-checkbox_faux"></span>
-											<span class="slds-form-element__label">Are you towing anything?</span>
-										</label>
-									</div>
-								</div>
-							</div>
-						</template> -->
-                        </div>
+                            
+                        </div-->
 
                         <template if:true={booleanVar.isContactType}>
                             <c-contacts-feature contacttype={contactype}
@@ -3148,26 +3058,6 @@
                                                 value={totalAmount} format-style="currency" currency-code="USD">
                                             </lightning-formatted-number>
                                         </div>
-
-                                        <!-- <h4 class="slds-m-top_medium smallHeading">Select payment type</h4>
-                                        <div class="slds-grid slds-wrap slds-m-bottom_medium">
-                                            <div class="slds-grid slds-wrap">
-                                                <div class="slds-col slds-p-around_small">
-                                                    <lightning-input class="" type="radio" name="Payment_Type__c"
-                                                        label="Card Payment" value="Card"
-                                                        onchange={handlePaymentInputChange}>
-                                                    </lightning-input>
-                                                </div>
-                                                <div class="slds-col slds-p-around_small">
-                                                    <lightning-input class="validate" type="radio"
-                                                        name="Payment_Type__c" label="Cash Payment" value="Cash"
-                                                        onchange={handlePaymentInputChange}>
-                                                    </lightning-input>
-                                                </div>
-                                            </div>
-                                        </div> -->
-
-                                        <!-- <template if:true={booleanVar.showCardPayment}> -->
                                         <div class="slds-grid slds-wrap">
 
                                             <div class="slds-col slds-p-around_small">

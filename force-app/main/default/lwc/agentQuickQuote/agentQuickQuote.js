@@ -99,7 +99,7 @@ export default class AgentQuickQuote extends PolicyUtils {
     apextimedata;
     userInfo;
     vendorlist = [];
-    agency = '';
+    @api agency;
     agent = '';
     agencyRtId;
     agentRtId;
@@ -386,8 +386,10 @@ export default class AgentQuickQuote extends PolicyUtils {
                 })
 
             if (this.trackVar.Email != '') {
+                console.log('@@@@@@@@@@ ',this.trackVar.Email);
                 await portalAccessForUser({ 'username': this.trackVar.Email })
                     .then((result) => {
+                        console.log('@@@result ',result);
                         if (result != null) {
                             this.booleanVar.isportalAccessHide = false;
                             this.booleanVar.checkPortalAcccess = true;

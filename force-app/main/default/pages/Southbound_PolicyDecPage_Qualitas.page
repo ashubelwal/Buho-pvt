@@ -184,7 +184,10 @@
                     
                 </caption>
                 <tr>
-                    <th style="width:20%">Policy #</th> <td style="width:20%"> {!policy.Name} </td><th style="width:15%">Broker</th><td>Mexico Insurance Services, Inc. California Department of Insurance 0G35864</td>
+                    <th style="width:20%">Policy #</th> 
+                    <td style="width:20%"> {!policy.Name} </td>
+                    <th style="width:15%">Broker</th>
+                    <td>Mexico Insurance Services, Inc. California Department of Insurance 0G35864</td>
                 </tr>
                 <tr>
                     <th style="width:20%">Issue Date</th>

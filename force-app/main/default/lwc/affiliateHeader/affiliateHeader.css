@@ -5,9 +5,10 @@
 }
 
 .affiliateLogo img {
-	width: 250px;
+	width: 100px;
 	height: fit-content;
     cursor: pointer;
+    max-height: 100px;
 }
 
 

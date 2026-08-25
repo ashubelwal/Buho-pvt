@@ -541,8 +541,6 @@ export default class AffiliatePolicyUtils extends LightningElement {
         this.customerData = { ...this.customerData, [event.target?.name]: event.target?.value };
         this.trackVar = {...this.trackVar,[event.target?.name]: event.target?.value};
         console.log('Event name',JSON.stringify(event.target?.name));
-        console.log('Track var data in Input Change',JSON.stringify(this.trackVar));
-        console.log('Customer data After Update',JSON.stringify(this.customerData));
         if(event.target?.name === 'FirstName'){
             this.newDriver = { ...this.newDriver, ['First_Name__c']: event.target?.value };
         }
@@ -1040,62 +1038,67 @@ export default class AffiliatePolicyUtils extends LightningElement {
     }
 
     fetchCoverageQuote = async () => {
-        console.log('this.customerData.Policy_Type__c',this.customerData.Policy_Type__c);
-        console.log('this.customerData.Coverage__c '+this.customerData.Coverage__c);
-        
-        let mainCoverageMap = await getExactCoverageDetailForSouthbound({ 'pickList': this.customerData.Policy_Type__c , 'packageType': this.customerData.Coverage__c });
-        console.log('mainCoverageMap',mainCoverageMap);
-        if (mainCoverageMap != undefined && mainCoverageMap != null) {
-            //this.quickQuoteDetail = { ...this.quickQuoteDetail, ['Coverage']: mainCoverageMap }
-            mainCoverageMap.Qualitas.map((data) => {
-                if (data.Package__c == "Liability" && this.customerData.Coverage__c == 'Liability') {
-                    if ((this.customerData.territory == 'Baja Sonora' || this.customerData.territory == 'Baja/Sonora' || this.customerData.territory == 'Limited' || this.customerData.territory == 'Full')
-                        && data.Territory_Discount__c == 'Yes') {
-                        this.coverageMap = { ...this.coverageMap, ['Qualitas']: data };
-                    } else {
-                        this.coverageMap = { ...this.coverageMap, ['Qualitas']: data };
-                    }
-                } else if (this.customerData.Coverage__c != 'Liability') {
-                    this.coverageMap = { ...this.coverageMap, ['Qualitas']: data };
-                }
-                console.log('coveragemAp--->>>>>>>>',this.coverageMap);
-            })
-
-            if(mainCoverageMap.Chubb != undefined){
-                mainCoverageMap.Chubb.map((data) => {
+        try {
+            console.log('this.customerData.Policy_Type__c',this.customerData.Policy_Type__c);
+            console.log('this.customerData.Coverage__c '+this.customerData.Coverage__c);
+            
+            let mainCoverageMap = await getExactCoverageDetailForSouthbound({ 'pickList': this.customerData.Policy_Type__c , 'packageType': this.customerData.Coverage__c });
+            console.log('mainCoverageMap',mainCoverageMap);
+            if (mainCoverageMap != undefined && mainCoverageMap != null) {
+                //this.quickQuoteDetail = { ...this.quickQuoteDetail, ['Coverage']: mainCoverageMap }
+                mainCoverageMap.Qualitas.map((data) => {
                     if (data.Package__c == "Liability" && this.customerData.Coverage__c == 'Liability') {
-                        this.coverageMap = { ...this.coverageMap, ['Chubb']: data };
+                        if ((this.customerData.territory == 'Baja Sonora' || this.customerData.territory == 'Baja/Sonora' || this.customerData.territory == 'Limited' || this.customerData.territory == 'Full')
+                            && data.Territory_Discount__c == 'Yes') {
+                            this.coverageMap = { ...this.coverageMap, ['Qualitas']: data };
+                        } else {
+                            this.coverageMap = { ...this.coverageMap, ['Qualitas']: data };
+                        }
                     } else if (this.customerData.Coverage__c != 'Liability') {
-                        this.coverageMap = { ...this.coverageMap, ['Chubb']: data };
+                        this.coverageMap = { ...this.coverageMap, ['Qualitas']: data };
                     }
-                });
-            }
-            
+                    console.log('coveragemAp--->>>>>>>>',this.coverageMap);
+                })
 
-            console.log('mainCoverageMap MAPFRE-->',mainCoverageMap.Mapfre);
-            if(mainCoverageMap.Mapfre != undefined){
-                mainCoverageMap.Mapfre.forEach(currentItem => {
-                    if (this.customerData.Coverage__c == 'Liability' && currentItem.Package__c == 'Liability') {
-                        this.coverageMap = { ...this.coverageMap, ['Mapfre']: currentItem };
-    
-                    } else if (this.customerData.Coverage__c == 'Max' && currentItem.Package__c == 'Max') {
-                        this.coverageMap = { ...this.coverageMap, ['Mapfre']: currentItem };
-    
-                    } else if (this.customerData.Coverage__c == 'Complete' && currentItem.Package__c == 'Complete') {
-                        this.coverageMap = { ...this.coverageMap, ['Mapfre']: currentItem };
-    
-                    } else if (this.customerData.Coverage__c == 'Full' && currentItem.Package__c == 'Full') {
-                        this.coverageMap = { ...this.coverageMap, ['Mapfre']: currentItem };
-    
-                    } else if (this.customerData.Coverage__c == 'LiabilityTheft' && currentItem.Package__c == 'LiabilityTheft') {
-                        this.coverageMap = { ...this.coverageMap, ['Mapfre']: currentItem };
-    
-                    }
-                });
+                if(mainCoverageMap.Chubb != undefined){
+                    mainCoverageMap.Chubb.map((data) => {
+                        if (data.Package__c == "Liability" && this.customerData.Coverage__c == 'Liability') {
+                            this.coverageMap = { ...this.coverageMap, ['Chubb']: data };
+                        } else if (this.customerData.Coverage__c != 'Liability') {
+                            this.coverageMap = { ...this.coverageMap, ['Chubb']: data };
+                        }
+                    });
+                }
+                
+
+                console.log('mainCoverageMap MAPFRE-->',mainCoverageMap.Mapfre);
+                if(mainCoverageMap.Mapfre != undefined){
+                    mainCoverageMap.Mapfre.forEach(currentItem => {
+                        if (this.customerData.Coverage__c == 'Liability' && currentItem.Package__c == 'Liability') {
+                            this.coverageMap = { ...this.coverageMap, ['Mapfre']: currentItem };
+        
+                        } else if (this.customerData.Coverage__c == 'Max' && currentItem.Package__c == 'Max') {
+                            this.coverageMap = { ...this.coverageMap, ['Mapfre']: currentItem };
+        
+                        } else if (this.customerData.Coverage__c == 'Complete' && currentItem.Package__c == 'Complete') {
+                            this.coverageMap = { ...this.coverageMap, ['Mapfre']: currentItem };
+        
+                        } else if (this.customerData.Coverage__c == 'Full' && currentItem.Package__c == 'Full') {
+                            this.coverageMap = { ...this.coverageMap, ['Mapfre']: currentItem };
+        
+                        } else if (this.customerData.Coverage__c == 'LiabilityTheft' && currentItem.Package__c == 'LiabilityTheft') {
+                            this.coverageMap = { ...this.coverageMap, ['Mapfre']: currentItem };
+        
+                        }
+                    });
+                }
+                
             }
-            
+            console.log('retrieved final json-> '+ JSON.stringify(this.coverageMap));
+        } catch (error) {
+            console.error('Error fetching coverage quote: ', error);
+            this.showToastEvent('Error', error?.body?.message || error?.message || 'Error occurred fetching coverage details.', 'error');
         }
-        console.log('retrieved final json-> '+ JSON.stringify(this.coverageMap));
     }
 
     fetchNorthBoundCoverageQuote = async () => {
@@ -1110,6 +1113,7 @@ export default class AffiliatePolicyUtils extends LightningElement {
             console.log('this.coverageMap',this.coverageMap);
         } catch (error) {
             console.log('Error :::: ', error);
+            this.showToastEvent('Error', error?.body?.message || error?.message || 'Error occurred fetching northbound coverage.', 'error');
         }
     }
 
@@ -1368,6 +1372,7 @@ export default class AffiliatePolicyUtils extends LightningElement {
         } catch (error) {
             console.log('Error in saving quote--->', error);
             this.booleanVar.isLoading = false;
+            this.showToastEvent('Error', error?.body?.message || error?.message || 'Error occurred saving lead details.', 'error');
             throw error;
         }
     }
@@ -1786,7 +1791,10 @@ export default class AffiliatePolicyUtils extends LightningElement {
                 if(item){
                     console.log('item--->', item);
                 }
-            })
+            }).catch(error => {
+                console.error('Error updating agent fee: ', error);
+                this.showToastEvent('Error', error?.body?.message || error?.message || 'Error occurred updating agent fee.', 'error');
+            });
         }
         console.log('this.agentFee',this.agentFee);
         console.log('this.trackVar.qualitasRatevalue',this.trackVar.qualitasRatevalue);

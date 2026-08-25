@@ -53,11 +53,11 @@ export default class Buho_vehicleDetails extends LightningElement {
     @track showModelOtherInput = false;
 
     get makeInputType() {
-        return this.makeOptions.length > 0 ? 'combobox' : 'input';
+        return this.makeOptions.length > 0 ? 'searchable_combobox' : 'input';
     }
 
     get modelInputType() {
-        return this.makeOptions.length > 0 ? 'combobox' : 'input';
+        return this.makeOptions.length > 0 ? 'searchable_combobox' : 'input';
     }
 
     get currentUserType() {

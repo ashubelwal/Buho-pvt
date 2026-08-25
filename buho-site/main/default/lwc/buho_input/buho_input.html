@@ -32,7 +32,8 @@
                         onchange={handleInputChange}
                         oninput={handleInput} 
                         onkeyup={handleKeyUp}
-                        oninvalid={handleInvalid} />
+                        oninvalid={handleInvalid}
+                        onblur={handleNativeBlur} />
                 </div>
                 <template if:true={showPatternError}>
                     <small class="form-text" style="color: #EF4444; margin-top: 6px; display: block; font-size: 12px;">{messageWhenPatternMismatch}</small>
@@ -55,7 +56,8 @@
                     onchange={handleInputChange} 
                     oninput={handleInput}
                     onkeyup={handleKeyUp}
-                    oninvalid={handleInvalid} />
+                    oninvalid={handleInvalid}
+                    onblur={handleNativeBlur} />
                 <template if:true={showPatternError}>
                     <small class="form-text" style="color: #EF4444; margin-top: 6px; display: block; font-size: 12px;">{messageWhenPatternMismatch}</small>
                 </template>
@@ -75,9 +77,10 @@
                     </template>
                 </div>
             </template>
+            
             <div class="dropdown-container">
                 <select id={name} name={name} class={computedDropdownClass} disabled={disabled}
-                    required={required}
+                    required={required} value={value}
                     onchange={handleComboboxChange}>
                     <template for:each={comboboxOptions} for:item="option">
                         <option key={option.value} value={option.value} selected={option.isSelected}>
@@ -88,21 +91,68 @@
             </div>
         </template>
 
+        <!-- Searchable Combobox Type -->
+        <template if:true={isSearchableCombobox}>
+            <template if:true={label}>
+                <div class="label-with-tooltip">
+                    <label for={name} class={computedLabelClass}>{label}</label>
+                    <template if:true={hasTooltip}>
+                        <span class="tooltip-icon-wrapper">
+                            <i class="bi bi-info-circle tooltip-icon"></i>
+                            <span class="tooltip-text">{tooltipText}</span>
+                        </span>
+                    </template>
+                </div>
+            </template>
+
+            <div class="searchable-combobox-container">
+                <div class="input-with-icon searchable-input-wrapper">
+                    <input 
+                        type="text" 
+                        id={name} 
+                        class={computedDropdownClass} 
+                        disabled={disabled}
+                        required={required}
+                        value={searchInputValue}
+                        placeholder={placeholder}
+                        onfocus={openDropdown}
+                        onblur={handleBlur}
+                        oninput={handleSearch} 
+                        autocomplete="off" />
+                    <i class="bi bi-chevron-down dropdown-icon"></i>
+                </div>
+                <template if:true={_isDropdownOpen}>
+                    <div class="searchable-dropdown-list">
+                        <ul>
+                            <template for:each={filteredOptions} for:item="option">
+                                <li key={option.value} data-value={option.value} onmousedown={handleSelectOption} class={option.listItemClass}>
+                                    {option.label}
+                                </li>
+                            </template>
+                            <template if:true={noOptionsFound}>
+                                <li class="no-options-item">No options found</li>
+                            </template>
+                        </ul>
+                    </div>
+                </template>
+            </div>
+        </template>
+
         <!-- Checkbox Type -->
          
         <template if:true={isCheckbox}>
-            <div class="custom-checkbox">
+            <label class="custom-checkbox">
                 <input type="checkbox" id={name} name={name} checked={checked} disabled={disabled}
                     required={required}
                     onchange={handleCheckboxChange} />
                 <template if:true={label}>
-                    <label for={name}>
+                    <div>
                         <span class={computedLabelTitleClass}>{label}</span>
                         
                         <template if:true={hint}>
                             <span class="checkbox-hint">{hint}</span>
                         </template>
-                    </label>
+                    </div>
                     <template if:true={hasTooltip}>
                         <span class="tooltip-icon-wrapper">
                             <i class="bi bi-info-circle tooltip-icon"></i>
@@ -110,7 +160,7 @@
                         </span>
                     </template>
                 </template>
-            </div>
+            </label>
         </template>
 
         <!-- Radio Type -->

@@ -4,7 +4,16 @@ export default class Buho_input extends LightningElement {
     @api label = '';
     @api type = 'input'; // input, combobox, checkbox, radio, textarea
     @api name = '';
-    @api value = '';
+    @api set value(val) {
+        this.inputValue =
+            val === undefined || val === null || val === 'undefined'
+                ? ''
+                : val;
+    };
+
+    get value() {
+        return this.inputValue;
+    };
     @api placeholder = '';
     @api inputType = 'text'; // text, password, time, date, email, etc.
     @api options = []; // for combobox
@@ -23,6 +32,12 @@ export default class Buho_input extends LightningElement {
     @api textareaStyle = ''; // custom style for textarea (e.g., "height: 180px;")
     @api required = false; // whether the field is required
     @api tooltipText = ''; // tooltip text to display on hover of info icon
+
+    @track _isDropdownOpen = false;
+    @track _searchTerm = '';
+    _isTyping = false;
+
+    @track inputValue;
 
     showPatternError = false;
 
@@ -52,6 +67,10 @@ export default class Buho_input extends LightningElement {
 
     get isCombobox() {
         return this.type === 'combobox';
+    }
+
+    get isSearchableCombobox() {
+        return this.type === 'searchable_combobox';
     }
 
     get isCheckbox() {
@@ -88,19 +107,19 @@ export default class Buho_input extends LightningElement {
                 return {
                     label: option,
                     value: option,
-                    isSelected: option === this.value
+                    isSelected: option === this.inputValue
                 };
             }
             return {
                 label: option.label || option.value,
                 value: option.value,
-                isSelected: option.value === this.value
+                isSelected: option.value === this.inputValue
             };
         }) || [];
 
         // Add blank option at the beginning if no value is pre-selected
         // This forces users to actively select an option
-        const hasValue = this.value !== null && this.value !== undefined && this.value !== '';
+        const hasValue = this.inputValue !== null && this.inputValue !== undefined && this.inputValue !== '';
         if (!hasValue && mappedOptions.length > 0) {
             return [
                 { label: '-- Select --', value: '', isSelected: true },
@@ -109,6 +128,72 @@ export default class Buho_input extends LightningElement {
         }
 
         return mappedOptions;
+    }
+
+    get searchInputValue() {
+        if (this._isDropdownOpen) {
+            return this._searchTerm;
+        }
+        // When closed, show the label of the selected value
+        const selectedOpt = this.comboboxOptions.find(opt => opt.value === this.inputValue);
+        return selectedOpt ? selectedOpt.label : '';
+    }
+
+    get filteredOptions() {
+        let options = this.comboboxOptions;
+        
+        if (this._searchTerm && this._isDropdownOpen && this._isTyping) {
+            const lowerSearch = this._searchTerm.toLowerCase();
+            options = options.filter(opt => 
+                opt.label && opt.label.toLowerCase().includes(lowerSearch)
+            );
+        }
+        
+        return options.map(opt => ({
+            ...opt,
+            listItemClass: `dropdown-list-item ${opt.isSelected ? 'selected' : ''}`
+        }));
+    }
+
+    get noOptionsFound() {
+        return this.filteredOptions.length === 0;
+    }
+
+    openDropdown() {
+        this._isDropdownOpen = true;
+        this._isTyping = false;
+        const selectedOpt = this.comboboxOptions.find(opt => opt.value === this.inputValue);
+        this._searchTerm = selectedOpt && selectedOpt.value !== '' ? selectedOpt.label : '';
+    }
+
+    handleBlur() {
+        // Delay closing to allow mousedown on option to fire first
+        setTimeout(() => {
+            this._isDropdownOpen = false;
+        }, 200);
+    }
+
+    handleNativeBlur() {
+        this.dispatchEvent(new CustomEvent('blur'));
+    }
+
+    handleSearch(event) {
+        this._searchTerm = event.target.value;
+        this._isTyping = true;
+        this._isDropdownOpen = true;
+    }
+
+    handleSelectOption(event) {
+        const selectedValue = event.currentTarget.dataset.value;
+        this.inputValue = selectedValue;
+        this.dispatchEvent(new CustomEvent('change', {
+            detail: {
+                name: this.name,
+                value: selectedValue,
+                type: this.type
+            }
+        }));
+        this._isDropdownOpen = false;
     }
 
     handleInvalid(event) {
@@ -125,6 +210,7 @@ export default class Buho_input extends LightningElement {
     handleInputChange(event) {
         event.stopPropagation();
         const value = event.target.value;
+        this.inputValue = value;
         
         // Validate pattern if provided
         if (this.pattern && this.messageWhenPatternMismatch) {
@@ -149,6 +235,7 @@ export default class Buho_input extends LightningElement {
     handleComboboxChange(event) {
         event.stopPropagation();
         const value = event.target.value;
+        this.inputValue = value;
         this.dispatchEvent(new CustomEvent('change', {
             detail: {
                 name: this.name,
@@ -157,6 +244,15 @@ export default class Buho_input extends LightningElement {
             }
         }));
         
+    }
+
+    renderedCallback() {
+        if (this.isCombobox) {
+            const selectEl = this.template.querySelector('select');
+            if (selectEl && selectEl.value !== this.inputValue) {
+                selectEl.value = this.inputValue || '';
+            }
+        }
     }
 
     handleCheckboxChange(event) {
@@ -227,14 +323,27 @@ export default class Buho_input extends LightningElement {
             inputElement = this.template.querySelector('input, textarea');
         } else if (this.isCombobox) {
             inputElement = this.template.querySelector('select');
+        } else if (this.isSearchableCombobox) {
+            inputElement = this.template.querySelector('.searchable-input-wrapper input');
         } else if (this.isCheckbox || this.isRadio) {
             inputElement = this.template.querySelector('input[type="checkbox"], input[type="radio"]');
         }
 
         if (inputElement) {
             // Check native HTML5 validation
-            const isValid = inputElement.reportValidity();
+            let isValid = inputElement.reportValidity();
             console.log(inputElement,'html 5 validation@@@',isValid);
+            
+            if (this.isSearchableCombobox && this.required) {
+                if (!this.inputValue) {
+                    inputElement.setCustomValidity('Please select an option.');
+                    inputElement.reportValidity();
+                    return false;
+                } else {
+                    inputElement.setCustomValidity('');
+                    isValid = true;
+                }
+            }
             // Additional pattern validation for custom error messages
             if (this.pattern && this.messageWhenPatternMismatch) {
                 const regex = new RegExp(this.pattern);
@@ -270,14 +379,24 @@ export default class Buho_input extends LightningElement {
             inputElement = this.template.querySelector('input, textarea');
         } else if (this.isCombobox) {
             inputElement = this.template.querySelector('select');
+        } else if (this.isSearchableCombobox) {
+            inputElement = this.template.querySelector('.searchable-input-wrapper input');
         } else if (this.isCheckbox || this.isRadio) {
             inputElement = this.template.querySelector('input[type="checkbox"], input[type="radio"]');
         }
         console.log('@@@checking validity',inputElement);
         if (inputElement) {
             // Check native HTML5 validation
-            const isValid = inputElement.checkValidity();
+            let isValid = inputElement.checkValidity();
             console.log(inputElement,'html2 5 validation@@@',isValid);
+            
+            if (this.isSearchableCombobox && this.required) {
+                if (!this.inputValue) {
+                    return false;
+                } else {
+                    isValid = true;
+                }
+            }
             // Additional pattern validation
             if (this.pattern) {
                 const regex = new RegExp(this.pattern);
@@ -307,6 +426,8 @@ export default class Buho_input extends LightningElement {
             inputElement = this.template.querySelector('input, textarea');
         } else if (this.isCombobox) {
             inputElement = this.template.querySelector('select');
+        } else if (this.isSearchableCombobox) {
+            inputElement = this.template.querySelector('.searchable-input-wrapper input');
         } else if (this.isCheckbox || this.isRadio) {
             inputElement = this.template.querySelector('input[type="checkbox"], input[type="radio"]');
         }
@@ -329,6 +450,8 @@ export default class Buho_input extends LightningElement {
             inputElement = this.template.querySelector('input, textarea');
         } else if (this.isCombobox) {
             inputElement = this.template.querySelector('select');
+        } else if (this.isSearchableCombobox) {
+            inputElement = this.template.querySelector('.searchable-input-wrapper input');
         } else if (this.isCheckbox || this.isRadio) {
             inputElement = this.template.querySelector('input[type="checkbox"], input[type="radio"]');
         }

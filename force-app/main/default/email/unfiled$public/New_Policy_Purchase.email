@@ -1,5 +1,5 @@
-<messaging:emailTemplate subject="Your Policy Documents" recipientType="Contact" relatedToType="Contact">
-<messaging:htmlEmailBody >
-<c:EmailTemplateStyling policyType="southbound"/>
-</messaging:htmlEmailBody>
+<messaging:emailTemplate subject="Your Policy Documents" recipientType="Contact" renderUsingSystemContextWithoutSharing="true">
+    <messaging:htmlEmailBody >
+        <c:EmailTemplateStyling policyType="southbound" contactAgencyIdVar="{!recipient.Agency__c}"/>
+    </messaging:htmlEmailBody>
 </messaging:emailTemplate>

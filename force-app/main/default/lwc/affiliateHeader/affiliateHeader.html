@@ -7,7 +7,9 @@
                 </div>
                 <div class="slds-col affusrDlt">
                     <div class="affiliateUserDetails">
-                        <img src={affiliateUserInfo.Owner_Photo__c} />
+                        <template lwc:if={hasAffiliatePhoto}>
+                            <img src={affiliateUserInfo.Owner_Photo__c} />
+                        </template>
                         <div class="container">
                             <div class="box">
                                 <h2>{affiliateUserInfo.Owner_Name__c} </h2>

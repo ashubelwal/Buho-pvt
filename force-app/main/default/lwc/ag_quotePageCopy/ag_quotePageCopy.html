@@ -36,9 +36,7 @@
 
                     <!-- Quote Section -->
                     <div class="quote-page slds-m-bottom_small">
-                        <!-- <h2 class="slds-text-heading_medium">Here's Your Quote : {tab.content.name}</h2>
-                        <h4 class="quote-amount slds-text-heading_large slds-m-bottom_small">{tab.content.price}</h4> -->
-
+                       
                         <div class="coverageAdjustment">
                             <div class="slds-grid slds-wrap slds-gutters slds-p-around_small">
 
@@ -72,22 +70,7 @@
                                     </template>
                                 </div>
 
-                                <!-- <template if:true={tab.Gold}>
-                                    <div class="slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-p-around_small">
-                                        <lightning-input name="Gold__c" type="checkbox" label="Gold"
-                                            checked={checkedData.Gold__c} onchange={handleInputChange}>
-                                        </lightning-input>
-                                    </div>
-                                </template>
-
-                                <template if:true={tab.Max}>
-                                    <div class="slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-p-around_small">
-                                        <lightning-input name="Max__c" type="checkbox" label="Max"
-                                            checked={checkedData.Max__c} onchange={handleInputChange}>
-                                        </lightning-input>
-                                    </div>
-                                    </template> -->
-
+                            
                                 <template if:true={tab.Gold}>
 
                                     <div class={goldClass}>
@@ -208,69 +191,6 @@
                     <template if:false={coverageList.length}>
                         <p class="slds-text-color_error slds-p-around_medium">No coverage data available.</p>
                     </template>
-
-
-                    <!-- <template if:true={chubbCoverageList.length}>
-                        <lightning-layout multiple-rows>
-                            <template for:each={chubbCoverageList} for:item="item">
-                                <lightning-layout-item key={item.key} size="12" class="coverage">
-                                    <div class="slds-grid slds-wrap">
-                                        <div
-                                            class="slds-col slds-size_1-of-1 slds-large-size_2-of-12 slds-m-bottom_small">
-                                            <img src={item.image} alt={item.key} style="max-width: 60px;" />
-                                        </div>
-                                        
-                                        <div
-                                            class="slds-col slds-size_1-of-1 slds-large-size_10-of-12 slds-p-left_medium">
-                                            <div class="slds-text-heading_small slds-m-bottom_xx-small" style="font-weight: 600">{item.key}</div>
-                                            <div class="slds-text-body_regular">{item.description}</div>
-                                        </div>
-                                    </div>
-                                </lightning-layout-item>
-                            </template>
-                        </lightning-layout>
-                    </template>
-
-                    <template if:false={chubbCoverageList.length}>
-                        <p class="slds-text-color_error slds-p-around_medium">No coverage data available.</p>
-                    </template> -->
-
-
-                    <!-- Coverage List -->
-                    <!-- <div class="contacts-list">
-                        <template if:true={activeTabCoverage}>
-                            <div class="company-section">                                
-                                <template for:each={activeTabCoverage} for:item="coverage">
-                                    <template if:true={coverage.title}>
-                                        <div key={coverage.title} class="coverage">
-                                            <div class="slds-grid slds-grid_align-center">                                                
-                                                <div class="slds-col slds-size_1-of-1 slds-large-size_2-of-12">
-                                                    <img src={coverage.img} alt={coverage.title} class="coverage-image"/>
-                                                </div>
-                                                
-                                                <div class="slds-col slds-size_1-of-1 slds-large-size_8-of-12">
-                                                    <h2 class="slds-m-bottom_x-small"
-                                                        style="font-size: 17px;font-weight: 600">
-                                                        {coverage.title}
-                                                    </h2>
-                                                    <p class="slds-text-title slds-m-bottom_xx-small">
-                                                        {coverage.desc}
-                                                    </p>
-                                                </div>
-                                                
-                                                <div class="slds-col slds-size_1-of-1 slds-large-size_2-of-12">
-                                                    <p class="slds-text-title slds-m-bottom_xx-small">
-                                                        {coverage.price}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </template>
-                                </template>
-                            </div>
-                        </template>
-
-                    </div> -->
                 </div>
             </template>
         </template>

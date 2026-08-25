@@ -33,6 +33,10 @@ export default class Buho_towed extends LightningElement {
         return ICON_INFO;
     }
 
+    get showExistingTowedUnits(){
+        return this.currentUserType && this.existingtowedUnits.length > 0;
+    }
+
     connectedCallback() {
         console.log('OUTPUT : existingtowedUnits',this.existingtowedUnits);
 
@@ -198,7 +202,7 @@ export default class Buho_towed extends LightningElement {
     }
 
     changetowedOption(event) {
-        const selectedId = event.target.value;
+        const selectedId = (event.detail && event.detail.value !== undefined) ? event.detail.value : event.target.value;
         
         if (!selectedId) {
             return;
